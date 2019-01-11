@@ -1,0 +1,25 @@
+﻿<Properties StartupConfiguration="{096EFE50-52A7-4105-9DD4-EE3F0699E088}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="sweng894/Pages/_ViewStart.cshtml">
+    <Files>
+      <File FileName="sweng894/Pages/_ViewStart.cshtml" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="sweng894" expanded="True">
+            <Node name="sweng894" expanded="True" selected="True">
+              <Node name="Pages" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.sweng894 FirstBuild="True" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
