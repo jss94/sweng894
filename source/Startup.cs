@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using source.Database;
 
 namespace source
 {
@@ -27,6 +28,8 @@ namespace source
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddTransient<AppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

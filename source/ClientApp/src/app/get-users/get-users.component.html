@@ -1,0 +1,26 @@
+<div class="container">
+
+  <h1>App Users</h1>
+
+  <p>This component demonstrates fetching data from our MySql Database served on AWS.</p>
+
+  <p *ngIf="!users"><em>Loading...</em></p>
+
+  <table class='table table-striped' *ngIf="users">
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>User Identifier</th>
+        <th>User Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.role }}</td>
+      </tr>
+    </tbody>
+  </table>
+    
+</div>

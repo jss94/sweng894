@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { GoogleMapComponent } from './google-map/google-map.component';
+import { GetUsersComponent } from './get-users/get-users.component';
+import { GetUsersService } from './get-users/Services/get-users.service';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { GoogleMapComponent } from './google-map/google-map.component';
     CounterComponent,
     FetchDataComponent,
     GoogleMapComponent,
+    GetUsersComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -28,10 +31,11 @@ import { GoogleMapComponent } from './google-map/google-map.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'google-map', component: GoogleMapComponent}
+      { path: 'google-map', component: GoogleMapComponent },
+      { path: 'get-users', component: GetUsersComponent },
     ])
   ],
-  providers: [],
+  providers: [GetUsersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

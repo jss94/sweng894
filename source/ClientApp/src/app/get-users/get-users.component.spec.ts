@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { MapsComponent } from './google-map.component';
+import { GetUsersComponent } from './get-users.component';
 
 describe('MapsComponent', () => {
   let component: MapsComponent;

@@ -15,17 +15,84 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="MySql.Data" Version="8.0.13" />
+    <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
-    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Include="ClientApp\src\app\get-users\Models\user.model.ts" Exclude="$(SpaRoot)node_modules\**" />
+    <None Remove="ClientApp\src\app\get-users\maps.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\get-users.component.spec.ts" />
+    <None Remove="ClientApp\src\app\get-users\Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\get-users\Services\get-users.service.ts" />
+    <None Remove="UnitTests\.DS_Store" />
+    <None Remove="UnitTests\obj\UnitTests.csproj.nuget.cache" />
+    <None Remove="UnitTests\obj\UnitTests.csproj.nuget.g.props" />
+    <None Remove="UnitTests\obj\UnitTests.csproj.nuget.g.targets" />
+    <None Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.AssemblyInfoInputs.cache" />
+    <None Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.assets.cache" />
+    <None Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.csproj.CoreCompileInputs.cache" />
+    <None Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.csprojAssemblyReference.cache" />
+    <None Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.dll" />
+    <None Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.pdb" />
+    <None Remove="UnitTests\bin\Debug\netcoreapp2.2\xunit.runner.reporters.netcoreapp10.dll" />
+    <None Remove="UnitTests\bin\Debug\netcoreapp2.2\xunit.runner.utility.netcoreapp10.dll" />
+    <None Remove="UnitTests\bin\Debug\netcoreapp2.2\xunit.runner.visualstudio.dotnetcore.testadapter.dll" />
+    <None Remove="UnitTests\bin\Debug\netcoreapp2.2\UnitTests.pdb" />
+    <None Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.csproj.FileListAbsolute.txt" />
+    <Content Remove="UnitTests\obj\project.assets.json" />
+    <Content Remove="UnitTests\obj\Debug\netcoreapp2.2\project.razor.json" />
+    <Content Remove="UnitTests\bin\Debug\netcoreapp2.2\UnitTests.runtimeconfig.json" />
+    <Content Remove="UnitTests\bin\Debug\netcoreapp2.2\UnitTests.runtimeconfig.dev.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\New Folder\" />
+    <Folder Include="Models\" />
+    <Folder Include="Database\" />
+    <Folder Include="Queries\" />
+    <Folder Include="ClientApp\src\app\get-users\" />
+    <Folder Include="ClientApp\src\app\get-users\Models\" />
+    <Folder Include="ClientApp\src\app\get-users\Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="UnitTests\UnitTest1.cs" />
+    <Compile Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.AssemblyInfo.cs" />
+    <Compile Remove="UnitTests\obj\Debug\netcoreapp2.2\UnitTests.Program.cs" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
