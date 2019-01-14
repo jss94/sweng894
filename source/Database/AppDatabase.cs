@@ -1,20 +1,27 @@
-﻿using System;
+﻿
+using System.Data;
 using MySql.Data.MySqlClient;
 
 namespace source.Database
 {
-    public class AppDatabase: IDisposable
+    public class AppDatabase : IAppDatabase
     {
-        public MySqlConnection Connection;
+        MySqlConnection _connection;
+        IDbConnection IAppDatabase.Connection 
+        {
+            get => _connection; 
+            set => _connection = value as MySqlConnection; 
+        }
+
 
         public AppDatabase(string connectionString)
         {
-            Connection = new MySqlConnection(connectionString);
+            _connection = new MySqlConnection(connectionString);
         }
 
         public void Dispose()
         {
-            Connection.Close();
+            _connection.Close();
         }
     }
 }

@@ -7,7 +7,7 @@ using source.Database;
 
 namespace source.Models
 {
-    public class User
+    public class User : IUser
     {
         public string id { get; set; }
 
@@ -16,36 +16,55 @@ namespace source.Models
         public string role { get; set; }
 
         [JsonIgnore]
-        public AppDatabase Db { get; set; }
+        public IAppDatabase _database { get; set; }
 
-        public User(AppDatabase db = null)
+        public User(IAppDatabase db = null)
         {
-            Db = db;
+            _database = db;
         }
 
         public async Task InsertAsync()
         {
-            var cmd = Db.Connection.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"INSERT INTO sweng894.users (id, name, role) VALUES (@id, @name, @role);";
-            BindParams(cmd);
-            await cmd.ExecuteNonQueryAsync();
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText = @"INSERT INTO sweng894.users (id, name, role) VALUES (@id, @name, @role);";
+                BindParams(cmd);
+                await cmd.ExecuteNonQueryAsync();
+            }
+
         }
 
         public async Task UpdateAsync()
         {
-            var cmd = Db.Connection.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"UPDATE sweng894.users SET name = @name, role = @role WHERE id = @id;";
-            BindParams(cmd);
-            BindId(cmd);
-            await cmd.ExecuteNonQueryAsync();
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText = @"UPDATE sweng894.users SET name = @name, role = @role WHERE id = @id;";
+                BindParams(cmd);
+                BindId(cmd);
+                await cmd.ExecuteNonQueryAsync();
+            }
         }
 
         public async Task DeleteAsync()
         {
-            var cmd = Db.Connection.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"DELETE FROM sweng894.users WHERE id = @id;";
-            BindId(cmd);
-            await cmd.ExecuteNonQueryAsync();
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText = @"DELETE FROM sweng894.users WHERE id = @id;";
+                BindId(cmd);
+                await cmd.ExecuteNonQueryAsync();
+            }
         }
 
         private void BindId(MySqlCommand cmd)

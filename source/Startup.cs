@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using source.Database;
+using source.Models;
+using source.Queries;
 
 namespace source
 {
@@ -29,7 +30,9 @@ namespace source
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddTransient<AppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddTransient<IAppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
+            services.AddTransient<IUsersQuery, UsersQuery>();
+            services.AddTransient<IUser, User>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

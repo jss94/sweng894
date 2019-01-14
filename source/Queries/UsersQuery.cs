@@ -8,34 +8,46 @@ using source.Models;
 
 namespace source.Queries
 {
-    public class UsersQuery
+    public class UsersQuery : IUsersQuery
     {
 
-        public readonly AppDatabase Db;
-        public UsersQuery(AppDatabase db)
+        public readonly IAppDatabase _database;
+        public UsersQuery(IAppDatabase db)
         {
-            Db = db;
+            _database = db;
         }
 
-        public async Task<User> GetAsync(string userId)
+        public async Task<User> GetOneAsync(string userId)
         {
-            var cmd = Db.Connection.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"SELECT id, name, role FROM sweng894.users WHERE id = @userId;";
-            cmd.Parameters.Add(new MySqlParameter
+            using (var db = _database)
             {
-                ParameterName = "@userId",
-                DbType = DbType.String,
-                Value = userId,
-            });
-            var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
-            return result.Count > 0 ? result[0] : null;
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText = @"SELECT id, name, role FROM sweng894.users WHERE id = @userId;";
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@userId",
+                    DbType = DbType.String,
+                    Value = userId,
+                });
+                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                return result.Count > 0 ? result[0] : null;
+            }
         }
 
         public async Task<List<User>> GetAllAsync()
         {
-            var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"SELECT id, name, role FROM sweng894.users ORDER BY id DESC;";
-            return await ReadAllAsync(await cmd.ExecuteReaderAsync());
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText = @"SELECT id, name, role FROM sweng894.users ORDER BY id DESC;";
+                return await ReadAllAsync(await cmd.ExecuteReaderAsync());
+            }
         }
 
         private async Task<List<User>> ReadAllAsync(DbDataReader reader)
@@ -45,7 +57,7 @@ namespace source.Queries
             {
                 while (await reader.ReadAsync())
                 {
-                    var post = new User(Db)
+                    var post = new User()
                     {
                         id = await reader.GetFieldValueAsync<string>(0),
                         name = await reader.GetFieldValueAsync<string>(1),
