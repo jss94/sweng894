@@ -60,7 +60,7 @@
 ```
     git pull origin master
 ```
-    -  This tells git to go to the location aliased to “origin” (i.e. https://github.com/jss94/sweng894.git) and get the code from the branch called “master”.
+-  This tells git to go to the location aliased to “origin” (i.e. https://github.com/jss94/sweng894.git) and get the code from the branch called “master”.
 3. Resolve frontend and backend merge conflicts in their respective IDEs.
 
 ### Updating your feature branch on origin; i.e. https://github.com/jss94/sweng894.git:
