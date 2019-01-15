@@ -8,7 +8,7 @@
 * ASP.Net Core 2.2 SDK: https://dotnet.microsoft.com/download
 * MySQL Workbench: https://dev.mysql.com/downloads/workbench/
 
-# Once you have everything installed you can begin by cloning the GitHub Repo:
+# Once you have everything installed clone the GitHub Repo:
 1. Create a folder and name it whatever you want. I named my folder “psu”.
 2. Go to the command prompt and travers to your new directory.
 3. In you new directory type
