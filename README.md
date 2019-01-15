@@ -1,4 +1,4 @@
-Install the following software:
+#Install the following software:
 * Git: https://git-scm.com/
 * Node.js 10.15+ https://nodejs.org/en/
 * Visual Studio Code: https://code.visualstudio.com/
@@ -8,19 +8,19 @@ Install the following software:
 * ASP.Net Core 2.2 SDK: https://dotnet.microsoft.com/download
 * MySQL Workbench: https://dev.mysql.com/downloads/workbench/
 
-Once you have everything installed you can begin by cloning the GitHub Repo:
+#Once you have everything installed you can begin by cloning the GitHub Repo:
 1. Create a folder and name it whatever you want. I named my folder “psu”.
 2. Go to the command prompt and travers to your new directory.
 3. In you new directory type
     git clone https://github.com/jss94/sweng894.git
 
-Open the solution and build the project:
+#Open the solution and build the project:
 1. Navigate to and open ./psu/sweng894/source/source.sln in your file browser.
 2. In the top menu bar, click build>rebuild
 3. Wait until a browser automatically opens and displays the template webpage. 
     - NOTE: This might take awhile as it is downloading all the dependencies.
 
-Modifying the frontend project:
+#Modifying the frontend project:
 1. Open Visual Studio Code and navigate to ./psu/sweng894/source/clientapp
 2. You will find all the pages/components in the ./src/app folder. Here are a few things to note:
     - Each page and all its related files are placed together in the same folder. For example the google-map folder contains all the related HTML, CSS and TS files needed to create the page. 
@@ -28,16 +28,17 @@ Modifying the frontend project:
     - You can modify the frontend without having to rebuild and run the project, just saving the file will cause the website to reload with you changes.
 
 
-Developer work flow- 
-Pick a story to work on. 
-Create a feature branch from the latest in master
-Update your feature branch with your code.
-When done, make sure you get the latest code from master and fix any merge conflicts
-Create a pull request for your feature branch using the GitHub site.
-Ask another developer to review your pull request.
-Once approved, go to GitHub and merge your pull request.
+#Developer work flow- 
+1. Pick a story to work on. 
+2. Create a feature branch from the latest in master
+3. Update your feature branch with your code.
+4. When done, make sure you get the latest code from master and fix any merge conflicts
+5. Create a pull request for your feature branch using the GitHub site.
+6. Ask another developer to review your pull request.
+7. Once approved, go to GitHub and merge your pull request.
+8. Close out your story
 
-Adding a feature branch to the project-
+#Adding a feature branch to the project-
 
 Create your own branch to work from:
 1. In the command prompt go to ./psu/sweng894
