@@ -5,3 +5,4 @@ Software Repository for SWENG 894
 - Visual Studio Community 2017+ (make sure you have all the latest updates)
 - NodeJS v10+
 - ASP.Net Core 2.2+ SDK
+- MySQL Workbench
