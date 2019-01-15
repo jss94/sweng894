@@ -12,7 +12,9 @@
 1. Create a folder and name it whatever you want. I named my folder “psu”.
 2. Go to the command prompt and travers to your new directory.
 3. In you new directory type
+```
     git clone https://github.com/jss94/sweng894.git
+```
 
 # Open the solution and build the project:
 1. Navigate to and open ./psu/sweng894/source/source.sln in your file browser.
@@ -28,7 +30,7 @@
     - You can modify the frontend without having to rebuild and run the project, just saving the file will cause the website to reload with you changes.
 
 
-# Developer work flow- 
+# Developer work flow
 1. Pick a story to work on. 
 2. Create a feature branch from the latest in master
 3. Update your feature branch with your code.
@@ -38,28 +40,40 @@
 7. Once approved, go to GitHub and merge your pull request.
 8. Close out your story
 
-# Adding a feature branch to the project-
+# Adding a feature branch to the project
 
 ### Create your own branch to work from:
 1. In the command prompt go to ./psu/sweng894
 2. Type the following to create a new branch:
+```
     git branch your-name/feature-name
+```
 3. Type the following to go to the branch you just created:
+```
     git checkout your-name/feature-name
+```
 4. You can now modify the code as much as you’d like without changing master
 
 ### Updating your branch with the latest from the master branch:
 1. In the command prompt go to ./psu/sweng894
 2. Type the following to update your branch with the latest code from master
+```
     git pull origin master
+```
     -  This tells git to go to the location aliased to “origin” (i.e. https://github.com/jss94/sweng894.git) and get the code from the branch called “master”.
 3. Resolve frontend and backend merge conflicts in their respective IDEs.
 
-### Updating you feature branch on origin; i.e. https://github.com/jss94/sweng894.git:
+### Updating your feature branch on origin; i.e. https://github.com/jss94/sweng894.git:
 1. In the command prompt go to ./psu/sweng894
 2. Type the following to stage all your files for commitment:
+```
     git add .
+```
 3. Type the following to commit your files to the feature branch in the local repository:
+```
     git commit -m ‘your commit message here’
+```
 4. Type the following to update the feature branch at the origin or remote repository. 
+```
     git push origin 
+```
