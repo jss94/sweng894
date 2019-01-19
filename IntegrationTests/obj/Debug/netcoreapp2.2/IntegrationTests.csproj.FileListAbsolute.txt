@@ -10,10 +10,10 @@
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/bin/Debug/netcoreapp2.2/IntegrationTests.pdb
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/bin/Debug/netcoreapp2.2/source.dll
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/bin/Debug/netcoreapp2.2/source.pdb
-/Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.csprojAssemblyReference.cache
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.csproj.CoreCompileInputs.cache
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.AssemblyInfoInputs.cache
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.AssemblyInfo.cs
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.csproj.CopyComplete
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.dll
 /Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.pdb
+/Users/pesettan/Documents/GitHub/sweng894/IntegrationTests/obj/Debug/netcoreapp2.2/IntegrationTests.csprojAssemblyReference.cache
