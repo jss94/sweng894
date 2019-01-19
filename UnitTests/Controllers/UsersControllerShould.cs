@@ -1,12 +1,12 @@
-using System;
 using System.Threading.Tasks;
 using Moq;
-using source.Models;
 using source.Queries;
 using Xunit;
 using System.Collections.Generic;
 using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using source.Models;
+using System;
 
 namespace UnitTests.Controllers
 {

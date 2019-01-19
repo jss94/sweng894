@@ -19,6 +19,6 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\source.csproj" />
+    <ProjectReference Include="..\source\source.csproj" />
   </ItemGroup>
 </Project>
