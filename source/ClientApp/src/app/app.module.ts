@@ -12,6 +12,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { GetUsersComponent } from './get-users/get-users.component';
 import { GetUsersService } from './get-users/Services/get-users.service';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { GetUsersService } from './get-users/Services/get-users.service';
     FetchDataComponent,
     GoogleMapComponent,
     GetUsersComponent,
+
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -33,7 +36,9 @@ import { GetUsersService } from './get-users/Services/get-users.service';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'google-map', component: GoogleMapComponent },
       { path: 'get-users', component: GetUsersComponent },
-    ])
+    ]),
+    BrowserAnimationsModule,
+    MatToolbarModule,
   ],
   providers: [GetUsersService],
   bootstrap: [AppComponent]

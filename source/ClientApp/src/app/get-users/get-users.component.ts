@@ -12,7 +12,6 @@ export class GetUsersComponent {
   constructor(private service: GetUsersService) {
     this.service.getUsers().subscribe(response => {
       this.users = response;
-      debugger;
     });
   }
 }
