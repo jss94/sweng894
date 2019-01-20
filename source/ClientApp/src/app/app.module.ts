@@ -2,45 +2,38 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { GoogleMapComponent } from './google-map/google-map.component';
-import { GetUsersComponent } from './get-users/get-users.component';
 import { GetUsersService } from './get-users/Services/get-users.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RoutingModule } from './app.router.module';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './shared/services/auth.service';
+import { CallbackComponent } from './call-back/callback.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
-    GoogleMapComponent,
-    GetUsersComponent,
-
+    CallbackComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    CommonModule,
+    BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'google-map', component: GoogleMapComponent },
-      { path: 'get-users', component: GetUsersComponent },
-    ]),
+    RoutingModule,
     BrowserAnimationsModule,
     MatToolbarModule,
   ],
-  providers: [GetUsersService],
+  exports: [
+  ],
+  providers: [
+    AuthService,
+    GetUsersService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,17 +1,27 @@
 <mat-toolbar>
     <span class="logo-container nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-      <img class="logo" src="./assets/occasions-24px.svg" alt="Home" [routerLink]='["/"]'>
-    </span>
-    <span class="nav-item" [routerLinkActive]='["link-active"]'>
-      <a class="nav-link text-dark" [routerLink]='["/google-map"]'>Vendors</a>
-    </span>
-    <span class="nav-item" [routerLinkActive]='["link-active"]'>
-      <a class="nav-link text-dark" [routerLink]='["/get-users"]'>Organizers</a>
-    </span>
-    <span class="nav-item" [routerLinkActive]='["link-active"]'>
-      <a class="nav-link text-dark" [routerLink]='["/get-users"]'>Login</a>
+      <img class="logo clickable" src="./assets/occasions-24px.svg" alt="Home" [routerLink]='["/"]'>
     </span>
 
+    <span class="nav-item" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" [routerLink]='["/vendors"]'>Vendors</a>
+    </span>
+    
+    <span class="nav-item" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" [routerLink]='["/organizers"]'>Organizers</a>
+    </span>
+
+    <span class="nav-item clickable" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" *ngIf="!auth.isAuthenticated()" (click)="auth.login()">Login</a>
+    </span>
+
+    <span class="nav-item clickable" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" *ngIf="auth.isAuthenticated()" (click)="auth.logout()">Logout</a>
+    </span>
+
+    <span class="nav-item" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" *ngIf="auth.isAuthenticated()" [routerLink]='["/profile"]'>{{ auth?.userProfile?.nickname }}</a>
+    </span>
 </mat-toolbar>
 <!-- <header>
   <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
