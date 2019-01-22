@@ -36,3 +36,9 @@
 /Users/pesettan/Documents/GitHub/sweng894/UnitTests/obj/Debug/netcoreapp2.2/UnitTests.csproj.CopyComplete
 /Users/pesettan/Documents/GitHub/sweng894/UnitTests/obj/Debug/netcoreapp2.2/UnitTests.dll
 /Users/pesettan/Documents/GitHub/sweng894/UnitTests/obj/Debug/netcoreapp2.2/UnitTests.pdb
+C:\psu\sweng894\UnitTests\obj\Debug\netcoreapp2.2\UnitTests.csprojAssemblyReference.cache
+C:\psu\sweng894\UnitTests\obj\Debug\netcoreapp2.2\UnitTests.csproj.CoreCompileInputs.cache
+C:\psu\sweng894\UnitTests\obj\Debug\netcoreapp2.2\UnitTests.AssemblyInfoInputs.cache
+C:\psu\sweng894\UnitTests\obj\Debug\netcoreapp2.2\UnitTests.AssemblyInfo.cs
+C:\psu\sweng894\UnitTests\obj\Debug\netcoreapp2.2\UnitTests.dll
+C:\psu\sweng894\UnitTests\obj\Debug\netcoreapp2.2\UnitTests.pdb

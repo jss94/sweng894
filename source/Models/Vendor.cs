@@ -7,7 +7,7 @@ using source.Database;
 
 namespace source.Models
 {
-    public class User : IUser
+    public class Vendor : IVendor
     {
         public string id { get; set; }
 
@@ -18,7 +18,7 @@ namespace source.Models
         [JsonIgnore]
         public IAppDatabase _database { get; set; }
 
-        public User(IAppDatabase db = null)
+        public void User(IAppDatabase db = null)
         {
             _database = db;
         }
