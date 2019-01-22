@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -16,10 +18,15 @@ export class AuthService {
     domain: 'sweng894.auth0.com',
     responseType: 'token id_token',
     redirectUri: 'https://localhost:5001/home',
-    scope: 'openid profile'
+    audience: 'https://localhost:5001/api',
+    scope: 'openid profile read:messages'
   });
 
-  constructor(public router: Router) {
+  constructor(
+    @Inject('BASE_URL') private baseUrl: string,
+    public router: Router,
+    private http: HttpClient
+    ) {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
@@ -40,13 +47,16 @@ export class AuthService {
   public handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
+        // TODO: Do not save all of authReult. This was only done for simplicity.
+        localStorage.setItem('authResult', JSON.stringify(authResult));
+
         window.location.hash = '';
         this.localLogin(authResult);
-        this.getClient();
+        this.getUser();
         this.router.navigate(['/home']);
       } else if (err) {
         this.router.navigate(['/home']);
-        console.log(err);
+        console.log('Auth Error:', err);
       }
     });
   }
@@ -54,6 +64,7 @@ export class AuthService {
   private localLogin(authResult): void {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
+
     // Set the time that the access token will expire at
     const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
     this._accessToken = authResult.accessToken;
@@ -72,13 +83,22 @@ export class AuthService {
     });
   }
 
+  public renewUser(authResult: any): void {
+    if (authResult.accessToken && authResult.idTokenPayload) {
+      this._accessToken = authResult.accessToken;
+      this.userProfile = authResult.idTokenPayload;
+    }
+  }
+
   public logout(): void {
+    this.auth0.logout();
     // Remove tokens and expiry time
     this._accessToken = '';
     this._idToken = '';
     this._expiresAt = 0;
     // Remove isLoggedIn flag from localStorage
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('authResult');
     // Go back to the home route
     this.router.navigate(['/']);
   }
@@ -89,7 +109,7 @@ export class AuthService {
     return new Date().getTime() < this._expiresAt;
   }
 
-  public getClient() {
+  private getUser() {
     this.auth0.client.userInfo(this._accessToken, (err, profile) => {
       if (profile) {
         this.userProfile = profile;
@@ -98,4 +118,10 @@ export class AuthService {
     });
   }
 
+  public authGet(endpoint: string): Observable<any> {
+    return this.http
+    .get(`${this.baseUrl}api/${endpoint}`, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`)
+    });
+  }
 }

@@ -10,3 +10,7 @@
 .clickable:hover {
   cursor: pointer;
 }
+
+.text-grey {
+  color: #8394AB;
+}

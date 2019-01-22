@@ -15,5 +15,10 @@ export class HomeComponent implements OnInit {
     if (localStorage.getItem('isLoggedIn') === 'true') {
       this.auth.renewTokens();
     }
+
+    const authResult = JSON.parse(localStorage.getItem('authResult'));
+    if (authResult) {
+      this.auth.renewUser(authResult);
+    }
   }
 }

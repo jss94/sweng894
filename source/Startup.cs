@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using source.Auth;
 using source.Database;
 using source.Models;
 using source.Queries;
@@ -30,6 +33,28 @@ namespace source
                 configuration.RootPath = "ClientApp/dist";
             });
 
+            string domain = Configuration["Auth0:Domain"];
+            string apiIdentifier = Configuration["Auth0:ApiIdentifier"];
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = domain;
+                options.Audience = apiIdentifier;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", domain)));
+            });
+
+            // register the scope authorization handler
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
+
             services.AddTransient<IAppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddTransient<IUsersQuery, UsersQuery>();
             services.AddTransient<IUser, User>();
@@ -52,6 +77,7 @@ namespace source
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -72,6 +98,8 @@ namespace source
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+
         }
     }
 }

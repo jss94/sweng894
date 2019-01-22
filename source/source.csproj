@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="MySql.Data" Version="8.0.13" />
     <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -111,6 +112,7 @@
     <Folder Include="ClientApp\src\app\get-users\" />
     <Folder Include="ClientApp\src\app\get-users\Models\" />
     <Folder Include="ClientApp\src\app\get-users\Services\" />
+    <Folder Include="Auth\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="UnitTests\UnitTest1.cs" />

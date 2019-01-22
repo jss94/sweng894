@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { VendorComponent } from './vendor.component';
 import { VendorService } from './Services/vendor.service';
-import { MockVendorService } from './Services/mockVendor.service';
+import { MockVendorService } from './Services/mock-vendor.service';
 import { Vendor } from './Models/vendor.model';
 
-describe('MapsComponent', () => {
+describe('VendorComponent', () => {
   let component: VendorComponent;
   let fixture: ComponentFixture<VendorComponent>;
   let mockVendorService: VendorService;
