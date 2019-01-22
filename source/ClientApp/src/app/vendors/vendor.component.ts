@@ -3,8 +3,8 @@ import { Vendor } from './Models/vendor.model';
 import { VendorService } from './Services/vendor.service';
 
 @Component({
-  selector: 'app-get-users',
-  templateUrl: './get-users.component.html'
+  selector: 'app-vendor',
+  templateUrl: './vendor.component.html'
 })
 export class VendorComponent {
   public vendors: Vendor[];

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using source.Database;
 using source.Models;
@@ -18,6 +19,7 @@ namespace source.Controllers
 
         // GET api/users/{userId}
         [HttpGet("{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetUser(string userId)
         {
             var result = await _usersQuery.GetOneAsync(userId);
@@ -31,6 +33,7 @@ namespace source.Controllers
 
         // GET api/users
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _usersQuery.GetAllAsync();
@@ -66,7 +69,7 @@ namespace source.Controllers
 
         }
 
-        // DELETE api/async/5
+        // DELETE api/users/{userId}
         [HttpDelete("{userId}")]
         public async Task<IActionResult> Delete(string userId)
         {

@@ -1,18 +1,16 @@
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+.logo-continaer {
+  padding-top: 10px;
 }
 
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.logo {
+  width: 200px;
+  height: 30px;
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.clickable:hover {
+  cursor: pointer;
+}
+
+.text-grey {
+  color: #8394AB;
 }
