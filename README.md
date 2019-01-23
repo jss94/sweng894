@@ -30,6 +30,12 @@
     - When additional Angular services and models are needed they are placed under the same folder. See get-users folder.
     - You can modify the frontend without having to rebuild and run the project, just saving the file will cause the website to reload your changes.
 
+# Connecting to the Database:
+Before you can use MySQL Workbench to connect to the db on Google Cloud you mush start, and keep, the proxy server running.
+1. Start the Google Cloud Proxy Server
+    - For Window users click on ./psu/sweng894/source/start-proxy.bat
+    - For Mac users click on ./psu/sweng894/source/start-proxy.bash
+2. Database connection properties can be found in ./psu/sweng894/source/appsettings.json
 
 # Developer work flow
 1. Pick a story to work on. 
