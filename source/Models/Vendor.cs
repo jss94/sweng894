@@ -7,7 +7,9 @@ using source.Database;
 
 namespace source.Models
 {
+
     public class Vendor
     {
+
     }
 }
