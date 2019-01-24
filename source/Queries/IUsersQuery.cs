@@ -7,6 +7,9 @@ namespace source.Queries
     public interface IUsersQuery
     {
         Task<List<User>> GetAllAsync();
-        Task<User> GetOneAsync(string userId);
+        Task<User> GetOneAsync(string userName);
+        Task DeactivateAsync(User user);
+        Task InsertAsync(User user);
+        Task UpdateAsync(User user);
     }
 }
