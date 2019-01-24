@@ -4880,6 +4880,7 @@
       "type": "package",
       "path": "microsoft.aspnetcore.mvc.testing/2.2.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "build/netstandard2.0/Microsoft.AspNetCore.Mvc.Testing.targets",
         "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Testing.dll",
@@ -4931,6 +4932,7 @@
       "sha512": "ex8MZwgoyqHim1L6/65FnfjdSMtSKSuSU3DVoiCADZACc05T7f8uRB7SnDIP5LPQKLUBLilfNkd1p14RLyfdQA==",
       "type": "package",
       "path": "microsoft.aspnetcore.razor.design/2.2.0",
+      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5165,6 +5167,7 @@
       "type": "package",
       "path": "microsoft.aspnetcore.testhost/2.2.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.TestHost.xml",
@@ -5202,6 +5205,7 @@
       "sha512": "HS3iRWZKcUw/8eZ/08GXKY2Bn7xNzQPzf8gRPHGSowX7u7XXu9i9YEaBeBNKUXWfI7qjvT2zXtLUvbN0hds8vg==",
       "type": "package",
       "path": "microsoft.codeanalysis.analyzers/1.1.0",
+      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         "ThirdPartyNotices.rtf",
@@ -5935,6 +5939,7 @@
       "type": "package",
       "path": "microsoft.net.test.sdk/15.0.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "build/net45/Microsoft.Net.Test.Sdk.props",
         "build/net45/Microsoft.Net.Test.Sdk.targets",
@@ -6289,6 +6294,7 @@
       "type": "package",
       "path": "microsoft.testplatform.objectmodel/15.0.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net46/Microsoft.TestPlatform.CoreUtilities.dll",
         "lib/net46/Microsoft.VisualStudio.TestPlatform.ObjectModel.dll",
@@ -6355,6 +6361,7 @@
       "type": "package",
       "path": "microsoft.testplatform.testhost/15.0.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "lib/net45/_._",
@@ -8351,6 +8358,7 @@
       "type": "package",
       "path": "system.diagnostics.textwritertracelistener/4.0.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -12235,6 +12243,7 @@
       "type": "package",
       "path": "xunit/2.4.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "xunit.2.4.1.nupkg.sha512",
         "xunit.nuspec"
@@ -12245,6 +12254,7 @@
       "type": "package",
       "path": "xunit.abstractions/2.0.3",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net35/xunit.abstractions.dll",
         "lib/net35/xunit.abstractions.xml",
@@ -12260,7 +12270,9 @@
       "sha512": "Uw6EqkOmt0IystUtzkU4U8ixCEz+piqgczyoPT00RwPDsWHtWwzedjsBQTS6P1h2+uwDF6w5UpYt5/SSE7eexQ==",
       "type": "package",
       "path": "xunit.analyzers/0.10.0",
+      "hasTools": true,
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/xunit.analyzers.dll",
         "tools/install.ps1",
@@ -12274,6 +12286,7 @@
       "type": "package",
       "path": "xunit.assert/2.4.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard1.1/xunit.assert.dll",
         "lib/netstandard1.1/xunit.assert.xml",
@@ -12286,6 +12299,7 @@
       "type": "package",
       "path": "xunit.core/2.4.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "build/xunit.core.props",
         "build/xunit.core.targets",
@@ -12300,6 +12314,7 @@
       "type": "package",
       "path": "xunit.extensibility.core/2.4.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/xunit.core.dll",
         "lib/net452/xunit.core.dll.tdnet",
@@ -12317,6 +12332,7 @@
       "type": "package",
       "path": "xunit.extensibility.execution/2.4.1",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "lib/net452/xunit.execution.desktop.dll",
         "lib/net452/xunit.execution.desktop.xml",
@@ -12331,6 +12347,7 @@
       "type": "package",
       "path": "xunit.runner.visualstudio/2.4.0",
       "files": [
+        ".nupkg.metadata",
         ".signature.p7s",
         "build/_common/xunit.abstractions.dll",
         "build/_common/xunit.runner.reporters.net452.dll",
@@ -12466,5 +12483,13 @@
         "warn": true
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\development\\repos\\test_repo\\sweng894\\IntegrationTests\\obj\\IntegrationTests.csproj.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

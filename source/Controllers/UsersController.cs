@@ -28,7 +28,6 @@ namespace source.Controllers
                 return new NotFoundResult();
 
             return new OkObjectResult(result);
-
         }
 
         // GET api/users
@@ -49,7 +48,7 @@ namespace source.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]User body)
         { 
-            await body.InsertAsync();
+            await _usersQuery.InsertAsync(body);
             return new OkObjectResult(body);
         }
 
@@ -62,9 +61,11 @@ namespace source.Controllers
             if (result == null)
                 return new NotFoundResult();
 
-            result.name = body.name;
+            result.userName = body.userName;
+            result.firstName = body.firstName;
+            result.lastName = body.lastName;
             result.role = body.role;
-            await result.UpdateAsync();
+            await _usersQuery.UpdateAsync(result);
             return new OkObjectResult(result);
 
         }
@@ -78,7 +79,7 @@ namespace source.Controllers
             if (result == null)
                 return new NotFoundResult();
 
-            await result.DeleteAsync();
+            await _usersQuery.DeactivateAsync(result);
             return new OkResult();
 
         }
