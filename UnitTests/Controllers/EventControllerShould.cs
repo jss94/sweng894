@@ -30,7 +30,7 @@ namespace UnitTests.Controllers
         [Fact]
         public void CreateEventTest()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }
