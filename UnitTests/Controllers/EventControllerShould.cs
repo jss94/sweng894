@@ -21,15 +21,13 @@ namespace UnitTests.Controllers
 
         public EventControllerShould()
         {
-            //_eventQueryMock = new Mock<IUsersQuery>();
-            _eventMock = new Mock<Event>();
-
-            _sut = new EventController(__eventDaoMock.Object);
+          
         }
 
         [Fact]
         public void CreateEventTest()
         {
+            Assert.Equal("test", "test");
             //throw new NotImplementedException();
         }
     }
