@@ -27,6 +27,10 @@ IntegrationTests/bin/
 IntegrationTests/obj/
 UnitTests/bin/
 UnitTests/obj/
+IntegrationTests/bin/**
+IntegrationTests/obj/**
+UnitTests/bin/**
+UnitTests/obj/**
 
 # Visual Studio 2015 cache/options directory
 .vs/
