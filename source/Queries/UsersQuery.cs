@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace source.Queries
             _database = db;
         }
 
-        public async Task<User> GetOneAsync(string userId)
+        public async Task<User> GetOneAsync(string username)
         {
             using (var db = _database)
             {
@@ -25,13 +26,10 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT id, name, role FROM sweng894.users WHERE id = @userId;";
-                cmd.Parameters.Add(new MySqlParameter
-                {
-                    ParameterName = "@userId",
-                    DbType = DbType.String,
-                    Value = userId,
-                });
+                cmd.CommandText
+                    = @"SELECT user_name, first_name, last_name, address_id, role "
+                    + @"FROM occasions.users WHERE user_name = @userName;";
+                BindId(cmd, username);
                 var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
                 return result.Count > 0 ? result[0] : null;
             }
@@ -45,7 +43,10 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT id, name, role FROM sweng894.users ORDER BY id DESC;";
+                cmd.CommandText
+                    = @"SELECT user_name, first_name, last_name, address_id, role "
+                    + @"FROM occasions.users "
+                    + @"WHERE active = 1 ORDER BY user_name DESC;";
                 return await ReadAllAsync(await cmd.ExecuteReaderAsync());
             }
         }
@@ -59,14 +60,117 @@ namespace source.Queries
                 {
                     var post = new User()
                     {
-                        id = await reader.GetFieldValueAsync<string>(0),
-                        name = await reader.GetFieldValueAsync<string>(1),
-                        role = await reader.GetFieldValueAsync<string>(2)
+                        userName = await reader.GetFieldValueAsync<string>(0),
+                        firstName = await reader.GetFieldValueAsync<string>(1),
+                        lastName = await reader.GetFieldValueAsync<string>(2),
+                        addressId = await reader.GetFieldValueAsync<string>(3),
+                        role = await reader.GetFieldValueAsync<string>(4),
                     };
                     posts.Add(post);
                 }
             }
             return posts;
+        }
+
+
+        public async Task InsertAsync(User user)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText 
+                    = @"INSERT INTO occasions.users (user_name, first_name, last_name, address_id, role) "
+                    + @"VALUES (@user.userName, @user.firstName, @user.lastName, @user.addressId, @user.role);";
+                BindParams(cmd, user);
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText
+                    = @"UPDATE occasions.users SET username = @user.username, "
+                    + @"first_name = @user.firstname, last_name = @user.lastName "
+                    + @"address_id = @user.addressId, role = @user.role "
+                    + @"WHERE username = @user.username;";
+                BindParams(cmd, user);
+                BindId(cmd, user);
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+        public async Task DeactivateAsync(User user)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText 
+                    = @"UPDATE occasions.users "
+                    + @"SET Active = 0 WHERE username = @user.username;";
+                BindId(cmd, user);
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+        private void BindId(MySqlCommand cmd, string userName)
+        {
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@username",
+                DbType = DbType.String,
+                Value = userName,
+            });
+        }
+
+        private void BindId(MySqlCommand cmd, User user)
+        {
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@username",
+                DbType = DbType.String,
+                Value = user.userName,
+            });
+        }
+
+        private void BindParams(MySqlCommand cmd, User user)
+        {
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@firstName",
+                DbType = DbType.String,
+                Value = user.firstName,
+            });
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@lastName",
+                DbType = DbType.String,
+                Value = user.lastName,
+            });
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@addressId",
+                DbType = DbType.String,
+                Value = user.addressId,
+            });
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@role",
+                DbType = DbType.String,
+                Value = user.role,
+            });
         }
     }
 }

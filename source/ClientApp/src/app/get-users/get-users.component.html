@@ -9,15 +9,15 @@
   <table class='table table-striped' *ngIf="users">
     <thead>
       <tr>
-        <th>User Name</th>
-        <th>User Identifier</th>
-        <th>User Role</th>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Role</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
+        <td>{{ user.userName }}</td>
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
         <td>{{ user.role }}</td>
       </tr>
     </tbody>
