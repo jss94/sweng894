@@ -4,3 +4,9 @@
 
 /IntegrationTests/obj/Debug/netcoreapp2.2
 /UnitTests/obj/Debug/netcoreapp2.2
+IntegrationTests/bin
+IntegrationTests/obj
+UnitTests/bin
+UnitTests/obj
+source/bin
+source/obj

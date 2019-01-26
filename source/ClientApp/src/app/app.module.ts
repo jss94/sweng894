@@ -11,6 +11,7 @@ import { RoutingModule } from './app.router.module';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
 import { CallbackComponent } from './call-back/callback.component';
+import { GoogleMapsService } from './google-map/Services/google-maps.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { CallbackComponent } from './call-back/callback.component';
   ],
   providers: [
     AuthService,
-    GetUsersService
+    GetUsersService,
+    GoogleMapsService
   ],
   bootstrap: [AppComponent]
 })
