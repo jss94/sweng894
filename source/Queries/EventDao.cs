@@ -78,7 +78,6 @@ namespace source.Queries
 
         public async Task<List<Event>> GetAllEventsByUser(string organizerUserName)
         {
-            Console.Write("IN DAO NOW");
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;

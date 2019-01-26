@@ -5,5 +5,6 @@ export interface Event {
   guestListId: any;
   name: string;
   description: string;
-  eventDate: string;
+  eventDate: any;
+  eventCreated: any;
 }
