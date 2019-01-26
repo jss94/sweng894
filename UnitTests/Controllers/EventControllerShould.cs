@@ -27,7 +27,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetAllEvents_ReturnEvents()
+        public void GetAllEventsByUser_ReturnEvents()
         {
 
             //arrange
