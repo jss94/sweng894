@@ -5,12 +5,14 @@ import { GetUsersComponent } from './get-users/get-users.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { EventComponent } from './events/event.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'vendors', component: GoogleMapComponent },
     { path: 'organizers', component: GetUsersComponent },
+    { path: 'events', component: EventComponent}
   ];
 
 @NgModule({
@@ -18,6 +20,7 @@ const routes: Routes = [
         HomeComponent,
         GoogleMapComponent,
         GetUsersComponent,
+        EventComponent
     ],
 
     imports: [

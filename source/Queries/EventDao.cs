@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT * FROM sweng894.events WHERE event_Id = @eventId;";
+                cmd.CommandText = @"SELECT * FROM occasions.events WHERE event_Id = @eventId;";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@eventId",
@@ -51,7 +52,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"INSERT INTO SWENG894.EVENTS (ORGANIZER_USERNAME, EVENT_NAME, EVENT_DESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
+                cmd.CommandText = @"INSERT INTO occasions.EVENTS (ORGANIZER_USERNAME, EVENT_NAME, EVENT_DESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@organizerUserName",
@@ -77,13 +78,14 @@ namespace source.Queries
 
         public async Task<List<Event>> GetAllEventsByUser(string organizerUserName)
         {
+            Console.Write("IN DAO NOW");
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT * FROM sweng894.events WHERE organizer_username = @organizerId;";
+                cmd.CommandText = @"SELECT event_name, event_description FROM occasions.events WHERE organizer_username = @organizerId;";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@organizerId",

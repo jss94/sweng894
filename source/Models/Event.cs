@@ -9,13 +9,13 @@ namespace source.Models
 
     {
         // unique string for event identifier
-        public string eventId { get; set; }
+        public int eventId { get; set; }
 
         // reference to the organizer who created the event.
         public string organizerId { get; set; }
 
         //reference to the identifier of the guest list
-        public string guestListId { get; set; }
+        public int guestListId { get; set; }
 
         //The name of the Event.
         public string name { get; set; }

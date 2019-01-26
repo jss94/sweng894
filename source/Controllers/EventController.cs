@@ -26,8 +26,9 @@ namespace source.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
         {
+            Console.Write("IN HERE!!!");
             var result = await _eventDao.GetAllEventsByUser(username);
-
+            Console.Write("NOW HERE!!");
             if (result == null)
                 return new NotFoundResult();
 
