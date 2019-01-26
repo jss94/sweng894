@@ -22,26 +22,38 @@ namespace source.Controllers
             _eventDao = evntDao;
         }
 
-        // GET: api/Event
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET: api/Event/
+        [HttpGet("{username}")]
+        public async Task<IActionResult> Get(string username)
         {
-            throw new NotImplementedException();
+            var result = await _eventDao.GetAllEventsByUser(username);
+
+            if (result == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(result);
         }
 
-        // GET: api/Event/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int eventId)
+        [HttpGet("{username}/{eventId}")]
+        public async Task<IActionResult> Get(string username, string eventId)
         {
-            throw new NotImplementedException();
+            var result = await _eventDao.GetOneEventById(eventId);
+
+            if (result == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(result);
         }
 
         // POST: api/Event
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody]Event body)
         {
-            throw new NotImplementedException();
+            await _eventDao.CreateNewEvent(body);
+            return new OkObjectResult(body);
         }
+
+        //--------------------NOT IMPLEMENTED--------------
 
         // PUT: api/Event/5
         [HttpPut("{id}")]

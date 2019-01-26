@@ -12,12 +12,18 @@ namespace source.Queries
     {
 
         public readonly IAppDatabase _database;
+
+        public EventDao()
+        {
+            //empty constructor
+        }
+
         public EventDao(IAppDatabase db)
         {
             _database = db;
         }
 
-        public async Task<Event> GetOneAsync(string eventId)
+        public async Task<Event> GetOneEventById(string eventId)
         {
             using (var db = _database)
             {
@@ -25,7 +31,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT name, description FROM sweng894.events WHERE eventId = @eventId;";
+                cmd.CommandText = @"SELECT * FROM sweng894.events WHERE event_Id = @eventId;";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@eventId",
@@ -37,7 +43,7 @@ namespace source.Queries
             }
         }
 
-        public async Task<List<Event>> GetAllAsync(string organizerId)
+        public async Task<Event> CreateNewEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -45,12 +51,44 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT name, description FROM sweng894.events WHERE organizerId = @organizerId;";
+                cmd.CommandText = @"INSERT INTO SWENG894.EVENTS (ORGANIZER_USERNAME, EVENT_NAME, EVENT_DESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@organizerUserName",
+                    DbType = DbType.String,
+                    Value = evnt.organizerId,
+                });
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@eventName",
+                    DbType = DbType.String,
+                    Value = evnt.organizerId,
+                });
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@eventDesc",
+                    DbType = DbType.String,
+                    Value = evnt.organizerId,
+                });
+                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                return result.Count > 0 ? result[0] : null;
+            }
+        }
+
+        public async Task<List<Event>> GetAllEventsByUser(string organizerUserName)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var cmd = db.Connection.CreateCommand() as MySqlCommand;
+                cmd.CommandText = @"SELECT * FROM sweng894.events WHERE organizer_username = @organizerId;";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@organizerId",
                     DbType = DbType.String,
-                    Value = organizerId,
+                    Value = organizerUserName,
                 });
                 return await ReadAllAsync(await cmd.ExecuteReaderAsync());
             }
