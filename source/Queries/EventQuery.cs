@@ -9,17 +9,17 @@ using source.Models;
 
 namespace source.Queries
 {
-    public class EventDao
+    public class EventQuery : IEventQuery
     {
 
         public readonly IAppDatabase _database;
 
-        public EventDao()
+        public EventQuery()
         {
             //empty constructor
         }
 
-        public EventDao(IAppDatabase db)
+        public EventQuery(IAppDatabase db)
         {
             _database = db;
         }
@@ -112,6 +112,12 @@ namespace source.Queries
                 }
             }
             return posts;
+        }
+        
+
+        public Task UpdateEvent(Event evnt)
+        {
+            throw new NotImplementedException();
         }
     }
 }

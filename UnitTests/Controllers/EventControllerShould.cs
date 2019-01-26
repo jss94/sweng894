@@ -15,13 +15,13 @@ namespace UnitTests.Controllers
     {
         // System Under Test
         readonly EventController _evntController;
-        readonly Mock<EventDao> __eventDaoMock;
+        readonly Mock<IEventQuery> __eventDaoMock;
         readonly Mock<Event> _eventMock;
 
 
         public EventControllerShould()
         {
-            __eventDaoMock = new Mock<EventDao>();
+            __eventDaoMock = new Mock<IEventQuery>();
 
             _evntController = new EventController(__eventDaoMock.Object);
         }

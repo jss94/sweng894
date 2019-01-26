@@ -14,10 +14,10 @@ namespace source.Controllers
     public class EventController : ControllerBase
     {
 
-        EventDao _eventDao { get; set; }
+        IEventQuery _eventDao { get; set; }
 
 
-        public EventController(EventDao evntDao)
+        public EventController(IEventQuery evntDao)
         {
             _eventDao = evntDao;
         }
