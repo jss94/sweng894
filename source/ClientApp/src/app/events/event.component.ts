@@ -15,4 +15,25 @@ export class EventComponent {
     });
 
   }
+
+  createNewEvent(): void {
+    console.log('hello there');
+    const testEvent: Event = {
+      organizerId: 'jss94',
+      name: 'New Test Event',
+      description: 'My Test Event Description',
+      eventCreated: null,
+      eventDate: null,
+      eventId: null,
+      guestListId: null
+     };
+
+     console.log('here now');
+    this.eventService.createNewEvent(testEvent).subscribe(response => {
+      console.log('back in here');
+    });
+
+    console.log('here now2');
+   }
+
 }

@@ -15,31 +15,38 @@ namespace UnitTests.Controllers
     {
         // System Under Test
         readonly EventController _evntController;
-        //readonly Mock<AppDatabase> _mockDb;
         readonly Mock<EventDao> __eventDaoMock;
         readonly Mock<Event> _eventMock;
 
 
         public EventControllerShould()
         {
-       //     _mockDb = new Mock<AppDatabase>();
             __eventDaoMock = new Mock<EventDao>();
-            _eventMock = new Mock<Event>();
 
             _evntController = new EventController(__eventDaoMock.Object);
-
         }
 
         [Fact]
-        public void CreateEventTest()
+        public void GetAllEvents_ReturnEvents()
         {
-            //Test setup of test is OK to this point. This can be removed once test is written
-            Assert.Equal("test", "test");
 
-            //TODO determine how to mock EventController get
+            //arrange
+            var evt = new Event { eventId = 1, organizerId = "jss94", description= "event description!" };
+            var evts = new List<Event> { evt, evt, evt };
 
-            //TODO, mock out call to Create New Event.
+            //act
+            __eventDaoMock.Setup(x => x.GetAllEventsByUser("jss94"))
+                .Returns(Task.Factory.StartNew(() => evts));
 
+            var task = _evntController.Get("jss94");
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var eventsResult = result.Value as List<Event>;
+            Assert.Equal(eventsResult[2].description, evts[2].description);
+            
         }
     }
 }

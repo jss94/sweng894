@@ -44,7 +44,7 @@ namespace source.Queries
             }
         }
 
-        public async Task<Event> CreateNewEvent(Event evnt)
+        public async Task<int> CreateNewEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -52,7 +52,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"INSERT INTO occasions.EVENTS (ORGANIZER_USERNAME, EVENT_NAME, EVENT_DESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
+                cmd.CommandText = @"INSERT INTO occasions.events (ORGANIZER_USERNAME, EVENT_NAME, EVENT_DESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@organizerUserName",
@@ -63,16 +63,17 @@ namespace source.Queries
                 {
                     ParameterName = "@eventName",
                     DbType = DbType.String,
-                    Value = evnt.organizerId,
+                    Value = evnt.name,
                 });
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@eventDesc",
                     DbType = DbType.String,
-                    Value = evnt.organizerId,
+                    Value = evnt.description,
                 });
-                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
-                return result.Count > 0 ? result[0] : null;
+                var result = await cmd.ExecuteNonQueryAsync();
+                Console.WriteLine(">>>>" + result);
+                return result;
             }
         }
 
