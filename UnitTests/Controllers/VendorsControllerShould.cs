@@ -7,6 +7,7 @@ using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using source.Models;
 using System;
+using source.Database;
 
 namespace UnitTests.Controllers
 {
@@ -53,13 +54,12 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            var testVendor = new Vendor();
-
+            
             _vendorsQueryMock.Setup(x => x.GetById(vendor.id))
-                .Returns(Task.Factory.StartNew(() => testVendor));
+                .Returns(Task.Factory.StartNew(() => vendor));
 
             // act
-            var task = _sut.GetById(Convert.ToInt32(vendor.id));
+            var task = _sut.GetById(vendor.id);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -70,17 +70,16 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetVendorByName_ReturnsVendorByName()
+        public void GetVendorByName_ReturnsVendorByUserName()
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            var testVendor = new Vendor();
-
+            
             _vendorsQueryMock.Setup(x => x.GetByUserName(vendor.userName))
-                .Returns(Task.Factory.StartNew(() => testVendor));
+                .Returns(Task.Factory.StartNew(() => vendor));
 
             // act
-            var task = _sut.GetByName(vendor.name);
+            var task = _sut.GetByUserName(vendor.userName);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -89,5 +88,7 @@ namespace UnitTests.Controllers
             var usersResult = result.Value as Vendor;
             Assert.Equal(vendor, usersResult);
         }
+
+        
     }
 }

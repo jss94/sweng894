@@ -18,23 +18,32 @@ namespace source.Queries
         public readonly IAppDatabase _database;
         public VendorsQuery(IAppDatabase db)
         {
-            _database = db;
+            _database = db;            
         }
 
         public async Task<List<Vendor>> GetAllAsync()
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"SELECT vendor_id, user_name, name, type, website, phone_number"
-                    + @"FROM occasions.vendors"
-                    + @"WHERE active = 1 ORDER BY user_name DESC;";
-                
-                var vendors = connection.QueryAsync<Vendor>(query).Result.ToList();
-                return vendors;
+                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
+                        + @"FROM occasions.vendors "
+                        + @"WHERE active = 1 ORDER BY user_name DESC;";
+
+                    var vendors = connection.QueryAsync<Vendor>(query).Result.ToList();
+                    return vendors;
+                }
             }
+            catch(Exception ex)
+            {
+                var thing = ex.Message;
+                var otherthing = ex.InnerException;
+            }
+            return null;
         }
 
         public async Task<Vendor> GetById(int id)
@@ -44,9 +53,9 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"SELECT vendor_id, user_name, name, type, website, phone_number"
-                    + @"FROM occasions.vendors"
-                    + @"WHERE vendor_id = id AND active = 1;";
+                string query = @"SELECT id, userName, name, type, website, phoneNumber "
+                    + @"FROM occasions.vendors "
+                    + @"WHERE id = id AND active = 1;";
 
                 var vendor = connection.QueryFirstAsync<Vendor>(query).Result;
                 return vendor;
@@ -60,9 +69,9 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"SELECT vendor_id, user_name, name, type, website, phone_number"
-                    + @"FROM occasions.vendors"
-                    + @"WHERE user_name = userName AND active = 1;";
+                string query = @"SELECT id, userName, name, type, website, phoneNumber "
+                    + @"FROM occasions.vendors "
+                    + @"WHERE userName = userName AND active = 1;";
 
                 var vendor = connection.QueryFirstAsync<Vendor>(query).Result;
                 return vendor;

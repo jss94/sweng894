@@ -15,6 +15,7 @@ namespace source.Controllers
             _query = query;
         }
 
+        /// GET api/vendors
         /// <summary>
         /// Gets all vendors
         /// </summary>
@@ -24,6 +25,7 @@ namespace source.Controllers
         {
             try
             {
+                var vendors = await _query.GetAllAsync();
                 return new OkObjectResult(await _query.GetAllAsync());
             }
             catch(Exception ex)
@@ -34,12 +36,13 @@ namespace source.Controllers
             }
         }
 
+        /// GET api/vendors/id
         /// <summary>
         /// Gets a vendor by the vendor id
         /// </summary>
         /// <param name="id">Vendor id</param>
         /// <returns>Vendor</returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -54,13 +57,14 @@ namespace source.Controllers
             }
         }
 
+        /// GET api/vendors/username
         /// <summary>
         /// Gets a single vendor by user name
         /// </summary>
         /// <param name="userName">Vendor's unique user name </param>
         /// <returns>Vendor</returns>
-        [HttpGet]
-        public async Task<IActionResult> GetByName(string userName)
+        [HttpGet("{userName}")]
+        public async Task<IActionResult> GetByUserName(string userName)
         {
             try
             {
