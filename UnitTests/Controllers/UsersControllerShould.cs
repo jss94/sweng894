@@ -16,13 +16,13 @@ namespace UnitTests.Controllers
         readonly UsersController _sut;
 
         readonly Mock<IUsersQuery> _usersQueryMock;
-        readonly Mock<User> _userMock;
+        readonly Mock<IUser> _userMock;
 
 
         public UsersControllerShould()
         {
             _usersQueryMock = new Mock<IUsersQuery>();
-            _userMock = new Mock<User>();
+            _userMock = new Mock<IUser>();
 
             _sut = new UsersController(_usersQueryMock.Object);
         }
@@ -31,7 +31,7 @@ namespace UnitTests.Controllers
         public void GetAllUser_ReturnsUsers()
         {
             // arrange
-            var user = new User { userName = "id1", lastName = "name1", role = "role1" };
+            var user = new User { id = "id1", name = "name1", role = "role1" };
             var users = new List<User> { user, user, user };
 
             _usersQueryMock.Setup(x => x.GetAllAsync())
@@ -45,7 +45,7 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as List<User>;
-            Assert.Equal(usersResult[2].userName, users[2].userName);
+            Assert.Equal(usersResult[2].id, users[2].id);
         }
     }
 }
