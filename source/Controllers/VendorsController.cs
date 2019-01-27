@@ -6,18 +6,25 @@ using source.Models;
 
 namespace source.Controllers
 {
+    /// <summary>
+    /// Vendor Controller
+    /// </summary>
     [Route("api/[controller]")]
     public class VendorsController
     {
         private IVendorsQuery _query;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="query">IVendorsQuery object handled by dependency injection</param>
         public VendorsController(IVendorsQuery query)
         {
             _query = query;
         }
 
-        /// GET api/vendors
         /// <summary>
+        /// GET api/vendors
         /// Gets all vendors
         /// </summary>
         /// <returns>List of Vendor</returns>
@@ -37,8 +44,8 @@ namespace source.Controllers
             }
         }
 
-        /// GET api/vendors/id
         /// <summary>
+        /// GET api/vendors/{id}
         /// Gets a vendor by the vendor id
         /// </summary>
         /// <param name="id">Vendor id</param>
@@ -58,8 +65,8 @@ namespace source.Controllers
             }
         }
 
-        /// GET api/vendors/username
         /// <summary>
+        /// GET api/vendors/{userName}
         /// Gets a single vendor by user name
         /// </summary>
         /// <param name="userName">Vendor's unique user name </param>
@@ -79,6 +86,12 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// POST api/vendors
+        /// Inserts a new vendor record
+        /// </summary>
+        /// <param name="vendor">Vendor</param>
+        /// <returns>New Vendor record</returns>
         [HttpPost]
         public async Task<IActionResult> InsertVendor([FromBody]Vendor vendor)
         {
@@ -94,6 +107,12 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// POST api/vendors/update
+        /// Updates a vendor record
+        /// </summary>
+        /// <param name="vendor">Vendor</param>
+        /// <returns>Updated Vendor record</returns>
         [HttpPost("update")]
         public async Task<IActionResult> UpdateVendor([FromBody]Vendor vendor)
         {
@@ -109,6 +128,12 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// POST api/vendor/remove
+        /// Marks a vendor record as inactive
+        /// </summary>
+        /// <param name="vendor">Vendor</param>
+        /// <returns>True if successful</returns>
         [HttpPost("remove")]
         public async Task<IActionResult> DeactivateVendor([FromBody]Vendor vendor)
         {
