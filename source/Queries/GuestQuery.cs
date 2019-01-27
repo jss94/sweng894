@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace source.Queries
 {
-    public class GuestQuery
+    public class GuestQuery : IGuestQuery
     {
         public readonly IAppDatabase _database;
         public GuestQuery(IAppDatabase db)
