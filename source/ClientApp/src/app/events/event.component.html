@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>My Events</h1>
+
+  <p>Your events are listed below.</p>
+
+  <p *ngIf="!events"><em>Loading...</em></p>
+
+  <span class="new-event">
+    <button class="new-event-button" (click)="createNewEvent()">New Event</button>
+  </span>
+
+
+  <table class='table table-striped' *ngIf="events">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of events">
+        <td>{{ event.name }}</td>
+        <td>{{ event.description }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
