@@ -108,6 +108,21 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
+
+        [HttpPost("remove")]
+        public async Task<IActionResult> DeactivateVendor([FromBody]Vendor vendor)
+        {
+            try
+            {
+                return new OkObjectResult(await _query.DeactivateVendor(vendor));
+            }
+            catch (Exception ex)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
+        }
     }
 
 }

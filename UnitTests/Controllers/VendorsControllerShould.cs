@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using source.Models;
-using System;
-using source.Database;
 
 namespace UnitTests.Controllers
 {
@@ -129,7 +127,28 @@ namespace UnitTests.Controllers
             Assert.Equal(vendor, usersResult);
         }
 
-       
+        [Fact]
+        public void DeactivateVendor_ReturnsNull()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            Vendor deactivatedVendor = null;
+
+            _vendorsQueryMock.Setup(x => x.DeactivateVendor(vendor))
+                .Returns(Task.Factory.StartNew(() => deactivatedVendor));
+
+            // act
+            var task = _sut.DeactivateVendor(vendor);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as Vendor;
+            Assert.Null(usersResult);
+        }
+
+
 
     }
 }
