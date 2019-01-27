@@ -57,7 +57,7 @@ namespace source
 
             services.AddTransient<IAppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddTransient<IUsersQuery, UsersQuery>();
-            services.AddTransient<EventQuery, EventQuery>();
+            services.AddTransient<IEventQuery, EventQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

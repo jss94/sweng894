@@ -48,7 +48,6 @@ namespace source.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Event body)
         {
-            Console.Write("IN POST!");
             await _eventDao.CreateNewEvent(body);
             return new OkObjectResult(body);
         }
