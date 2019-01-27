@@ -50,6 +50,7 @@ namespace source.Queries
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
+                return new List<Vendor>();
             }
         }
 
@@ -79,6 +80,7 @@ namespace source.Queries
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
+                return new Vendor();
             }
         }
 
@@ -108,6 +110,7 @@ namespace source.Queries
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
+                return new Vendor();
             }
         }
 
@@ -138,6 +141,7 @@ namespace source.Queries
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
+                return new Vendor();
             }
         }
 
@@ -168,6 +172,7 @@ namespace source.Queries
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
+                return new Vendor();
             }
         }
 
@@ -199,6 +204,7 @@ namespace source.Queries
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
+                return false;
             }
         }
 
