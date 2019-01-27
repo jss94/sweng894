@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using source.Models;
-using System;
 
 namespace UnitTests.Controllers
 {
@@ -31,7 +30,7 @@ namespace UnitTests.Controllers
         public void GetAllVendors_ReturnsVendors()
         {
             // arrange
-            var vendor = new Vendor { guid = "123", name = "name1", description = "description1" };
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
             var vendors = new List<Vendor> { vendor, vendor, vendor };
 
             _vendorsQueryMock.Setup(x => x.GetAllAsync())
@@ -45,7 +44,110 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as List<Vendor>;
-            Assert.Equal(usersResult[2].guid, vendors[2].guid);
+            Assert.Equal(usersResult[2].id, vendors[2].id);
         }
+
+        [Fact]
+        public void GetVendorById_ReturnsVendorById()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            
+            _vendorsQueryMock.Setup(x => x.GetById(vendor.id))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            // act
+            var task = _sut.GetById(vendor.id);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as Vendor;
+            Assert.Equal(vendor, usersResult);
+        }
+
+        [Fact]
+        public void GetVendorByName_ReturnsVendorByUserName()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            
+            _vendorsQueryMock.Setup(x => x.GetByUserName(vendor.userName))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            // act
+            var task = _sut.GetByUserName(vendor.userName);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as Vendor;
+            Assert.Equal(vendor, usersResult);
+        }
+
+        [Fact]
+        public void InsertVendor_ReturnsVendor()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+
+            _vendorsQueryMock.Setup(x => x.InsertVendor(vendor))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            // act
+            var task = _sut.InsertVendor(vendor);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as Vendor;
+            Assert.Equal(vendor, usersResult);
+        }
+
+        [Fact]
+        public void UpdateVendor_ReturnsVendor()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+
+            _vendorsQueryMock.Setup(x => x.UpdateVendor(vendor))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            // act
+            var task = _sut.UpdateVendor(vendor);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as Vendor;
+            Assert.Equal(vendor, usersResult);
+        }
+
+        [Fact]
+        public void DeactivateVendor_ReturnsNull()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            
+            _vendorsQueryMock.Setup(x => x.DeactivateVendor(vendor))
+                .Returns(Task.Factory.StartNew(() => true));
+
+            // act
+            var task = _sut.DeactivateVendor(vendor);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as bool?;
+            Assert.True(usersResult);
+        }
+
+
+
     }
 }

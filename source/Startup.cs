@@ -10,6 +10,10 @@ using source.Auth;
 using source.Database;
 using source.Models;
 using source.Queries;
+using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace source
 {
@@ -58,6 +62,19 @@ namespace source
             services.AddTransient<IAppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddTransient<IUsersQuery, UsersQuery>();
             services.AddTransient<IEventQuery, EventQuery>();
+            services.AddTransient<IVendorsQuery, VendorsQuery>();
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Occasions API", Version = "v1" });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
+            });            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +90,16 @@ namespace source
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Occasions API V1");
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
