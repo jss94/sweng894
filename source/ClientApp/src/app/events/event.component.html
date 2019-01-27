@@ -6,7 +6,11 @@
   <p *ngIf="!events"><em>Loading...</em></p>
 
   <span class="new-event">
-    <button class="new-event-button" (click)="createNewEvent()">New Event</button>
+      <ol>
+          <li>
+            <button mat-raised-button (click)="createNewEvent()">Create Event</button>
+          </li>
+        </ol>
   </span>
 
 
