@@ -31,8 +31,10 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var evt = new Event { eventId = 1, organizerId = "jss94", description= "event description!" };
-            var evts = new List<Event> { evt, evt, evt };
+            var evt1 = new Event { eventId = 1, organizerId = "jss94", description= "event description!" };
+            var evt2 = new Event { eventId = 2, organizerId = "jss94", description = "event description two!" };
+            var evt3 = new Event { eventId = 3, organizerId = "jss94", description = "event description three!!" };
+            var evts = new List<Event> { evt1, evt2, evt3 };
 
             //act
             __eventDaoMock.Setup(x => x.GetAllEventsByUser("jss94"))
@@ -46,7 +48,9 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as List<Event>;
             Assert.Equal(eventsResult[2].description, evts[2].description);
-            
+            Assert.Equal(eventsResult[2].organizerId, evts[2].organizerId);
+            Assert.Equal(eventsResult[2].eventId, evts[2].eventId);
+
         }
     }
 }

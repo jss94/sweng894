@@ -1,6 +1,6 @@
 export interface Event {
 
-  eventId: any;
+  eventId: number;
   organizerId: string;
   guestListId: any;
   name: string;

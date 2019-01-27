@@ -14,8 +14,9 @@ describe('EventComponent', () => {
     description: 'fake description',
     name: 'event name',
     eventDate: '2019/04/01',
-    eventId: '1234',
+    eventId: 1234,
     guestListId: null,
+    eventCreated: null
   };
 
   const fakeEvents: Event[] = [
