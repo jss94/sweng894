@@ -21,5 +21,19 @@ namespace source.Controllers
         {
             throw new NotImplementedException();
         }
+
+        // GET api/users
+        [HttpGet]
+        public async Task<IActionResult> GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        // GET api/users
+        [HttpGet]
+        public async Task<IActionResult> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

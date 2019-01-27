@@ -8,5 +8,7 @@ namespace source.Queries
     public interface IVendorsQuery
     {
         Task<List<Vendor>> GetAllAsync();
+        Task<Vendor> GetById(int id);
+        Task<Vendor> GetByUserName(string userName);
     }
 }
