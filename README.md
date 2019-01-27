@@ -92,3 +92,18 @@ Before you can use MySQL Workbench to connect to the db on Google Cloud you mush
 ```
     git push
 ```
+
+# Using Swagger
+Swagger is a tool that Swagger allows APIs to describe their own structure. It provides interactive documentation. Our swagger UI can be found at https://localhost:5001/swagger. It is set up to read the basic information from each API, and will read API descriptions if the native Visual Studio commenting structure is used. The commenting structure can be created by typing /// above your methods. 
+Ex.
+        /// <summary>
+        /// Gets a vendor by the vendor id
+        /// </summary>
+        /// <param name="id">Vendor id</param>
+        /// <returns>Vendor</returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            ...
+        }
+Swagger is interactive, so you can test your APIs from the UI.
