@@ -52,5 +52,50 @@ namespace UnitTests.Controllers
             Assert.Equal(eventsResult[2].eventId, evts[2].eventId);
 
         }
+
+        [Fact]
+        public void GetOneEventById_ReturnOneEvent()
+        {
+
+            //arrange
+            var evt2 = new Event { eventId = 2, organizerId = "jss94", description = "event description two!" };
+
+            //act
+            __eventDaoMock.Setup(x => x.GetOneEventById(2))
+                .Returns(Task.Factory.StartNew(() => evt2));
+
+            var task = _evntController.Get("jss94", 2);
+            
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var eventsResult = result.Value as Event;
+            Assert.Equal(evt2.description, eventsResult.description);
+            
+        }
+
+        [Fact]
+        public void CreateNewEvent_Post()
+        {
+
+            //arrange
+            var evt2 = new Event { eventId = 0, organizerId = "jss94", description = "mock test data event" };
+
+            //act
+            __eventDaoMock.Setup(x => x.CreateNewEvent(evt2))
+                .Returns(Task.Factory.StartNew(() => evt2));
+
+            var task = _evntController.Post(evt2);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var eventsResult = result.Value as Event;
+            Assert.Equal(evt2.description, eventsResult.description);
+
+        }
+
     }
 }

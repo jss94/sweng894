@@ -17,6 +17,7 @@ export class EventService {
   }
 
   createNewEvent(evt: Event): Observable<Object> {
+    console.log('Hello there' + evt);
     return this.auth.authPost('event/', evt);
   }
 

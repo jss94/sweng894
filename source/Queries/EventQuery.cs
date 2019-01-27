@@ -24,7 +24,7 @@ namespace source.Queries
             _database = db;
         }
 
-        public async Task<Event> GetOneEventById(string eventId)
+        public async Task<Event> GetOneEventById(int eventId)
         {
             using (var db = _database)
             {
@@ -36,7 +36,7 @@ namespace source.Queries
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@eventId",
-                    DbType = DbType.String,
+                    DbType = DbType.Int64,
                     Value = eventId,
                 });
                 var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
@@ -44,7 +44,7 @@ namespace source.Queries
             }
         }
 
-        public async Task<int> CreateNewEvent(Event evnt)
+        public async Task<Event> CreateNewEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -52,7 +52,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"INSERT INTO occasions.events (ORGANIZER_USERNAME, EVENT_NAME, EVENT_DESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
+                cmd.CommandText = @"INSERT INTO occasions.events (organizer_username, event_name, event_description) VALUES (@organizerUserName, @eventName, @eventDesc)";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@organizerUserName",
@@ -72,8 +72,11 @@ namespace source.Queries
                     Value = evnt.description,
                 });
                 var result = await cmd.ExecuteNonQueryAsync();
-                Console.WriteLine(">>>>" + result);
-                return result;
+                var lastInsertID = Convert.ToInt32(cmd.LastInsertedId);
+                Console.WriteLine("LAST INSERT ID:" + lastInsertID);
+
+                evnt.eventId = lastInsertID;
+                return evnt;
             }
         }
 

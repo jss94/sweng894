@@ -34,7 +34,7 @@ namespace source.Controllers
         }
 
         [HttpGet("{username}/{eventId}")]
-        public async Task<IActionResult> Get(string username, string eventId)
+        public async Task<IActionResult> Get(string username, int eventId)
         {
             var result = await _eventDao.GetOneEventById(eventId);
 
@@ -48,6 +48,7 @@ namespace source.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Event body)
         {
+            Console.Write("BODY RECEIVED!:" + body.organizerId);
             await _eventDao.CreateNewEvent(body);
             return new OkObjectResult(body);
         }

@@ -7,8 +7,8 @@ namespace source.Queries
     public interface IEventQuery
     {
         Task<List<Event>> GetAllEventsByUser(string organizer_id);
-        Task<Event> GetOneEventById(string eventId);
-        Task<int> CreateNewEvent(Event evnt);
+        Task<Event> GetOneEventById(int eventId);
+        Task<Event> CreateNewEvent(Event evnt);
         Task UpdateEvent(Event evnt);
     }
 }

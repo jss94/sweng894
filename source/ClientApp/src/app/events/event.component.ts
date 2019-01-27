@@ -21,15 +21,15 @@ export class EventComponent {
       organizerId: 'jss94',
       name: 'New Test Event',
       description: 'My Test Event Description',
-      eventCreated: null,
-      eventDate: null,
+      eventDateTime: 'empty',
+      eventCreated: 'empty',
       // eventId is handled by the db, this is a temporary value.
       eventId: 1,
-      guestListId: null
+      guestListId: 0
      };
 
     this.eventService.createNewEvent(testEvent).subscribe(response => {
-      // Response returned - TODO handle?
+      location.reload();
     });
 
    }
