@@ -16,13 +16,13 @@ namespace UnitTests.Controllers
         readonly VendorsController _sut;
 
         readonly Mock<IVendorsQuery> _vendorsQueryMock;
-        readonly Mock<IVendor> _vendorMock;
+        readonly Mock<Vendor> _vendorMock;
 
 
         public VendorsControllerShould()
         {
             _vendorsQueryMock = new Mock<IVendorsQuery>();
-            _vendorMock = new Mock<IVendor>();
+            _vendorMock = new Mock<Vendor>();
 
             _sut = new VendorsController(_vendorsQueryMock.Object);
         }
@@ -31,7 +31,7 @@ namespace UnitTests.Controllers
         public void GetAllVendors_ReturnsVendors()
         {
             // arrange
-            var vendor = new Vendor { guid = Guid.NewGuid(), name = "name1", description = "description1" };
+            var vendor = new Vendor { guid = "123", name = "name1", description = "description1" };
             var vendors = new List<Vendor> { vendor, vendor, vendor };
 
             _vendorsQueryMock.Setup(x => x.GetAllAsync())
