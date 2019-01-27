@@ -11,6 +11,6 @@ namespace source.Queries
         Task<Vendor> GetByUserName(string userName);
         Task<Vendor> InsertVendor(Vendor vendor);
         Task<Vendor> UpdateVendor(Vendor vendor);
-        Task<Vendor> DeactivateVendor(Vendor vendor);
+        Task<bool> DeactivateVendor(Vendor vendor);
     }
 }
