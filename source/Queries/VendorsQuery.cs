@@ -40,7 +40,7 @@ namespace source.Queries
 
                     string query = @"SELECT id, userName, name, type, website, phoneNumber "
                         + @"FROM occasions.vendors "
-                        + @"WHERE active = 1 ORDER BY user_name DESC;";
+                        + @"WHERE active = 1 ORDER BY userName DESC;";
 
                     var vendors = connection.QueryAsync<Vendor>(query).Result.ToList();
                     return vendors;

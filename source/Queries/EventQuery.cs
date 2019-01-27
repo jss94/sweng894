@@ -32,7 +32,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT * FROM occasions.events WHERE event_Id = @eventId;";
+                cmd.CommandText = @"SELECT * FROM occasions.events WHERE eventId = @eventId;";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@eventId",
@@ -52,7 +52,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"INSERT INTO occasions.events (ORGANIZER_USERNAME, EVENT_NAME, EVENT_DESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
+                cmd.CommandText = @"INSERT INTO occasions.events (ORGANIZERUSERNAME, EVENTNAME, EVENTDESCRIPTION) VALUES (@organizerUserName, @eventName, @eventDesc)";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@organizerUserName",
@@ -85,7 +85,7 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT event_name, event_description FROM occasions.events WHERE organizer_username = @organizerId;";
+                cmd.CommandText = @"SELECT eventName, eventDescription FROM occasions.events WHERE organizerUsername = @organizerId;";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@organizerId",

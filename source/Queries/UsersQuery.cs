@@ -27,8 +27,8 @@ namespace source.Queries
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText
-                    = @"SELECT user_name, first_name, last_name, address_id, role "
-                    + @"FROM occasions.users WHERE user_name = @userName;";
+                    = @"SELECT userName, firstName, lastName, addressId, role "
+                    + @"FROM occasions.users WHERE userName = @userName;";
                 BindId(cmd, username);
                 var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
                 return result.Count > 0 ? result[0] : null;
@@ -44,9 +44,9 @@ namespace source.Queries
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText
-                    = @"SELECT user_name, first_name, last_name, address_id, role "
+                    = @"SELECT userName, firstName, lastName, addressId, role "
                     + @"FROM occasions.users "
-                    + @"WHERE active = 1 ORDER BY user_name DESC;";
+                    + @"WHERE active = 1 ORDER BY userName DESC;";
                 return await ReadAllAsync(await cmd.ExecuteReaderAsync());
             }
         }
@@ -82,7 +82,7 @@ namespace source.Queries
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText 
-                    = @"INSERT INTO occasions.users (user_name, first_name, last_name, address_id, role) "
+                    = @"INSERT INTO occasions.users (userName, firstName, lastName, addressId, role) "
                     + @"VALUES (@user.userName, @user.firstName, @user.lastName, @user.addressId, @user.role);";
                 BindParams(cmd, user);
                 await cmd.ExecuteNonQueryAsync();
@@ -99,10 +99,10 @@ namespace source.Queries
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText
-                    = @"UPDATE occasions.users SET username = @user.username, "
-                    + @"first_name = @user.firstname, last_name = @user.lastName "
-                    + @"address_id = @user.addressId, role = @user.role "
-                    + @"WHERE username = @user.username;";
+                    = @"UPDATE occasions.users SET userName = @user.userName, "
+                    + @"firstName = @user.firstName, lastName = @user.lastName "
+                    + @"addressId = @user.addressId, role = @user.role "
+                    + @"WHERE userName = @user.userName;";
                 BindParams(cmd, user);
                 BindId(cmd, user);
                 await cmd.ExecuteNonQueryAsync();
@@ -119,7 +119,7 @@ namespace source.Queries
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText 
                     = @"UPDATE occasions.users "
-                    + @"SET Active = 0 WHERE username = @user.username;";
+                    + @"SET Active = 0 WHERE userName = @user.userName;";
                 BindId(cmd, user);
                 await cmd.ExecuteNonQueryAsync();
             }
@@ -129,7 +129,7 @@ namespace source.Queries
         {
             cmd.Parameters.Add(new MySqlParameter
             {
-                ParameterName = "@username",
+                ParameterName = "@userName",
                 DbType = DbType.String,
                 Value = userName,
             });
@@ -139,7 +139,7 @@ namespace source.Queries
         {
             cmd.Parameters.Add(new MySqlParameter
             {
-                ParameterName = "@username",
+                ParameterName = "@userName",
                 DbType = DbType.String,
                 Value = user.userName,
             });
