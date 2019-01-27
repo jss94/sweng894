@@ -24,7 +24,6 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// GET api/vendors
         /// Gets all vendors
         /// </summary>
         /// <returns>List of Vendor</returns>
@@ -45,7 +44,6 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// GET api/vendors/{id}
         /// Gets a vendor by the vendor id
         /// </summary>
         /// <param name="id">Vendor id</param>
@@ -66,7 +64,6 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// GET api/vendors/{userName}
         /// Gets a single vendor by user name
         /// </summary>
         /// <param name="userName">Vendor's unique user name </param>
@@ -87,7 +84,6 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// POST api/vendors
         /// Inserts a new vendor record
         /// </summary>
         /// <param name="vendor">Vendor</param>
@@ -108,7 +104,6 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// POST api/vendors/update
         /// Updates a vendor record
         /// </summary>
         /// <param name="vendor">Vendor</param>
@@ -129,7 +124,6 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// POST api/vendor/remove
         /// Marks a vendor record as inactive
         /// </summary>
         /// <param name="vendor">Vendor</param>
