@@ -10,5 +10,8 @@ namespace source.Queries
         Task<List<Vendor>> GetAllAsync();
         Task<Vendor> GetById(int id);
         Task<Vendor> GetByUserName(string userName);
+        Task<Vendor> InsertVendor(Vendor vendor);
+        Task<Vendor> UpdateVendor(Vendor vendor);
+       
     }
 }

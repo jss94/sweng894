@@ -89,6 +89,47 @@ namespace UnitTests.Controllers
             Assert.Equal(vendor, usersResult);
         }
 
-        
+        [Fact]
+        public void InsertVendor_ReturnsVendor()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+
+            _vendorsQueryMock.Setup(x => x.InsertVendor(vendor))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            // act
+            var task = _sut.InsertVendor(vendor);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as Vendor;
+            Assert.Equal(vendor, usersResult);
+        }
+
+        [Fact]
+        public void UpdateVendor_ReturnsVendor()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+
+            _vendorsQueryMock.Setup(x => x.UpdateVendor(vendor))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            // act
+            var task = _sut.UpdateVendor(vendor);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as Vendor;
+            Assert.Equal(vendor, usersResult);
+        }
+
+       
+
     }
 }

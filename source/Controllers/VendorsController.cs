@@ -2,6 +2,7 @@
 using source.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using source.Models;
 
 namespace source.Controllers
 {
@@ -77,5 +78,36 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertVendor([FromBody]Vendor vendor)
+        {
+            try
+            {
+                return new OkObjectResult(await _query.InsertVendor(vendor));
+            }
+            catch (Exception ex)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
+        }
+
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateVendor([FromBody]Vendor vendor)
+        {
+            try
+            {
+                return new OkObjectResult(await _query.UpdateVendor(vendor));
+            }
+            catch (Exception ex)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
+        }
     }
+
 }
