@@ -27,8 +27,8 @@ namespace source.Queries
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText
-                    = @"SELECT guest_id, firstName, lastName, email, isGoing, event_id"
-                    + @"FROM occasions.guests WHERE event_id = @eventId;";
+                    = @"SELECT guestId, firstName, lastName, email, isGoing, eventId"
+                    + @"FROM occasions.guests WHERE eventId = @eventId;";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@eventId",
@@ -48,7 +48,7 @@ namespace source.Queries
 
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText
-                    = @"INSERT INTO occasions.users (user_name, firstName, lastName, email, isGoing, event_id) "
+                    = @"INSERT INTO occasions.users (userName, firstName, lastName, email, isGoing, eventId) "
                     + @"VALUES (@guest.firstName, @guest.lastName, @guest.email, @guest.isGoing, @guest.eventId)";
                 BindParams(cmd, guest);
                 await cmd.ExecuteNonQueryAsync();
@@ -66,11 +66,11 @@ namespace source.Queries
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText
                     = @"UPDATE occasions.guests SET firstName = @guest.firstName, "
-                    + @"last_name = @guest.lastName, "
+                    + @"lastName = @guest.lastName, "
                     + @"email = @guest.email, "
                     + @"isGoing = @guest.isGoing "
-                    + @"event_id =  @guest.eventId"
-                    + @"WHERE guest_id = @guest.guestId;";
+                    + @"eventId =  @guest.eventId"
+                    + @"WHERE guestId = @guest.guestId;";
                 BindParams(cmd, guest);
                 await cmd.ExecuteNonQueryAsync();
             }
@@ -87,7 +87,7 @@ namespace source.Queries
                 var cmd = db.Connection.CreateCommand() as MySqlCommand;
                 cmd.CommandText
                     = @"DELETE FROM occasions.guests "
-                    + @"WHERE guest_Id = @guestId";
+                    + @"WHERE guestId = @guestId";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@guestId",
