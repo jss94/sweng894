@@ -6,18 +6,35 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using source.Database;
 using source.Models;
+using Dapper;
+using System.Linq;
 
 namespace source.Queries
 {
+    /// <summary>
+    /// Users repository
+    /// </summary>
     public class UsersQuery : IUsersQuery
     {
+        /// <summary>
+        /// database object
+        /// </summary>
+        protected readonly IAppDatabase _database;
 
-        public readonly IAppDatabase _database;
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="db">IAppDatabase supplied via dependency injection</param>
         public UsersQuery(IAppDatabase db)
         {
             _database = db;
         }
 
+        /// <summary>
+        /// Gets a single user by username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public async Task<User> GetOneAsync(string username)
         {
             using (var db = _database)
@@ -25,16 +42,18 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText
-                    = @"SELECT userName, firstName, lastName, addressId, role "
+                string query = @"SELECT userName, firstName, lastName, addressId, role "
                     + @"FROM occasions.users WHERE userName = @userName;";
-                BindId(cmd, username);
-                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
-                return result.Count > 0 ? result[0] : null;
+
+                var user = connection.QueryFirstAsync<User>(query, new { username }).Result;
+                return user;
             }
         }
 
+        /// <summary>
+        /// Gets all users
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<User>> GetAllAsync()
         {
             using (var db = _database)
@@ -42,73 +61,64 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText
-                    = @"SELECT userName, firstName, lastName, addressId, role "
+                string query = @"SELECT userName, firstName, lastName, addressId, role "
                     + @"FROM occasions.users "
                     + @"WHERE active = 1 ORDER BY userName DESC;";
-                return await ReadAllAsync(await cmd.ExecuteReaderAsync());
+
+                var users = connection.QueryAsync<User>(query).Result.ToList();
+                return users;
             }
         }
 
-        private async Task<List<User>> ReadAllAsync(DbDataReader reader)
-        {
-            var posts = new List<User>();
-            using (reader)
-            {
-                while (await reader.ReadAsync())
-                {
-                    var post = new User()
-                    {
-                        userName = await reader.GetFieldValueAsync<string>(0),
-                        firstName = await reader.GetFieldValueAsync<string>(1),
-                        lastName = await reader.GetFieldValueAsync<string>(2),
-                        addressId = await reader.GetFieldValueAsync<string>(3),
-                        role = await reader.GetFieldValueAsync<string>(4),
-                    };
-                    posts.Add(post);
-                }
-            }
-            return posts;
-        }
-
-
-        public async Task InsertAsync(User user)
+        /// <summary>
+        /// Inserts a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<User> InsertAsync(User user)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText 
-                    = @"INSERT INTO occasions.users (userName, firstName, lastName, addressId, role) "
-                    + @"VALUES (@user.userName, @user.firstName, @user.lastName, @user.addressId, @user.role);";
-                BindParams(cmd, user);
-                await cmd.ExecuteNonQueryAsync();
-            }
+                string query = @"INSERT INTO occasions.users (userName, firstName, lastName, addressId, role) "
+                    + @"VALUES (@userName, @firstName, @lastName, @addressId, @role);"
+                    + @"SELECT * FROM occasions.users WHERE id = LAST_INSERT_ID() AND active = 1;";
 
+                var newUser = connection.QueryFirstAsync<User>(query, user).Result;
+                return newUser;
+            }
         }
 
-        public async Task UpdateAsync(User user)
+        /// <summary>
+        /// Updates an existing users record
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<User> UpdateAsync(User user)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText
-                    = @"UPDATE occasions.users SET userName = @user.userName, "
-                    + @"firstName = @user.firstName, lastName = @user.lastName "
-                    + @"addressId = @user.addressId, role = @user.role "
-                    + @"WHERE userName = @user.userName;";
-                BindParams(cmd, user);
-                BindId(cmd, user);
-                await cmd.ExecuteNonQueryAsync();
+                string query = @"UPDATE occasions.users SET username = @username, "
+                    + @"firstName = @firstname, lastName = @lastName "
+                    + @"addressId = @addressId, role = @role "
+                    + @"WHERE username = @username;"
+                    + @"SELECT * FROM occasions.users WHERE id = @id AND active = 1;";
+
+                var updatedUser = connection.QueryFirstAsync<User>(query, user).Result;
+                return updatedUser;
             }
         }
 
+        /// <summary>
+        /// Deactivates a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task DeactivateAsync(User user)
         {
             using (var db = _database)
@@ -116,61 +126,12 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText 
-                    = @"UPDATE occasions.users "
-                    + @"SET Active = 0 WHERE userName = @user.userName;";
-                BindId(cmd, user);
-                await cmd.ExecuteNonQueryAsync();
+                string query = @"UPDATE occasions.users "
+                    + @"SET active = 0 WHERE username = @username;";
+
+                var result = connection.QueryFirstAsync<Vendor>(query, user).Result;
             }
         }
 
-        private void BindId(MySqlCommand cmd, string userName)
-        {
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@userName",
-                DbType = DbType.String,
-                Value = userName,
-            });
-        }
-
-        private void BindId(MySqlCommand cmd, User user)
-        {
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@userName",
-                DbType = DbType.String,
-                Value = user.userName,
-            });
-        }
-
-        private void BindParams(MySqlCommand cmd, User user)
-        {
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@firstName",
-                DbType = DbType.String,
-                Value = user.firstName,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@lastName",
-                DbType = DbType.String,
-                Value = user.lastName,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@addressId",
-                DbType = DbType.String,
-                Value = user.addressId,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@role",
-                DbType = DbType.String,
-                Value = user.role,
-            });
-        }
     }
 }
