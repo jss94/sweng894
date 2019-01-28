@@ -15,10 +15,10 @@ namespace UnitTests.Models
             var myEvent = new Event { };
 
             //Set description
-            myEvent.description = "This is the best party ever!";
+            myEvent.eventDescription = "This is the best party ever!";
 
             //Test Setter - while pointless to test getter/setter, I am new to C#
-            Assert.Equal("This is the best party ever!", myEvent.description);
+            Assert.Equal("This is the best party ever!", myEvent.eventDescription);
         }
     }
 }

@@ -14,6 +14,9 @@ namespace source.Queries
     /// </summary>
     public class VendorsQuery : IVendorsQuery
     {
+        /// <summary>
+        /// database object
+        /// </summary>
         protected readonly IAppDatabase _database;
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace source.Queries
 
                     string query = @"SELECT id, userName, name, type, website, phoneNumber "
                         + @"FROM occasions.vendors "
-                        + @"WHERE active = 1 ORDER BY user_name DESC;";
+                        + @"WHERE active = 1 ORDER BY userName DESC;";
 
                     var vendors = connection.QueryAsync<Vendor>(query).Result.ToList();
                     return vendors;
@@ -70,9 +73,9 @@ namespace source.Queries
 
                     string query = @"SELECT id, userName, name, type, website, phoneNumber "
                         + @"FROM occasions.vendors "
-                        + @"WHERE id = id AND active = 1;";
+                        + @"WHERE id = @id AND active = 1;";
 
-                    var vendor = connection.QueryFirstAsync<Vendor>(query).Result;
+                    var vendor = connection.QueryFirstAsync<Vendor>(query, new { id }).Result;
                     return vendor;
                 }
             }
@@ -100,9 +103,9 @@ namespace source.Queries
 
                     string query = @"SELECT id, userName, name, type, website, phoneNumber "
                         + @"FROM occasions.vendors "
-                        + @"WHERE userName = userName AND active = 1;";
+                        + @"WHERE userName = @userName AND active = 1;";
 
-                    var vendor = connection.QueryFirstAsync<Vendor>(query).Result;
+                    var vendor = connection.QueryFirstAsync<Vendor>(query, new { userName }).Result;
                     return vendor;
                 }
             }
@@ -160,7 +163,7 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"UPDATE occasions.vendors "
-                        + @"SET name = @name, type = @type, addressId = @addressId, website = @website, phoneNumber = @phoneNumber) "
+                        + @"SET name = @name, type = @type, addressId = @addressId, website = @website, phoneNumber = @phoneNumber "
                         + @"WHERE id = @id; "
                         + @"SELECT * FROM occasions.vendors WHERE id = @id AND active = 1;";
 
@@ -191,13 +194,11 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"UPDATE occasions.vendors "
-                        + @"SET active = false "
+                        + @"SET active = 0 "
                         + @"WHERE id = @id AND active = 1;";
 
-                    var returnedValue = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
-                    if (returnedValue != null)
-                        return true;
-                    return false;
+                    var returnedValue = connection.QueryAsync<Vendor>(query, vendor);
+                    return true;                   
                 }
             }
             catch (Exception ex)

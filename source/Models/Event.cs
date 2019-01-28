@@ -12,16 +12,16 @@ namespace source.Models
         public int eventId { get; set; }
 
         // reference to the organizer who created the event.
-        public string organizerId { get; set; }
+        public string organizerUserName { get; set; }
 
         //reference to the identifier of the guest list
         public int guestListId { get; set; }
 
         //The name of the Event.
-        public string name { get; set; }
+        public string eventName { get; set; }
 
         //The description of the Event.
-        public string description { get; set; }
+        public string eventDescription { get; set; }
 
         //The date that the event will be held.
         public DateTime eventDateTime { get; set; }

@@ -32,7 +32,6 @@ namespace source.Controllers
         {
             try
             {
-                var vendors = await _query.GetAllAsync();
                 return new OkObjectResult(await _query.GetAllAsync());
             }
             catch(Exception ex)
@@ -68,7 +67,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="userName">Vendor's unique user name </param>
         /// <returns>Vendor</returns>
-        [HttpGet("{userName}")]
+        [HttpGet("user")]
         public async Task<IActionResult> GetByUserName(string userName)
         {
             try

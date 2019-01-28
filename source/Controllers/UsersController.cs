@@ -19,7 +19,6 @@ namespace source.Controllers
 
         // GET api/users/{userId}
         [HttpGet("{userId}")]
-        [Authorize]
         public async Task<IActionResult> GetUser(string userId)
         {
             var result = await _usersQuery.GetOneAsync(userId);
@@ -32,7 +31,6 @@ namespace source.Controllers
 
         // GET api/users
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _usersQuery.GetAllAsync();
