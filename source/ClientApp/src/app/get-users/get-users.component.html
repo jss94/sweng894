@@ -2,9 +2,64 @@
 
   <h1>App Users</h1>
 
-  <p>This component demonstrates fetching data from our MySql Database served on AWS.</p>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Register User
+        </mat-panel-title>
+        <mat-panel-description>
+          Add a user to the Users Database
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+ 
+      <div class="form">
+        <mat-form-field appearance="outline">
+          <mat-label>E-Mail</mat-label>
+          <input required autocomplete="email" matInput placeholder="ePugh@email.com">
+          <mat-hint>This will become your username</mat-hint>
+        </mat-form-field>
 
-  <p *ngIf="!users"><em>Loading...</em></p>
+        <br>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input autocomplete="name" matInput placeholder="Evan Pugh">
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Address</mat-label>
+          <input autocomplete="street-address" matInput placeholder="Old Main">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input autocomplete="locality" matInput placeholder="State College">
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <input autocomplete="region" matInput placeholder="PA">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Zipcode</mat-label>
+          <input autocomplete="postal-code" matInput placeholder="16801">
+        </mat-form-field>
+      </div>
+
+      <mat-action-row>
+        <button mat-button>
+          <mat-icon>add</mat-icon>
+          Add User
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <table class='table table-striped' *ngIf="users">
     <thead>
