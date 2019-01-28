@@ -6,10 +6,10 @@ namespace source.Queries
 {
     public interface IAddressesQuery
     {
-        Task<bool> Deactivate(Address address);
-        Task<List<Address>> GetAllAsync();
+        Task Deactivate(Address address);
+        Task<List<Address>> GetAll();
         Task<Address> GetById(int id);
-        Task<Address> Insert(Address address);
-        Task<Address> Update(Address address);
+        Task<int> Insert(Address address);
+        Task Update(Address address);
     }
 }

@@ -128,7 +128,8 @@ export class AuthService {
   public authPost(endpoint: string, body: any): Observable<any> {
     return this.http
     .post(`${this.baseUrl}api/${endpoint}`, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`)
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`),
+      body: body,
     });
   }
 }

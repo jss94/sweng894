@@ -10,29 +10,26 @@ using System.Linq;
 namespace source.Queries
 {
     /// <summary>
-    /// Vendors repository
+    /// Addresses query.
     /// </summary>
-    public class VendorsQuery : IVendorsQuery
+    public class AddressesQuery : IAddressesQuery
     {
-        /// <summary>
-        /// database object
-        /// </summary>
         protected readonly IAppDatabase _database;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="T:source.Queries.AddressesQuery"/> class.
         /// </summary>
-        /// <param name="db">IAppDatabase via dependency injection</param>
-        public VendorsQuery(IAppDatabase db)
+        /// <param name="db">Db.</param>
+        public AddressesQuery(IAppDatabase db)
         {
             _database = db;
         }
 
         /// <summary>
-        /// Gets a list of all vendors
+        /// Gets all async.
         /// </summary>
-        /// <returns>List of Vendor</returns>
-        public async Task<List<Vendor>> GetAllAsync()
+        /// <returns>The all async.</returns>
+        public async Task<List<Address>> GetAll()
         {
             try
             {
@@ -41,28 +38,28 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
-                        + @"FROM occasions.vendors "
-                        + @"WHERE active = 1 ORDER BY userName DESC;";
+                    string query = @"SELECT id, street, city, state, zip"
+                        + @" FROM occasions.addresses "
+                        + @" WHERE active = 1;";
 
-                    var vendors = connection.QueryAsync<Vendor>(query).Result.ToList();
-                    return vendors;
+                    var result = connection.QueryAsync<Address>(query).Result.ToList();
+                    return result;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
-                return new List<Vendor>();
+                return new List<Address>();
             }
         }
 
         /// <summary>
-        /// Gets a vendor record by vendor id
+        /// Gets the by identifier.
         /// </summary>
-        /// <param name="id">Vendor id</param>
-        /// <returns>Vendor</returns>
-        public async Task<Vendor> GetById(int id)
+        /// <returns>The by identifier.</returns>
+        /// <param name="id">Identifier.</param>
+        public async Task<Address> GetById(int id)
         {
             try
             {
@@ -71,28 +68,28 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
-                        + @"FROM occasions.vendors "
-                        + @"WHERE id = @id AND active = 1;";
+                    string query = @"SELECT id, street, city, state, zip"
+                        + @" FROM occasions.addresses "
+                        + @" WHERE id = @id AND active = 1;";
 
-                    var vendor = connection.QueryFirstAsync<Vendor>(query, new { id }).Result;
-                    return vendor;
+                    var result = connection.QueryFirstAsync<Address>(query, new { id }).Result;
+                    return result;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
-                return new Vendor();
+                return new Address();
             }
         }
 
         /// <summary>
-        /// Gets a vendor record by username
+        /// Insert the specified address.
         /// </summary>
-        /// <param name="userName">Vendors username</param>
-        /// <returns>Vendor</returns>
-        public async Task<Vendor> GetByUserName(string userName)
+        /// <returns>The insert.</returns>
+        /// <param name="address">Address.</param>
+        public async Task<int> Insert(Address address)
         {
             try
             {
@@ -101,28 +98,29 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
-                        + @"FROM occasions.vendors "
-                        + @"WHERE userName = @userName AND active = 1;";
+                    string query = @"INSERT INTO occasions.addresses "
+                        + @"(street, city, state, zip)"
+                        + @" VALUES(@street, @city, @state, @zip); "
+                        + @" SELECT id FROM occasions.addresses WHERE id = LAST_INSERT_ID() AND active = 1; ";
 
-                    var vendor = connection.QueryFirstAsync<Vendor>(query, new { userName }).Result;
-                    return vendor;
+                    var result = connection.QueryFirstAsync<int>(query, address).Result;
+                    return result;
                 }
             }
             catch (Exception ex)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
-                return new Vendor();
+                return new int();
             }
         }
 
         /// <summary>
-        /// Inserts a new vendor record
+        /// Update the specified address.
         /// </summary>
-        /// <param name="vendor">Vendor</param>
-        /// <returns>New vendor record</returns>
-        public async Task<Vendor> InsertVendor(Vendor vendor)
+        /// <returns>The update.</returns>
+        /// <param name="address">Address.</param>
+        public async Task Update(Address address)
         {
             try
             {
@@ -131,29 +129,29 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"INSERT INTO occasions.vendors "
-                        + @"(id, userName, name, type, addressId, website, phoneNumber, active) "
-                        + @"VALUES(@id, @userName, @name, @type, @addressId, @website, @phoneNumber, 1); "
-                        + @"SELECT * FROM occasions.vendors WHERE id = LAST_INSERT_ID() AND active = 1;";
+                    string query = @"UPDATE occasions.addresses "
+                        + @"SET street = @street, city = @city, state = @state, zip = @zip"
+                        + @" WHERE id = @id; "
+                        + @" SELECT * FROM occasions.addresses WHERE id = @id AND active = 1;";
 
-                    var returnedVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
-                    return returnedVendor;
+                    var result = connection.QueryFirstAsync<Address>(query, address).Result;
+                    await Task.CompletedTask;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
-                return new Vendor();
+                await Task.CompletedTask;
             }
         }
 
         /// <summary>
-        /// Updates a vendor record
+        /// Deactivate the specified address.
         /// </summary>
-        /// <param name="vendor">Vendor</param>
-        /// <returns>Updated vendor record</returns>
-        public async Task<Vendor> UpdateVendor(Vendor vendor)
+        /// <returns>The deactivate.</returns>
+        /// <param name="address">Address.</param>
+        public async Task Deactivate(Address address)
         {
             try
             {
@@ -162,50 +160,19 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"UPDATE occasions.vendors "
-                        + @"SET name = @name, type = @type, addressId = @addressId, website = @website, phoneNumber = @phoneNumber "
-                        + @"WHERE id = @id; "
-                        + @"SELECT * FROM occasions.vendors WHERE id = @id AND active = 1;";
+                    string query = @"UPDATE occasions.addresses "
+                        + @" SET active = 0"
+                        + @" WHERE id = @id AND active = 1;";
 
-                    var returnedVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
-                    return returnedVendor;
+                    var results = connection.QueryAsync<Vendor>(query, address);
+                    await Task.CompletedTask;            
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
-                return new Vendor();
-            }
-        }
-
-        /// <summary>
-        /// Deactivates a vendor record
-        /// </summary>
-        /// <param name="vendor">Vendor</param>
-        /// <returns>True/False</returns>
-        public async Task<bool> DeactivateVendor(Vendor vendor)
-        {
-            try
-            {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
-
-                    string query = @"UPDATE occasions.vendors "
-                        + @"SET active = 0 "
-                        + @"WHERE id = @id AND active = 1;";
-
-                    var returnedValue = connection.QueryAsync<Vendor>(query, vendor);
-                    return true;                   
-                }
-            }
-            catch (Exception ex)
-            {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
-                return false;
+                await Task.CompletedTask;
             }
         }
 

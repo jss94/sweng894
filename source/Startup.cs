@@ -63,6 +63,7 @@ namespace source
             services.AddTransient<IUsersQuery, UsersQuery>();
             services.AddTransient<IEventQuery, EventQuery>();
             services.AddTransient<IVendorsQuery, VendorsQuery>();
+            services.AddTransient<IAddressesQuery, AddressesQuery>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
