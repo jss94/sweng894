@@ -48,7 +48,6 @@ namespace source.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Event body)
         {
-            Console.Write("BODY RECEIVED!:" + body.organizerId);
             await _eventDao.CreateNewEvent(body);
             return new OkObjectResult(body);
         }

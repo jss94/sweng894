@@ -1,10 +1,10 @@
 export interface Event {
 
   eventId: number;
-  organizerId: string;
+  organizerUserName: string;
   guestListId: any;
-  name: string;
-  description: string;
+  eventName: string;
+  eventDescription: string;
   eventDateTime: any;
   eventCreated: any;
 }

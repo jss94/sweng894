@@ -6,24 +6,35 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using source.Database;
 using source.Models;
+using Dapper;
+using System.Linq;
 
 namespace source.Queries
 {
+    /// <summary>
+    /// Event repository
+    /// </summary>
     public class EventQuery : IEventQuery
     {
+        /// <summary>
+        /// database object
+        /// </summary>
+        protected readonly IAppDatabase _database;
 
-        public readonly IAppDatabase _database;
-
-        public EventQuery()
-        {
-            //empty constructor
-        }
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="db">IAppDatabase supplied by dependency injection</param>
         public EventQuery(IAppDatabase db)
         {
             _database = db;
         }
 
+        /// <summary>
+        /// Get an event by id
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
         public async Task<Event> GetOneEventById(int eventId)
         {
             using (var db = _database)
@@ -31,19 +42,21 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT * FROM occasions.events WHERE event_Id = @eventId;";
-                cmd.Parameters.Add(new MySqlParameter
-                {
-                    ParameterName = "@eventId",
-                    DbType = DbType.Int64,
-                    Value = eventId,
-                });
-                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
-                return result.Count > 0 ? result[0] : null;
+                string query = @"SELECT * FROM occasions.events WHERE eventId = @eventId;";
+
+                // Use the structure new { object } when you are passing in a single param
+                // If you pass in the object without the new { } Dapper will look for the 
+                // field eventId in the object eventId (ie. eventId.eventId)
+                var result = await connection.QueryFirstAsync<Event>(query, new { eventId });
+                return result;
             }
         }
 
+        /// <summary>
+        /// Inserts a new event
+        /// </summary>
+        /// <param name="evnt"></param>
+        /// <returns></returns>
         public async Task<Event> CreateNewEvent(Event evnt)
         {
             using (var db = _database)
@@ -51,35 +64,24 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"INSERT INTO occasions.events (organizer_username, event_name, event_description) VALUES (@organizerUserName, @eventName, @eventDesc)";
-                cmd.Parameters.Add(new MySqlParameter
-                {
-                    ParameterName = "@organizerUserName",
-                    DbType = DbType.String,
-                    Value = evnt.organizerId,
-                });
-                cmd.Parameters.Add(new MySqlParameter
-                {
-                    ParameterName = "@eventName",
-                    DbType = DbType.String,
-                    Value = evnt.name,
-                });
-                cmd.Parameters.Add(new MySqlParameter
-                {
-                    ParameterName = "@eventDesc",
-                    DbType = DbType.String,
-                    Value = evnt.description,
-                });
-                var result = await cmd.ExecuteNonQueryAsync();
-                var lastInsertID = Convert.ToInt32(cmd.LastInsertedId);
-                Console.WriteLine("LAST INSERT ID:" + lastInsertID);
+                // I left these all caps because Dapper doesnt care
+                string query = @"INSERT INTO occasions.events (ORGANIZERUSERNAME, EVENTNAME, EVENTDESCRIPTION, eventDateTime) "
+                    + @"VALUES (@organizerUserName, @eventName, @eventDescription, @eventDateTime)";
 
-                evnt.eventId = lastInsertID;
+                // Here we pass in the entire event without the new  { }
+                // Dapper will rightly look for fields like evnt.eventName doing this
+                int result = connection.QueryAsync<int>(query, evnt).Result.ToList().FirstOrDefault();
+
+                evnt.eventId = result;
                 return evnt;
             }
         }
 
+        /// <summary>
+        /// Get all events associated with a user
+        /// </summary>
+        /// <param name="organizerUserName"></param>
+        /// <returns></returns>
         public async Task<List<Event>> GetAllEventsByUser(string organizerUserName)
         {
             using (var db = _database)
@@ -87,37 +89,19 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText = @"SELECT event_name, event_description FROM occasions.events WHERE organizer_username = @organizerId;";
-                cmd.Parameters.Add(new MySqlParameter
-                {
-                    ParameterName = "@organizerId",
-                    DbType = DbType.String,
-                    Value = organizerUserName,
-                });
-                return await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                string query = @"SELECT eventName, eventDescription FROM occasions.events "
+                    + @"WHERE organizerUsername = @organizerUserName;";
+
+                var events = connection.QueryAsync<Event>(query, new { organizerUserName } ).Result.ToList();
+                return events;
             }
         }
 
-        private async Task<List<Event>> ReadAllAsync(DbDataReader reader)
-        {
-            var posts = new List<Event>();
-            using (reader)
-            {
-                while (await reader.ReadAsync())
-                {
-                    var post = new Event()
-                    {
-                        name = await reader.GetFieldValueAsync<string>(0),
-                        description = await reader.GetFieldValueAsync<string>(1),
-                    };
-                    posts.Add(post);
-                }
-            }
-            return posts;
-        }
-        
-
+        /// <summary>
+        /// Updates existing event
+        /// </summary>
+        /// <param name="evnt"></param>
+        /// <returns></returns>
         public Task UpdateEvent(Event evnt)
         {
             throw new NotImplementedException();

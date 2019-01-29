@@ -31,9 +31,9 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var evt1 = new Event { eventId = 1, organizerId = "jss94", description= "event description!" };
-            var evt2 = new Event { eventId = 2, organizerId = "jss94", description = "event description two!" };
-            var evt3 = new Event { eventId = 3, organizerId = "jss94", description = "event description three!!" };
+            var evt1 = new Event { eventId = 1, organizerUserName = "jss94", eventDescription = "event description!" };
+            var evt2 = new Event { eventId = 2, organizerUserName = "jss94", eventDescription = "event description two!" };
+            var evt3 = new Event { eventId = 3, organizerUserName = "jss94", eventDescription = "event description three!!" };
             var evts = new List<Event> { evt1, evt2, evt3 };
 
             //act
@@ -47,8 +47,8 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as List<Event>;
-            Assert.Equal(eventsResult[2].description, evts[2].description);
-            Assert.Equal(eventsResult[2].organizerId, evts[2].organizerId);
+            Assert.Equal(eventsResult[2].eventDescription, evts[2].eventDescription);
+            Assert.Equal(eventsResult[2].organizerUserName, evts[2].organizerUserName);
             Assert.Equal(eventsResult[2].eventId, evts[2].eventId);
 
         }
@@ -58,7 +58,7 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var evt2 = new Event { eventId = 2, organizerId = "jss94", description = "event description two!" };
+            var evt2 = new Event { eventId = 2, organizerUserName = "jss94", eventDescription = "event description two!" };
 
             //act
             __eventDaoMock.Setup(x => x.GetOneEventById(2))
@@ -71,7 +71,7 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as Event;
-            Assert.Equal(evt2.description, eventsResult.description);
+            Assert.Equal(evt2.eventDescription, eventsResult.eventDescription);
             
         }
 
@@ -80,7 +80,7 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var evt2 = new Event { eventId = 0, organizerId = "jss94", description = "mock test data event" };
+            var evt2 = new Event { eventId = 0, organizerUserName = "jss94", eventDescription = "mock test data event" };
 
             //act
             __eventDaoMock.Setup(x => x.CreateNewEvent(evt2))
@@ -93,7 +93,7 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as Event;
-            Assert.Equal(evt2.description, eventsResult.description);
+            Assert.Equal(evt2.eventDescription, eventsResult.eventDescription);
 
         }
 

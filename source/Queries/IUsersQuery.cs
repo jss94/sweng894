@@ -9,7 +9,7 @@ namespace source.Queries
         Task<List<User>> GetAllAsync();
         Task<User> GetOneAsync(string userName);
         Task DeactivateAsync(User user);
-        Task InsertAsync(User user);
-        Task UpdateAsync(User user);
+        Task<User> InsertAsync(User user);
+        Task<User> UpdateAsync(User user);
     }
 }

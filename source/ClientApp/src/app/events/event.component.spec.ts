@@ -10,9 +10,9 @@ describe('EventComponent', () => {
   let mockEventService: EventService;
 
   const fakeEvent: Event = {
-    organizerId: 'organizerId',
-    description: 'fake description',
-    name: 'event name',
+    organizerUserName: 'organizerId',
+    eventDescription: 'fake description',
+    eventName: 'event name',
     eventDateTime: '2019/04/01',
     eventId: 0,
     guestListId: 0,

@@ -18,11 +18,11 @@ export class EventComponent {
 
   createNewEvent(): void {
     const testEvent: Event = {
-      organizerId: 'jss94',
-      name: 'New Test Event',
-      description: 'My Test Event Description',
-      eventDateTime: 'empty',
-      eventCreated: 'empty',
+      organizerUserName: 'jss94',
+      eventName: 'New Test Event',
+      eventDescription: 'My Test Event Description',
+      eventDateTime: '2019/02/14 10:00:00',
+      eventCreated: '2019/01/28',
       // eventId is handled by the db, this is a temporary value.
       eventId: 1,
       guestListId: 0
