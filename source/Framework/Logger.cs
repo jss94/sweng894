@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace source.Business
+namespace source.Framework
 {
     /// <summary>
     /// Logger class for logging to database
@@ -22,8 +22,10 @@ namespace source.Business
             _loggerQuery = loggerQuery;
         }
         
-        public async Task LogEvent()
+        public async Task LogEvent(string userName, string logValue, string logDetail)
         {
+            
+            
 
         }
     }

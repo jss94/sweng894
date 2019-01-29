@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using source.Auth;
+using source.Framework;
 using source.Database;
 using source.Models;
 using source.Queries;
@@ -29,8 +31,8 @@ namespace source
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
+        
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -53,16 +55,19 @@ namespace source
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", domain)));
+                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new Framework.HasScopeRequirement("read:messages", domain)));
             });
 
             // register the scope authorization handler
-            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
-
+            services.AddSingleton<IAuthorizationHandler, Framework.HasScopeHandler>();
+            
             services.AddTransient<IAppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddTransient<IUsersQuery, UsersQuery>();
             services.AddTransient<IEventQuery, EventQuery>();
             services.AddTransient<IVendorsQuery, VendorsQuery>();
+            services.AddTransient<ILoggerQuery, LoggerQuery>();
+            services.AddTransient<ILogger, Logger>();
+            
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
