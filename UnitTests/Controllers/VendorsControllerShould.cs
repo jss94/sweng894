@@ -131,7 +131,7 @@ namespace UnitTests.Controllers
         public void DeactivateVendor_ReturnsNull()
         {
             // arrange
-            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var vendor = new Vendor { id = 123 };
             
             _vendorsQueryMock.Setup(x => x.DeactivateVendor(vendor))
                 .Returns(Task.Factory.StartNew(() => true));
