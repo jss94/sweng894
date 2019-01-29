@@ -25,12 +25,12 @@ export class GetUsersComponent {
   ];
 
   userForm = new FormGroup({
-    email: new FormControl('', Validators.required),
+    email: new FormControl('', [ Validators.required, Validators.email ]),
     name: new FormControl(''),
     street: new FormControl(''),
     city: new FormControl(''),
-    state: new FormControl('', Validators.maxLength(2)),
-    zip: new FormControl(''),
+    state: new FormControl('', [ Validators.minLength(2), Validators.maxLength(2) ]),
+    zip: new FormControl('', [ Validators.min(10), Validators.max(99999) ]),
     role: new FormControl('', Validators.required)
   });
 
@@ -40,25 +40,21 @@ export class GetUsersComponent {
     });
   }
 
-  onAddUser() {
+  onAddUser(): User {
     const user: User = {
       userName: this.userForm.controls['email'].value,
       name: this.userForm.controls['name'].value,
       role: this.userForm.controls['role'].value.toUpperCase(),
+      address: {
+        street: this.userForm.controls['street'].value,
+        city: this.userForm.controls['city'].value,
+        state: this.userForm.controls['state'].value.toUpperCase(),
+        zip: this.userForm.controls['zip'].value,
+      }
     };
 
-    const address: Address = {
-
-      street: this.userForm.controls['street'].value,
-      city: this.userForm.controls['city'].value,
-      state: this.userForm.controls['state'].value.toUpperCase(),
-      zip: this.userForm.controls['zip'].value,
-    };
-
-    user.address = address;
-
-    console.log(user);
     this.service.registerUser(user);
 
+    return user;
   }
 }
