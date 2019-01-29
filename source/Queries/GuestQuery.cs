@@ -6,159 +6,133 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using Dapper;
 using System.Threading.Tasks;
 
 namespace source.Queries
 {
+    /// <summary>
+    /// Guest Repository
+    /// </summary>
     public class GuestQuery : IGuestQuery
     {
+        /// <summary>
+        /// DB Object
+        /// </summary>
         public readonly IAppDatabase _database;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="db">DB used to pull guests</param>
         public GuestQuery(IAppDatabase db)
         {
             _database = db;
         }
 
+        /// <summary>
+        /// Get a list of guests by event
+        /// </summary>
+        /// <param name="eventId">DB id of the event you want to search for</param>
+        /// <returns>List of guests</returns>
         public async Task<List<Guest>> GetGuestListByEventId(int eventId)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
-
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText
-                    = @"SELECT guestId, firstName, lastName, email, isGoing, eventId"
-                    + @"FROM occasions.guests WHERE eventId = @eventId;";
-                cmd.Parameters.Add(new MySqlParameter
+                using (var db = _database)
                 {
-                    ParameterName = "@eventId",
-                    DbType = DbType.Int64,
-                    Value = eventId,
-                });
-                return await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"SELECT guestId, firstName, lastName, email, isGoing, eventId"
+                        + @"FROM occasions.guests "
+                        + "WHERE eventId = @eventId;";
+
+                    var guests = connection.QueryAsync<Guest>(query, new { eventId }).Result.ToList();
+                    return guests;
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: Traditional Logging
+                return new List<Guest>();
             }
         }
 
-        public async Task InsertGuest(Guest guest)
+        /// <summary>
+        /// Add a guest to the DB
+        /// </summary>
+        /// <param name="guest">Person being added</param>
+        /// <returns>The guest back after successful addition</returns>
+        public async Task<Guest> InsertGuest(Guest guest)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText
-                    = @"INSERT INTO occasions.users (userName, firstName, lastName, email, isGoing, eventId) "
-                    + @"VALUES (@guest.firstName, @guest.lastName, @guest.email, @guest.isGoing, @guest.eventId)";
-                BindParams(cmd, guest);
-                await cmd.ExecuteNonQueryAsync();
+                string query = @"INSERT INTO occasions.users (userName, firstName, lastName, email, isGoing, eventId) "
+                    + @"VALUES (@guest.firstName, @guest.lastName, @guest.email, @guest.isGoing, @guest.eventId) "
+                    + @"SELECT * FROM occasions.guests WHERE guestId = LAST_INSERT_ID()";
+
+                var guestReturn = connection.QueryFirstAsync<Guest>(query, guest).Result;
+                return guestReturn;
             }
 
         }
 
-        public async Task UpdateGuest(Guest guest)
+        /// <summary>
+        /// Update a guest information
+        /// </summary>
+        /// <param name="guest">guest information going to be updated</param>
+        /// <returns></returns>
+        public async Task<Guest> UpdateGuest(Guest guest)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText
-                    = @"UPDATE occasions.guests SET firstName = @guest.firstName, "
+                string query = @"UPDATE occasions.guests SET firstName = @guest.firstName, "
                     + @"lastName = @guest.lastName, "
                     + @"email = @guest.email, "
                     + @"isGoing = @guest.isGoing "
                     + @"eventId =  @guest.eventId"
-                    + @"WHERE guestId = @guest.guestId;";
-                BindParams(cmd, guest);
-                await cmd.ExecuteNonQueryAsync();
+                    + @"WHERE guestId = @guest.guestId;"
+                    + @"SELECT * FROM occasions.guests WHERE guestId = @guestId";
+
+                var guestReturn = connection.QueryFirstAsync<Guest>(query, guest).Result;
+                return guestReturn;
             }
 
         }
 
-        public async Task DeleteGuestById(int guestId)
+        /// <summary>
+        /// Deletes a guest from the db
+        /// </summary>
+        /// <param name="guestId">DB id of the guest</param>
+        /// <returns>Success/Failure</returns>
+        public async Task<bool> DeleteGuestById(int guestId)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
-
-                var cmd = db.Connection.CreateCommand() as MySqlCommand;
-                cmd.CommandText
-                    = @"DELETE FROM occasions.guests "
-                    + @"WHERE guestId = @guestId";
-                cmd.Parameters.Add(new MySqlParameter
+                using (var db = _database)
                 {
-                    ParameterName = "@guestId",
-                    DbType = DbType.Int64,
-                    Value = guestId,
-                });
-                await cmd.ExecuteNonQueryAsync();
-            }
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-        }
+                    var query = @"DELETE FROM occasions.guests "
+                        + @"WHERE guestId = @guestId";
 
-        private async Task<List<Guest>> ReadAllAsync(DbDataReader reader)
-        {
-            var posts = new List<Guest>();
-            using (reader)
-            {
-                while (await reader.ReadAsync())
-                {
-                    var post = new Guest()
-                    {
-                        guestId = await reader.GetFieldValueAsync<int>(0),
-                        firstName = await reader.GetFieldValueAsync<string>(1),
-                        lastName = await reader.GetFieldValueAsync<string>(2),
-                        email = await reader.GetFieldValueAsync<string>(3),
-                        isGoing = await reader.GetFieldValueAsync<bool?>(4),
-                        eventId = await reader.GetFieldValueAsync<int>(5)
-                    };
-                    posts.Add(post);
+                    var guestReturn = connection.QueryFirstAsync<Guest>(query, new { guestId }).Result;
+                    return true;
                 }
             }
-            return posts;
-        }
-
-        private void BindParams(MySqlCommand cmd, Guest guest)
-        {
-            cmd.Parameters.Add(new MySqlParameter
+            catch (Exception ex)
             {
-                ParameterName = "@guestId",
-                DbType = DbType.Int64,
-                Value = guest.guestId,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@firstName",
-                DbType = DbType.String,
-                Value = guest.firstName,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@lastName",
-                DbType = DbType.String,
-                Value = guest.lastName,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@email",
-                DbType = DbType.String,
-                Value = guest.email,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@isGoing",
-                DbType = DbType.Boolean,
-                Value = guest.isGoing,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@eventId",
-                DbType = DbType.Int64,
-                Value = guest.eventId,
-            });
+                // TODO: Traditional Logging
+                return false;
+            }
         }
     }
 }
