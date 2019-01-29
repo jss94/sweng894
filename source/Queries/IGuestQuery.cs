@@ -8,9 +8,9 @@ namespace source.Queries
 {
     public interface IGuestQuery
     {
-        Task<List<Guest>> GetGuestListByEventId(int eventId);
-        Task<Guest> InsertGuest(Guest guest);
-        Task<Guest> UpdateGuest(Guest guest);
-        Task<bool> DeleteGuestById(int guestId);
+        Task<List<Guest>> GetListByEventId(int eventId);
+        Task<Guest> Insert(Guest guest);
+        Task<Guest> Update(Guest guest);
+        Task<bool> DeleteById(int guestId);
     }
 }
