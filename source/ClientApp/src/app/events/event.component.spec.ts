@@ -44,7 +44,7 @@ describe('EventComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all events for organizer', () => {
+  it('should display all events for organizer', fakeAsync => {
     // arrange
     spyOn(mockEventService, 'getEvents').and.returnValue({ subscribe: () => fakeEvents });
 
@@ -53,7 +53,7 @@ describe('EventComponent', () => {
     // assert
     expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
 
-    // expect(component.events.length).toBe(2);
+     expect(component.events.length).toBe(2);
 
   });
 });
