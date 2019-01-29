@@ -57,7 +57,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="evnt"></param>
         /// <returns></returns>
-        public async Task<Event> CreateNewEvent(Event evnt)
+        public async Task<int> CreateNewEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -72,8 +72,7 @@ namespace source.Queries
                 // Dapper will rightly look for fields like evnt.eventName doing this
                 int result = connection.QueryAsync<int>(query, evnt).Result.ToList().FirstOrDefault();
 
-                evnt.eventId = result;
-                return evnt;
+                return result;
             }
         }
 

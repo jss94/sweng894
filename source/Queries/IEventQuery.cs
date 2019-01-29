@@ -8,7 +8,7 @@ namespace source.Queries
     {
         Task<List<Event>> GetAllEventsByUser(string organizer_id);
         Task<Event> GetOneEventById(int eventId);
-        Task<Event> CreateNewEvent(Event evnt);
+        Task<int> CreateNewEvent(Event evnt);
         Task UpdateEvent(Event evnt);
     }
 }
