@@ -27,10 +27,10 @@ export class GetUsersComponent {
   userForm = new FormGroup({
     email: new FormControl('', Validators.required),
     name: new FormControl(''),
-    address: new FormControl(''),
-    locality: new FormControl(''),
-    region: new FormControl('', Validators.maxLength(2)),
-    postalcode: new FormControl(''),
+    street: new FormControl(''),
+    city: new FormControl(''),
+    state: new FormControl('', Validators.maxLength(2)),
+    zip: new FormControl(''),
     role: new FormControl('', Validators.required)
   });
 
@@ -48,13 +48,17 @@ export class GetUsersComponent {
     };
 
     const address: Address = {
+
       street: this.userForm.controls['street'].value,
-      city: this.userForm.controls['locality'].value,
-      state: this.userForm.controls['region'].value.toUpperCase(),
-      zip: this.userForm.controls['postalcode'].value,
+      city: this.userForm.controls['city'].value,
+      state: this.userForm.controls['state'].value.toUpperCase(),
+      zip: this.userForm.controls['zip'].value,
     };
 
-    this.service.registerUser(user, address);
+    user.address = address;
+
+    console.log(user);
+    this.service.registerUser(user);
 
   }
 }

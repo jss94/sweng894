@@ -17,10 +17,12 @@ export class GetUsersService {
     }
 
     getUser(id: string): Observable<User> {
-        return this.auth.authGet('user/' + id);
+        return this.auth.authGet('users/' + id);
     }
 
-    registerUser(user: User, address: Address) {
-        return this.auth.authPost('user', { user, address });
+    registerUser(user: User) {
+        this.auth.authPost('users', user).subscribe((results) => {
+            console.log(results);
+        });
     }
 }

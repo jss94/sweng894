@@ -61,7 +61,6 @@ namespace source.Controllers
         /// </summary>
         /// <returns>The post.</returns>
         /// <param name="user">User.</param>
-        /// <param name="address">Address.</param>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]User user)
         {

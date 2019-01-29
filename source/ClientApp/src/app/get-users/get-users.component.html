@@ -13,7 +13,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <form class="form" [formGroup]="userForm" (ngSubmit)="onAddUser">
+      <form class="form" [formGroup]="userForm" (ngSubmit)="onAddUser()">
 
         <mat-form-field class="options">
           <mat-select placeholder="Your Job Type" formControlName="role">
@@ -53,20 +53,20 @@
         <mat-form-field appearance="outline">
           <mat-label>Address</mat-label>
           <input 
-            autocomplete="street-address" 
+            autocomplete="address-line1" 
             matInput 
             placeholder="Old Main"
-            formControlName="address"
+            formControlName="street"
             >
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>City</mat-label>
           <input 
-            autocomplete="locality" 
+            autocomplete="address-level2" 
             matInput 
             placeholder="State College"
-            formControlName="locality"
+            formControlName="city"
             >
         </mat-form-field>
 
@@ -75,10 +75,10 @@
         <mat-form-field appearance="outline">
           <mat-label>State</mat-label>
           <input 
-            autocomplete="region" 
+            autocomplete="address-level1" 
             matInput 
             placeholder="PA"
-            formControlName="region"
+            formControlName="state"
           >
         </mat-form-field>
 
@@ -88,7 +88,7 @@
             autocomplete="postal-code" 
             matInput 
             placeholder="16801"
-            formControlName="postalcode"
+            formControlName="zip"
             >
         </mat-form-field>
       
@@ -117,7 +117,7 @@
     <tbody>
       <tr *ngFor="let user of users">
         <td>{{ user.userName }}</td>
-        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ user.name }}</td>
         <td>{{ user.role }}</td>
       </tr>
     </tbody>

@@ -11,7 +11,7 @@ namespace source.Models
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        public int id { get; set; }
+        public int? id { get; set; }
 
         /// <summary>
         /// Gets or sets the street number.

@@ -9,7 +9,7 @@
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        public int id { get; set; }
+        public int? id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.
@@ -27,7 +27,7 @@
         /// Gets or sets the address identifier.
         /// </summary>
         /// <value>The address identifier.</value>
-        public int addressId { get; set; }
+        public int? addressId { get; set; }
 
         /// <summary>
         /// Gets or sets the address.
@@ -45,6 +45,6 @@
         /// Gets or sets a value indicating whether this <see cref="T:source.Models.User"/> is active.
         /// </summary>
         /// <value><c>true</c> if active; otherwise, <c>false</c>.</value>
-        public bool active { get; set; }
+        public bool? active { get; set; }
     }
 }
