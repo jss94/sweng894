@@ -35,7 +35,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="eventId">DB id of the event you want to search for</param>
         /// <returns>List of guests</returns>
-        public async Task<List<Guest>> GetGuestListByEventId(int eventId)
+        public async Task<List<Guest>> GetListByEventId(int eventId)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="guest">Person being added</param>
         /// <returns>The guest back after successful addition</returns>
-        public async Task<Guest> InsertGuest(Guest guest)
+        public async Task<Guest> Insert(Guest guest)
         {
             using (var db = _database)
             {
@@ -86,7 +86,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="guest">guest information going to be updated</param>
         /// <returns></returns>
-        public async Task<Guest> UpdateGuest(Guest guest)
+        public async Task<Guest> Update(Guest guest)
         {
             using (var db = _database)
             {
@@ -112,7 +112,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="guestId">DB id of the guest</param>
         /// <returns>Success/Failure</returns>
-        public async Task<bool> DeleteGuestById(int guestId)
+        public async Task<bool> DeleteById(int guestId)
         {
             try
             {
