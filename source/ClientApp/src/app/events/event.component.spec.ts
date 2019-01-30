@@ -1,8 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { EventComponent } from './event.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
 import { Event } from './Models/event.model';
+import { of } from 'rxjs/internal/observable/of';
 
 describe('EventComponent', () => {
   let component: EventComponent;
@@ -21,7 +22,8 @@ describe('EventComponent', () => {
 
   const fakeEvents: Event[] = [
     fakeEvent,
-      fakeEvent,
+    fakeEvent,
+    fakeEvent,
   ];
 
   beforeEach(async(() => {
@@ -37,23 +39,23 @@ describe('EventComponent', () => {
     fixture = TestBed.createComponent(EventComponent);
     component = fixture.componentInstance;
     mockEventService = TestBed.get(EventService);
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all events', () => {
+  it('should display all events', fakeAsync(() => {
     // arrange
-    spyOn(mockEventService, 'getEvents').and.returnValue(fakeEvents);
+    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
 
     // act
-    // when constructor is called.
+    fixture.detectChanges();
 
     // assert
     expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
     expect(component.events.length).toBe(3);
 
-  });
+  }));
+
 });
