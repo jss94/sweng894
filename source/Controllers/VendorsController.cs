@@ -3,6 +3,7 @@ using source.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using source.Models;
+using source.Framework;
 
 namespace source.Controllers
 {
@@ -13,14 +14,17 @@ namespace source.Controllers
     public class VendorsController
     {
         private IVendorsQuery _query;
+        private ILogger _logger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="query">IVendorsQuery object handled by dependency injection</param>
-        public VendorsController(IVendorsQuery query)
+        /// <param name="query">IVendorsQuery obtained via dependency injection</param>
+        /// <param name="logger">ILogger obtained via dependency injection</param>
+        public VendorsController(IVendorsQuery query, ILogger logger)
         {
             _query = query;
+            _logger = logger;
         }
 
         /// <summary>
@@ -32,6 +36,7 @@ namespace source.Controllers
         {
             try
             {
+
                 return new OkObjectResult(await _query.GetAllAsync());
             }
             catch(Exception ex)

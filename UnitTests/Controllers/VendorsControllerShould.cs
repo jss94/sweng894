@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using source.Models;
+using source.Framework;
 
 namespace UnitTests.Controllers
 {
@@ -15,6 +16,7 @@ namespace UnitTests.Controllers
         readonly VendorsController _sut;
 
         readonly Mock<IVendorsQuery> _vendorsQueryMock;
+        readonly Mock<ILogger> _loggerMock;
         readonly Mock<Vendor> _vendorMock;
 
 
@@ -23,7 +25,7 @@ namespace UnitTests.Controllers
             _vendorsQueryMock = new Mock<IVendorsQuery>();
             _vendorMock = new Mock<Vendor>();
 
-            _sut = new VendorsController(_vendorsQueryMock.Object);
+            _sut = new VendorsController(_vendorsQueryMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -131,7 +133,7 @@ namespace UnitTests.Controllers
         public void DeactivateVendor_ReturnsNull()
         {
             // arrange
-            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var vendor = new Vendor { id = 123 };
             
             _vendorsQueryMock.Setup(x => x.DeactivateVendor(vendor))
                 .Returns(Task.Factory.StartNew(() => true));
