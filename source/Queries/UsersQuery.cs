@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using source.Database;
@@ -12,13 +10,11 @@ using System.Linq;
 namespace source.Queries
 {
     /// <summary>
-    /// Users repository
+    /// Users query.
     /// </summary>
     public class UsersQuery : IUsersQuery
     {
-        /// <summary>
-        /// database object
-        /// </summary>
+
         protected readonly IAppDatabase _database;
 
         /// <summary>
@@ -35,60 +31,85 @@ namespace source.Queries
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public async Task<User> GetOneAsync(string username)
+        public async Task<User> GetByUserName(string username)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"SELECT userName, firstName, lastName, addressId, role "
-                    + @"FROM occasions.users WHERE userName = @userName;";
+                    string userQuery = @"SELECT userName, name, addressId, role "
+                        + @"FROM occasions.users WHERE userName = @username;";
 
-                var user = connection.QueryFirstAsync<User>(query, new { username }).Result;
-                return user;
+                    var user = connection.QueryFirstAsync<User>(userQuery, new { username }).Result;
+
+                    return user;
+                }
             }
+            catch (Exception)
+            {
+                return new User();
+            }
+
         }
 
         /// <summary>
         /// Gets all users
         /// </summary>
         /// <returns></returns>
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<User>> GetAll()
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"SELECT userName, firstName, lastName, addressId, role "
-                    + @"FROM occasions.users "
-                    + @"WHERE active = 1 ORDER BY userName DESC;";
+                    string query = @"SELECT userName, name, addressId, role "
+                        + @"FROM occasions.users "
+                        + @"WHERE active = 1 ORDER BY userName DESC;";
 
-                var users = connection.QueryAsync<User>(query).Result.ToList();
-                return users;
+                    var users = connection.QueryAsync<User>(query).Result.ToList();
+                    return users;
+                }
             }
+            catch (Exception)
+            {
+                return new List<User>();
+            }
+
         }
 
         /// <summary>
-        /// Inserts a user
+        /// Insert the specified user.
         /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public async Task<User> InsertAsync(User user)
+        /// <returns>The insert.</returns>
+        /// <param name="user">User.</param>
+        public async Task<int> Insert(User user)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"INSERT INTO occasions.users (userName, firstName, lastName, addressId, role) "
-                    + @"VALUES (@userName, @firstName, @lastName, @addressId, @role);"
-                    + @"SELECT * FROM occasions.users WHERE id = LAST_INSERT_ID() AND active = 1;";
+                    string query = @"INSERT INTO occasions.users (userName, name, addressId, role) "
+                        + @"VALUES (@userName, @name, @addressId, @role);"
+                        + @"SELECT LAST_INSERT_ID() FROM occasions.users WHERE active = 1;";
 
-                var newUser = connection.QueryFirstAsync<User>(query, user).Result;
-                return newUser;
+                    var result = connection.QueryFirstAsync<int>(query, user).Result;
+                    return result;
+                }
+            } 
+            catch(Exception)
+            {
+                return new int();
             }
+
         }
 
         /// <summary>
@@ -96,40 +117,55 @@ namespace source.Queries
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<User> UpdateAsync(User user)
+        public async Task Update(User user)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.users SET username = @username, "
-                    + @"firstName = @firstname, lastName = @lastName "
-                    + @"addressId = @addressId, role = @role "
-                    + @"WHERE username = @username;"
-                    + @"SELECT * FROM occasions.users WHERE id = @id AND active = 1;";
+                    string query = @"UPDATE occasions.users"
+                        + @" SET username = @username, name = @name, addressId = @addressId, role = @role "
+                        + @" WHERE username = @username;"
+                        + @" SELECT * FROM occasions.users WHERE id = @id AND active = 1;";
 
-                var updatedUser = connection.QueryFirstAsync<User>(query, user).Result;
-                return updatedUser;
+                    var updatedUser = connection.QueryFirstAsync<User>(query, user).Result;
+                    await Task.CompletedTask;
+                }
             }
+            catch (Exception)
+            {
+                await Task.CompletedTask;
+            }
+
         }
 
         /// <summary>
-        /// Deactivates a user
+        /// Deactivate the specified user.
         /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public async Task DeactivateAsync(User user)
+        /// <returns>The deactivate.</returns>
+        /// <param name="user">User.</param>
+        public async Task Deactivate(User user)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.users "
-                    + @"SET active = 0 WHERE username = @username;";
+                    string query = @"UPDATE occasions.users "
+                        + @"SET active = 0 WHERE username = @username;";
 
-                var result = connection.QueryFirstAsync<Vendor>(query, user).Result;
+                    var result = connection.QueryFirstAsync<Vendor>(query, user).Result;
+                    await Task.CompletedTask;
+                }
+            }
+            catch (Exception)
+            {
+                await Task.CompletedTask;
             }
         }
 

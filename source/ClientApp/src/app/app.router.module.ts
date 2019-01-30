@@ -6,6 +6,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { EventComponent } from './events/event.component';
+import { MaterialModule } from './material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -20,13 +22,16 @@ const routes: Routes = [
         HomeComponent,
         GoogleMapComponent,
         GetUsersComponent,
-        EventComponent
+        EventComponent,
+
     ],
 
     imports: [
         RouterModule.forRoot(routes),
         CommonModule,
         BrowserModule,
+        MaterialModule,
+        ReactiveFormsModule,
     ],
 
     exports: [ RouterModule ]

@@ -126,9 +126,12 @@ export class AuthService {
   }
 
   public authPost(endpoint: string, body: any): Observable<any> {
-    return this.http
-    .post(`${this.baseUrl}api/${endpoint}`, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`)
-    });
+    const url = `${this.baseUrl}api/${endpoint}`;
+    const opt = {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`),
+      body: body,
+    };
+
+    return this.http.post(url, body, opt);
   }
 }
