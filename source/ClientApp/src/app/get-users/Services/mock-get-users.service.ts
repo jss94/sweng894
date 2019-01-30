@@ -14,4 +14,8 @@ export class MockGetUsersService {
     getUser(id: string): Observable<User> {
         return of(null);
     }
+
+    registerUser(id: string): void {
+
+    }
 }

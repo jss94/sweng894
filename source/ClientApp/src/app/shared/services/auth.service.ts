@@ -12,6 +12,7 @@ export class AuthService {
   private _expiresAt: number;
 
   userProfile: any;
+  isVendor = true;
 
   auth0 = new auth0.WebAuth({
     clientID: '7tvdINTUbtF7igWDygC7lO90o8BEv27D',
@@ -126,9 +127,12 @@ export class AuthService {
   }
 
   public authPost(endpoint: string, body: any): Observable<any> {
-    return this.http
-    .post(`${this.baseUrl}api/${endpoint}`, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`)
-    });
+    const url = `${this.baseUrl}api/${endpoint}`;
+    const opt = {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`),
+      body: body,
+    };
+
+    return this.http.post(url, body, opt);
   }
 }

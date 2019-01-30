@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
 import { CallbackComponent } from './call-back/callback.component';
 import { GoogleMapsService } from './google-map/Services/google-maps.service';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,7 @@ import { GoogleMapsService } from './google-map/Services/google-maps.service';
     FormsModule,
     RoutingModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
+    MaterialModule,
   ],
   exports: [
   ],
@@ -36,7 +38,7 @@ import { GoogleMapsService } from './google-map/Services/google-maps.service';
     AuthService,
     GetUsersService,
     EventService,
-    GoogleMapsService
+    GoogleMapsService,
   ],
   bootstrap: [AppComponent]
 })

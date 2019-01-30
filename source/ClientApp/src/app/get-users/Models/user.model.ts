@@ -1,7 +1,10 @@
+import { Address } from 'src/app/shared/models/address.model';
+
 export interface User {
+    // id: number;
     userName: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     role: string;
-    address_id: string;
+    // addressId: number;
+    address?: Address;
 }
