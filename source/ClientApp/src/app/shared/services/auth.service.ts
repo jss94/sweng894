@@ -12,6 +12,7 @@ export class AuthService {
   private _expiresAt: number;
 
   userProfile: any;
+  isVendor = true;
 
   auth0 = new auth0.WebAuth({
     clientID: '7tvdINTUbtF7igWDygC7lO90o8BEv27D',
