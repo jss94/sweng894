@@ -27,7 +27,7 @@ const routes: Routes = [
     ],
 
     imports: [
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' }),
         CommonModule,
         BrowserModule,
         MaterialModule,

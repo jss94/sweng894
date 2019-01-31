@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from './Models/user.model';
 import { GetUsersService } from './Services/get-users.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Address } from '../shared/models/address.model';
-import { AuthService } from '../shared/services/auth.service';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 @Component({
   selector: 'app-get-users',
   templateUrl: './get-users.component.html',
   styleUrls: [ './get-users.component.css']
 })
-export class GetUsersComponent {
+export class GetUsersComponent implements OnInit {
   users: User[];
 
   roles = [
@@ -34,13 +33,17 @@ export class GetUsersComponent {
     role: new FormControl('', Validators.required)
   });
 
-  constructor(private service: GetUsersService) {
+  constructor(
+    private service: GetUsersService,
+    ) { }
+
+  ngOnInit() {
     this.service.getUsers().subscribe(response => {
       this.users = response;
     });
   }
 
-  onAddUser(): User {
+  onAddUser() {
     const user: User = {
       userName: this.userForm.controls['email'].value,
       name: this.userForm.controls['name'].value,
@@ -55,6 +58,7 @@ export class GetUsersComponent {
 
     this.service.registerUser(user);
 
-    return user;
+    // reload page
+    this.ngOnInit();
   }
 }

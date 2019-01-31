@@ -45,6 +45,7 @@ namespace source.Controllers
         /// </summary>
         /// <returns>The all.</returns>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _usersQuery.GetAll();
