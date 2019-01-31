@@ -11,7 +11,7 @@ namespace source.Controllers
     /// Users controller.
     /// </summary>
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
         IUsersQuery _usersQuery { get; set; }
         IAddressesQuery _addressesQuery { get; set; }
@@ -46,6 +46,7 @@ namespace source.Controllers
         /// <returns>The all.</returns>
         [HttpGet]
         [Authorize]
+        [Logger]
         public async Task<IActionResult> GetAll()
         {
             var result = await _usersQuery.GetAll();

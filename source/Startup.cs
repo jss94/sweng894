@@ -16,6 +16,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
 using System.Reflection;
+using source.Controllers;
 
 namespace source
 {
@@ -32,7 +33,11 @@ namespace source
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
-        
+
+            // Intercepts all controller calls with LoggerAttribute
+            services.AddMvc(options => { options.Filters.Add<LoggerAttribute>(); });
+
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
