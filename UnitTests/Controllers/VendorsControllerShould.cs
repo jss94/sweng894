@@ -17,13 +17,12 @@ namespace UnitTests.Controllers
 
         readonly Mock<IVendorsQuery> _vendorsQueryMock;
         readonly Mock<ILogger> _loggerMock;
-        readonly Mock<Vendor> _vendorMock;
 
 
         public VendorsControllerShould()
         {
             _vendorsQueryMock = new Mock<IVendorsQuery>();
-            _vendorMock = new Mock<Vendor>();
+            _loggerMock = new Mock<ILogger>();
 
             _sut = new VendorsController(_vendorsQueryMock.Object, _loggerMock.Object);
         }
