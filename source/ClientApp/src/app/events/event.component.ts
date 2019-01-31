@@ -14,6 +14,9 @@ export class EventComponent {
     const nickname = this.auth.userProfile.nickname;
     this.eventService.getEvents(nickname).subscribe(response => {
       this.events = response;
+      this.events.forEach(element => {
+        console.log(JSON.stringify(element));
+      });
     });
 
   }

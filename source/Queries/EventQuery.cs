@@ -89,7 +89,7 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"SELECT eventName, eventDescription FROM occasions.events "
+                string query = @"SELECT * FROM occasions.events "
                     + @"WHERE organizerUsername = @organizerUserName;";
 
                 var events = connection.QueryAsync<Event>(query, new { organizerUserName } ).Result.ToList();
@@ -98,7 +98,7 @@ namespace source.Queries
         }
 
         /// <summary>
-        /// Updates existing event
+        /// Enables a user to update the eventName, eventDescription and eventDateTime
         /// </summary>
         /// <param name="evnt"></param>
         /// <returns></returns>
@@ -108,26 +108,39 @@ namespace source.Queries
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
+                
+                string query = @"UPDATE occasions.events SET eventName=@eventName, eventDescription=@eventDescription, eventDateTime=STR_TO_DATE(@eventDateTime,'%m/%d/%Y %h:%i:%s %p') WHERE occasions.events.eventId =  @eventId";
 
-                string query = @"UPDATE events SET eventName='@eventName', eventDescripiton='@eventDescription', WHERE occasions.events.eventId =  @eventId";
-
-                return connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
+                return connection.QueryAsync<Event>(query, new { evnt.eventName, evnt.eventDescription, evnt.eventDateTime, evnt.eventId}).Result.ToList().FirstOrDefault();
                 
             }
         }
 
-        public async Task<Event> DeleteEvent(Event evnt)
+        public async Task<bool> DeleteEvent(Event evnt)
         {
             using (var db = _database)
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+             //   try
+               // {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"DELETE FROM events WHERE occasions.events.eventId =  @eventId";
+                
+                    string query = @"DELETE FROM occasions.events WHERE occasions.events.eventId =  @eventId";
+                //    connection.Execute(query, new { evnt.eventId}, commandType: CommandType.Text);
 
-                connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
+                connection.QueryAsync<Event>(query, new { evnt.eventId } );
 
-                return evnt;
+                    return true;
+               // }
+               // catch (Exception ex)
+               // {
+                 //   Console.WriteLine(ex.StackTrace);
+
+                    //TODO: we should log our errors in the db
+                    //Errors should bubble up but this is super helpful during development
+                   // return false;
+              //  }
 
             }
         }

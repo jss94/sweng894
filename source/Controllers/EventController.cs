@@ -61,18 +61,18 @@ namespace source.Controllers
         /// </summary>
         /// <param name="evnt">The Event to insert into the database.</param>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Event evnt)
+        public async Task<IActionResult>CreateEvent([FromBody]Event evnt)
         {
             await _eventQuery.CreateEvent(evnt);
             return new OkObjectResult(evnt);
         }
 
         /// <summary>
-        /// Updates the Event in the database given the event unique id
+        /// Enables a user to update the eventName, eventDescription and eventDateTime
         /// </summary>
-        /// <param name="evnt">The Event of which to update.</param>
+        /// <param name="evnt"></param>
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Event evnt)
+        public async Task<IActionResult> UpdateEvent([FromBody] Event evnt)
         {
             await _eventQuery.UpdateEvent(evnt);
             return new OkObjectResult(evnt);
@@ -82,10 +82,10 @@ namespace source.Controllers
         /// Deletes the Event in the database given the event unique id
         /// </summary>
         /// <param name="event">The Event to delete.</param>
-        [HttpDelete("{evnt}")]
-        public async void Delete(Event evnt)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteEvent(Event evnt)
         {
-            await _eventQuery.DeleteEvent(evnt);
+            return new OkObjectResult(await _eventQuery.DeleteEvent(evnt));
         }
     }
 }
