@@ -56,8 +56,8 @@ namespace source.Queries
         /// Inserts a new event
         /// </summary>
         /// <param name="evnt"></param>
-        /// <returns></returns>
-        public async Task<int> CreateNewEvent(Event evnt)
+        /// <returns>Event</returns>
+        public async Task<Event> CreateEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -70,9 +70,10 @@ namespace source.Queries
 
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
-                int result = connection.QueryAsync<int>(query, evnt).Result.ToList().FirstOrDefault();
+                Event createdEvent = connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
 
-                return result;
+
+                return createdEvent;
             }
         }
 
@@ -101,9 +102,34 @@ namespace source.Queries
         /// </summary>
         /// <param name="evnt"></param>
         /// <returns></returns>
-        public Task UpdateEvent(Event evnt)
+        public async Task<Event> UpdateEvent(Event evnt)
         {
-            throw new NotImplementedException();
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"UPDATE events SET eventName='@eventName', eventDescripiton='@eventDescription', WHERE occasions.events.eventId =  @eventId";
+
+                return connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
+                
+            }
+        }
+
+        public async Task<Event> DeleteEvent(Event evnt)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"DELETE FROM events WHERE occasions.events.eventId =  @eventId";
+
+                connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
+
+                return evnt;
+
+            }
         }
     }
 }

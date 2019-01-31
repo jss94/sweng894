@@ -83,7 +83,7 @@ namespace UnitTests.Controllers
             var evt2 = new Event { eventId = 0, organizerUserName = "jss94", eventDescription = "mock test data event" };
 
             //act
-            __eventDaoMock.Setup(x => x.CreateNewEvent(evt2))
+            __eventDaoMock.Setup(x => x.CreateEvent(evt2))
                 .Returns(Task.Factory.StartNew(() => evt2));
 
             var task = _evntController.Post(evt2);
