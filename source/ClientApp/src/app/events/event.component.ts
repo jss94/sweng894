@@ -11,22 +11,17 @@ export class EventComponent {
   public events: Event[];
 
   constructor(private auth: AuthService, private eventService: EventService) {
-  //  let username = this.auth.userProfile.organizerUserName;
-  //  if (username == null) {
-   //   console.log('Username was null!');
-    //  username = 'jss94';
-   // }
-    this.eventService.getEvents('jss94').subscribe(response => {
+    const nickname = this.auth.userProfile.nickname;
+    this.eventService.getEvents(nickname).subscribe(response => {
       this.events = response;
     });
 
   }
 
   createNewEvent(): void {
-    const nickname = 'jss94'; // this.auth.userProfile.nickname;
-    const username = 'jss94'; // this.auth.userProfile.organizerUserName;
+    const nickname = this.auth.userProfile.nickname;
     const testEvent: Event = {
-      organizerUserName: username,
+      organizerUserName: nickname,
       eventName: nickname + '\'s New Test Event',
       eventDescription: nickname + '\'s Event Description',
       eventDateTime: '2019/02/14 10:00:00',
