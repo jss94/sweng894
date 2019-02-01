@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Event } from './Models/event.model';
 import { EventService } from './Services/event.service';
 import { AuthService } from '../shared/services/auth.service';
@@ -7,18 +7,20 @@ import { AuthService } from '../shared/services/auth.service';
   selector: 'app-event',
   templateUrl: './event.component.html'
 })
-export class EventComponent {
+export class EventComponent implements OnInit {
   public events: Event[];
 
   constructor(private auth: AuthService, private eventService: EventService) {
+  }
+
+  ngOnInit() {
     const nickname = this.auth.userProfile.nickname;
-    this.eventService.getEvents(nickname).subscribe(response => {
+    this.eventService.getEvents('jss94').subscribe(response => {
       this.events = response;
       this.events.forEach(element => {
         console.log(JSON.stringify(element));
       });
     });
-
   }
 
   createNewEvent(): void {
@@ -35,7 +37,7 @@ export class EventComponent {
      };
 
     this.eventService.createNewEvent(testEvent).subscribe(response => {
-      location.reload();
+      // TODO - how do we reload the page with the user logged in?  location.reload();
     });
 
    }

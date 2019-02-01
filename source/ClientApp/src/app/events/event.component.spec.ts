@@ -1,13 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { EventComponent } from './event.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
 import { Event } from './Models/event.model';
+import { of } from 'rxjs/internal/observable/of';
+import { AuthService } from '../shared/services/auth.service';
+import { MockAuthService } from '../shared/services/mock-auth.service';
 
 describe('EventComponent', () => {
   let component: EventComponent;
   let fixture: ComponentFixture<EventComponent>;
   let mockEventService: EventService;
+  let mockAuthService: AuthService;
 
   const fakeEvent: Event = {
     organizerUserName: 'organizerId',
@@ -21,39 +25,48 @@ describe('EventComponent', () => {
 
   const fakeEvents: Event[] = [
     fakeEvent,
-      fakeEvent,
+    fakeEvent,
+    fakeEvent,
   ];
+
+  const fakeUserProfile: any = {
+    nickname: 'jss94'
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ EventComponent ],
       providers: [
-          { provide: EventService, useClass: MockEventService },
+          { provide: EventService, useClass: MockEventService},
+          { provide: AuthService, useClass: MockAuthService }
       ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     mockEventService = TestBed.get(EventService);
+    mockAuthService = TestBed.get(AuthService);
     fixture = TestBed.createComponent(EventComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all events for organizer', fakeAsync => {
+  it('should display all events', fakeAsync(() => {
     // arrange
-    spyOn(mockEventService, 'getEvents').and.returnValue({ subscribe: () => fakeEvents });
+    spyOn(mockAuthService, 'getUserProfile').and.returnValue(of(fakeUserProfile));
+    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
 
-    fixture = TestBed.createComponent(EventComponent);
+    // act
+    fixture.detectChanges();
 
     // assert
     expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
 
-     expect(component.events.length).toBe(2);
+     expect(component.events.length).toBe(3);
 
-  });
+  }));
+
 });

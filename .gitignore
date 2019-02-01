@@ -10,3 +10,6 @@ UnitTests/bin
 UnitTests/obj
 source/bin
 source/obj
+source/.DS_Store
+.DS_Store
+UnitTests/.DS_Store

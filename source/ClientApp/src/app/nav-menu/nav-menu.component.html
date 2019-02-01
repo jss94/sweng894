@@ -1,29 +1,47 @@
 <mat-toolbar>
-    <span class="logo-container nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-      <img class="logo clickable" src="./assets/occasions-24px.svg" alt="Home" [routerLink]='["/"]'>
+    <span class="logo-container" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+      <img class="logo clickable" src="./assets/img/occasions-24px.svg" alt="Home" [routerLink]='["/"]'>
     </span>
 
-    <span class="nav-item" [routerLinkActive]='["link-active"]'>
-      <a class="nav-link text-dark" [routerLink]='["/vendors"]'>Vendors</a>
-    </span>
+    <button *ngIf="auth.isVendor" mat-button [matMenuTriggerFor]="orginizerMenu">Organizers</button>
+    <mat-menu #orginizerMenu="matMenu">
+      <button mat-menu-item [routerLink]='["/organizer-events"]' [routerLinkActive]='["link-active"]'>
+        My Events
+      </button>
+      <button mat-menu-item [routerLink]='["/find-vendors"]' [routerLinkActive]='["link-active"]'>
+        Find Vendors
+      </button>
+      <!-- <button mat-menu-item [routerLink]='["/update-organizer"]' [routerLinkActive]='["link-active"]'> 
+       Update Organizer Account
+      </button> -->
+    </mat-menu>
 
-    <span class="nav-item" [routerLinkActive]='["link-active"]'>
-      <a class="nav-link text-dark" [routerLink]='["/organizers"]'>Organizers</a>
-    </span>
+    <button *ngIf="auth.isVendor" mat-button [matMenuTriggerFor]="vendorMenu">Vendors</button>
+    <mat-menu #vendorMenu="matMenu">
+      <button mat-menu-item [routerLink]='["/vendor-events"]' [routerLinkActive]='["link-active"]'>
+        My Events
+      </button>
+      <!-- <button mat-menu-item [routerLink]='["/update-vendor"]' [routerLinkActive]='["link-active"]'>
+        Update Vendor Account
+      </button> -->
+    </mat-menu>
 
-    <span class="nav-item" [routerLinkActive]='["link-active"]'>
-      <a class="nav-link text-dark" [routerLink]='["/events"]'>My Events</a>
-    </span>
-
-    <span class="nav-item clickable" [routerLinkActive]='["link-active"]'>
+    <button *ngIf="!auth.isAuthenticated()" mat-button [routerLink]='["/register"]' [routerLinkActive]='["link-active"]'>
+      Register
+    </button>
+    
+    <button mat-button class="clickable" [routerLinkActive]='["link-active"]'>
       <a class="nav-link text-dark" *ngIf="!auth.isAuthenticated()" (click)="auth.login()">Login</a>
-    </span>
+    </button>
 
-    <span class="nav-item clickable" [routerLinkActive]='["link-active"]'>
+    <button mat-button class="clickable" [routerLinkActive]='["link-active"]'>
       <a class="nav-link text-dark" *ngIf="auth.isAuthenticated()" (click)="auth.logout()">Logout</a>
-    </span>
+    </button>
 
-    <span class="nav-item" [routerLinkActive]='["link-active"]'>
+    <button mat-button [routerLinkActive]='["link-active"]'>
       <a class="nav-link text-grey" *ngIf="auth.isAuthenticated()" [routerLink]='["/profile"]'>{{ auth?.userProfile?.nickname }}</a>
-    </span>
+    </button>
+
+
+
 </mat-toolbar>
