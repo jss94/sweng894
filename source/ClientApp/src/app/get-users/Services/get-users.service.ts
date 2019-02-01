@@ -20,9 +20,7 @@ export class GetUsersService {
         return this.auth.authGet('users/' + id);
     }
 
-    registerUser(user: User) {
-        this.auth.authPost('users', user).subscribe((results) => {
-            console.log(results);
-        });
+    registerUser(user: User): Observable<User> {
+        return this.auth.authPost('users', user);
     }
 }

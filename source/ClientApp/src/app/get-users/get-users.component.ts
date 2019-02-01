@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from './Models/user.model';
 import { GetUsersService } from './Services/get-users.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatAccordion, MatExpansionPanel } from '@angular/material';
 
 @Component({
   selector: 'app-get-users',
@@ -10,8 +12,11 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
   styleUrls: [ './get-users.component.css']
 })
 export class GetUsersComponent implements OnInit {
-  users: User[];
 
+  @ViewChild(MatExpansionPanel) expansion: MatExpansionPanel;
+
+  users: User[];
+  isUserRegistrationActive = false;
   roles = [
     {
       value: 'Organizer',
@@ -35,6 +40,7 @@ export class GetUsersComponent implements OnInit {
 
   constructor(
     private service: GetUsersService,
+    private snackbar: MatSnackBar,
     ) { }
 
   ngOnInit() {
@@ -56,9 +62,21 @@ export class GetUsersComponent implements OnInit {
       }
     };
 
-    this.service.registerUser(user);
+    this.service.registerUser(user).subscribe((result) => {
+      let message = 'Successfully Registered User';
+
+      if (result.id === null) {
+        message = 'Error Registering User';
+      }
+
+      this.snackbar.open(message, '', {
+        duration: 2000
+      });
+    });
 
     // reload page
+    this.expansion.close();
+    this.userForm.reset();
     this.ngOnInit();
   }
 }
