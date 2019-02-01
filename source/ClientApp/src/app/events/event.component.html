@@ -1,32 +1,73 @@
 <div class="container">
+
   <h1>My Events</h1>
+  <div class="create-new">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Create Event
+          </mat-panel-title>
+          <mat-panel-description>
+            Creates an event with a name and description.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
 
-  <p>Your events are listed below.</p>
+        <form class="form" [formGroup]="userForm" (ngSubmit)="createNewEvent()">
 
-  <p *ngIf="!events"><em>Loading...</em></p>
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input
+              autocomplete="name"
+              matInput
+              placeholder="Event Name"
+              formControlName="name"
+              >
+          </mat-form-field>
 
-  <span class="new-event">
-      <ol>
-          <li>
-            <button mat-raised-button (click)="createNewEvent()">Create Event</button>
-          </li>
-        </ol>
-  </span>
+          <br>
 
+          <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <input
+                autocomplete="description"
+                matInput
+                placeholder="Event Description"
+                formControlName="description"
+                >
+            </mat-form-field>
 
-  <table class='table table-striped' *ngIf="events">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let event of events">
-        <td>{{ event.eventName }}</td>
-        <td>{{ event.eventDescription }}</td>
-      </tr>
-    </tbody>
-  </table>
+          <mat-action-row>
+            <button type="submit" mat-button [disabled]="!userForm.valid">
+              <mat-icon>add</mat-icon>
+              Add Event
+            </button>
+          </mat-action-row>
 
+        </form>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+  <div class="event-list">
+    <p>Your events are listed below.</p>
+
+    <p *ngIf="!events"><em>Loading...</em></p>
+
+    <table class='table table-striped' *ngIf="events">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events">
+          <td>{{ event.eventName }}</td>
+          <td>{{ event.eventDescription }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -1,0 +1,17 @@
+
+.create-new {
+  float: left;
+}
+
+.event-list {
+  float: right;
+}
+
+mat-form-field {
+  padding-top: 5px;
+  padding-right: 20px;
+}
+
+.options {
+  padding-left: 5px;
+}
