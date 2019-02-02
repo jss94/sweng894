@@ -11,7 +11,7 @@ namespace source.Controllers
     /// Users controller.
     /// </summary>
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
         IUsersQuery _usersQuery { get; set; }
         IAddressesQuery _addressesQuery { get; set; }
@@ -46,6 +46,7 @@ namespace source.Controllers
         /// <returns>The all.</returns>
         [HttpGet]
         [Authorize]
+        [Logger]
         public async Task<IActionResult> GetAll()
         {
             var result = await _usersQuery.GetAll();
@@ -82,16 +83,25 @@ namespace source.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> Put(string userId, [FromBody]User body)
         {
-            var result = await _usersQuery.GetByUserName(userId);
+            var user = await _usersQuery.GetByUserName(userId);
 
-            if (result == null)
+            if (user == null)
                 return new NotFoundResult();
 
-            result.userName = body.userName;
-            result.name = body.name;
-            result.role = body.role;
-            await _usersQuery.Update(result);
-            return new OkObjectResult(result);
+            user.userName = body.userName;
+            user.name = body.name;
+            user.role = body.role;
+
+            user.address.street = body.address.street;
+            user.address.city = body.address.city;
+            user.address.state = body.address.state;
+            user.address.zip = body.address.zip;
+
+            await _usersQuery.Update(user);
+
+            await _addressesQuery.Update(user.address);
+
+            return new OkObjectResult(user);
 
         }
 
