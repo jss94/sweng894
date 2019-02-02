@@ -1,26 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { GetUsersComponent } from './get-users.component';
-import { GetUsersService } from './Services/get-users.service';
-import { MockGetUsersService } from './Services/mock-get-users.service';
-import { FakeUser } from '../shared/models/fake-user.model';
-
-import { ReactiveFormsModule, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA, forwardRef } from '@angular/core';
+import { RegisterComponent } from './register.component';
+import { RegisterService } from './Services/register.service';
+import { MockRegisterService } from './Services/mock-register.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FakeUser } from '../shared/models/fake-user.model';
 
 describe('GetUsers', () => {
-  let component: GetUsersComponent;
-  let fixture: ComponentFixture<GetUsersComponent>;
-  let mockUsersService: GetUsersService;
+  let component: RegisterComponent;
+  let fixture: ComponentFixture<RegisterComponent>;
+  let mockRegisterService: MockRegisterService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        GetUsersComponent,
+        RegisterComponent,
       ],
       providers: [
-        { provide: GetUsersService, useClass: MockGetUsersService },
+        { provide: RegisterComponent, useClass: MockRegisterService },
       ],
       imports: [
         FormsModule,
@@ -36,9 +35,9 @@ describe('GetUsers', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GetUsersComponent);
+    fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
-    mockUsersService = TestBed.get(GetUsersService);
+    mockRegisterService = TestBed.get(RegisterService);
     fixture.detectChanges();
   });
 
@@ -49,13 +48,13 @@ describe('GetUsers', () => {
   describe('onAddUser', () => {
     it('should call the correct service', () => {
       // arrange
-      spyOn(mockUsersService, 'registerUser').and.callThrough();
+      spyOn(mockRegisterService, 'registerUser').and.callThrough();
 
       // act
       component.onAddUser();
 
       // assert
-      expect(mockUsersService.registerUser).toHaveBeenCalledTimes(1);
+      expect(mockRegisterService.registerUser).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from 'src/app/shared/models/user.model';
 
 @Injectable()
 export class AuthService {
@@ -10,13 +11,16 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
+  private _clientId = '7tvdINTUbtF7igWDygC7lO90o8BEv27D';
+  private _domain = 'sweng894.auth0.com';
+  private _connection = 'Username-Password-Authentication';
 
   userProfile: any;
   isVendor = true;
 
   auth0 = new auth0.WebAuth({
-    clientID: '7tvdINTUbtF7igWDygC7lO90o8BEv27D',
-    domain: 'sweng894.auth0.com',
+    clientID: this._clientId,
+    domain: this._domain,
     responseType: 'token id_token',
     redirectUri: 'https://localhost:5001/home',
     audience: 'https://localhost:5001/api',
@@ -119,14 +123,24 @@ export class AuthService {
     });
   }
 
-  public authGet(endpoint: string): Observable<any> {
+  public auth0Signup(user: User, password: string): Observable<any> {
+    return this.http
+    .post(`https://${this._domain}/dbconnections/signup`, {
+        'client_id': this._clientId,
+        'email': user.userName,
+        'password': password,
+        'connection': this._connection,
+    });
+  }
+
+  public Get(endpoint: string): Observable < any > {
     return this.http
     .get(`${this.baseUrl}api/${endpoint}`, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`)
     });
   }
 
-  public authPost(endpoint: string, body: any): Observable<any> {
+  public Post(endpoint: string, body: any): Observable < any > {
     const url = `${this.baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`),
@@ -135,4 +149,6 @@ export class AuthService {
 
     return this.http.post(url, body, opt);
   }
+
+
 }

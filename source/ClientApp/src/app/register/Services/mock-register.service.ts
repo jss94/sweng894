@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../shared/models/user.model';
 import { Observable, of } from 'rxjs';
+import { User } from 'src/app/shared/models/user.model';
 
 @Injectable()
-export class MockGetUsersService {
+export class MockRegisterService {
     constructor() {
     }
 

@@ -13,11 +13,11 @@ export class EventService {
   }
 
   getEvents(id: string): Observable<Event[]> {
-      return this.auth.authGet('event/' + id);
+      return this.auth.Get('event/' + id);
   }
 
   createNewEvent(evt: Event): Observable<Object> {
-    return this.auth.authPost('event/', evt);
+    return this.auth.Post('event/', evt);
   }
 
 }

@@ -1,12 +1,10 @@
-import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { User } from '../../shared/models/user.model';
+import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { Address } from 'src/app/shared/models/address.model';
+import { User } from 'src/app/shared/models/user.model';
 
 @Injectable()
-export class GetUsersService {
+export class RegisterService {
     constructor(
         private auth: AuthService,
         ) {
@@ -20,7 +18,10 @@ export class GetUsersService {
         return this.auth.Get('users/' + id);
     }
 
-    registerUser(user: User): Observable<User> {
-        return this.auth.Post('users', user);
+    registerUser(user: User, password: string): Observable<[User, any]> {
+        return forkJoin(
+            this.auth.Post('users', user),
+            this.auth.auth0Signup(user, password)
+        );
     }
 }

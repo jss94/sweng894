@@ -1,16 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { User } from '../shared/models/user.model';
-import { GetUsersService } from './Services/get-users.service';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
+import { User } from '../shared/models/user.model';
+import { RegisterService } from './Services/register.service';
 
 @Component({
-  selector: 'app-get-users',
-  templateUrl: './get-users.component.html',
-  styleUrls: [ './get-users.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: [ './register.component.css']
 })
-export class GetUsersComponent implements OnInit {
+export class RegisterComponent {
 
   @ViewChild(MatExpansionPanel) expansion: MatExpansionPanel;
 
@@ -29,6 +29,8 @@ export class GetUsersComponent implements OnInit {
 
   userForm = new FormGroup({
     email: new FormControl('', [ Validators.required, Validators.email ]),
+    password: new FormControl('', [ Validators.required, Validators.minLength(8) ]),
+    confirm: new FormControl('', [ Validators.required, Validators.minLength(8) ]),
     name: new FormControl(''),
     street: new FormControl(''),
     city: new FormControl(''),
@@ -38,15 +40,9 @@ export class GetUsersComponent implements OnInit {
   });
 
   constructor(
-    private service: GetUsersService,
+    private service: RegisterService,
     private snackbar: MatSnackBar,
     ) { }
-
-  ngOnInit() {
-    this.service.getUsers().subscribe(response => {
-      this.users = response;
-    });
-  }
 
   onAddUser() {
     const user: User = {
@@ -61,21 +57,31 @@ export class GetUsersComponent implements OnInit {
       }
     };
 
-    this.service.registerUser(user).subscribe((result) => {
-      let message = 'Successfully Registered User';
+    const password = this.userForm.controls['password'].value;
+    const confirm = this.userForm.controls['confirm'].value;
+    let message = 'Successfully Registered User';
+    if (password === confirm) {
+      this.service.registerUser(user, password).subscribe((result) => {
+        if (result[0].id === null) {
+          message = 'Error Registering User';
+        } else if (result[1].email_verified = false) {
+          message = 'Email already exists.';
+        }
 
-      if (result.id === null) {
-        message = 'Error Registering User';
-      }
+        this.snackbar.open(message, '', {
+          duration: 2000
+        });
+
+        // reload page
+        this.expansion.close();
+        this.userForm.reset();
+      });
+    } else {
+      message = 'Passwords do not match.';
 
       this.snackbar.open(message, '', {
         duration: 2000
       });
-    });
-
-    // reload page
-    this.expansion.close();
-    this.userForm.reset();
-    this.ngOnInit();
+    }
   }
 }
