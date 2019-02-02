@@ -1,12 +1,14 @@
 
 .create-new {
   float: left;
+  width: 25vw
 }
 
 .event-list {
   float: right;
   overflow: scroll;
   height: 75vh;
+  width: 50vw;
 }
 
 mat-form-field {

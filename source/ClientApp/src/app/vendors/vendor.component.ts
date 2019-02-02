@@ -10,9 +10,11 @@ export class VendorComponent {
   public vendors: Vendor[];
 
   constructor(private vendorService: VendorService) {
+  }
+
+  ngOnInit() {
     this.vendorService.getVendors().subscribe((response: Vendor[]) => {
       this.vendors = response;
     });
   }
-
 }

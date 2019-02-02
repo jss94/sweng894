@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { GetUsersService } from './get-users/Services/get-users.service';
 import { EventService } from './events/Services/event.service';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RoutingModule } from './app.router.module';
 import { CommonModule } from '@angular/common';
@@ -28,6 +27,7 @@ import { MaterialModule } from './material.module';
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
