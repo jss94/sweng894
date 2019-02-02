@@ -20,4 +20,8 @@ export class EventService {
     return this.auth.authPost('event/', evt);
   }
 
+  deleteEvent(evnt: Event): Observable<Object> {
+    return this.auth.authDelete('event/', evnt);
+  }
+
 }

@@ -5,6 +5,8 @@
 
 .event-list {
   float: right;
+  overflow: scroll;
+  height: 75vh;
 }
 
 mat-form-field {

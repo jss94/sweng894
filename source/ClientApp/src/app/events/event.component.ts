@@ -14,7 +14,7 @@ export class EventComponent implements OnInit {
 
   userForm = new FormGroup({
     name: new FormControl('', [ Validators.required]),
-    description: new FormControl(''),
+    description: new FormControl('', [ Validators.required]),
   });
 
   constructor(private auth: AuthService, private eventService: EventService) {
@@ -49,6 +49,13 @@ export class EventComponent implements OnInit {
       this.ngOnInit();
     });
 
+   }
+
+   deleteEvent(evnt: Event): void {
+    this.eventService.deleteEvent(evnt).subscribe(response => {
+      // reload page
+     this.ngOnInit();
+   });
    }
 
 }
