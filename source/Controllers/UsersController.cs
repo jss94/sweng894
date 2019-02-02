@@ -46,9 +46,9 @@ namespace source.Controllers
         /// <returns>The all.</returns>
         [HttpGet]
         [Authorize]
-        [Logger]
         public async Task<IActionResult> GetAll()
         {
+            var currentUser = HttpContext.User;
             var result = await _usersQuery.GetAll();
 
             if (result == null)
