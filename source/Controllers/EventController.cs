@@ -14,29 +14,41 @@ namespace source.Controllers
     public class EventController : ControllerBase
     {
 
-        IEventQuery _eventDao { get; set; }
+        IEventQuery _eventQuery { get; set; }
 
 
-        public EventController(IEventQuery evntDao)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="query">IEventQuery object handled by dependency injection</param>
+        public EventController(IEventQuery query)
         {
-            _eventDao = evntDao;
+            _eventQuery = query;
         }
 
-        // GET: api/Event/
+        /// <summary>
+        /// Returns All Events for a given username
+        /// </summary>
+        /// <param name="username">The username of which all events belong.</param>
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
         {
-            var result = await _eventDao.GetAllEventsByUser(username);
+            var result = await _eventQuery.GetAllEventsByUser(username);
             if (result == null)
                 return new NotFoundResult();
 
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Returns one Event given a username and eventId
+        /// </summary>
+        /// <param name="username">The username of which all events belong.</param>
+        /// <param name="eventId">The unique id of a given Event</param>
         [HttpGet("{username}/{eventId}")]
-        public async Task<IActionResult> Get(string username, string eventId)
+        public async Task<IActionResult> Get(string username, int eventId)
         {
-            var result = await _eventDao.GetOneEventById(eventId);
+            var result = await _eventQuery.GetOneEventById(eventId);
 
             if (result == null)
                 return new NotFoundResult();
@@ -44,28 +56,36 @@ namespace source.Controllers
             return new OkObjectResult(result);
         }
 
-        // POST: api/Event
+        /// <summary>
+        /// Creates a new event in the database
+        /// </summary>
+        /// <param name="evnt">The Event to insert into the database.</param>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Event body)
+        public async Task<IActionResult>CreateEvent([FromBody]Event evnt)
         {
-            await _eventDao.CreateNewEvent(body);
-            return new OkObjectResult(body);
+            await _eventQuery.CreateEvent(evnt);
+            return new OkObjectResult(evnt);
         }
 
-        //--------------------NOT IMPLEMENTED--------------
-
-        // PUT: api/Event/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        /// <summary>
+        /// Enables a user to update the eventName, eventDescription and eventDateTime
+        /// </summary>
+        /// <param name="evnt"></param>
+        [HttpPut]
+        public async Task<IActionResult> UpdateEvent([FromBody] Event evnt)
         {
-            throw new NotImplementedException();
+            await _eventQuery.UpdateEvent(evnt);
+            return new OkObjectResult(evnt);
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        /// <summary>
+        /// Deletes the Event in the database given the event unique id
+        /// </summary>
+        /// <param name="event">The Event to delete.</param>
+        [HttpDelete]
+        public async Task<IActionResult> DeleteEvent(Event evnt)
         {
-            throw new NotImplementedException();
+            return new OkObjectResult(await _eventQuery.DeleteEvent(evnt));
         }
     }
 }

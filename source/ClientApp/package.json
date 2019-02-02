@@ -8,7 +8,8 @@
     "build:ssr": "ng run source:server:dev",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "test-report": "ng test --code-coverage --reporters"
   },
   "private": true,
   "dependencies": {

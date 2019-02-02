@@ -129,10 +129,24 @@ export class AuthService {
   public authPost(endpoint: string, body: any): Observable<any> {
     const url = `${this.baseUrl}api/${endpoint}`;
     const opt = {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`),
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
       body: body,
     };
 
     return this.http.post(url, body, opt);
+  }
+
+  public authDelete(endpoint: string, body: any): Observable<any> {
+    const url = `${this.baseUrl}api/${endpoint}`;
+    const opt = {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
+      body: body,
+    };
+
+    return this.http.delete(url, opt);
+  }
+
+  public getUserProfile(): any {
+    return this.userProfile;
   }
 }
