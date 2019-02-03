@@ -36,7 +36,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        public async Task<Event> GetOneEventById(string eventId)
+        public async Task<Event> GetOneEventById(int eventId)
         {
             using (var db = _database)
             {
@@ -57,8 +57,8 @@ namespace source.Queries
         /// Inserts a new event
         /// </summary>
         /// <param name="evnt"></param>
-        /// <returns></returns>
-        public async Task<int> CreateNewEvent(Event evnt)
+        /// <returns>Event</returns>
+        public async Task<Event> CreateEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -71,9 +71,10 @@ namespace source.Queries
 
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
-                int result = connection.QueryAsync<int>(query, evnt).Result.ToList().FirstOrDefault();
-                Console.WriteLine(">>>>" + result);
-                return result;
+                Event createdEvent = connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
+
+
+                return createdEvent;
             }
         }
 
@@ -89,7 +90,7 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"SELECT eventName, eventDescription FROM occasions.events "
+                string query = @"SELECT * FROM occasions.events "
                     + @"WHERE organizerUsername = @organizerUserName;";
 
                 var events = connection.QueryAsync<Event>(query, new { organizerUserName } ).Result.ToList();
@@ -98,13 +99,51 @@ namespace source.Queries
         }
 
         /// <summary>
-        /// Updates existing event
+        /// Enables a user to update the eventName, eventDescription and eventDateTime
         /// </summary>
         /// <param name="evnt"></param>
         /// <returns></returns>
-        public Task UpdateEvent(Event evnt)
+        public async Task<Event> UpdateEvent(Event evnt)
         {
-            throw new NotImplementedException();
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+                
+                string query = @"UPDATE occasions.events SET eventName=@eventName, eventDescription=@eventDescription, eventDateTime=STR_TO_DATE(@eventDateTime,'%m/%d/%Y %h:%i:%s %p') WHERE occasions.events.eventId =  @eventId";
+
+                return connection.QueryAsync<Event>(query, new { evnt.eventName, evnt.eventDescription, evnt.eventDateTime, evnt.eventId}).Result.ToList().FirstOrDefault();
+                
+            }
+        }
+
+        public async Task<bool> DeleteEvent(Event evnt)
+        {
+            using (var db = _database)
+            {
+             //   try
+               // {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                
+                    string query = @"DELETE FROM occasions.events WHERE occasions.events.eventId =  @eventId";
+                //    connection.Execute(query, new { evnt.eventId}, commandType: CommandType.Text);
+
+                connection.QueryAsync<Event>(query, new { evnt.eventId } );
+
+                    return true;
+               // }
+               // catch (Exception ex)
+               // {
+                 //   Console.WriteLine(ex.StackTrace);
+
+                    //TODO: we should log our errors in the db
+                    //Errors should bubble up but this is super helpful during development
+                   // return false;
+              //  }
+
+            }
         }
     }
 }

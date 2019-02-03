@@ -24,9 +24,9 @@ namespace source.Models
         public string eventDescription { get; set; }
 
         //The date that the event will be held.
-        public DateTime eventDateTime { get; set; }
+        public string eventDateTime { get; set; }
 
-        public DateTime eventCreated { get; set; }
+        public string eventCreated { get; set; }
 
         /* 
          * TODO 

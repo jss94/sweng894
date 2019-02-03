@@ -4,20 +4,23 @@ import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
 import { Event } from './Models/event.model';
 import { of } from 'rxjs/internal/observable/of';
+import { AuthService } from '../shared/services/auth.service';
+import { MockAuthService } from '../shared/services/mock-auth.service';
 
 describe('EventComponent', () => {
   let component: EventComponent;
   let fixture: ComponentFixture<EventComponent>;
   let mockEventService: EventService;
+  let mockAuthService: AuthService;
 
   const fakeEvent: Event = {
-    organizerId: 'aaaa-bbbb',
-    description: 'fake description',
-    name: 'event name',
-    eventDate: '2019/04/01',
-    eventId: 1234,
-    guestListId: null,
-    eventCreated: null
+    organizerUserName: 'organizerId',
+    eventDescription: 'fake description',
+    eventName: 'event name',
+    eventDateTime: '2019/04/01',
+    eventId: 0,
+    guestListId: 0,
+    eventCreated: 'null'
   };
 
   const fakeEvents: Event[] = [
@@ -26,19 +29,25 @@ describe('EventComponent', () => {
     fakeEvent,
   ];
 
+  const fakeUserProfile: any = {
+    nickname: 'jss94'
+  };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ EventComponent ],
       providers: [
-          { provide: EventService, useClass: MockEventService },
+          { provide: EventService, useClass: MockEventService},
+          { provide: AuthService, useClass: MockAuthService }
       ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    mockEventService = TestBed.get(EventService);
+    mockAuthService = TestBed.get(AuthService);
     fixture = TestBed.createComponent(EventComponent);
     component = fixture.componentInstance;
-    mockEventService = TestBed.get(EventService);
   });
 
   it('should create', () => {
@@ -47,6 +56,7 @@ describe('EventComponent', () => {
 
   it('should display all events', fakeAsync(() => {
     // arrange
+    spyOn(mockAuthService, 'getUserProfile').and.returnValue(of(fakeUserProfile));
     spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
 
     // act
@@ -54,7 +64,8 @@ describe('EventComponent', () => {
 
     // assert
     expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-    expect(component.events.length).toBe(3);
+
+     expect(component.events.length).toBe(3);
 
   }));
 
