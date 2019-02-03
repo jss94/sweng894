@@ -35,7 +35,7 @@ namespace source
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
 
             // Intercepts all controller calls with LoggerAttribute
-            services.AddMvc(options => { options.Filters.Add<LoggerAttribute>(); });
+            //services.AddMvc(options => { options.Filters.Add<LoggerAttribute>(); });
 
 
             // In production, the Angular files will be served from this directory

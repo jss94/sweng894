@@ -26,11 +26,12 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// GET api/guests/{id}
         /// Gets the list of guests for an event
         /// </summary>
         /// <param name="id">Event Id</param>
         /// <returns>List of guests</returns>
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetListByEventId (int id)
         {
             try
@@ -46,11 +47,12 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// POST api/guests/{insert}
         /// Inserts a new guest record
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>New Guest record</returns>
-        [HttpPost]
+        [HttpPost("{insert}")]
         public async Task<IActionResult> Insert([FromBody]Guest guest)
         {
             try
@@ -66,11 +68,12 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// POST api/guests/{update}
         /// Updates a guest record
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>Updated Guest record</returns>
-        [HttpPost]
+        [HttpPost("{update}")]
         public async Task<IActionResult> Update([FromBody]Guest guest)
         {
             try
@@ -86,11 +89,12 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// DELETE api/guests/{id}
         /// Deletes a guest
         /// </summary>
         /// <param name="id">Guest Id</param>
         /// <returns>True if successful</returns>
-        [HttpPost]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
