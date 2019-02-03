@@ -2,15 +2,16 @@ import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
-import { User } from '../shared/models/user.model';
-import { RegisterService } from './Services/register.service';
+import { User } from '../../shared/models/user.model';
+import { RegisterService } from '../Services/register.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: [ './register.component.css']
+  selector: 'app-register-user',
+  templateUrl: './register-user.component.html',
+  styleUrls: [ './register-user.component.css']
 })
-export class RegisterComponent {
+export class RegisterUserComponent {
 
   @ViewChild(MatExpansionPanel) expansion: MatExpansionPanel;
 
@@ -42,6 +43,7 @@ export class RegisterComponent {
   constructor(
     private service: RegisterService,
     private snackbar: MatSnackBar,
+    private auth: AuthService,
     ) { }
 
   onAddUser() {
@@ -60,11 +62,10 @@ export class RegisterComponent {
     const password = this.userForm.controls['password'].value;
     const confirm = this.userForm.controls['confirm'].value;
     let message = 'Successfully Registered User';
+
     if (password === confirm) {
       this.service.registerUser(user, password).subscribe((result) => {
-        if (result[0].id === null) {
-          message = 'Error Registering User';
-        } else if (result[1].email_verified = false) {
+        if (result[1].email_verified = false) {
           message = 'Email already exists.';
         }
 
@@ -75,12 +76,20 @@ export class RegisterComponent {
         // reload page
         this.expansion.close();
         this.userForm.reset();
+        this.auth.login();
+
+      }, (error) => {
+        message = error.error.description;
+
+        this.snackbar.open(message, '', {
+          duration: 5000
+        });
       });
     } else {
       message = 'Passwords do not match.';
 
       this.snackbar.open(message, '', {
-        duration: 2000
+        duration: 5000
       });
     }
   }

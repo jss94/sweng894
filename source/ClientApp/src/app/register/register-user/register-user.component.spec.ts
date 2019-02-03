@@ -1,25 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RegisterComponent } from './register.component';
-import { RegisterService } from './Services/register.service';
-import { MockRegisterService } from './Services/mock-register.service';
+import { RegisterUserComponent } from './register-user.component';
+import { RegisterService } from '../Services/register.service';
+import { MockRegisterService } from '../Services/mock-register.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FakeUser } from '../shared/models/fake-user.model';
+import { FakeUser } from '../../shared/models/fake-user.model';
 
 describe('GetUsers', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
+  let component: RegisterUserComponent;
+  let fixture: ComponentFixture<RegisterUserComponent>;
   let mockRegisterService: MockRegisterService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        RegisterComponent,
+        RegisterUserComponent,
       ],
       providers: [
-        { provide: RegisterComponent, useClass: MockRegisterService },
+        { provide: RegisterUserComponent, useClass: MockRegisterService },
       ],
       imports: [
         FormsModule,
@@ -35,7 +35,7 @@ describe('GetUsers', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterComponent);
+    fixture = TestBed.createComponent(RegisterUserComponent);
     component = fixture.componentInstance;
     mockRegisterService = TestBed.get(RegisterService);
     fixture.detectChanges();
