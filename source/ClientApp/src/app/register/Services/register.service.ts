@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { User } from 'src/app/shared/models/user.model';
+import { Vendor } from 'src/app/vendors/Models/vendor.model';
 
 @Injectable()
 export class RegisterService {
@@ -23,5 +24,9 @@ export class RegisterService {
             this.auth.Post('users', user),
             this.auth.auth0Signup(user, password)
         );
+    }
+
+    registerVendor(vendor: Vendor): Observable<Vendor> {
+        return this.auth.Post('vendors', vendor);
     }
 }

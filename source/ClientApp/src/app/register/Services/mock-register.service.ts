@@ -18,4 +18,8 @@ export class MockRegisterService {
     registerUser(id: string): void {
 
     }
+
+    registerVendor(id: string): void {
+
+    }
 }

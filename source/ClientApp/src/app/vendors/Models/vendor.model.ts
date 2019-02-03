@@ -1,5 +1,11 @@
+import { Address } from 'src/app/shared/models/address.model';
+
 export interface Vendor {
-    guid: string;
+    id?: number;
+    userName: string;
     name: string;
-    description: string;
+    type: string;
+    website: string;
+    phone: number;
+    address?: Address;
 }

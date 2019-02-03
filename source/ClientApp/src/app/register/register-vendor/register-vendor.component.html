@@ -1,0 +1,114 @@
+<div class="container">
+
+      <form class="form" [formGroup]="userForm" (ngSubmit)="onAddUser()">
+
+        <mat-form-field class="options">
+          <mat-select placeholder="Your Job Type" formControlName="role">
+            <mat-option *ngFor="let role of roles" [value]="role.value">
+              {{role.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field appearance="outline">
+          <mat-label>E-Mail</mat-label>
+          <input 
+            required 
+            autocomplete="email" 
+            matInput 
+            placeholder="ePugh@email.com"
+            formControlName="email"
+            >
+          <mat-hint>This will become your username</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Enter Password</mat-label>
+          <input 
+            type="password"
+            required 
+            matInput 
+            formControlName="password"
+            >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input 
+            type="password"
+            required 
+            matInput 
+            formControlName="confirm"
+            >
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input 
+            autocomplete="name" 
+            matInput 
+            placeholder="Evan Pugh"
+            formControlName="name"
+            >
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Address</mat-label>
+          <input 
+            autocomplete="address-line1" 
+            matInput 
+            placeholder="Old Main"
+            formControlName="street"
+            >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input 
+            autocomplete="address-level2" 
+            matInput 
+            placeholder="State College"
+            formControlName="city"
+            >
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <input 
+            autocomplete="address-level1" 
+            matInput 
+            placeholder="PA"
+            formControlName="state"
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Zipcode</mat-label>
+          <input 
+            autocomplete="postal-code" 
+            matInput 
+            placeholder="16801"
+            formControlName="zip"
+            >
+        </mat-form-field>
+      
+      
+
+        <mat-action-row>
+          <button type="submit" mat-button [disabled]="!userForm.valid">
+            <mat-icon>add</mat-icon>
+            Add User
+          </button>
+        </mat-action-row>
+
+      </form>
+
+</div>
