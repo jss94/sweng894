@@ -1,9 +1,10 @@
 ﻿using System;
-using source.Queries;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using source.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using source.Framework;
+using source.Models;
+using source.Queries;
 
 namespace source.Controllers
 {
@@ -11,16 +12,15 @@ namespace source.Controllers
     /// Vendor Controller
     /// </summary>
     [Route("api/[controller]")]
-    public class VendorsController
+    public class VendorsController: ControllerBase
     {
         private IVendorsQuery _query;
         private ILogger _logger;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="query">IVendorsQuery obtained via dependency injection</param>
-        /// <param name="logger">ILogger obtained via dependency injection</param>
         public VendorsController(IVendorsQuery query, ILogger logger)
         {
             _query = query;
@@ -36,13 +36,13 @@ namespace source.Controllers
         {
             try
             {
-
+                //Example 1: exception is handled
+                throw new Exception();
                 return new OkObjectResult(await _query.GetAllAsync());
             }
             catch(Exception ex)
             {
-                //TODO: we should log our errors in the db
-
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -55,16 +55,10 @@ namespace source.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
+                //Example 2: Exception is unhandled
+                throw new Exception();
                 return new OkObjectResult(await _query.GetById(id));
-            }
-            catch (Exception ex)
-            {
-                //TODO: we should log our errors in the db
-
-                return new BadRequestResult();
-            }
+            
         }
 
         /// <summary>
