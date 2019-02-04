@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
 import { RegisterService } from '../Services/register.service';
 import { Vendor } from 'src/app/vendors/Models/vendor.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-vendor',
@@ -29,6 +30,7 @@ export class RegisterVendorComponent {
   constructor(
     private service: RegisterService,
     private snackbar: MatSnackBar,
+    private router: Router,
     ) { }
 
   onAddVendor() {
@@ -56,6 +58,8 @@ export class RegisterVendorComponent {
 
       // reload page
       this.vendorForm.reset();
+      this.router.navigate(['/home']);
+
 
     }, (error) => {
       message = error.error.description;

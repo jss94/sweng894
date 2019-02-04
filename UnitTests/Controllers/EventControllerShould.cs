@@ -119,7 +119,14 @@ namespace UnitTests.Controllers
         public void DeleteEvent_ReturnEvent()
         {
             // arrange
-            var evnt = new Event { eventId = 123, eventName = "Surprise Party", eventDescription = "Lets throw a surprise party for John!" };
+            var evnt = new Event { 
+                eventId = 123, 
+                eventName = "Surprise Party", 
+                eventDescription = "Lets throw a surprise party for John!"
+                };
+                
+            __eventQueryMock.Setup(x => x.GetOneEventById(evnt.eventId))
+                .Returns(Task.Factory.StartNew(() => evnt));
 
             __eventQueryMock.Setup(x => x.DeleteEvent(evnt))
                 .Returns(Task.Factory.StartNew(() => true));
