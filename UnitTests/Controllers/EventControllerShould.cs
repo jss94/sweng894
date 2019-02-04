@@ -16,8 +16,6 @@ namespace UnitTests.Controllers
         // System Under Test
         readonly EventController _evntController;
         readonly Mock<IEventQuery> __eventQueryMock;
-        readonly Mock<Event> _eventMock;
-
 
         public EventControllerShould()
         {
@@ -127,7 +125,7 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _evntController.DeleteEvent(evnt);
+            var task = _evntController.DeleteEvent(evnt.eventId);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);

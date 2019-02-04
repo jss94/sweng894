@@ -12,21 +12,21 @@ export class RegisterService {
     }
 
     getUsers(): Observable<User[]> {
-        return this.auth.Get('users');
+        return this.auth.get('users');
     }
 
     getUser(id: string): Observable<User> {
-        return this.auth.Get('users/' + id);
+        return this.auth.get('users/' + id);
     }
 
     registerUser(user: User, password: string): Observable<[User, any]> {
         return forkJoin(
-            this.auth.Post('users', user),
+            this.auth.post('users', user),
             this.auth.auth0Signup(user, password)
         );
     }
 
     registerVendor(vendor: Vendor): Observable<Vendor> {
-        return this.auth.Post('vendors', vendor);
+        return this.auth.post('vendors', vendor);
     }
 }

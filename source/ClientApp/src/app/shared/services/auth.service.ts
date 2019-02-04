@@ -2,12 +2,14 @@ import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { User } from 'src/app/shared/models/user.model';
 
 @Injectable()
 export class AuthService {
 
+  private _user: User;
+  private _user$ = new Subject<User>();
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
@@ -15,7 +17,7 @@ export class AuthService {
   private _domain = 'sweng894.auth0.com';
   private _connection = 'Username-Password-Authentication';
 
-  userProfile: any;
+  _userProfile: any;
   isVendor = true;
 
   auth0 = new auth0.WebAuth({
@@ -35,6 +37,14 @@ export class AuthService {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
+  }
+
+  get user(): User {
+    return this._user;
+  }
+
+  get user$(): Observable<User> {
+    return this._user$;
   }
 
   get accessToken(): string {
@@ -91,7 +101,8 @@ export class AuthService {
   public renewUser(authResult: any): void {
     if (authResult.accessToken && authResult.idTokenPayload) {
       this._accessToken = authResult.accessToken;
-      this.userProfile = authResult.idTokenPayload;
+      this._userProfile = authResult.idTokenPayload;
+      this.getAuthenticatedUser(this._userProfile);
     }
   }
 
@@ -117,9 +128,17 @@ export class AuthService {
   private getUser() {
     this.auth0.client.userInfo(this._accessToken, (err, profile) => {
       if (profile) {
-        this.userProfile = profile;
-        console.log('Hello', this.userProfile.nickname);
+        this._userProfile = profile;
+        this.getAuthenticatedUser(profile);
       }
+    });
+  }
+
+  private getAuthenticatedUser(userProfile: any) {
+    this.get('users/' + userProfile.name).subscribe(result => {
+      this._user = result;
+      this._user$.next(result);
+      console.log('Hello', this._user.name);
     });
   }
 
@@ -133,14 +152,14 @@ export class AuthService {
     });
   }
 
-  public Get(endpoint: string): Observable < any > {
+  public get(endpoint: string): Observable < any > {
     return this.http
     .get(`${this.baseUrl}api/${endpoint}`, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`)
     });
   }
 
-  public Post(endpoint: string, body: any): Observable < any > {
+  public post(endpoint: string, body: any): Observable < any > {
     const url = `${this.baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
@@ -150,17 +169,12 @@ export class AuthService {
     return this.http.post(url, body, opt);
   }
 
-  public authDelete(endpoint: string, body: any): Observable<any> {
+  public delete(endpoint: string): Observable<any> {
     const url = `${this.baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
-      body: body,
     };
 
     return this.http.delete(url, opt);
-  }
-
-  public getUserProfile(): any {
-    return this.userProfile;
   }
 }

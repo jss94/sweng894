@@ -4,14 +4,23 @@ import { RegisterService } from '../Services/register.service';
 import { MockRegisterService } from '../Services/mock-register.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar, MatExpansionModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../../shared/models/fake-user.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
+import { of } from 'rxjs';
 
-describe('GetUsers', () => {
+describe('RegisterUserComponent', () => {
   let component: RegisterUserComponent;
   let fixture: ComponentFixture<RegisterUserComponent>;
   let mockRegisterService: MockRegisterService;
+
+  class MockMatSnackBar {
+    open() {
+
+    }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,7 +28,9 @@ describe('GetUsers', () => {
         RegisterUserComponent,
       ],
       providers: [
-        { provide: RegisterUserComponent, useClass: MockRegisterService },
+        { provide: RegisterService, useClass: MockRegisterService },
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: AuthService, useClass: MockAuthService },
       ],
       imports: [
         FormsModule,
@@ -27,6 +38,7 @@ describe('GetUsers', () => {
         MatSelectModule,
         MatFormFieldModule,
         MatInputModule,
+        MatExpansionModule,
         NoopAnimationsModule,
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
@@ -48,7 +60,11 @@ describe('GetUsers', () => {
   describe('onAddUser', () => {
     it('should call the correct service', () => {
       // arrange
-      spyOn(mockRegisterService, 'registerUser').and.callThrough();
+      const fakeUser = new FakeUser();
+      spyOn(mockRegisterService, 'registerUser').and.returnValue(of([
+        fakeUser,
+        {email_verified: true}
+      ]));
 
       // act
       component.onAddUser();

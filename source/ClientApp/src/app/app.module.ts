@@ -14,6 +14,7 @@ import { GoogleMapsService } from './google-map/Services/google-maps.service';
 import { MatSnackBar } from '@angular/material';
 import { MaterialModule } from './material.module';
 import { RegisterService } from './register/Services/register.service';
+import { VendorService } from './vendors/Services/vendor.service';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { RegisterService } from './register/Services/register.service';
     EventService,
     GoogleMapsService,
     RegisterService,
+    VendorService,
     MatSnackBar,
   ],
   bootstrap: [AppComponent]

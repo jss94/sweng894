@@ -1,14 +1,6 @@
 <div class="container">
 
-      <form class="form" [formGroup]="userForm" (ngSubmit)="onAddUser()">
-
-        <mat-form-field class="options">
-          <mat-select placeholder="Your Job Type" formControlName="role">
-            <mat-option *ngFor="let role of roles" [value]="role.value">
-              {{role.viewValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <form class="form" [formGroup]="vendorForm" (ngSubmit)="onAddVendor()">
 
         <br>
 
@@ -25,34 +17,44 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Enter Password</mat-label>
+          <mat-label>Enter Vendor Name</mat-label>
           <input 
-            type="password"
             required 
             matInput 
-            formControlName="password"
+            placeholder="Penn State"
+            formControlName="name"
             >
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Confirm Password</mat-label>
+          <mat-label>Type of Vendor</mat-label>
           <input 
-            type="password"
             required 
             matInput 
-            formControlName="confirm"
+            placeholder="College"
+            formControlName="type"
             >
         </mat-form-field>
 
         <br>
 
         <mat-form-field appearance="outline">
-          <mat-label>Name</mat-label>
+          <mat-label>Website</mat-label>
           <input 
-            autocomplete="name" 
+            autocomplete="website" 
             matInput 
-            placeholder="Evan Pugh"
-            formControlName="name"
+            placeholder="www.psu.edu"
+            formControlName="website"
+            >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input 
+            autocomplete="phone" 
+            matInput 
+            placeholder="5558179"
+            formControlName="phone"
             >
         </mat-form-field>
 
@@ -103,9 +105,9 @@
       
 
         <mat-action-row>
-          <button type="submit" mat-button [disabled]="!userForm.valid">
+          <button type="submit" mat-button [disabled]="!vendorForm.valid">
             <mat-icon>add</mat-icon>
-            Add User
+            Add Vendor
           </button>
         </mat-action-row>
 

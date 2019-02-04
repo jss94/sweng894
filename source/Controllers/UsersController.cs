@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using source.Database;
 using source.Models;
 using source.Queries;
 
@@ -106,8 +105,27 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// PUT api/users/{userId}
+        /// Deactivate the specified userId.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="userId">User identifier.</param>
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> Deactivate(string userId)
+        {
+            var result = await _usersQuery.GetByUserName(userId);
+
+            if (result == null)
+                return new NotFoundResult();
+
+            await _usersQuery.Deactivate(result);
+            return new OkResult();
+
+        }
+
+        /// <summary>
         /// DELETE api/users/{userId}
-        /// Delete the specified userId.
+        /// Deactivate the specified userId.
         /// </summary>
         /// <returns>The delete.</returns>
         /// <param name="userId">User identifier.</param>
@@ -119,7 +137,7 @@ namespace source.Controllers
             if (result == null)
                 return new NotFoundResult();
 
-            await _usersQuery.Deactivate(result);
+            await _usersQuery.Delete(result);
             return new OkResult();
 
         }

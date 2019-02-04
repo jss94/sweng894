@@ -6,11 +6,12 @@ namespace source.Queries
 {
     public interface IVendorsQuery
     {
-        Task<List<Vendor>> GetAllAsync();
+        Task<List<Vendor>> GetAll();
         Task<Vendor> GetById(int id);
         Task<Vendor> GetByUserName(string userName);
-        Task<Vendor> InsertVendor(Vendor vendor);
-        Task<Vendor> UpdateVendor(Vendor vendor);
-        Task<bool> DeactivateVendor(Vendor vendor);
+        Task<Vendor> Insert(Vendor vendor);
+        Task<Vendor> Update(Vendor vendor);
+        Task<bool> Deactivate(Vendor vendor);
+        Task<bool> Delete(Vendor vendor);
     }
 }

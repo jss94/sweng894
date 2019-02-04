@@ -7,8 +7,9 @@ import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { EventComponent } from './events/event.component';
 import { MaterialModule } from './material.module';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './register/register-user/register-user.component';
+import { RegisterVendorComponent } from './register/register-vendor/register-vendor.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
     { path: 'find-vendors', component: GoogleMapComponent },
     { path: 'vendor-events', component: GetUsersComponent },
     { path: 'organizer-events', component: EventComponent },
-    { path: 'register', component: RegisterUserComponent },
+    { path: 'register-user', component: RegisterUserComponent },
+    { path: 'register-vendor', component: RegisterVendorComponent },
   ];
 
 @NgModule({
@@ -26,6 +28,7 @@ const routes: Routes = [
         GetUsersComponent,
         EventComponent,
         RegisterUserComponent,
+        RegisterVendorComponent,
     ],
 
     imports: [

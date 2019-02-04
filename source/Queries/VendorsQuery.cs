@@ -32,7 +32,7 @@ namespace source.Queries
         /// Gets a list of all vendors
         /// </summary>
         /// <returns>List of Vendor</returns>
-        public async Task<List<Vendor>> GetAllAsync()
+        public async Task<List<Vendor>> GetAll()
         {
             try
             {
@@ -122,7 +122,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="vendor">Vendor</param>
         /// <returns>New vendor record</returns>
-        public async Task<Vendor> InsertVendor(Vendor vendor)
+        public async Task<Vendor> Insert(Vendor vendor)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="vendor">Vendor</param>
         /// <returns>Updated vendor record</returns>
-        public async Task<Vendor> UpdateVendor(Vendor vendor)
+        public async Task<Vendor> Update(Vendor vendor)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="vendor">Vendor</param>
         /// <returns>True/False</returns>
-        public async Task<bool> DeactivateVendor(Vendor vendor)
+        public async Task<bool> Deactivate(Vendor vendor)
         {
             try
             {
@@ -199,6 +199,36 @@ namespace source.Queries
 
                     var returnedValue = connection.QueryAsync<Vendor>(query, vendor);
                     return true;                   
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: we should log our errors in the db
+                //Errors should bubble up but this is super helpful during development
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Delete the specified vendor.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="vendor">Vendor.</param>
+        public async Task<bool> Delete(Vendor vendor)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"DELETE FROM occasions.vendors "
+                        + @"WHERE id = @id AND active = 1;";
+
+                    var returnedValue = connection.QueryAsync<Vendor>(query, vendor);
+                    return true;
                 }
             }
             catch (Exception ex)

@@ -2,27 +2,23 @@ import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
-import { User } from '../../shared/models/user.model';
 import { RegisterService } from '../Services/register.service';
-import { AuthService } from '../../shared/services/auth.service';
 import { Vendor } from 'src/app/vendors/Models/vendor.model';
 
 @Component({
-  selector: 'app-register-user',
-  templateUrl: './register-user.component.html',
-  styleUrls: [ './register-user.component.css']
+  selector: 'app-register-vendor',
+  templateUrl: './register-vendor.component.html',
+  styleUrls: [ './register-vendor.component.css']
 })
 export class RegisterVendorComponent {
 
-  @ViewChild(MatExpansionPanel) expansion: MatExpansionPanel;
-
   isUserRegistrationActive = false;
 
-  userForm = new FormGroup({
+  vendorForm = new FormGroup({
     email: new FormControl('', [ Validators.required, Validators.email ]),
     name: new FormControl('', [ Validators.required ]),
     type: new FormControl('', [ Validators.required, Validators.minLength(5) ]),
-    website: new FormControl('', [ Validators.required, Validators.minLength(8) ]),
+    website: new FormControl('', [ Validators.minLength(8) ]),
     phone: new FormControl('', [Validators.minLength(10), Validators.maxLength(11)]),
     street: new FormControl(''),
     city: new FormControl(''),
@@ -37,21 +33,19 @@ export class RegisterVendorComponent {
 
   onAddVendor() {
     const vendor: Vendor = {
-      userName: this.userForm.controls['email'].value,
-      name: this.userForm.controls['name'].value,
-      type: this.userForm.controls['type'].value,
-      website: this.userForm.controls['website'].value,
-      phone: this.userForm.controls['phone'].value,
+      userName: this.vendorForm.controls['email'].value,
+      name: this.vendorForm.controls['name'].value,
+      type: this.vendorForm.controls['type'].value,
+      website: this.vendorForm.controls['website'].value,
+      phone: this.vendorForm.controls['phone'].value,
       address: {
-        street: this.userForm.controls['street'].value,
-        city: this.userForm.controls['city'].value,
-        state: this.userForm.controls['state'].value.toUpperCase(),
-        zip: this.userForm.controls['zip'].value,
+        street: this.vendorForm.controls['street'].value,
+        city: this.vendorForm.controls['city'].value,
+        state: this.vendorForm.controls['state'].value.toUpperCase(),
+        zip: this.vendorForm.controls['zip'].value,
       }
     };
 
-    const password = this.userForm.controls['password'].value;
-    const confirm = this.userForm.controls['confirm'].value;
     let message = 'Successfully Registered Vendor';
 
     this.service.registerVendor(vendor).subscribe((result) => {
@@ -61,8 +55,7 @@ export class RegisterVendorComponent {
       });
 
       // reload page
-      this.expansion.close();
-      this.userForm.reset();
+      this.vendorForm.reset();
 
     }, (error) => {
       message = error.error.description;

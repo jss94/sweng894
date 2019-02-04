@@ -79,13 +79,19 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// Deletes the Event in the database given the event unique id
+        /// Deletes the event.
         /// </summary>
-        /// <param name="event">The Event to delete.</param>
+        /// <returns>The event.</returns>
+        /// <param name="eventId">Event identifier.</param>
         [HttpDelete]
-        public async Task<IActionResult> DeleteEvent(Event evnt)
+        public async Task<IActionResult> DeleteEvent(int eventId)
         {
-            return new OkObjectResult(await _eventQuery.DeleteEvent(evnt));
+            var result = await _eventQuery.GetOneEventById(eventId);
+
+            if (result == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(await _eventQuery.DeleteEvent(result));
         }
     }
 }

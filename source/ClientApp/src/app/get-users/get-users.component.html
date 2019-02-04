@@ -119,6 +119,11 @@
         <td>{{ user.userName }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.role }}</td>
+        <!-- <td *ngIf="auth.user.role === 'Admin'">
+          <button type="button" mat-button (click)="onDeleteUser(user)">
+              <a class="material-icons">delete_forever</a>
+          </button>
+        </td> -->
       </tr>
     </tbody>
   </table>

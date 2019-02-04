@@ -15,16 +15,19 @@ namespace UnitTests.Controllers
         // System Under Test
         readonly VendorsController _sut;
 
-        readonly Mock<IVendorsQuery> _vendorsQueryMock;
         readonly Mock<ILogger> _loggerMock;
+        readonly Mock<IVendorsQuery> _vendorsQueryMock;
+        readonly Mock<IAddressesQuery> _addressQueryMock;
+
 
 
         public VendorsControllerShould()
         {
-            _vendorsQueryMock = new Mock<IVendorsQuery>();
             _loggerMock = new Mock<ILogger>();
+            _vendorsQueryMock = new Mock<IVendorsQuery>();
+            _addressQueryMock = new Mock<IAddressesQuery>();
 
-            _sut = new VendorsController(_vendorsQueryMock.Object, _loggerMock.Object);
+            _sut = new VendorsController(_vendorsQueryMock.Object, _addressQueryMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -34,7 +37,7 @@ namespace UnitTests.Controllers
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
             var vendors = new List<Vendor> { vendor, vendor, vendor };
 
-            _vendorsQueryMock.Setup(x => x.GetAllAsync())
+            _vendorsQueryMock.Setup(x => x.GetAll())
                 .Returns(Task.Factory.StartNew(() => vendors));
 
             // act
@@ -54,11 +57,11 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
             
-            _vendorsQueryMock.Setup(x => x.GetById(vendor.id))
+            _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
             // act
-            var task = _sut.GetById(vendor.id);
+            var task = _sut.GetById(vendor.id.Value);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -94,11 +97,11 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
 
-            _vendorsQueryMock.Setup(x => x.InsertVendor(vendor))
+            _vendorsQueryMock.Setup(x => x.Insert(vendor))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
             // act
-            var task = _sut.InsertVendor(vendor);
+            var task = _sut.Insert(vendor);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -114,11 +117,11 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
 
-            _vendorsQueryMock.Setup(x => x.UpdateVendor(vendor))
+            _vendorsQueryMock.Setup(x => x.Update(vendor))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
             // act
-            var task = _sut.UpdateVendor(vendor);
+            var task = _sut.Update(vendor);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -134,11 +137,31 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123 };
             
-            _vendorsQueryMock.Setup(x => x.DeactivateVendor(vendor))
+            _vendorsQueryMock.Setup(x => x.Deactivate(vendor))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.DeactivateVendor(vendor);
+            var task = _sut.Deactivate(vendor);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as bool?;
+            Assert.True(usersResult);
+        }
+
+        [Fact]
+        public void DeleteVendor_ReturnsNull()
+        {
+            // arrange
+            var vendor = new Vendor { id = 123 };
+
+            _vendorsQueryMock.Setup(x => x.Delete(vendor))
+                .Returns(Task.Factory.StartNew(() => true));
+
+            // act
+            var task = _sut.Delete(vendor);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);

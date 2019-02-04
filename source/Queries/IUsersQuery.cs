@@ -12,5 +12,6 @@ namespace source.Queries
         Task Deactivate(User user);
         Task<int> Insert(User user);
         Task Update(User user);
+        Task Delete(User user);
     }
 }

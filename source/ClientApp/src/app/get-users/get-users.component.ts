@@ -4,6 +4,7 @@ import { GetUsersService } from './Services/get-users.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-get-users',
@@ -78,4 +79,23 @@ export class GetUsersComponent implements OnInit {
     this.userForm.reset();
     this.ngOnInit();
   }
+
+
+  // TODO : This will only work if we also delete the user from Auth0;
+  // To delete the user from Auth0 we neeed their user_id string from Auth0 DB.
+  // onDeleteUser(user: User) {
+  //   this.service.deleteUser(user).subscribe(() => {
+  //     this.snackbar.open(user.userName + ' was deleted.', '', {
+  //       duration: 1500
+  //     });
+
+  //     this.ngOnInit();
+  //   }, (error) => {
+  //     this.snackbar.open('There was an issue deleting ' + user.userName, '', {
+  //       duration: 5000
+  //     });
+
+  //     this.ngOnInit();
+  //   });
+  // }
 }

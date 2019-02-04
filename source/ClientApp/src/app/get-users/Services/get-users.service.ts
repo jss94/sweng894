@@ -13,14 +13,18 @@ export class GetUsersService {
     }
 
     getUsers(): Observable<User[]> {
-        return this.auth.Get('users');
+        return this.auth.get('users');
     }
 
     getUser(id: string): Observable<User> {
-        return this.auth.Get('users/' + id);
+        return this.auth.get('users/' + id);
     }
 
     registerUser(user: User): Observable<User> {
-        return this.auth.Post('users', user);
+        return this.auth.post('users', user);
+    }
+
+    deleteUser(user: User): Observable<Boolean> {
+        return this.auth.delete('users/' + user.userName);
     }
 }

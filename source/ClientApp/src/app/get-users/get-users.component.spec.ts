@@ -4,15 +4,22 @@ import { GetUsersService } from './Services/get-users.service';
 import { MockGetUsersService } from './Services/mock-get-users.service';
 import { FakeUser } from '../shared/models/fake-user.model';
 
-import { ReactiveFormsModule, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA, forwardRef } from '@angular/core';
-import { MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar, MatExpansionModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs/internal/observable/of';
 
-describe('GetUsers', () => {
+describe('GetUsersComponent', () => {
   let component: GetUsersComponent;
   let fixture: ComponentFixture<GetUsersComponent>;
   let mockUsersService: GetUsersService;
+
+  class MockMatSnackBar {
+    open() {
+
+    }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -21,6 +28,7 @@ describe('GetUsers', () => {
       ],
       providers: [
         { provide: GetUsersService, useClass: MockGetUsersService },
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
       ],
       imports: [
         FormsModule,
@@ -28,6 +36,7 @@ describe('GetUsers', () => {
         MatSelectModule,
         MatFormFieldModule,
         MatInputModule,
+        MatExpansionModule,
         NoopAnimationsModule,
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
@@ -49,7 +58,7 @@ describe('GetUsers', () => {
   describe('onAddUser', () => {
     it('should call the correct service', () => {
       // arrange
-      spyOn(mockUsersService, 'registerUser').and.callThrough();
+      spyOn(mockUsersService, 'registerUser').and.returnValue(of({id: 0}));
 
       // act
       component.onAddUser();
@@ -62,6 +71,7 @@ describe('GetUsers', () => {
   describe('form validator', () => {
     it('should catch invalid email', () => {
       // arrange
+      spyOn(mockUsersService, 'registerUser').and.returnValue(of({id: 0}));
       const user = new FakeUser();
       user.userName = 'this is not an email@address.com';
       component.userForm.controls['email'].setValue( user.userName );

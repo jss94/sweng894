@@ -8,4 +8,8 @@ export class MockVendorService {
     getVendors(): Observable<Vendor[]> {
         return of(null);
     }
+
+    getVendor(id: number): Observable<Vendor> {
+        return of(null);
+    }
 }
