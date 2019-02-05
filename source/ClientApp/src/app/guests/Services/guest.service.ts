@@ -13,6 +13,6 @@ export class GuestService {
   }
 
   getGuests(id: string): Observable<Guest[]> {
-    return this.auth.authGet('guest/' + id);
+    return this.auth.get('guest/' + id);
   }
 }

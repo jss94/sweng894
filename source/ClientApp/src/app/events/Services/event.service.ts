@@ -22,7 +22,7 @@ export class EventService {
 
 
   updateEvent(evnt: Event): Observable<Object> {
-    return this.auth.authPut('event/', evnt);
+    return this.auth.put('event/', evnt);
   }
 
   deleteEvent(evnt: Event): Observable<Object> {
