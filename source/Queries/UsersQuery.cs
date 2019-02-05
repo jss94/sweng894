@@ -169,5 +169,31 @@ namespace source.Queries
             }
         }
 
+        /// <summary>
+        /// Delete the specified user.
+        /// </summary>
+        /// <returns>The deactivate.</returns>
+        /// <param name="user">User.</param>
+        public async Task Delete(User user)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"DELETE FROM occasions.users "
+                        + @"WHERE active = 1 AND username = @username;";
+
+                    var result = connection.QueryFirstAsync<Vendor>(query, user).Result;
+                    await Task.CompletedTask;
+                }
+            }
+            catch (Exception)
+            {
+                await Task.CompletedTask;
+            }
+        }
     }
 }

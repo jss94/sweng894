@@ -34,6 +34,7 @@
       </mat-menu>
 
     <button *ngIf="!auth.isAuthenticated()" mat-button [routerLink]='["/register"]' [routerLinkActive]='["link-active"]'>
+    <button *ngIf="!auth.isAuthenticated()" mat-button [routerLink]='["/register-user"]' [routerLinkActive]='["link-active"]'>
       Register
     </button>
     
@@ -46,7 +47,7 @@
     </button>
 
     <button mat-button [routerLinkActive]='["link-active"]'>
-      <a class="nav-link text-grey" *ngIf="auth.isAuthenticated()" [routerLink]='["/profile"]'>{{ auth?.userProfile?.nickname }}</a>
+      <a class="nav-link text-grey" *ngIf="auth.isAuthenticated()" [routerLink]='["/profile"]'>{{ auth?.user?.name }}</a>
     </button>
 
 

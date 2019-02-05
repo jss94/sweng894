@@ -14,16 +14,19 @@ namespace source.Controllers
     [Route("api/[controller]")]
     public class VendorsController: ControllerBase
     {
-        private IVendorsQuery _query;
+        private IVendorsQuery _vendorQuery;
+        private IAddressesQuery _addressesQuery;
         private ILogger _logger;
         
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="query">IVendorsQuery obtained via dependency injection</param>
-        public VendorsController(IVendorsQuery query, ILogger logger)
+        /// <param name="logger">ILogger obtained via dependency injection</param>
+        public VendorsController(IVendorsQuery vendorQuery, IAddressesQuery addressQuery, ILogger logger)
         {
-            _query = query;
+            _vendorQuery = vendorQuery;
+            _addressesQuery = addressQuery;
             _logger = logger;
         }
 
@@ -36,9 +39,7 @@ namespace source.Controllers
         {
             try
             {
-                //Example 1: exception is handled
-                throw new Exception();
-                return new OkObjectResult(await _query.GetAllAsync());
+                return new OkObjectResult(await _vendorQuery.GetAll());
             }
             catch(Exception ex)
             {
@@ -55,10 +56,16 @@ namespace source.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-                //Example 2: Exception is unhandled
-                throw new Exception();
-                return new OkObjectResult(await _query.GetById(id));
-            
+            try
+            {
+                return new OkObjectResult(await _vendorQuery.GetById(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
         }
 
         /// <summary>
@@ -66,12 +73,17 @@ namespace source.Controllers
         /// </summary>
         /// <param name="userName">Vendor's unique user name </param>
         /// <returns>Vendor</returns>
-        [HttpGet("user")]
+        [HttpGet("userName")]
         public async Task<IActionResult> GetByUserName(string userName)
         {
             try
             {
-                return new OkObjectResult(await _query.GetByUserName(userName));
+                var vendor = await _vendorQuery.GetByUserName(userName);
+
+                if (vendor == null)
+                    return new BadRequestResult();
+
+                return new OkObjectResult(vendor);
             }
             catch (Exception ex)
             {
@@ -87,11 +99,15 @@ namespace source.Controllers
         /// <param name="vendor">Vendor</param>
         /// <returns>New Vendor record</returns>
         [HttpPost]
-        public async Task<IActionResult> InsertVendor([FromBody]Vendor vendor)
+        public async Task<IActionResult> Insert([FromBody]Vendor vendor)
         {
             try
             {
-                return new OkObjectResult(await _query.InsertVendor(vendor));
+                var addressId = await _addressesQuery.Insert(vendor.address);
+                vendor.addressId = addressId;
+
+                await _vendorQuery.Insert(vendor);
+                return new OkObjectResult(vendor);
             }
             catch (Exception ex)
             {
@@ -106,12 +122,12 @@ namespace source.Controllers
         /// </summary>
         /// <param name="vendor">Vendor</param>
         /// <returns>Updated Vendor record</returns>
-        [HttpPost("update")]
-        public async Task<IActionResult> UpdateVendor([FromBody]Vendor vendor)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody]Vendor vendor)
         {
             try
             {
-                return new OkObjectResult(await _query.UpdateVendor(vendor));
+                return new OkObjectResult(await _vendorQuery.Update(vendor));
             }
             catch (Exception ex)
             {
@@ -126,12 +142,32 @@ namespace source.Controllers
         /// </summary>
         /// <param name="vendor">Vendor</param>
         /// <returns>True if successful</returns>
-        [HttpPost("remove")]
-        public async Task<IActionResult> DeactivateVendor([FromBody]Vendor vendor)
+        [HttpPut]
+        public async Task<IActionResult> Deactivate([FromBody]Vendor vendor)
         {
             try
             {
-                return new OkObjectResult(await _query.DeactivateVendor(vendor));
+                return new OkObjectResult(await _vendorQuery.Deactivate(vendor));
+            }
+            catch (Exception ex)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
+        /// Delete the specified vendor.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="vendor">Vendor.</param>
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody]Vendor vendor)
+        {
+            try
+            {
+                return new OkObjectResult(await _vendorQuery.Delete(vendor));
             }
             catch (Exception ex)
             {

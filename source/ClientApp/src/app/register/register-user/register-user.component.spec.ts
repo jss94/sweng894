@@ -1,19 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { GetUsersComponent } from './get-users.component';
-import { GetUsersService } from './Services/get-users.service';
-import { MockGetUsersService } from './Services/mock-get-users.service';
-import { FakeUser } from '../shared/models/fake-user.model';
-
+import { RegisterUserComponent } from './register-user.component';
+import { RegisterService } from '../Services/register.service';
+import { MockRegisterService } from '../Services/mock-register.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar, MatExpansionModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { of } from 'rxjs/internal/observable/of';
+import { FakeUser } from '../../shared/models/fake-user.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
+import { of } from 'rxjs';
 
-describe('GetUsersComponent', () => {
-  let component: GetUsersComponent;
-  let fixture: ComponentFixture<GetUsersComponent>;
-  let mockUsersService: GetUsersService;
+describe('RegisterUserComponent', () => {
+  let component: RegisterUserComponent;
+  let fixture: ComponentFixture<RegisterUserComponent>;
+  let mockRegisterService: MockRegisterService;
 
   class MockMatSnackBar {
     open() {
@@ -24,11 +25,12 @@ describe('GetUsersComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        GetUsersComponent,
+        RegisterUserComponent,
       ],
       providers: [
-        { provide: GetUsersService, useClass: MockGetUsersService },
+        { provide: RegisterService, useClass: MockRegisterService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: AuthService, useClass: MockAuthService },
       ],
       imports: [
         FormsModule,
@@ -45,9 +47,9 @@ describe('GetUsersComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GetUsersComponent);
+    fixture = TestBed.createComponent(RegisterUserComponent);
     component = fixture.componentInstance;
-    mockUsersService = TestBed.get(GetUsersService);
+    mockRegisterService = TestBed.get(RegisterService);
     fixture.detectChanges();
   });
 
@@ -58,20 +60,23 @@ describe('GetUsersComponent', () => {
   describe('onAddUser', () => {
     it('should call the correct service', () => {
       // arrange
-      spyOn(mockUsersService, 'registerUser').and.returnValue(of({id: 0}));
+      const fakeUser = new FakeUser();
+      spyOn(mockRegisterService, 'registerUser').and.returnValue(of([
+        fakeUser,
+        {email_verified: true}
+      ]));
 
       // act
       component.onAddUser();
 
       // assert
-      expect(mockUsersService.registerUser).toHaveBeenCalledTimes(1);
+      expect(mockRegisterService.registerUser).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('form validator', () => {
     it('should catch invalid email', () => {
       // arrange
-      spyOn(mockUsersService, 'registerUser').and.returnValue(of({id: 0}));
       const user = new FakeUser();
       user.userName = 'this is not an email@address.com';
       component.userForm.controls['email'].setValue( user.userName );

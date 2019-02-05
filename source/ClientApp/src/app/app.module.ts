@@ -10,21 +10,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RoutingModule } from './app.router.module';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
-import { CallbackComponent } from './call-back/callback.component';
 import { GoogleMapsService } from './google-map/Services/google-maps.service';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { MaterialModule } from './material.module';
+import { RegisterService } from './register/Services/register.service';
+import { VendorService } from './vendors/Services/vendor.service';
 import { GuestService } from './guests/Services/guest.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    CallbackComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     CommonModule,
+    FormsModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,
@@ -41,6 +42,9 @@ import { GuestService } from './guests/Services/guest.service';
     EventService,
     GoogleMapsService,
     GuestService
+    RegisterService,
+    VendorService,
+    MatSnackBar,
   ],
   bootstrap: [AppComponent]
 })

@@ -5,15 +5,31 @@ import { MockEventService } from './Services/mock-event.service';
 import { Event } from './Models/event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
+<<<<<<< HEAD
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FakeUser } from '../shared/models/fake-user.model';
+import { Observable } from 'rxjs';
+=======
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
 
 describe('EventComponent', () => {
   let component: EventComponent;
   let fixture: ComponentFixture<EventComponent>;
   let mockEventService: EventService;
   let mockAuthService: AuthService;
+
+  class MockAuthService {
+    user$ = of(new FakeUser);
+
+    get(aString: string): Observable<any> {
+      return of(new FakeUser);
+    }
+  }
 
   const fakeEvent: Event = {
     organizerUserName: 'organizerId',
@@ -37,12 +53,22 @@ describe('EventComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+<<<<<<< HEAD
+      declarations: [ EventComponent ],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NoopAnimationsModule,
+      ],
+=======
       imports: [MaterialModule, ReactiveFormsModule],
       declarations: [ EventComponent],
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
       providers: [
           { provide: EventService, useClass: MockEventService},
           { provide: AuthService, useClass: MockAuthService }
-      ]
+      ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
   }));
 
@@ -59,7 +85,6 @@ describe('EventComponent', () => {
 
   it('should display all events', fakeAsync(() => {
     // arrange
-    spyOn(mockAuthService, 'getUserProfile').and.returnValue(of(fakeUserProfile));
     spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
 
     // act
@@ -67,8 +92,7 @@ describe('EventComponent', () => {
 
     // assert
     expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-
-     expect(component.events.length).toBe(3);
+    expect(component.events.length).toBe(3);
 
   }));
 
