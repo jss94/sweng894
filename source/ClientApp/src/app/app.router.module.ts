@@ -30,7 +30,7 @@ const routes: Routes = [
         GoogleMapComponent,
         GetUsersComponent,
         EventComponent,
-        GuestComponent
+        GuestComponent,
         RegisterUserComponent,
         RegisterVendorComponent,
     ],
