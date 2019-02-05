@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     ) {
     iconRegistry.addSvgIcon(
-        'user', sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-person-24px.svg'));
+        'person', sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-person-24px.svg'));
 
     iconRegistry.addSvgIcon(
         'add', sanitizer.bypassSecurityTrustResourceUrl('assets/img/icons/baseline-add-24px.svg'));
