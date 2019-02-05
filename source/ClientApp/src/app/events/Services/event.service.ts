@@ -20,6 +20,11 @@ export class EventService {
     return this.auth.post('event/', evt);
   }
 
+
+  updateEvent(evnt: Event): Observable<Object> {
+    return this.auth.authPut('event/', evnt);
+  }
+
   deleteEvent(evnt: Event): Observable<Object> {
     return this.auth.delete('event/' + evnt.eventId);
   }

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using source.Auth;
-using source.Framework;
 using source.Database;
 using source.Models;
 using source.Queries;
@@ -17,6 +16,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using source.Controllers;
+using source.Framework;
 
 namespace source
 {
@@ -32,11 +32,7 @@ namespace source
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
-
-            // Intercepts all controller calls with LoggerAttribute
-            //services.AddMvc(options => { options.Filters.Add<LoggerAttribute>(); });
-
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -60,11 +56,11 @@ namespace source
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new Framework.HasScopeRequirement("read:messages", domain)));
+                options.AddPolicy("read:messages", policy => policy.Requirements.Add(new HasScopeRequirement("read:messages", domain)));
             });
 
             // register the scope authorization handler
-            services.AddSingleton<IAuthorizationHandler, Framework.HasScopeHandler>();
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
             
             services.AddTransient<IAppDatabase>(_ => new AppDatabase(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddTransient<IUsersQuery, UsersQuery>();
@@ -88,7 +84,7 @@ namespace source
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger logger)
         {
             if (env.IsDevelopment())
             {
@@ -96,11 +92,12 @@ namespace source
             }
             else
             {
-                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            app.ConfigureExceptionHandler(logger);
+            
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -135,8 +132,7 @@ namespace source
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-
-
         }
+        
     }
 }

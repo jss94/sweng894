@@ -1,9 +1,10 @@
 ﻿using System;
-using source.Queries;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using source.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using source.Framework;
+using source.Models;
+using source.Queries;
 
 namespace source.Controllers
 {
@@ -11,12 +12,12 @@ namespace source.Controllers
     /// Vendor Controller
     /// </summary>
     [Route("api/[controller]")]
-    public class VendorsController
+    public class VendorsController: ControllerBase
     {
         private IVendorsQuery _vendorQuery;
         private IAddressesQuery _addressesQuery;
         private ILogger _logger;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -42,8 +43,7 @@ namespace source.Controllers
             }
             catch(Exception ex)
             {
-                //TODO: we should log our errors in the db
-
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }

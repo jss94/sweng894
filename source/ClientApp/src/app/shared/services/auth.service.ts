@@ -169,7 +169,21 @@ export class AuthService {
     return this.http.post(url, body, opt);
   }
 
+<<<<<<< HEAD
   public delete(endpoint: string): Observable<any> {
+=======
+  public authPut(endpoint: string, body: any): Observable<any> {
+    const url = `${this.baseUrl}api/${endpoint}`;
+    const opt = {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
+      body: body,
+    };
+
+    return this.http.put(url, body, opt);
+  }
+
+  public authDelete(endpoint: string, body: any): Observable<any> {
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
     const url = `${this.baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),

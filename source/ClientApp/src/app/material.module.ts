@@ -6,8 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule, MatMenuModule, MatSnackBarModule } from '@angular/material';
 import { SnackbarComponent } from './snackbar/snackbar.component';
+import { MatSelectModule, MatMenuModule, MatSnackBarModule, MatTableModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -21,6 +21,7 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
     MatSelectModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatTableModule,
   ],
   exports: [
     BrowserAnimationsModule,
@@ -33,6 +34,7 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
     MatSelectModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatTableModule
   ],
   providers: [
     MatIconRegistry,

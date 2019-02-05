@@ -1,15 +1,21 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { EventComponent } from './event.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
 import { Event } from './Models/event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
+<<<<<<< HEAD
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { Observable } from 'rxjs';
+=======
+import { MockAuthService } from '../shared/services/mock-auth.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material.module';
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
 
 describe('EventComponent', () => {
   let component: EventComponent;
@@ -47,12 +53,17 @@ describe('EventComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+<<<<<<< HEAD
       declarations: [ EventComponent ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
       ],
+=======
+      imports: [MaterialModule, ReactiveFormsModule],
+      declarations: [ EventComponent],
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
       providers: [
           { provide: EventService, useClass: MockEventService},
           { provide: AuthService, useClass: MockAuthService }

@@ -1,7 +1,4 @@
-﻿using source.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace source.Framework
@@ -11,6 +8,8 @@ namespace source.Framework
     /// </summary>
     public interface ILogger
     {
-        Task LogEvent(string userName, string logValue, string logDetail);
+        Task LogUnhandledException(System.Security.Claims.ClaimsPrincipal user, Exception error);
+        Task LogUnhandledException(Exception error);
+        Task LogError(System.Security.Claims.ClaimsPrincipal user, Exception ex);
     }
 }

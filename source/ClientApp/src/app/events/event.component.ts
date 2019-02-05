@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Event } from './Models/event.model';
 import { EventService } from './Services/event.service';
 import { AuthService } from '../shared/services/auth.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-event',
@@ -22,6 +22,7 @@ export class EventComponent implements OnInit {
   }
 
   ngOnInit() {
+<<<<<<< HEAD
     this.auth.user$.subscribe((result) => {
       this.userName = result.userName;
 
@@ -30,6 +31,13 @@ export class EventComponent implements OnInit {
         this.events.forEach(element => {
           console.log(JSON.stringify(element));
         });
+=======
+    const nickname = this.auth.userProfile.nickname;
+    this.eventService.getEvents(nickname).subscribe(response => {
+      this.events = response;
+      this.events.forEach(element => {
+        // console.log(JSON.stringify(element));
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
       });
     });
 
@@ -54,7 +62,20 @@ export class EventComponent implements OnInit {
 
   }
 
+<<<<<<< HEAD
   deleteEvent(evnt: Event): void {
+=======
+   updateEvent(changedName: string, changedDescription: string, evnt: Event): void {
+     evnt.eventName = changedName;
+     evnt.eventDescription = changedDescription;
+    this.eventService.updateEvent(evnt).subscribe(response => {
+      // reload page
+     this.ngOnInit();
+   });
+   }
+
+   deleteEvent(evnt: Event): void {
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
     this.eventService.deleteEvent(evnt).subscribe(response => {
       // reload page
       this.ngOnInit();
