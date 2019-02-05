@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { EventComponent } from './event.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
@@ -6,6 +6,8 @@ import { Event } from './Models/event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material.module';
 
 describe('EventComponent', () => {
   let component: EventComponent;
@@ -35,7 +37,8 @@ describe('EventComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventComponent ],
+      imports: [MaterialModule, ReactiveFormsModule],
+      declarations: [ EventComponent],
       providers: [
           { provide: EventService, useClass: MockEventService},
           { provide: AuthService, useClass: MockAuthService }

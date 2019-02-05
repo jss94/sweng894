@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Event } from './Models/event.model';
 import { EventService } from './Services/event.service';
 import { AuthService } from '../shared/services/auth.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-event',
@@ -25,7 +25,7 @@ export class EventComponent implements OnInit {
     this.eventService.getEvents(nickname).subscribe(response => {
       this.events = response;
       this.events.forEach(element => {
-        console.log(JSON.stringify(element));
+        // console.log(JSON.stringify(element));
       });
     });
   }
@@ -49,6 +49,15 @@ export class EventComponent implements OnInit {
       this.ngOnInit();
     });
 
+   }
+
+   updateEvent(changedName: string, changedDescription: string, evnt: Event): void {
+     evnt.eventName = changedName;
+     evnt.eventDescription = changedDescription;
+    this.eventService.updateEvent(evnt).subscribe(response => {
+      // reload page
+     this.ngOnInit();
+   });
    }
 
    deleteEvent(evnt: Event): void {
