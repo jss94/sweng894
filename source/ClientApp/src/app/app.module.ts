@@ -41,7 +41,7 @@ import { GuestService } from './guests/Services/guest.service';
     GetUsersService,
     EventService,
     GoogleMapsService,
-    GuestService
+    GuestService,
     RegisterService,
     VendorService,
     MatSnackBar,
