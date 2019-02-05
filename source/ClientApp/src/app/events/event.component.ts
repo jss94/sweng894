@@ -10,7 +10,8 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
   styleUrls: [ './event.component.css']
 })
 export class EventComponent implements OnInit {
-  public events: Event[];
+  events: Event[];
+  userName: string;
 
   userForm = new FormGroup({
     name: new FormControl('', [ Validators.required]),
@@ -21,20 +22,30 @@ export class EventComponent implements OnInit {
   }
 
   ngOnInit() {
+<<<<<<< HEAD
+    this.auth.user$.subscribe((result) => {
+      this.userName = result.userName;
+
+      this.eventService.getEvents(this.userName).subscribe(response => {
+        this.events = response;
+        this.events.forEach(element => {
+          console.log(JSON.stringify(element));
+        });
+=======
     const nickname = this.auth.userProfile.nickname;
     this.eventService.getEvents(nickname).subscribe(response => {
       this.events = response;
       this.events.forEach(element => {
         // console.log(JSON.stringify(element));
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
       });
     });
+
   }
 
   createNewEvent(): void {
-
-    const nickname = this.auth.userProfile.nickname;
     const testEvent: Event = {
-      organizerUserName: nickname,
+      organizerUserName: this.userName,
       eventName:  this.userForm.controls['name'].value,
       eventDescription:  this.userForm.controls['description'].value,
       eventDateTime: '2019/02/14 10:00:00', // hard coded for now
@@ -49,8 +60,11 @@ export class EventComponent implements OnInit {
       this.ngOnInit();
     });
 
-   }
+  }
 
+<<<<<<< HEAD
+  deleteEvent(evnt: Event): void {
+=======
    updateEvent(changedName: string, changedDescription: string, evnt: Event): void {
      evnt.eventName = changedName;
      evnt.eventDescription = changedDescription;
@@ -61,10 +75,11 @@ export class EventComponent implements OnInit {
    }
 
    deleteEvent(evnt: Event): void {
+>>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
     this.eventService.deleteEvent(evnt).subscribe(response => {
       // reload page
-     this.ngOnInit();
-   });
-   }
+      this.ngOnInit();
+    });
+  }
 
 }

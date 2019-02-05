@@ -8,10 +8,6 @@ describe('AuthService', () => {
   let sut: AuthService; // System under test
   let router: Router;
   let httpClient: HttpClient;
-  let fakeAuthResult = {
-    accessToken: '',
-    idToken: '',
-  };
 
   beforeEach(async() => {
     TestBed.configureTestingModule({
@@ -37,23 +33,5 @@ describe('AuthService', () => {
     expect(sut).toBeTruthy();
   });
 
-  describe('handleAuthentication()', () => {
-    it('should handle authentication and navigate home', () => {
-      // arrange
-      spyOn(sut.auth0, 'parseHash').and.callFake(function(err, authResult, callback) {
-        callback(err, authResult);
-        // console.log(err)
-      });
-      spyOn(router, 'navigate').and.callThrough();
-
-      // act
-      sut.handleAuthentication();
-
-      // assert
-      expect(sut.auth0.parseHash).toHaveBeenCalledTimes(1);
-      expect(router.navigate).toHaveBeenCalledTimes(1);
-
-    });
-  });
 });
 

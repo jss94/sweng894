@@ -8,13 +8,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { EventComponent } from './events/event.component';
 import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RegisterUserComponent } from './register/register-user/register-user.component';
+import { RegisterVendorComponent } from './register/register-vendor/register-vendor.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'find-vendors', component: GoogleMapComponent },
     { path: 'vendor-events', component: GetUsersComponent },
-    { path: 'organizer-events', component: EventComponent}
+    { path: 'organizer-events', component: EventComponent },
+    { path: 'register-user', component: RegisterUserComponent },
+    { path: 'register-vendor', component: RegisterVendorComponent },
   ];
 
 @NgModule({
@@ -23,7 +27,8 @@ const routes: Routes = [
         GoogleMapComponent,
         GetUsersComponent,
         EventComponent,
-
+        RegisterUserComponent,
+        RegisterVendorComponent,
     ],
 
     imports: [
@@ -33,7 +38,6 @@ const routes: Routes = [
         MaterialModule,
         ReactiveFormsModule,
     ],
-
     exports: [ RouterModule ]
 })
 

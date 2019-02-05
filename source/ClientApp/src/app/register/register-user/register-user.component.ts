@@ -1,17 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { User } from '../shared/models/user.model';
-import { GetUsersService } from './Services/get-users.service';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
-import { AuthService } from '../shared/services/auth.service';
+import { User } from '../../shared/models/user.model';
+import { RegisterService } from '../Services/register.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
-  selector: 'app-get-users',
-  templateUrl: './get-users.component.html',
-  styleUrls: [ './get-users.component.css']
+  selector: 'app-register-user',
+  templateUrl: './register-user.component.html',
+  styleUrls: [ './register-user.component.css']
 })
-export class GetUsersComponent implements OnInit {
+export class RegisterUserComponent {
 
   @ViewChild(MatExpansionPanel) expansion: MatExpansionPanel;
 
@@ -30,6 +30,8 @@ export class GetUsersComponent implements OnInit {
 
   userForm = new FormGroup({
     email: new FormControl('', [ Validators.required, Validators.email ]),
+    password: new FormControl('', [ Validators.required, Validators.minLength(8) ]),
+    confirm: new FormControl('', [ Validators.required, Validators.minLength(8) ]),
     name: new FormControl(''),
     street: new FormControl(''),
     city: new FormControl(''),
@@ -39,15 +41,10 @@ export class GetUsersComponent implements OnInit {
   });
 
   constructor(
-    private service: GetUsersService,
+    private service: RegisterService,
     private snackbar: MatSnackBar,
+    private auth: AuthService,
     ) { }
-
-  ngOnInit() {
-    this.service.getUsers().subscribe(response => {
-      this.users = response;
-    });
-  }
 
   onAddUser() {
     const user: User = {
@@ -62,40 +59,38 @@ export class GetUsersComponent implements OnInit {
       }
     };
 
-    this.service.registerUser(user).subscribe((result) => {
-      let message = 'Successfully Registered User';
+    const password = this.userForm.controls['password'].value;
+    const confirm = this.userForm.controls['confirm'].value;
+    let message = 'Successfully Registered User';
 
-      if (result.id === null) {
-        message = 'Error Registering User';
-      }
+    if (password === confirm) {
+      this.service.registerUser(user, password).subscribe((result) => {
+        if (result[1].email_verified = false) {
+          message = 'Email already exists.';
+        }
+
+        this.snackbar.open(message, '', {
+          duration: 2000
+        });
+
+        // reload page
+        this.expansion.close();
+        this.userForm.reset();
+        this.auth.login();
+
+      }, (error) => {
+        message = error.error.description;
+
+        this.snackbar.open(message, '', {
+          duration: 5000
+        });
+      });
+    } else {
+      message = 'Passwords do not match.';
 
       this.snackbar.open(message, '', {
-        duration: 2000
+        duration: 5000
       });
-    });
-
-    // reload page
-    this.expansion.close();
-    this.userForm.reset();
-    this.ngOnInit();
+    }
   }
-
-
-  // TODO : This will only work if we also delete the user from Auth0;
-  // To delete the user from Auth0 we neeed their user_id string from Auth0 DB.
-  // onDeleteUser(user: User) {
-  //   this.service.deleteUser(user).subscribe(() => {
-  //     this.snackbar.open(user.userName + ' was deleted.', '', {
-  //       duration: 1500
-  //     });
-
-  //     this.ngOnInit();
-  //   }, (error) => {
-  //     this.snackbar.open('There was an issue deleting ' + user.userName, '', {
-  //       duration: 5000
-  //     });
-
-  //     this.ngOnInit();
-  //   });
-  // }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
+import { Router } from '@angular/router';
+import { VendorService } from '../vendors/Services/vendor.service';
 
 @Component({
   selector: 'app-home',
@@ -7,18 +9,27 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public auth: AuthService) {
+  constructor(
+    private auth: AuthService,
+    private vendorService: VendorService,
+    private router: Router
+    ) {
     auth.handleAuthentication();
+
   }
 
   ngOnInit() {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-      this.auth.renewTokens();
-    }
+    this.auth.user$.subscribe((user) => {
+      // Get any vendor information
+      this.vendorService.getVendor(user.userName).subscribe((vendor) => {
+        if (user && user.role === 'VENDOR' && vendor.id === null) {
+          this.router.navigate(['/register-vendor']);
+        }
+      }, (error) => {
 
-    const authResult = JSON.parse(localStorage.getItem('authResult'));
-    if (authResult) {
-      this.auth.renewUser(authResult);
-    }
+      });
+
+    });
+
   }
 }

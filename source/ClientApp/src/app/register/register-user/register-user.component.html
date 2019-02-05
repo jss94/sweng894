@@ -1,7 +1,4 @@
 <div class="container">
-
-  <h1>App Users</h1>
-
   <mat-accordion #expansion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -9,7 +6,7 @@
           Register User
         </mat-panel-title>
         <mat-panel-description>
-          Add a user to the Users Database
+          Add a user to the system.
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -37,6 +34,27 @@
           <mat-hint>This will become your username</mat-hint>
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Enter Password</mat-label>
+          <input 
+            type="password"
+            required 
+            matInput 
+            formControlName="password"
+            >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input 
+            type="password"
+            required 
+            matInput 
+            formControlName="confirm"
+            >
+        </mat-form-field>
+
+        <br>
 
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
@@ -106,26 +124,4 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <table class='table table-striped' *ngIf="users">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Name</th>
-        <th>Role</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.userName }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.role }}</td>
-        <!-- <td *ngIf="auth.user.role === 'Admin'">
-          <button type="button" mat-button (click)="onDeleteUser(user)">
-              <a class="material-icons">delete_forever</a>
-          </button>
-        </td> -->
-      </tr>
-    </tbody>
-  </table>
-    
 </div>

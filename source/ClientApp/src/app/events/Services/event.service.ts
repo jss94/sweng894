@@ -13,11 +13,11 @@ export class EventService {
   }
 
   getEvents(id: string): Observable<Event[]> {
-      return this.auth.authGet('event/' + id);
+      return this.auth.get('event/' + id);
   }
 
   createNewEvent(evt: Event): Observable<Object> {
-    return this.auth.authPost('event/', evt);
+    return this.auth.post('event/', evt);
   }
 
 
@@ -26,7 +26,7 @@ export class EventService {
   }
 
   deleteEvent(evnt: Event): Observable<Object> {
-    return this.auth.authDelete('event/', evnt);
+    return this.auth.delete('event/' + evnt.eventId);
   }
 
 }

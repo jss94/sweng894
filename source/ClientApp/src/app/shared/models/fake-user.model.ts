@@ -1,6 +1,6 @@
-import { User } from './user.model';
+
 import { FakeAddress } from 'src/app/shared/models/fake-address.model';
-import { inherits } from 'util';
+import { User } from './user.model';
 
 export class FakeUser implements User {
     userName =  'my@UserName.com';
