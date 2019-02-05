@@ -56,23 +56,35 @@
     <p *ngIf="!events"><em>Loading...</em></p>
 
     <table class='table table-striped' *ngIf="events">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let event of events">
-          <td>{{ event.eventName }}</td>
-          <td>{{ event.eventDescription }}</td>
-          <td>
-              <button type="submit" mat-button (click)="deleteEvent(event)">
-                  <i class="material-icons">delete_forever</i>
-                </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let event of events">
+            <td>
+                <input type="text" ([ngModel])="event.eventName" [disabled]="!event.isEditable" #name value={{event.eventName}}/>
+              </td>
+
+              <td>
+                  <input type="text" ([ngModel])="event.eventDescription" [disabled]="!event.isEditable" #description value={{event.eventDescription}}/>
+                </td>
+              <td>
+                  <button (click)="event.isEditable=!event.isEditable" *ngIf="!event.isEditable">
+                    <i class="material-icons">edit</i>
+                  </button>
+                  <button *ngIf="event.isEditable" (click)="event.isEditable=!event.isEditable; updateEvent(name.value, description.value, event)">
+                    <i class="material-icons">save</i>
+                  </button>
+                  <button type="submit" mat-button (click)="deleteEvent(event)">
+                      <i class="material-icons">delete_forever</i>
+                    </button>
+              </td>
+            </tr>
+        </tbody>
+      </table>
   </div>
 </div>

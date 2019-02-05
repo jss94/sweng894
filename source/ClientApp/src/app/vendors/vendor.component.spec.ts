@@ -1,8 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { VendorComponent } from './vendor.component';
 import { VendorService } from './Services/vendor.service';
 import { MockVendorService } from './Services/mock-vendor.service';
 import { Vendor } from './Models/vendor.model';
+import { of } from 'rxjs';
 
 describe('VendorComponent', () => {
   let component: VendorComponent;
@@ -30,26 +31,25 @@ describe('VendorComponent', () => {
   }));
 
   beforeEach(() => {
+    mockVendorService = TestBed.get(VendorService);
     fixture = TestBed.createComponent(VendorComponent);
     component = fixture.componentInstance;
-    mockVendorService = TestBed.get(VendorService);
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all vendors', () => {
+  it('should display all vendors', fakeAsync(() => {
     // arrange
-    spyOn(mockVendorService, 'getVendors').and.returnValue(fakeVendors);
+    spyOn(mockVendorService, 'getVendors').and.returnValue(of(fakeVendors));
 
     // act
-    // when constructor is called.
+    fixture.detectChanges();
 
     // assert
     expect(mockVendorService.getVendors).toHaveBeenCalledTimes(1);
-    expect(component.vendors.length).toBe(3);
+    expect(component.vendors.length).toBe(2);
 
-  });
+  }));
 });
