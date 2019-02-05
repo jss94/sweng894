@@ -10,10 +10,12 @@ import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './register/register-user/register-user.component';
 import { RegisterVendorComponent } from './register/register-vendor/register-vendor.component';
+import { LearnMoreComponent } from './learn-more/learn-more.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
+    { path: 'learn-more', component: LearnMoreComponent},
     { path: 'find-vendors', component: GoogleMapComponent },
     { path: 'vendor-events', component: GetUsersComponent },
     { path: 'organizer-events', component: EventComponent },
@@ -24,6 +26,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         HomeComponent,
+        LearnMoreComponent,
         GoogleMapComponent,
         GetUsersComponent,
         EventComponent,

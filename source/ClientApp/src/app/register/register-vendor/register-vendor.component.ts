@@ -1,7 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatExpansionPanel } from '@angular/material';
 import { RegisterService } from '../Services/register.service';
 import { Vendor } from 'src/app/vendors/Models/vendor.model';
 import { Router } from '@angular/router';
