@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { EventComponent } from './events/event.component';
+import { GuestComponent } from './guests/guest.component';
 import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -14,7 +15,8 @@ const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'find-vendors', component: GoogleMapComponent },
     { path: 'vendor-events', component: GetUsersComponent },
-    { path: 'organizer-events', component: EventComponent}
+    { path: 'organizer-events', component: EventComponent},
+    { path: 'guest', component: GuestComponent}
   ];
 
 @NgModule({
@@ -23,7 +25,7 @@ const routes: Routes = [
         GoogleMapComponent,
         GetUsersComponent,
         EventComponent,
-
+        GuestComponent
     ],
 
     imports: [

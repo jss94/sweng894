@@ -44,9 +44,11 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT guestId, firstName, lastName, email, isGoing, eventId"
-                        + @"FROM occasions.guests "
-                        + "WHERE eventId = @eventId;";
+                    //string query = @"SELECT guestId, firstName, lastName, email, isGoing, eventId"
+                    //    + @"FROM occasions.guests "
+                    //    + "WHERE eventId = @eventId;";
+
+                    string query = @"SELECT * FROM occasions.guests WHERE eventId = @eventId";
 
                     var guests = connection.QueryAsync<Guest>(query, new { eventId }).Result.ToList();
                     return guests;

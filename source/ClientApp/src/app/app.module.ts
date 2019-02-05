@@ -15,6 +15,7 @@ import { CallbackComponent } from './call-back/callback.component';
 import { GoogleMapsService } from './google-map/Services/google-maps.service';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { MaterialModule } from './material.module';
+import { GuestService } from './guests/Services/guest.service';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { MaterialModule } from './material.module';
     GetUsersService,
     EventService,
     GoogleMapsService,
+    GuestService
   ],
   bootstrap: [AppComponent]
 })
