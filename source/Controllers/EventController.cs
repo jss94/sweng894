@@ -9,6 +9,9 @@ using source.Queries;
 
 namespace source.Controllers
 {
+    /// <summary>
+    /// Event controller.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class EventController : ControllerBase
@@ -91,7 +94,7 @@ namespace source.Controllers
             if (result == null)
                 return new NotFoundResult();
 
-            return new OkObjectResult(await _eventQuery.DeleteEvent(result));
+            return new OkObjectResult(true);
         }
     }
 }

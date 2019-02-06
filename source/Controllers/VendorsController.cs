@@ -59,7 +59,12 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _vendorQuery.GetById(id));
+                var vendor = await _vendorQuery.GetById(id);
+
+                if (vendor == null)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(vendor);
             }
             catch (Exception)
             {
@@ -74,7 +79,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="userName">Vendor's unique user name </param>
         /// <returns>Vendor</returns>
-        [HttpGet("userName")]
+        [HttpGet("{userName}")]
         public async Task<IActionResult> GetByUserName(string userName)
         {
             try
@@ -82,7 +87,7 @@ namespace source.Controllers
                 var vendor = await _vendorQuery.GetByUserName(userName);
 
                 if (vendor == null)
-                    return new BadRequestResult();
+                    return new NotFoundResult();
 
                 return new OkObjectResult(vendor);
             }
@@ -148,14 +153,14 @@ namespace source.Controllers
         {
             try
             {
-                var existingVendor = _vendorQuery.GetById(id);
+                var vendor = await _vendorQuery.GetById(id);
 
-                if (existingVendor == null)
+                if (vendor == null)
                 {
-                    return new BadRequestResult();
+                    return new NotFoundResult();
                 }
 
-                return new OkObjectResult(await _vendorQuery.Deactivate(id));
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
@@ -175,14 +180,14 @@ namespace source.Controllers
         {
             try
             {
-                var existingVendor = _vendorQuery.GetById(id);
+                var vendor = await _vendorQuery.GetById(id);
 
-                if (existingVendor == null)
+                if (vendor == null)
                 {
-                    return new BadRequestResult();
+                    return new NotFoundResult();
                 }
                 
-                return new OkObjectResult(await _vendorQuery.Delete(id));
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
