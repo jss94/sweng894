@@ -3,6 +3,8 @@ import { OccEvent } from './Models/occ-event.model';
 import { EventService } from './Services/event.service';
 import { AuthService } from '../shared/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-events',
@@ -15,11 +17,17 @@ export class EventsComponent implements OnInit {
   userName: string;
 
   eventForm = new FormGroup({
-    name: new FormControl('', [ Validators.required]),
-    description: new FormControl('', [ Validators.required]),
+    date: new FormControl('', [ Validators.required ]),
+    name: new FormControl('', [ Validators.required ]),
+    description: new FormControl('', [ Validators.required] ),
   });
 
-  constructor(private auth: AuthService, private eventService: EventService) {
+  constructor(
+    private auth: AuthService,
+    private eventService: EventService,
+    private router: Router,
+    private snackbar: MatSnackBar,
+    ) {
   }
 
   ngOnInit() {
@@ -39,21 +47,22 @@ export class EventsComponent implements OnInit {
 
   }
 
+  // TODO: Add time!!!
   onCreate(): void {
-    const testEvent: OccEvent = {
+    const event: OccEvent = {
       userName: this.userName,
       name:  this.eventForm.controls['name'].value,
       description:  this.eventForm.controls['description'].value,
-      dateTime: '2019/02/14 10:00:00', // hard coded for now
-      created: ' ',
-      // eventId is handled by the db, this is a temporary value.
-      eventId: -1,
-      guestListId: -1
+      dateTime: this.eventForm.controls['date'].value.toISOString().slice(0, 19).replace('T', ' '),
+      created: new Date().toISOString().slice(0, 19).replace('T', ' '),
      };
 
-    this.eventService.createNewEvent(testEvent).subscribe(response => {
-       // reload page
+    this.eventService.createNewEvent(event).subscribe(response => {
       this.ngOnInit();
+      this.eventForm.reset();
+      this.snackbar.open('Successfully Created ' + event.name, '', {
+        duration: 1500
+      });
     });
 
   }
@@ -67,10 +76,17 @@ export class EventsComponent implements OnInit {
    });
    }
 
+   onGuestsClicked(event: OccEvent): void {
+    this.router.navigate(['/guests/' + event.eventId]);
+   }
+
    deleteEvent(evnt: OccEvent): void {
     this.eventService.deleteEvent(evnt).subscribe(response => {
       // reload page
       this.ngOnInit();
+      this.snackbar.open('Successfully Deleted ' + evnt.name, '', {
+        duration: 3000
+      });
     });
   }
 

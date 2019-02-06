@@ -152,18 +152,19 @@ export class AuthService {
     });
   }
 
-  public get(endpoint: string): Observable < any > {
-    return this.http
-    .get(`${this.baseUrl}api/${endpoint}`, {
-      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`)
-    });
-  }
-
-  public post(endpoint: string, body: any): Observable < any > {
+  public get(endpoint: string): Observable<any> {
     const url = `${this.baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
-      body: body,
+    };
+
+    return this.http.get(url, opt);
+  }
+
+  public post(endpoint: string, body: any): Observable<any> {
+    const url = `${this.baseUrl}api/${endpoint}`;
+    const opt = {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
 
     return this.http.post(url, body, opt);
@@ -173,7 +174,6 @@ export class AuthService {
     const url = `${this.baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
-      body: body,
     };
 
     return this.http.put(url, body, opt);

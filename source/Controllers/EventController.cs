@@ -94,6 +94,7 @@ namespace source.Controllers
             if (result == null)
                 return new NotFoundResult();
 
+            await _eventQuery.DeleteEvent(result);
             return new OkObjectResult(true);
         }
     }

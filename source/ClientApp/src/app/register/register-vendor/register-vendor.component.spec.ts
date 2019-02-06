@@ -7,8 +7,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../../shared/models/fake-user.model';
-import { of } from 'rxjs';
 import { FakeVendor } from 'src/app/vendors/Models/fake-vendor.model';
+import { of } from 'rxjs/internal/observable/of';
 
 describe('RegisterVendorComponent', () => {
   let component: RegisterVendorComponent;

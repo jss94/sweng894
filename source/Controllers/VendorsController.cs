@@ -54,7 +54,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="id">Vendor id</param>
         /// <returns>Vendor</returns>
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -86,6 +86,7 @@ namespace source.Controllers
             {
                 var vendor = await _vendorQuery.GetByUserName(userName);
 
+                Console.WriteLine(vendor);
                 if (vendor == null)
                     return new NotFoundResult();
 
@@ -107,10 +108,17 @@ namespace source.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody]Vendor vendor)
         {
+            //if (vendor == null)
+                //return new OkObjectResult(vendor);
+
             try
             {
-                var addressId = await _addressesQuery.Insert(vendor.address);
-                vendor.addressId = addressId;
+                if (vendor.address.city != null)
+                {
+                    var addressId = await _addressesQuery.Insert(vendor.address);
+                    vendor.addressId = addressId;
+                }
+
 
                 await _vendorQuery.Insert(vendor);
                 return new OkObjectResult(vendor);

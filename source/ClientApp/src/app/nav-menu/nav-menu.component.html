@@ -26,16 +26,16 @@
       </button>
       <mat-menu #userMenu="matMenu">
         <button mat-button class="clickable" [routerLinkActive]='["link-active"]'>
-          <span class="nav-link text-dark" *ngIf="auth.isAuthenticated()" (click)="auth.logout()">Logout</span>
+          <span class="nav-link text-dark" (click)="auth.logout()">Logout</span>
         </button>
       </mat-menu>
 
-      <button mat-button [matMenuTriggerFor]="guestMenu">
+      <button *ngIf="!auth.isAuthenticated()" mat-button [matMenuTriggerFor]="guestMenu">
         <mat-icon>person_outline</mat-icon>
         Guest
       </button>
       <mat-menu #guestMenu="matMenu">
-        <button mat-menu-item [routerLink]='["/guest"]' [routerLinkActive]='["link-active"]'> 
+        <button mat-menu-item [routerLink]='["/guests"]' [routerLinkActive]='["link-active"]'> 
           Guest List
         </button>
       </mat-menu>

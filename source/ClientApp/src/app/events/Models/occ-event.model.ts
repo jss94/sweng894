@@ -1,8 +1,8 @@
 export interface OccEvent {
 
-  eventId: number;
+  eventId?: number;
   userName: string;
-  guestListId: any;
+  guestListId?: any;
   name: string;
   description: string;
   dateTime: any;

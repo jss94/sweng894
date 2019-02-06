@@ -22,7 +22,7 @@ const routes: Routes = [
     { path: 'events', component: EventsComponent },
     { path: 'register-user', component: RegisterUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
-    { path: 'guest', component: GuestComponent}
+    { path: 'guests/:eventId', component: GuestComponent },
   ];
 
 @NgModule({

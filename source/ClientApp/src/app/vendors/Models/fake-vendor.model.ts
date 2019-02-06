@@ -8,7 +8,7 @@ export class FakeVendor implements Vendor {
     name = 'Vendor Name';
     type = 'VENDOR';
     website = 'www.avendor.com';
-    phone = 5555555;
+    phone = '5555555';
     address = new FakeAddress();
 }
 

@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { RegisterService } from '../Services/register.service';
 import { Vendor } from 'src/app/vendors/Models/vendor.model';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-register-vendor',
@@ -15,7 +16,6 @@ export class RegisterVendorComponent {
   isUserRegistrationActive = false;
 
   vendorForm = new FormGroup({
-    email: new FormControl('', [ Validators.required, Validators.email ]),
     name: new FormControl('', [ Validators.required ]),
     type: new FormControl('', [ Validators.required, Validators.minLength(5) ]),
     website: new FormControl('', [ Validators.minLength(8) ]),
@@ -30,11 +30,12 @@ export class RegisterVendorComponent {
     private service: RegisterService,
     private snackbar: MatSnackBar,
     private router: Router,
+    private auth: AuthService,
     ) { }
 
   onAddVendor() {
     const vendor: Vendor = {
-      userName: this.vendorForm.controls['email'].value,
+      userName: this.auth.user.userName,
       name: this.vendorForm.controls['name'].value,
       type: this.vendorForm.controls['type'].value,
       website: this.vendorForm.controls['website'].value,
@@ -58,7 +59,7 @@ export class RegisterVendorComponent {
       // reload page
       this.vendorForm.reset();
       this.router.navigate(['/home']);
-
+      console.log(result);
 
     }, (error) => {
       message = error.error.description;

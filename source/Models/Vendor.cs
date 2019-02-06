@@ -15,7 +15,7 @@ namespace source.Models
         public string name { get; set; }
         public string type { get; set; }
         public string website { get; set; }
-        public string phoneNumber { get; set; }
+        public string phone { get; set; }
 
         public int? addressId { get; set; }
         public Address address { get; set; }

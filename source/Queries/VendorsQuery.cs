@@ -41,7 +41,7 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
+                    string query = @"SELECT id, userName, name, type, website, phone "
                         + @"FROM occasions.vendors "
                         + @"WHERE active = 1 ORDER BY userName DESC;";
 
@@ -71,7 +71,7 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
+                    string query = @"SELECT id, userName, name, type, website, phone "
                         + @"FROM occasions.vendors "
                         + @"WHERE id = @id AND active = 1;";
 
@@ -101,9 +101,9 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
-                        + @"FROM occasions.vendors "
-                        + @"WHERE userName = @userName AND active = 1;";
+                    string query = @"SELECT *"
+                        + @" FROM occasions.vendors"
+                        + @" WHERE userName = @userName AND active = 1;";
 
                     var vendor = connection.QueryFirstAsync<Vendor>(query, new { userName }).Result;
                     return vendor;
@@ -132,8 +132,8 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"INSERT INTO occasions.vendors "
-                        + @"(id, userName, name, type, addressId, website, phoneNumber, active) "
-                        + @"VALUES(@id, @userName, @name, @type, @addressId, @website, @phoneNumber, 1); "
+                        + @"(id, userName, name, type, addressId, website, phone, active) "
+                        + @"VALUES(@id, @userName, @name, @type, @addressId, @website, @phone, 1); "
                         + @"SELECT * FROM occasions.vendors WHERE id = LAST_INSERT_ID() AND active = 1;";
 
                     var returnedVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
@@ -163,7 +163,7 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"UPDATE occasions.vendors "
-                        + @"SET name = @name, type = @type, addressId = @addressId, website = @website, phoneNumber = @phoneNumber "
+                        + @"SET name = @name, type = @type, addressId = @addressId, website = @website, phone = @phone "
                         + @"WHERE id = @id; "
                         + @"SELECT * FROM occasions.vendors WHERE id = @id AND active = 1;";
 
@@ -197,7 +197,7 @@ namespace source.Queries
                         + @"SET active = 0 "
                         + @"WHERE id = @id AND active = 1;";
 
-                    var returnedValue = connection.QueryAsync<Vendor>(query, id);
+                    var returnedValue = connection.QueryAsync<Vendor>(query, new { id });
                     return true;                   
                 }
             }
@@ -225,7 +225,7 @@ namespace source.Queries
                 string query = @"DELETE FROM occasions.vendors "
                     + @"WHERE id = @id AND active = 1;";
 
-                var returnedValue = connection.QueryAsync<Vendor>(query, id);
+                var returnedValue = connection.QueryAsync<Vendor>(query, new { id });
                 return true;
             }
         }

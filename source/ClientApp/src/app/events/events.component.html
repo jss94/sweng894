@@ -4,6 +4,7 @@
 
   <mat-accordion>
     <mat-expansion-panel>
+
       <mat-expansion-panel-header>
         <mat-panel-title>
           Create Event
@@ -12,10 +13,15 @@
 
       <form class="form" [formGroup]="eventForm" (ngSubmit)="onCreate()">
 
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Event Date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
-          <mat-label>Name</mat-label>
+          <mat-label>Event Name</mat-label>
           <input
-            autocomplete="name"
             matInput
             placeholder="Event Name"
             formControlName="name"
@@ -23,7 +29,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Description</mat-label>
+            <mat-label>Event Description</mat-label>
             <input
               autocomplete="description"
               matInput
@@ -74,6 +80,10 @@
       <button *ngIf="event.isEditable" (click)="event.isEditable=!event.isEditable; updateEvent(name.value, description.value, event)">
           <mat-icon>save</mat-icon>
       </button> -->
+      <button mat-button (click)="onGuestsClicked(event)">
+        <mat-icon>people</mat-icon>
+      </button>
+
       <button mat-button (click)="deleteEvent(event)">
           <mat-icon>delete_forever</mat-icon>
       </button>
