@@ -41,12 +41,16 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, userName, name, type, website, phoneNumber "
-                        + @"FROM occasions.vendors "
-                        + @"WHERE active = 1 ORDER BY userName DESC;";
+                    //not correct
+                    string query = @"SELECT v.id, v.userName, v.name, v.type, v.website, v.phoneNumber, "
+                        + @"s.id, s.vendorId, s.serviceName, s.serviceDescription, s.flatFee, s.price, s.unitsAvailable "
+                        + @"FROM occasions.vendors v "
+                        + @"LEFT JOIN occasions.vendorServices s on s.vendorId = v.id "
+                        + @"WHERE v.active = 1 and s.active = 1 "
+                        + @"ORDER BY v.name DESC;";
 
-                    var vendors = connection.QueryAsync<Vendor>(query).Result.ToList();
-                    return vendors;
+                    var result = connection.Query<Vendor, VendorServices, Vendor>(query, (vendor, vendorService) => { vendor.id = vendorService.vendorId; return vendor; });
+                    return result.ToList();
                 }
             }
             catch (Exception ex)

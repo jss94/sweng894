@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
@@ -19,5 +20,6 @@ namespace source.Models
 
         public int? addressId { get; set; }
         public Address address { get; set; }
+        public List<VendorServices> services { get; set; }
     }
 }
