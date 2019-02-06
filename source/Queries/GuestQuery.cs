@@ -54,7 +54,7 @@ namespace source.Queries
                     return guests;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // TODO: Traditional Logging
                 return new List<Guest>();
@@ -130,7 +130,7 @@ namespace source.Queries
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // TODO: Traditional Logging
                 return false;

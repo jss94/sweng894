@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace source.Controllers
 {
+    /// <summary>
+    /// API controller.
+    /// </summary>
     [Route("api")]
     public class ApiController : Controller
     {

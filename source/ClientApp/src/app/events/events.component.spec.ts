@@ -1,25 +1,23 @@
 import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { EventComponent } from './event.component';
+import { EventsComponent } from './events.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
-import { Event } from './Models/event.model';
+import { OccEvent } from './Models/occ-event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
-<<<<<<< HEAD
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { Observable } from 'rxjs';
-=======
-import { MockAuthService } from '../shared/services/mock-auth.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '../material.module';
->>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
+import { Router, Routes } from '@angular/router';
+import {RouterTestingModule} from '@angular/router/testing';
+import { GuestsComponent } from '../guests/guests.component';
+import { MatSnackBar } from '@angular/material';
 
-describe('EventComponent', () => {
-  let component: EventComponent;
-  let fixture: ComponentFixture<EventComponent>;
+describe('EventsComponent', () => {
+  let component: EventsComponent;
+  let fixture: ComponentFixture<EventsComponent>;
   let mockEventService: EventService;
   let mockAuthService: AuthService;
 
@@ -31,17 +29,21 @@ describe('EventComponent', () => {
     }
   }
 
-  const fakeEvent: Event = {
-    organizerUserName: 'organizerId',
-    eventDescription: 'fake description',
-    eventName: 'event name',
-    eventDateTime: '2019/04/01',
+  class MockMatSnackBar {
+    open() {}
+  }
+
+  const fakeEvent: OccEvent = {
+    userName: 'organizerId',
+    description: 'fake description',
+    name: 'event name',
+    dateTime: '2019/04/01',
     eventId: 0,
     guestListId: 0,
-    eventCreated: 'null'
+    created: 'null'
   };
 
-  const fakeEvents: Event[] = [
+  const fakeEvents: OccEvent[] = [
     fakeEvent,
     fakeEvent,
     fakeEvent,
@@ -51,31 +53,35 @@ describe('EventComponent', () => {
     nickname: 'jss94'
   };
 
+  const routes: Routes = [
+    { path: 'guests/:id', component: GuestsComponent },
+];
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-<<<<<<< HEAD
-      declarations: [ EventComponent ],
+      declarations: [
+        EventsComponent,
+        GuestsComponent,
+      ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
+        RouterTestingModule.withRoutes(routes),
       ],
-=======
-      imports: [MaterialModule, ReactiveFormsModule],
-      declarations: [ EventComponent],
->>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
       providers: [
-          { provide: EventService, useClass: MockEventService},
-          { provide: AuthService, useClass: MockAuthService }
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: EventService, useClass: MockEventService },
+        { provide: AuthService, useClass: MockAuthService },
       ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     mockEventService = TestBed.get(EventService);
     mockAuthService = TestBed.get(AuthService);
-    fixture = TestBed.createComponent(EventComponent);
+    fixture = TestBed.createComponent(EventsComponent);
     component = fixture.componentInstance;
   });
 

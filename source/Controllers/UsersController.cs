@@ -76,12 +76,11 @@ namespace source.Controllers
         /// Update the specified userId and body.
         /// </summary>
         /// <returns>The put.</returns>
-        /// <param name="userId">User identifier.</param>
         /// <param name="body">Body.</param>
-        [HttpPut("{userId}")]
-        public async Task<IActionResult> Put(string userId, [FromBody]User body)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]User body)
         {
-            var user = await _usersQuery.GetByUserName(userId);
+            var user = await _usersQuery.GetByUserName(body.userName);
 
             if (user == null)
                 return new NotFoundResult();

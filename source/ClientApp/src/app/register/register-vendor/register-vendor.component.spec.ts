@@ -7,8 +7,13 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../../shared/models/fake-user.model';
-import { of } from 'rxjs';
 import { FakeVendor } from 'src/app/vendors/Models/fake-vendor.model';
+import { of } from 'rxjs/internal/observable/of';
+import { RouterTestingModule } from '@angular/router/testing';
+import { GuestsComponent } from 'src/app/guests/guests.component';
+import { Routes } from '@angular/router';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
 
 describe('RegisterVendorComponent', () => {
   let component: RegisterVendorComponent;
@@ -21,12 +26,18 @@ describe('RegisterVendorComponent', () => {
     }
   }
 
+  const routes: Routes = [
+    { path: 'guests/:id', component: GuestsComponent },
+  ];
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         RegisterVendorComponent,
+        GuestsComponent,
       ],
       providers: [
+        { provide: AuthService, useClass: MockAuthService },
         { provide: RegisterService, useClass: MockRegisterService },
         { provide: MatSnackBar, useClass: MockMatSnackbar},
       ],
@@ -37,6 +48,7 @@ describe('RegisterVendorComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         NoopAnimationsModule,
+        RouterTestingModule.withRoutes(routes),
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
@@ -72,22 +84,6 @@ describe('RegisterVendorComponent', () => {
   });
 
   describe('form validator', () => {
-    it('should catch invalid email', () => {
-      // arrange
-      const vendor = new FakeVendor();
-      vendor.userName = 'this is not an email@address.com';
-      component.vendorForm.controls['email'].setValue( vendor.userName );
-
-      // the following are additional required fields in the form
-      component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
-
-      // act
-      // done automatically by formgroup object
-
-      // assert
-      expect(component.vendorForm.valid).toBeFalsy();
-    });
 
     it('should catch invalid more than two characters long', () => {
       // arrange
@@ -96,7 +92,6 @@ describe('RegisterVendorComponent', () => {
       component.vendorForm.controls['state'].setValue( vendor.address.state );
 
       // the following are required fields in the form
-      component.vendorForm.controls['email'].setValue( vendor.userName );
       component.vendorForm.controls['name'].setValue( vendor.name );
       component.vendorForm.controls['type'].setValue( vendor.type );
 
@@ -114,7 +109,6 @@ describe('RegisterVendorComponent', () => {
       component.vendorForm.controls['state'].setValue( vendor.address.state );
 
       // the following are required fields in the form
-      component.vendorForm.controls['email'].setValue( vendor.userName );
       component.vendorForm.controls['name'].setValue( vendor.name );
       component.vendorForm.controls['type'].setValue( vendor.type );
       // act
@@ -131,7 +125,6 @@ describe('RegisterVendorComponent', () => {
       component.vendorForm.controls['zip'].setValue( vendor.address.zip );
 
       // the following are required fields in the form
-      component.vendorForm.controls['email'].setValue( vendor.userName );
       component.vendorForm.controls['name'].setValue( vendor.name );
       component.vendorForm.controls['type'].setValue( vendor.type );
 
@@ -149,7 +142,6 @@ describe('RegisterVendorComponent', () => {
       component.vendorForm.controls['zip'].setValue( vendor.address.zip );
 
       // the following are required fields in the form
-      component.vendorForm.controls['email'].setValue( vendor.userName );
       component.vendorForm.controls['name'].setValue( vendor.name );
       component.vendorForm.controls['type'].setValue( vendor.type );
 

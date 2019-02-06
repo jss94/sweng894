@@ -1,6 +1,6 @@
-import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Event } from '../Models/event.model';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { OccEvent } from '../Models/occ-event.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -12,20 +12,20 @@ export class EventService {
       ) {
   }
 
-  getEvents(id: string): Observable<Event[]> {
+  getEvents(id: string): Observable<OccEvent[]> {
       return this.auth.get('event/' + id);
   }
 
-  createNewEvent(evt: Event): Observable<Object> {
+  createNewEvent(evt: OccEvent): Observable<any> {
     return this.auth.post('event/', evt);
   }
 
 
-  updateEvent(evnt: Event): Observable<Object> {
+  updateEvent(evnt: OccEvent): Observable<any> {
     return this.auth.put('event/', evnt);
   }
 
-  deleteEvent(evnt: Event): Observable<Object> {
+  deleteEvent(evnt: OccEvent): Observable<any> {
     return this.auth.delete('event/' + evnt.eventId);
   }
 

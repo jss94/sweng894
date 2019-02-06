@@ -1,0 +1,92 @@
+<div class="events-container">
+
+  <h1>My Events</h1>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Create Event
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form class="form" [formGroup]="eventForm" (ngSubmit)="onCreate()">
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Event Date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Event Name</mat-label>
+          <input
+            matInput
+            placeholder="Event Name"
+            formControlName="name"
+            >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Event Description</mat-label>
+            <input
+              autocomplete="description"
+              matInput
+              placeholder="Event Description"
+              formControlName="description"
+              >
+          </mat-form-field>
+
+        <mat-action-row>
+          <button type="submit" mat-button [disabled]="!eventForm.valid">
+            <mat-icon>add</mat-icon>
+            Add Event
+          </button>
+        </mat-action-row>
+
+      </form>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+<div class="item-container" *ngFor="let event of events">
+  <div class="event-item">
+    
+
+    <div class="header">
+      <div class="event-icon">
+        <mat-icon>event</mat-icon>
+      </div>
+      <div>
+        <div>
+          <h5>{{event.name}}</h5>
+        </div>
+        <div>
+          <div>{{event.dateTime}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+        <h6>{{event.description}}</h6>
+      </div>
+
+    <div class="actions">
+      <!-- <button *ngIf="!event.isEditable" (click)="event.isEditable=!event.isEditable">
+          <mat-icon>edit</mat-icon>
+      </button>
+      <button *ngIf="event.isEditable" (click)="event.isEditable=!event.isEditable; updateEvent(name.value, description.value, event)">
+          <mat-icon>save</mat-icon>
+      </button> -->
+      <button mat-button (click)="onGuestsClicked(event)">
+        <mat-icon>people</mat-icon>
+      </button>
+
+      <button mat-button (click)="deleteEvent(event)">
+          <mat-icon>delete_forever</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

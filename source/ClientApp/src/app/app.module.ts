@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material';
 import { MaterialModule } from './material.module';
 import { RegisterService } from './register/Services/register.service';
 import { VendorService } from './vendors/Services/vendor.service';
-import { GuestService } from './guests/Services/guest.service';
+import { GuestsService } from './guests/Services/guests.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { GuestService } from './guests/Services/guest.service';
     GetUsersService,
     EventService,
     GoogleMapsService,
-    GuestService,
+    GuestsService,
     RegisterService,
     VendorService,
     MatSnackBar,
