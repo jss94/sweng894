@@ -6,6 +6,7 @@ using source.Database;
 using source.Models;
 using Dapper;
 using System.Linq;
+using source.Framework;
 
 namespace source.Queries
 {
@@ -42,14 +43,15 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     //not correct
-                    string query = @"SELECT v.id, v.userName, v.name, v.type, v.website, v.phoneNumber, "
-                        + @"s.id, s.vendorId, s.serviceName, s.serviceDescription, s.flatFee, s.price, s.unitsAvailable "
-                        + @"FROM occasions.vendors v "
-                        + @"LEFT JOIN occasions.vendorServices s on s.vendorId = v.id "
-                        + @"WHERE v.active = 1 and s.active = 1 "
-                        + @"ORDER BY v.name DESC;";
+                    string query = @"SELECT * from occasions.vendors WHERE active = 1; "
+                        + @"SELECT * from occasions.vendorServices WHERE active = 1";
 
-                    var result = connection.Query<Vendor, VendorServices, Vendor>(query, (vendor, vendorService) => { vendor.id = vendorService.vendorId; return vendor; });
+                    var result = await connection.QueryMultiple(query).Map<Vendor, VendorServices, int?>
+                        (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
+                        (vendor, vendorservices) => {
+                        vendor.services = vendorservices.ToList(); 
+                    });
+                        
                     return result.ToList();
                 }
             }
