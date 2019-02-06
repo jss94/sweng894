@@ -163,7 +163,7 @@ namespace UnitTests.Controllers
             .Returns(Task.Factory.StartNew(() => (object)null));
 
             // act
-            var task = _sut.Put(user.userName, user);
+            var task = _sut.Put(user);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -199,7 +199,7 @@ namespace UnitTests.Controllers
             .Returns(Task.Factory.StartNew(() => 99));
 
             // act
-            var task = _sut.Put(user.userName, user);
+            var task = _sut.Put(user);
 
             // assert
             Assert.IsType<NotFoundResult>(task.Result);

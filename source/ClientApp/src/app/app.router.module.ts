@@ -11,7 +11,7 @@ import { RegisterUserComponent } from './register/register-user/register-user.co
 import { RegisterVendorComponent } from './register/register-vendor/register-vendor.component';
 import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { EventsComponent } from './events/events.component';
-import { GuestComponent } from './guests/guest.component';
+import { GuestsComponent } from './guests/guests.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -22,7 +22,7 @@ const routes: Routes = [
     { path: 'events', component: EventsComponent },
     { path: 'register-user', component: RegisterUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
-    { path: 'guests/:eventId', component: GuestComponent },
+    { path: 'guests/:eventId', component: GuestsComponent },
   ];
 
 @NgModule({
@@ -32,7 +32,7 @@ const routes: Routes = [
         GoogleMapComponent,
         GetUsersComponent,
         EventsComponent,
-        GuestComponent,
+        GuestsComponent,
         RegisterUserComponent,
         RegisterVendorComponent,
     ],

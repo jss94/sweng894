@@ -97,6 +97,9 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
 
+            _addressQueryMock.Setup(x => x.Insert(It.IsAny<Address>()))
+                .Returns(Task.Factory.StartNew(() => 999));
+
             _vendorsQueryMock.Setup(x => x.Insert(vendor))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
@@ -136,12 +139,15 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123 };
-            
-            _vendorsQueryMock.Setup(x => x.Deactivate(vendor))
+
+            _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            _vendorsQueryMock.Setup(x => x.Deactivate(vendor.id.Value))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Deactivate(vendor);
+            var task = _sut.Deactivate(vendor.id.Value);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -157,11 +163,14 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123 };
 
-            _vendorsQueryMock.Setup(x => x.Delete(vendor))
+            _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            _vendorsQueryMock.Setup(x => x.Delete(vendor.id.Value))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Delete(vendor);
+            var task = _sut.Delete(vendor.id.Value);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);

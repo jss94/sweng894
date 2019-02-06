@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Guest } from './Models/guest.model';
-import { GuestService } from './Services/guest.service';
+import { GuestsService } from './Services/guests.service';
 import { AuthService } from '../shared/services/auth.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-@Component
-(
+@Component(
     {
-        selector: 'app-guest',
-        templateUrl: './guest.component.html',
-        styleUrls: [ './guest.component.css']
+        selector: 'app-guests',
+        templateUrl: './guests.component.html',
+        styleUrls: [ './guests.component.css']
     }
 )
-export class GuestComponent implements OnInit {
+export class GuestsComponent implements OnInit {
     public guests: Guest[];
     private guest: Guest = {
         guestId: 1,
@@ -25,7 +24,7 @@ export class GuestComponent implements OnInit {
 
     constructor(
         private auth: AuthService,
-        private guestService: GuestService,
+        private guestService: GuestsService,
         private route: ActivatedRoute,
         ) {
 

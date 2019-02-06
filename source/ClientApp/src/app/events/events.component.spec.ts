@@ -5,11 +5,15 @@ import { MockEventService } from './Services/mock-event.service';
 import { OccEvent } from './Models/occ-event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { Observable } from 'rxjs';
+import { Router, Routes } from '@angular/router';
+import {RouterTestingModule} from '@angular/router/testing';
+import { GuestsComponent } from '../guests/guests.component';
+import { MatSnackBar } from '@angular/material';
 
 describe('EventsComponent', () => {
   let component: EventsComponent;
@@ -23,6 +27,10 @@ describe('EventsComponent', () => {
     get(aString: string): Observable<any> {
       return of(new FakeUser);
     }
+  }
+
+  class MockMatSnackBar {
+    open() {}
   }
 
   const fakeEvent: OccEvent = {
@@ -45,19 +53,28 @@ describe('EventsComponent', () => {
     nickname: 'jss94'
   };
 
+  const routes: Routes = [
+    { path: 'guests/:id', component: GuestsComponent },
+];
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventsComponent ],
+      declarations: [
+        EventsComponent,
+        GuestsComponent,
+      ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
+        RouterTestingModule.withRoutes(routes),
       ],
       providers: [
-          { provide: EventService, useClass: MockEventService},
-          { provide: AuthService, useClass: MockAuthService }
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: EventService, useClass: MockEventService },
+        { provide: AuthService, useClass: MockAuthService },
       ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
   }));
 

@@ -1,9 +1,15 @@
 
 import { Observable, of, ObjectUnsubscribedError } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { FakeUser } from '../models/fake-user.model';
+import { User } from '../models/user.model';
 
 @Injectable()
 export class MockAuthService {
+
+  user: User = new FakeUser();
+  user$: Observable<User> = of(new FakeUser());
+
   userProfile: any = {};
 
   getUserProfile(): any {
