@@ -30,6 +30,16 @@
         </button>
       </mat-menu>
 
+      <button mat-button [matMenuTriggerFor]="guestMenu">
+        <mat-icon>person_outline</mat-icon>
+        Guest
+      </button>
+      <mat-menu #guestMenu="matMenu">
+        <button mat-menu-item [routerLink]='["/guest"]' [routerLinkActive]='["link-active"]'> 
+          Guest List
+        </button>
+      </mat-menu>
+
       <button *ngIf="isVendor && isOrginizor" mat-button [matMenuTriggerFor]="adminMenu">
         <mat-icon>verified_user</mat-icon>
         Admin

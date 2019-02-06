@@ -1,0 +1,22 @@
+<div class="container"> 
+    <h1>Guest List</h1>
+    <div class="guest-list">
+        <p *ngIf="!guests"><em>Loading...</em></p>
+        <table class='table table-striped' *ngIf="guests">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Is Going?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let guest of guests">
+                    <td>{{ guest.firstName }}</td>
+                    <td>{{ guest.email }}</td>
+                    <td>{{ guest.isGoing }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

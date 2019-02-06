@@ -26,7 +26,7 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// GET api/guests/{id}
+        /// GET api/guest/{id}
         /// Gets the list of guests for an event
         /// </summary>
         /// <param name="id">Event Id</param>
@@ -47,7 +47,7 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// POST api/guests/{insert}
+        /// POST api/guest/{insert}
         /// Inserts a new guest record
         /// </summary>
         /// <param name="guest">Guest</param>
@@ -68,7 +68,7 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// POST api/guests/{update}
+        /// POST api/guest/{update}
         /// Updates a guest record
         /// </summary>
         /// <param name="guest">Guest</param>
@@ -89,7 +89,7 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// DELETE api/guests/{id}
+        /// DELETE api/guest/{id}
         /// Deletes a guest
         /// </summary>
         /// <param name="id">Guest Id</param>
