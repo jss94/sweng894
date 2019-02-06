@@ -49,7 +49,7 @@ namespace source.Queries
                     return vendors;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
@@ -79,7 +79,7 @@ namespace source.Queries
                     return vendor;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
@@ -109,7 +109,7 @@ namespace source.Queries
                     return vendor;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
@@ -140,7 +140,7 @@ namespace source.Queries
                     return returnedVendor;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
@@ -171,7 +171,7 @@ namespace source.Queries
                     return returnedVendor;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
@@ -182,9 +182,9 @@ namespace source.Queries
         /// <summary>
         /// Deactivates a vendor record
         /// </summary>
-        /// <param name="vendor">Vendor</param>
+        /// <param name="id">Vendor ID</param>
         /// <returns>True/False</returns>
-        public async Task<bool> Deactivate(Vendor vendor)
+        public async Task<bool> Deactivate(int id)
         {
             try
             {
@@ -197,11 +197,11 @@ namespace source.Queries
                         + @"SET active = 0 "
                         + @"WHERE id = @id AND active = 1;";
 
-                    var returnedValue = connection.QueryAsync<Vendor>(query, vendor);
+                    var returnedValue = connection.QueryAsync<Vendor>(query, id);
                     return true;                   
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
@@ -214,28 +214,19 @@ namespace source.Queries
         /// Delete the specified vendor.
         /// </summary>
         /// <returns>The delete.</returns>
-        /// <param name="vendor">Vendor.</param>
-        public async Task<bool> Delete(Vendor vendor)
+        /// <param name="id">Vendor ID.</param>
+        public async Task<bool> Delete(int id)
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"DELETE FROM occasions.vendors "
-                        + @"WHERE id = @id AND active = 1;";
+                string query = @"DELETE FROM occasions.vendors "
+                    + @"WHERE id = @id AND active = 1;";
 
-                    var returnedValue = connection.QueryAsync<Vendor>(query, vendor);
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
-                return false;
+                var returnedValue = connection.QueryAsync<Vendor>(query, id);
+                return true;
             }
         }
 

@@ -1,7 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatExpansionPanel } from '@angular/material';
 import { User } from '../../shared/models/user.model';
 import { RegisterService } from '../Services/register.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -12,8 +11,6 @@ import { AuthService } from '../../shared/services/auth.service';
   styleUrls: [ './register-user.component.css']
 })
 export class RegisterUserComponent {
-
-  @ViewChild(MatExpansionPanel) expansion: MatExpansionPanel;
 
   users: User[];
   isUserRegistrationActive = false;
@@ -74,7 +71,6 @@ export class RegisterUserComponent {
         });
 
         // reload page
-        this.expansion.close();
         this.userForm.reset();
         this.auth.login();
 

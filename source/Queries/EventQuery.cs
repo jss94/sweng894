@@ -1,8 +1,5 @@
-﻿using System;
-using System;
+﻿
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using source.Database;
@@ -36,7 +33,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        public async Task<Event> GetOneEventById(int eventId)
+        public async Task<Event> GetEventById(int eventId)
         {
             using (var db = _database)
             {
@@ -66,8 +63,8 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 // I left these all caps because Dapper doesnt care
-                string query = @"INSERT INTO occasions.events (ORGANIZERUSERNAME, EVENTNAME, EVENTDESCRIPTION, eventDateTime) "
-                    + @"VALUES (@organizerUserName, @eventName, @eventDescription, @eventDateTime)";
+                string query = @"INSERT INTO occasions.events (userName, name, description, dateTime) "
+                    + @"VALUES (@userName, @name, @description, @dateTime)";
 
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
@@ -81,9 +78,9 @@ namespace source.Queries
         /// <summary>
         /// Get all events associated with a user
         /// </summary>
-        /// <param name="organizerUserName"></param>
+        /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<List<Event>> GetAllEventsByUser(string organizerUserName)
+        public async Task<List<Event>> GetAllEventsByUser(string userName)
         {
             using (var db = _database)
             {
@@ -91,9 +88,9 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 string query = @"SELECT * FROM occasions.events "
-                    + @"WHERE organizerUsername = @organizerUserName;";
+                    + @"WHERE username = @userName;";
 
-                var events = connection.QueryAsync<Event>(query, new { organizerUserName } ).Result.ToList();
+                var events = connection.QueryAsync<Event>(query, new { userName } ).Result.ToList();
                 return events;
             }
         }
@@ -110,10 +107,11 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
                 
-                string query = @"UPDATE occasions.events SET eventName=@eventName, eventDescription=@eventDescription, eventDateTime=STR_TO_DATE(@eventDateTime,'%m/%d/%Y %h:%i:%s %p') WHERE occasions.events.eventId =  @eventId";
+                string query = @"UPDATE occasions.events"
+                    + " SET name=@name, description=@description, dateTime=STR_TO_DATE(@dateTime,'%m/%d/%Y %h:%i:%s %p')"
+                    + " WHERE eventId =  @eventId";
 
-                return connection.QueryAsync<Event>(query, new { evnt.eventName, evnt.eventDescription, evnt.eventDateTime, evnt.eventId}).Result.ToList().FirstOrDefault();
-                
+                return connection.QueryAsync<Event>(query, new { evnt.name, evnt.description, evnt.dateTime, evnt.eventId}).Result.ToList().FirstOrDefault();
             }
         }
 
@@ -127,10 +125,11 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                 
-                    string query = @"DELETE FROM occasions.events WHERE occasions.events.eventId =  @eventId";
+                    string query = @"DELETE FROM occasions.events"
+                        + " WHERE eventId =  @eventId";
                 //    connection.Execute(query, new { evnt.eventId}, commandType: CommandType.Text);
 
-                connection.QueryAsync<Event>(query, new { evnt.eventId } );
+                await connection.QueryAsync<Event>(query, new { evnt.eventId } );
 
                     return true;
                // }

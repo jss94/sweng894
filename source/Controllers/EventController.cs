@@ -48,7 +48,7 @@ namespace source.Controllers
         [HttpGet("{username}/{eventId}")]
         public async Task<IActionResult> Get(string username, int eventId)
         {
-            var result = await _eventQuery.GetOneEventById(eventId);
+            var result = await _eventQuery.GetEventById(eventId);
 
             if (result == null)
                 return new NotFoundResult();
@@ -61,7 +61,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="evnt">The Event to insert into the database.</param>
         [HttpPost]
-        public async Task<IActionResult>CreateEvent([FromBody]Event evnt)
+        public async Task<IActionResult>Create([FromBody]Event evnt)
         {
             await _eventQuery.CreateEvent(evnt);
             return new OkObjectResult(evnt);
@@ -72,7 +72,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="evnt"></param>
         [HttpPut]
-        public async Task<IActionResult> UpdateEvent([FromBody] Event evnt)
+        public async Task<IActionResult> Update([FromBody] Event evnt)
         {
             await _eventQuery.UpdateEvent(evnt);
             return new OkObjectResult(evnt);
@@ -83,10 +83,10 @@ namespace source.Controllers
         /// </summary>
         /// <returns>The event.</returns>
         /// <param name="eventId">Event identifier.</param>
-        [HttpDelete]
-        public async Task<IActionResult> DeleteEvent(int eventId)
+        [HttpDelete("{eventId}")]
+        public async Task<IActionResult> Delete(int eventId)
         {
-            var result = await _eventQuery.GetOneEventById(eventId);
+            var result = await _eventQuery.GetEventById(eventId);
 
             if (result == null)
                 return new NotFoundResult();

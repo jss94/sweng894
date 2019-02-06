@@ -21,7 +21,8 @@ namespace source.Controllers
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="query">IVendorsQuery obtained via dependency injection</param>
+        /// <param name="vendorQuery">IVendorsQuery obtained via dependency injection</param>
+        /// <param name="addressQuery">IAddressQuery obtained via dependency injection</param>
         /// <param name="logger">ILogger obtained via dependency injection</param>
         public VendorsController(IVendorsQuery vendorQuery, IAddressesQuery addressQuery, ILogger logger)
         {
@@ -60,7 +61,7 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _vendorQuery.GetById(id));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -85,7 +86,7 @@ namespace source.Controllers
 
                 return new OkObjectResult(vendor);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -109,7 +110,7 @@ namespace source.Controllers
                 await _vendorQuery.Insert(vendor);
                 return new OkObjectResult(vendor);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -129,7 +130,7 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _vendorQuery.Update(vendor));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -140,16 +141,23 @@ namespace source.Controllers
         /// <summary>
         /// Marks a vendor record as inactive
         /// </summary>
-        /// <param name="vendor">Vendor</param>
+        /// <param name="id">Vendor ID</param>
         /// <returns>True if successful</returns>
-        [HttpPut]
-        public async Task<IActionResult> Deactivate([FromBody]Vendor vendor)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Deactivate(int id)
         {
             try
             {
-                return new OkObjectResult(await _vendorQuery.Deactivate(vendor));
+                var existingVendor = _vendorQuery.GetById(id);
+
+                if (existingVendor == null)
+                {
+                    return new BadRequestResult();
+                }
+
+                return new OkObjectResult(await _vendorQuery.Deactivate(id));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -161,15 +169,22 @@ namespace source.Controllers
         /// Delete the specified vendor.
         /// </summary>
         /// <returns>The delete.</returns>
-        /// <param name="vendor">Vendor.</param>
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody]Vendor vendor)
+        /// <param name="id">Vendor ID.</param>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                return new OkObjectResult(await _vendorQuery.Delete(vendor));
+                var existingVendor = _vendorQuery.GetById(id);
+
+                if (existingVendor == null)
+                {
+                    return new BadRequestResult();
+                }
+                
+                return new OkObjectResult(await _vendorQuery.Delete(id));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 

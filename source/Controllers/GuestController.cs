@@ -38,7 +38,7 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _query.GetListByEventId(id));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -59,7 +59,7 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _query.Insert(guest));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -80,7 +80,7 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _query.Update(guest));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 
@@ -101,7 +101,7 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _query.DeleteById(id));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: we should log our errors in the db
 

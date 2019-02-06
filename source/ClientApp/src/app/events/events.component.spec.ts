@@ -1,25 +1,19 @@
 import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { EventComponent } from './event.component';
+import { EventsComponent } from './events.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
-import { Event } from './Models/event.model';
+import { OccEvent } from './Models/occ-event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
-<<<<<<< HEAD
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { Observable } from 'rxjs';
-=======
-import { MockAuthService } from '../shared/services/mock-auth.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from '../material.module';
->>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
 
-describe('EventComponent', () => {
-  let component: EventComponent;
-  let fixture: ComponentFixture<EventComponent>;
+describe('EventsComponent', () => {
+  let component: EventsComponent;
+  let fixture: ComponentFixture<EventsComponent>;
   let mockEventService: EventService;
   let mockAuthService: AuthService;
 
@@ -31,17 +25,17 @@ describe('EventComponent', () => {
     }
   }
 
-  const fakeEvent: Event = {
-    organizerUserName: 'organizerId',
-    eventDescription: 'fake description',
-    eventName: 'event name',
-    eventDateTime: '2019/04/01',
+  const fakeEvent: OccEvent = {
+    userName: 'organizerId',
+    description: 'fake description',
+    name: 'event name',
+    dateTime: '2019/04/01',
     eventId: 0,
     guestListId: 0,
-    eventCreated: 'null'
+    created: 'null'
   };
 
-  const fakeEvents: Event[] = [
+  const fakeEvents: OccEvent[] = [
     fakeEvent,
     fakeEvent,
     fakeEvent,
@@ -53,17 +47,12 @@ describe('EventComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-<<<<<<< HEAD
-      declarations: [ EventComponent ],
+      declarations: [ EventsComponent ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
       ],
-=======
-      imports: [MaterialModule, ReactiveFormsModule],
-      declarations: [ EventComponent],
->>>>>>> 398d378746b4101fea29c0a25c647532bdcd93d0
       providers: [
           { provide: EventService, useClass: MockEventService},
           { provide: AuthService, useClass: MockAuthService }
@@ -75,7 +64,7 @@ describe('EventComponent', () => {
   beforeEach(() => {
     mockEventService = TestBed.get(EventService);
     mockAuthService = TestBed.get(AuthService);
-    fixture = TestBed.createComponent(EventComponent);
+    fixture = TestBed.createComponent(EventsComponent);
     component = fixture.componentInstance;
   });
 
