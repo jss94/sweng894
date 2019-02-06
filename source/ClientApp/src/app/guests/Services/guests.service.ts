@@ -5,9 +5,8 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Injectable()
-export class GuestService {
+export class GuestsService {
   constructor(
-      private http: HttpClient,
       private auth: AuthService,
       ) {
   }

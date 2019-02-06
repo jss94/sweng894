@@ -29,9 +29,9 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var evt1 = new Event { eventId = 1, organizerUserName = "jss94", eventDescription = "event description!" };
-            var evt2 = new Event { eventId = 2, organizerUserName = "jss94", eventDescription = "event description two!" };
-            var evt3 = new Event { eventId = 3, organizerUserName = "jss94", eventDescription = "event description three!!" };
+            var evt1 = new Event { eventId = 1, userName = "jss94", description = "event description!" };
+            var evt2 = new Event { eventId = 2, userName = "jss94", description = "event description two!" };
+            var evt3 = new Event { eventId = 3, userName = "jss94", description = "event description three!!" };
             var evts = new List<Event> { evt1, evt2, evt3 };
 
             //act
@@ -45,8 +45,8 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as List<Event>;
-            Assert.Equal(eventsResult[2].eventDescription, evts[2].eventDescription);
-            Assert.Equal(eventsResult[2].organizerUserName, evts[2].organizerUserName);
+            Assert.Equal(eventsResult[2].description, evts[2].description);
+            Assert.Equal(eventsResult[2].userName, evts[2].userName);
             Assert.Equal(eventsResult[2].eventId, evts[2].eventId);
 
         }
@@ -56,10 +56,10 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var evt2 = new Event { eventId = 2, organizerUserName = "jss94", eventDescription = "event description two!" };
+            var evt2 = new Event { eventId = 2, userName = "jss94", description = "event description two!" };
 
             //act
-            __eventQueryMock.Setup(x => x.GetOneEventById(2))
+            __eventQueryMock.Setup(x => x.GetEventById(2))
                 .Returns(Task.Factory.StartNew(() => evt2));
 
             var task = _evntController.Get("jss94", 2);
@@ -69,7 +69,7 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as Event;
-            Assert.Equal(evt2.eventDescription, eventsResult.eventDescription);
+            Assert.Equal(evt2.description, eventsResult.description);
             
         }
 
@@ -78,20 +78,20 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var evt2 = new Event { eventId = 0, organizerUserName = "jss94", eventDescription = "mock test data event" };
+            var evt2 = new Event { eventId = 0, userName = "jss94", description = "mock test data event" };
 
             //act
             __eventQueryMock.Setup(x => x.CreateEvent(evt2))
                 .Returns(Task.Factory.StartNew(() => evt2));
 
-            var task = _evntController.CreateEvent(evt2);
+            var task = _evntController.Create(evt2);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as Event;
-            Assert.Equal(evt2.eventDescription, eventsResult.eventDescription);
+            Assert.Equal(evt2.description, eventsResult.description);
 
         }
 
@@ -99,13 +99,13 @@ namespace UnitTests.Controllers
         public void UpdateEvent_ReturnsEvent()
         {
             // arrange
-            var evnt = new Event { eventId = 123, eventName = "Surprise Party", eventDescription = "Lets throw a surprise party for John!" };
+            var evnt = new Event { eventId = 123, name = "Surprise Party", description = "Lets throw a surprise party for John!" };
 
             __eventQueryMock.Setup(x => x.UpdateEvent(evnt))
                 .Returns(Task.Factory.StartNew(() => evnt));
 
             // act
-            var task = _evntController.UpdateEvent(evnt);
+            var task = _evntController.Update(evnt);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -121,18 +121,18 @@ namespace UnitTests.Controllers
             // arrange
             var evnt = new Event { 
                 eventId = 123, 
-                eventName = "Surprise Party", 
-                eventDescription = "Lets throw a surprise party for John!"
+                name = "Surprise Party", 
+                description = "Lets throw a surprise party for John!"
                 };
                 
-            __eventQueryMock.Setup(x => x.GetOneEventById(evnt.eventId))
+            __eventQueryMock.Setup(x => x.GetEventById(evnt.eventId))
                 .Returns(Task.Factory.StartNew(() => evnt));
 
             __eventQueryMock.Setup(x => x.DeleteEvent(evnt))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _evntController.DeleteEvent(evnt.eventId);
+            var task = _evntController.Delete(evnt.eventId);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);

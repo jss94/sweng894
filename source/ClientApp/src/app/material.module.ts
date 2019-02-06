@@ -7,7 +7,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { SnackbarComponent } from './snackbar/snackbar.component';
-import { MatSelectModule, MatMenuModule, MatSnackBarModule, MatTableModule } from '@angular/material';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   imports: [
@@ -22,6 +27,8 @@ import { MatSelectModule, MatMenuModule, MatSnackBarModule, MatTableModule } fro
     MatMenuModule,
     MatSnackBarModule,
     MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -34,7 +41,9 @@ import { MatSelectModule, MatMenuModule, MatSnackBarModule, MatTableModule } fro
     MatSelectModule,
     MatMenuModule,
     MatSnackBarModule,
-    MatTableModule
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     MatIconRegistry,

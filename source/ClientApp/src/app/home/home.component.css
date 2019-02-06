@@ -1,0 +1,25 @@
+h1 {
+    padding: 30px;
+}
+
+p {
+    width: 500px;
+    text-align: center;
+}
+
+.container {
+    height: 80%;
+}
+
+.center {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.action {
+    display: flex;
+    padding: 10px;
+}

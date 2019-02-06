@@ -5,32 +5,34 @@ import { GetUsersComponent } from './get-users/get-users.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { EventComponent } from './events/event.component';
-import { GuestComponent } from './guests/guest.component';
 import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './register/register-user/register-user.component';
 import { RegisterVendorComponent } from './register/register-vendor/register-vendor.component';
+import { LearnMoreComponent } from './learn-more/learn-more.component';
+import { EventsComponent } from './events/events.component';
+import { GuestsComponent } from './guests/guests.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-    { path: 'find-vendors', component: GoogleMapComponent },
-    { path: 'vendor-events', component: GetUsersComponent },
-    { path: 'organizer-events', component: EventComponent },
+    { path: 'admin', component: GetUsersComponent },
+    { path: 'learn-more', component: LearnMoreComponent},
+    { path: 'search-vendors', component: GoogleMapComponent },
+    { path: 'events', component: EventsComponent },
     { path: 'register-user', component: RegisterUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
-    { path: 'organizer-events', component: EventComponent},
-    { path: 'guest', component: GuestComponent}
+    { path: 'guests/:eventId', component: GuestsComponent },
   ];
 
 @NgModule({
     declarations: [
         HomeComponent,
+        LearnMoreComponent,
         GoogleMapComponent,
         GetUsersComponent,
-        EventComponent,
-        GuestComponent,
+        EventsComponent,
+        GuestsComponent,
         RegisterUserComponent,
         RegisterVendorComponent,
     ],

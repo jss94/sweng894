@@ -8,7 +8,20 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class NavMenuComponent {
 
+  isVendor = false;
+  isOrginizor = false;
 
   constructor (private auth: AuthService) {
+
+    auth.user$.subscribe((user) => {
+      if (user.role.toUpperCase() === 'ADMIN') {
+        this.isVendor = true;
+        this.isOrginizor = true;
+      }
+
+      if (user.role === 'VENDOR') {
+        this.isVendor = true;
+      }
+    });
   }
 }
