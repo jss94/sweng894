@@ -7,6 +7,7 @@ using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using source.Models;
 using source.Framework;
+using source.Constants;
 
 namespace UnitTests.Controllers
 {
@@ -18,14 +19,14 @@ namespace UnitTests.Controllers
         readonly Mock<ILogger> _loggerMock;
         readonly Mock<IVendorsQuery> _vendorsQueryMock;
         readonly Mock<IAddressesQuery> _addressQueryMock;
-
-
-
+        readonly Mock<VendorServices> _vendorServicesMock;
+        
         public VendorsControllerShould()
         {
             _loggerMock = new Mock<ILogger>();
             _vendorsQueryMock = new Mock<IVendorsQuery>();
             _addressQueryMock = new Mock<IAddressesQuery>();
+            _vendorServicesMock = new Mock<VendorServices>();
 
             _sut = new VendorsController(_vendorsQueryMock.Object, _addressQueryMock.Object, _loggerMock.Object);
         }
@@ -35,6 +36,9 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var service = new VendorServices { vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue" };
+            vendor.services = new List<VendorServices> { service };
             var vendors = new List<Vendor> { vendor, vendor, vendor };
 
             _vendorsQueryMock.Setup(x => x.GetAll())
@@ -49,6 +53,7 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as List<Vendor>;
             Assert.Equal(usersResult[2].id, vendors[2].id);
+            Assert.Equal(usersResult[0].services, vendors[0].services);
         }
 
         [Fact]
@@ -56,7 +61,10 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            
+            var service = new VendorServices{ vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue" };
+            vendor.services = new List<VendorServices> { service };
+
             _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
@@ -68,7 +76,7 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as Vendor;
-            Assert.Equal(vendor, usersResult);
+            Assert.Equal(vendor, usersResult);            
         }
 
         [Fact]
@@ -76,7 +84,11 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            
+            var service = new VendorServices{ vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue"
+            };
+            vendor.services = new List<VendorServices> { service };
+
             _vendorsQueryMock.Setup(x => x.GetByUserName(vendor.userName))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
@@ -96,6 +108,10 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var service = new VendorServices{ vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue"
+            };
+            vendor.services = new List<VendorServices> { service };
 
             _addressQueryMock.Setup(x => x.Insert(It.IsAny<Address>()))
                 .Returns(Task.Factory.StartNew(() => 999));
@@ -178,6 +194,24 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as bool?;
             Assert.True(usersResult);
+        }
+
+        [Fact]
+        public void GetVendorTypes_ReturnsServiceList()
+        {
+            // arrange
+            var serviceTypesMock = new Mock<VendorServiceTypes>().Object;
+            var serviceTypes = serviceTypesMock.GetVendorServiceTypes();
+
+            // act
+            var task = _sut.GetVendorTypes();
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as List<string>;
+            Assert.Equal(serviceTypes, usersResult);
         }
 
 
