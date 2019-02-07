@@ -55,6 +55,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
+                return new List<Vendor>();
             }
         }
 
