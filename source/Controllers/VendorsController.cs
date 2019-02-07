@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using source.Constants;
 using source.Framework;
 using source.Models;
 using source.Queries;
@@ -12,12 +14,12 @@ namespace source.Controllers
     /// Vendor Controller
     /// </summary>
     [Route("api/[controller]")]
-    public class VendorsController: ControllerBase
+    public class VendorsController : ControllerBase
     {
         private IVendorsQuery _vendorQuery;
         private IAddressesQuery _addressesQuery;
         private ILogger _logger;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -42,7 +44,7 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _vendorQuery.GetAll());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
@@ -66,10 +68,9 @@ namespace source.Controllers
 
                 return new OkObjectResult(vendor);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -92,10 +93,9 @@ namespace source.Controllers
 
                 return new OkObjectResult(vendor);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -108,25 +108,20 @@ namespace source.Controllers
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody]Vendor vendor)
         {
-            //if (vendor == null)
-                //return new OkObjectResult(vendor);
-
             try
             {
-                if (vendor.address.city != null)
+                if (vendor.address != null && vendor.address.city != null)
                 {
                     var addressId = await _addressesQuery.Insert(vendor.address);
                     vendor.addressId = addressId;
                 }
 
-
                 await _vendorQuery.Insert(vendor);
                 return new OkObjectResult(vendor);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -143,10 +138,9 @@ namespace source.Controllers
             {
                 return new OkObjectResult(await _vendorQuery.Update(vendor));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -170,10 +164,9 @@ namespace source.Controllers
 
                 return new OkObjectResult(true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -194,13 +187,31 @@ namespace source.Controllers
                 {
                     return new NotFoundResult();
                 }
-                
+
                 return new OkObjectResult(true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
 
+        /// <summary>
+        /// Gets the list of service types for vendors' services
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("types")]
+        public async Task<IActionResult> GetVendorTypes()
+        {
+            try
+            {
+                VendorServiceTypes types = new VendorServiceTypes();
+                return new OkObjectResult(types.GetVendorServiceTypes());
+            }
+            catch(Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
