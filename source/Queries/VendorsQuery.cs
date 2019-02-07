@@ -6,6 +6,7 @@ using source.Database;
 using source.Models;
 using Dapper;
 using System.Linq;
+using source.Framework;
 
 namespace source.Queries
 {
@@ -40,20 +41,20 @@ namespace source.Queries
                 {
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
+                    string query = @"SELECT * from occasions.vendors WHERE active = 1; "
+                        + @"SELECT * from occasions.vendorServices WHERE active = 1";
 
-                    string query = @"SELECT id, userName, name, type, website, phone "
-                        + @"FROM occasions.vendors "
-                        + @"WHERE active = 1 ORDER BY userName DESC;";
-
-                    var vendors = connection.QueryAsync<Vendor>(query).Result.ToList();
-                    return vendors;
+                    var result = await connection.QueryMultiple(query).Map<Vendor, VendorServices, int?>
+                        (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
+                        (vendor, vendorservices) => {
+                        vendor.services = vendorservices.ToList(); 
+                    });
+                        
+                    return result.ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
-                return new List<Vendor>();
             }
         }
 
