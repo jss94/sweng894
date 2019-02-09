@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WarningDialogComponent } from '../shared/components/warning-dialog/warning-dialog.component';
 import { AuthService } from '../shared/services/auth.service';
-import { UsersService } from '../get-users/Services/get-users.service';
+import { UsersService } from '../users/Services/users.service';
 
 @Component({
     selector: 'app-deactivate-user',

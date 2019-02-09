@@ -1,16 +1,39 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DeactivateUserComponent } from './deactivate-user.component';
+import { MatDialogModule, MatDialog } from '@angular/material';
+import { UsersService } from '../users/Services/users.service';
+import { MockUsersService } from '../users/Services/mock-users.service';
+import { AuthService } from '../shared/services/auth.service';
+import { MockAuthService } from '../shared/services/mock-auth.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs/internal/observable/of';
+
+export class MockMatDialogRef {
+  afterClosed() {
+    return of({});
+  }
+}
+
+export class MockMatDialog {
+  open(a: any, b: any) {
+    return new MockMatDialogRef();
+  }
+}
 
 describe('DeactivateUserComponent', () => {
   let component: DeactivateUserComponent;
   let fixture: ComponentFixture<DeactivateUserComponent>;
-  let mockMapService: GoogleMapsService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ DeactivateUserComponent ],
+      imports: [
+        NoopAnimationsModule,
+      ],
       providers: [
-        { provide: GoogleMapsService, useClass: MockGoogleMapsService },
+        { provide: AuthService, useClass: MockAuthService },
+        { provide: MatDialog, useClass: MockMatDialog },
+        { provide: UsersService, useClass: MockUsersService }
       ]
     })
     .compileComponents();
@@ -19,7 +42,6 @@ describe('DeactivateUserComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DeactivateUserComponent);
     component = fixture.componentInstance;
-    mockMapService = TestBed.get(GoogleMapsService);
     fixture.detectChanges();
   });
 
