@@ -18,7 +18,6 @@ export class AuthService {
   private _connection = 'Username-Password-Authentication';
 
   _userProfile: any;
-  isVendor = true;
 
   auth0 = new auth0.WebAuth({
     clientID: this._clientId,
@@ -26,7 +25,7 @@ export class AuthService {
     responseType: 'token id_token',
     redirectUri: 'https://localhost:5001/home',
     audience: 'https://localhost:5001/api',
-    scope: 'openid profile read:messages'
+    scope: 'openid profile read:messages delete:users delete:current_user'
   });
 
   constructor(
@@ -37,6 +36,10 @@ export class AuthService {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
+  }
+
+  get profile(): any {
+    return this._userProfile;
   }
 
   get user(): User {
@@ -138,6 +141,7 @@ export class AuthService {
     this.get('users/' + userProfile.name).subscribe(result => {
       this._user = result;
       this._user$.next(result);
+
       console.log('Hello', this._user.name);
     });
   }
@@ -151,6 +155,9 @@ export class AuthService {
         'connection': this._connection,
     });
   }
+
+
+
 
   public get(endpoint: string): Observable<any> {
     const url = `${this.baseUrl}api/${endpoint}`;

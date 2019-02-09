@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { VendorService } from '../vendors/Services/vendor.service';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-home',
@@ -21,9 +22,19 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user$.subscribe((user) => {
+      if (user.userName == null) {
+        this.router.navigate(['/reactivate-user']);
+      } else {
+        this.routeToEvents(user);
+      }
+    });
+
+  }
+
+  routeToEvents(user: User) {
       // Get any vendor information
       this.vendorService.getVendor(user.userName).subscribe((vendor) => {
-        console.log('VENDOR', vendor);
+
         if (user && user.role === 'VENDOR' && vendor.id === null) {
           this.router.navigate(['/register-vendor']);
         } else {
@@ -33,8 +44,5 @@ export class HomeComponent implements OnInit {
       }, (error) => {
 
       });
-
-    });
-
   }
 }

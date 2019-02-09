@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../shared/models/user.model';
-import { GetUsersService } from './Services/get-users.service';
+import { UsersService } from './Services/get-users.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
@@ -39,7 +39,7 @@ export class GetUsersComponent implements OnInit {
   });
 
   constructor(
-    private service: GetUsersService,
+    private service: UsersService,
     private snackbar: MatSnackBar,
     ) { }
 

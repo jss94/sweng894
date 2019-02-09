@@ -108,7 +108,7 @@ namespace source.Controllers
         /// </summary>
         /// <returns>The delete.</returns>
         /// <param name="userId">User identifier.</param>
-        [HttpPut("{userId}")]
+        [HttpPut("deactivate/{userId}")]
         public async Task<IActionResult> Deactivate(string userId)
         {
             var result = await _usersQuery.GetByUserName(userId);
@@ -117,6 +117,25 @@ namespace source.Controllers
                 return new NotFoundResult();
 
             await _usersQuery.Deactivate(result);
+            return new OkResult();
+
+        }
+
+        /// <summary>
+        /// PUT api/users/{userId}
+        /// Reactivate the specified userId.
+        /// </summary>
+        /// <returns>The delete.</returns>
+        /// <param name="userId">User identifier.</param>
+        [HttpPut("reactivate/{userId}")]
+        public async Task<IActionResult> Reactivate(string userId)
+        {
+            var result = await _usersQuery.GetByUserName(userId, isActive: false);
+
+            if (result == null)
+                return new NotFoundResult();
+
+            await _usersQuery.Reactivate(result);
             return new OkResult();
 
         }

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { GetUsersComponent } from './get-users.component';
-import { GetUsersService } from './Services/get-users.service';
+import { UsersService } from './Services/get-users.service';
 import { MockGetUsersService } from './Services/mock-get-users.service';
 import { FakeUser } from '../shared/models/fake-user.model';
 
@@ -13,7 +13,7 @@ import { of } from 'rxjs/internal/observable/of';
 describe('GetUsersComponent', () => {
   let component: GetUsersComponent;
   let fixture: ComponentFixture<GetUsersComponent>;
-  let mockUsersService: GetUsersService;
+  let mockUsersService: UsersService;
 
   class MockMatSnackBar {
     open() {
@@ -27,7 +27,7 @@ describe('GetUsersComponent', () => {
         GetUsersComponent,
       ],
       providers: [
-        { provide: GetUsersService, useClass: MockGetUsersService },
+        { provide: UsersService, useClass: MockGetUsersService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
       ],
       imports: [
@@ -47,7 +47,7 @@ describe('GetUsersComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GetUsersComponent);
     component = fixture.componentInstance;
-    mockUsersService = TestBed.get(GetUsersService);
+    mockUsersService = TestBed.get(UsersService);
     fixture.detectChanges();
   });
 

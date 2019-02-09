@@ -12,6 +12,8 @@ import { RegisterVendorComponent } from './register/register-vendor/register-ven
 import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { EventsComponent } from './events/events.component';
 import { GuestsComponent } from './guests/guests.component';
+import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
+import { ReactivateUserComponent } from './reactivate-user/reactivate-user.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -21,6 +23,8 @@ const routes: Routes = [
     { path: 'search-vendors', component: GoogleMapComponent },
     { path: 'events', component: EventsComponent },
     { path: 'register-user', component: RegisterUserComponent },
+    { path: 'deactivate-user', component: DeactivateUserComponent },
+    { path: 'reactivate-user', component: ReactivateUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
     { path: 'guests/:eventId', component: GuestsComponent },
   ];
@@ -35,6 +39,8 @@ const routes: Routes = [
         GuestsComponent,
         RegisterUserComponent,
         RegisterVendorComponent,
+        DeactivateUserComponent,
+        ReactivateUserComponent,
     ],
 
     imports: [

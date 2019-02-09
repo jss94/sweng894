@@ -13,6 +13,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { WarningDialogComponent } from './shared/components/warning-dialog/warning-dialog.component';
+import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
 
 @NgModule({
   imports: [
@@ -28,7 +31,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSnackBarModule,
     MatTableModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule,
   ],
   exports: [
     BrowserAnimationsModule,
@@ -43,16 +47,19 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSnackBarModule,
     MatTableModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule
   ],
   providers: [
     MatIconRegistry,
   ],
   declarations: [
     SnackbarComponent,
+    WarningDialogComponent,
   ],
   entryComponents: [
-    SnackbarComponent
+    SnackbarComponent,
+    WarningDialogComponent
   ]
 })
 export class MaterialModule { }
