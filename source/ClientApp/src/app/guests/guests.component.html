@@ -23,14 +23,14 @@
                     <td>{{ guest.email }}</td>
                     <td>{{ guest.isGoing }}</td>
                     <td>
-                        <div ng-if="guest.isGoing == true">
+                        <div *ngIf="guest.isGoing">
                             <mat-icon>check</mat-icon>
                         </div>
-                        <div ng-if="guest.isGoing == false">
+                        <div *ngIf="!guest.isGoing && !guest.isUndecided">
                             <mat-icon>clear</mat-icon>
                         </div>
-                        <div ng-if="guest.isGoing == null">
-                            <mat-icon>info</mat-icon>
+                        <div *ngIf="guest.isUndecided">
+                            Undecided
                         </div>
                     </td>
                 </tr>

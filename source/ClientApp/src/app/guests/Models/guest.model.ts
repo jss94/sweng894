@@ -2,6 +2,7 @@ export interface Guest {
     guestId: number;
     name: string;
     email: string;
-    isGoing: boolean | null;
-    eventId: number
+    isGoing: boolean;
+    isUndecided?: boolean;
+    eventId: number;
 }
