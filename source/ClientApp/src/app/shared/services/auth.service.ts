@@ -17,8 +17,7 @@ export class AuthService {
   private _domain = 'sweng894.auth0.com';
   private _connection = 'Username-Password-Authentication';
 
-  _userProfile: any;
-  isVendor = true;
+  private _userProfile: any;
 
   auth0 = new auth0.WebAuth({
     clientID: this._clientId,

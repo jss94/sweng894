@@ -12,11 +12,13 @@ import { RegisterVendorComponent } from './register/register-vendor/register-ven
 import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { EventsComponent } from './events/events.component';
 import { GuestsComponent } from './guests/guests.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'admin', component: GetUsersComponent },
+    { path: 'profile', component: ProfileComponent },
     { path: 'learn-more', component: LearnMoreComponent},
     { path: 'search-vendors', component: GoogleMapComponent },
     { path: 'events', component: EventsComponent },
@@ -35,6 +37,7 @@ const routes: Routes = [
         GuestsComponent,
         RegisterUserComponent,
         RegisterVendorComponent,
+        ProfileComponent,
     ],
 
     imports: [

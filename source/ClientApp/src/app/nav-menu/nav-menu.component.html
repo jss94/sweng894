@@ -15,7 +15,7 @@
         <span>Search</span>
       </button>
       
-      <button *ngIf="!auth.isAuthenticated()"  mat-button class="clickable">
+      <button *ngIf="!auth.isAuthenticated()"  mat-button>
         <a class="nav-link text-dark" (click)="auth.login()">Login</a>
       </button>
 
@@ -25,7 +25,10 @@
         <span class="text-grey">{{ auth?.user?.name }}</span>
       </button>
       <mat-menu #userMenu="matMenu">
-        <button mat-button class="clickable" [routerLinkActive]='["link-active"]'>
+        <button mat-button [routerLinkActive]='["link-active"]'>
+          <span class="nav-link text-dark" [routerLink]='["/profile"]'>Profile</span>
+        </button>
+        <button mat-button [routerLinkActive]='["link-active"]'>
           <span class="nav-link text-dark" (click)="auth.logout()">Logout</span>
         </button>
       </mat-menu>
@@ -35,7 +38,7 @@
         Guest
       </button>
       <mat-menu #guestMenu="matMenu">
-        <button mat-menu-item [routerLink]='["/guests"]' [routerLinkActive]='["link-active"]'> 
+        <button mat-menu-item [routerLink]="['/guests']" [routerLinkActive]="['link-active']"> 
           Guest List
         </button>
       </mat-menu>

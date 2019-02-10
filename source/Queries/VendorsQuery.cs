@@ -42,7 +42,7 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
                     string query = @"SELECT * from occasions.vendors WHERE active = 1; "
-                        + @"SELECT * from occasions.vendorServices WHERE active = 1";
+                        + @"SELECT * from occasions.vendorServices WHERE active = 1;";
 
                     var result = await connection.QueryMultiple(query).Map<Vendor, VendorServices, int?>
                         (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
@@ -103,10 +103,10 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT *"
-                        + @" FROM occasions.vendors"
-                        + @" WHERE userName = @userName AND active = 1;";
-
+                    string query = @"SELECT * FROM occasions.vendors v "
+                        + @" JOIN occasions.addresses a ON v.addressId = a.id "
+                        + @" WHERE v.userName = @userName AND v.active = 1;";
+                        
                     var vendor = connection.QueryFirstAsync<Vendor>(query, new { userName }).Result;
                     return vendor;
                 }
@@ -137,6 +137,7 @@ namespace source.Queries
                         + @"(id, userName, name, type, addressId, website, phone, active) "
                         + @"VALUES(@id, @userName, @name, @type, @addressId, @website, @phone, 1); "
                         + @"SELECT * FROM occasions.vendors WHERE id = LAST_INSERT_ID() AND active = 1;";
+
 
                     var returnedVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
                     return returnedVendor;

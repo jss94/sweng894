@@ -16,6 +16,7 @@ import { MaterialModule } from './material.module';
 import { RegisterService } from './register/Services/register.service';
 import { VendorService } from './vendors/Services/vendor.service';
 import { GuestsService } from './guests/Services/guests.service';
+import { ProfileService } from './profile/Services/profile.service';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { GuestsService } from './guests/Services/guests.service';
     RegisterService,
     VendorService,
     MatSnackBar,
+    ProfileService,
   ],
   bootstrap: [AppComponent]
 })
