@@ -87,7 +87,6 @@ namespace source.Controllers
             {
                 var vendor = await _vendorQuery.GetByUserName(userName);
 
-                Console.WriteLine(vendor);
                 if (vendor == null)
                     return new NotFoundResult();
 

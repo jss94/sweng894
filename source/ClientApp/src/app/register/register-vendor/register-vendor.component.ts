@@ -58,8 +58,7 @@ export class RegisterVendorComponent {
 
       // reload page
       this.vendorForm.reset();
-      this.router.navigate(['/home']);
-      console.log(result);
+      this.router.navigate(['/events']);
 
     }, (error) => {
       message = error.error.description;

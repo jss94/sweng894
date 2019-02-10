@@ -54,12 +54,6 @@ export class GetUsersComponent implements OnInit {
       userName: this.userForm.controls['email'].value,
       name: this.userForm.controls['name'].value,
       role: this.userForm.controls['role'].value.toUpperCase(),
-      address: {
-        street: this.userForm.controls['street'].value,
-        city: this.userForm.controls['city'].value,
-        state: this.userForm.controls['state'].value.toUpperCase(),
-        zip: this.userForm.controls['zip'].value,
-      }
     };
 
     this.service.registerUser(user).subscribe((result) => {
