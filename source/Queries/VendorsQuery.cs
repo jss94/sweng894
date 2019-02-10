@@ -150,14 +150,17 @@ namespace source.Queries
                     var newVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
 
                     //If services are added at the same time as vendor, add services
-                    foreach (VendorServices v in vendor.services)
+                    if (vendor.services != null)
                     {
-                        v.vendorId = newVendor.id.Value;
-                        string servicesQuery = @"INSERT INTO occasions.vendorServices "
-                            + @"(vendorId, serviceType, serviceName, serviceDescription, flatFee, price, unitsAvailable, active) "
-                            + @"VALUES(@vendorId, @serviceType, @serviceName, @serviceDescription, @flatFee, @price, @unitsAvailable, 1); ";
+                        foreach (VendorServices v in vendor.services)
+                        {
+                            v.vendorId = newVendor.id.Value;
+                            string servicesQuery = @"INSERT INTO occasions.vendorServices "
+                                + @"(vendorId, serviceType, serviceName, serviceDescription, flatFee, price, unitsAvailable, active) "
+                                + @"VALUES(@vendorId, @serviceType, @serviceName, @serviceDescription, @flatFee, @price, @unitsAvailable, 1); ";
 
-                        var addedService = connection.ExecuteAsync(servicesQuery, v).Result;
+                            var addedService = connection.ExecuteAsync(servicesQuery, v).Result;
+                        }
                     }
 
                     var returnedVendor = await GetById(newVendor.id.Value);
