@@ -14,7 +14,6 @@ namespace source.Models
         public int? id { get; set; }
         public string userName { get; set; }
         public string name { get; set; }
-        public string type { get; set; }
         public string website { get; set; }
         public string phone { get; set; }
         public int? addressId { get; set; }

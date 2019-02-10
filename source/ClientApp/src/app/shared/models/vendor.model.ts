@@ -1,4 +1,5 @@
 import { Address } from 'src/app/shared/models/address.model';
+import { VendorService } from 'src/app/vendors/Services/vendor.service';
 
 export interface Vendor {
     id?: number;
@@ -7,6 +8,6 @@ export interface Vendor {
     type: string;
     website: string;
     phone: string;
-    addressId?: number;
     address?: Address;
+    services?: VendorService[];
 }

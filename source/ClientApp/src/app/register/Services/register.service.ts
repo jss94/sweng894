@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { User } from 'src/app/shared/models/user.model';
-import { Vendor } from 'src/app/vendors/Models/vendor.model';
+import { Vendor } from 'src/app/shared/models/vendor.model';
 
 @Injectable()
 export class RegisterService {

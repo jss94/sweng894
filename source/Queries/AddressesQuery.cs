@@ -150,8 +150,8 @@ namespace source.Queries
         /// Deactivate the specified address.
         /// </summary>
         /// <returns>The deactivate.</returns>
-        /// <param name="address">Address.</param>
-        public async Task Deactivate(Address address)
+        /// <param name="userName">User Name of Address.</param>
+        public async Task Deactivate(string userName)
         {
             try
             {
@@ -162,9 +162,9 @@ namespace source.Queries
 
                     string query = @"UPDATE occasions.addresses "
                         + @" SET active = 0"
-                        + @" WHERE id = @id AND active = 1;";
+                        + @" WHERE userName = @userName AND active = 1;";
 
-                    var results = connection.QueryAsync<Vendor>(query, address);
+                    var results = connection.QueryAsync<Vendor>(query, new { userName });
                     await Task.CompletedTask;            
                 }
             }

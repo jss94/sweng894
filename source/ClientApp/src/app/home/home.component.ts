@@ -34,7 +34,6 @@ export class HomeComponent implements OnInit {
   routeToEvents(user: User) {
       // Get any vendor information
       this.vendorService.getVendor(user.userName).subscribe((vendor) => {
-
         if (user && user.role === 'VENDOR' && vendor.id === null) {
           this.router.navigate(['/register-vendor']);
         } else {
