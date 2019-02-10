@@ -14,4 +14,16 @@ export class GuestsService {
   getGuests(id: string): Observable<Guest[]> {
     return this.auth.get('guest/' + id);
   }
+
+  insert(guest: Guest): Observable<any> {
+    return this.auth.post('guest/', guest);
+  }
+
+  update(guest: Guest): Observable<any> {
+    return this.auth.put('guest/', guest);
+  }
+
+  delete(id: string): Observable<any> {
+    return this.auth.delete('guest/' + id);
+  }
 }

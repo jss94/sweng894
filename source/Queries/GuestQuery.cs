@@ -74,10 +74,9 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 string query = @"INSERT INTO occasions.guests (name, email, isGoing, eventId) "
-                    + @"VALUES (@guest.name, @guest.email, @guest.isGoing, @guest.eventId) "
-                    + @"SELECT * FROM occasions.guests WHERE guestId = LAST_INSERT_ID()";
+                    + @"VALUES (@name, @email, @isGoing, @eventId)";
 
-                var guestReturn = connection.QueryFirstAsync<Guest>(query, guest).Result;
+                Guest guestReturn = connection.QueryAsync<Guest>(query, guest).Result.ToList().FirstOrDefault();
                 return guestReturn;
             }
 

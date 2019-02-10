@@ -1,40 +1,85 @@
-<div class="container"> 
+<div class="guest-container"> 
+    
     <h1>Guest List</h1>
-    <div class="guest-list">
-        <p *ngIf="!guests"><em>Loading...</em></p>
-        <table class='table table-striped' *ngIf="guests">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Is Going?</th>
-                    <th>test</th>
-                    <button type="submit" mat-button (click)="addGuestClicked()">
-                        <mat-icon>add_circle</mat-icon>
-                    </button>
-                    <button type="submit" mat-button (click)="deleteSelectedClicked()">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let guest of guests">
-                    <td>{{ guest.name }}</td>
-                    <td>{{ guest.email }}</td>
-                    <td>{{ guest.isGoing }}</td>
-                    <td>
-                        <div *ngIf="guest.isGoing">
-                            <mat-icon>check</mat-icon>
-                        </div>
-                        <div *ngIf="!guest.isGoing && !guest.isUndecided">
-                            <mat-icon>clear</mat-icon>
-                        </div>
-                        <div *ngIf="guest.isUndecided">
-                            Undecided
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+    <mat-accordion>
+        <mat-expansion-panel>
+
+            <mat-expansion-panel-header>
+            <mat-panel-title>
+                Add Guest
+            </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <form class="form" [formGroup]="guestForm" (ngSubmit)="onCreate()">
+
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input
+                matInput
+                placeholder="Name"
+                formControlName="name"
+                >
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input
+                    autocomplete="email"
+                    matInput
+                    placeholder="Email"
+                    formControlName="email"
+                    >
+                </mat-form-field>
+
+            <mat-action-row>
+                <button type="submit" mat-button [disabled]="!guestForm.valid">
+                <mat-icon>add</mat-icon>
+                Add Guest
+                </button>
+            </mat-action-row>
+
+            </form>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="item-container" *ngFor="let guest of guests">
+        <div class="guest-item">
+
+            <div class="guest-icon">
+                <mat-icon>person</mat-icon>
+            </div>
+            <div class="name-field">
+                <div>
+                    <h5>{{ guest.name }}</h5>
+                </div>
+            </div>
+            <div class="email-field">
+                <div>
+                    <h5>{{ guest.email }}</h5>
+                </div>
+            </div>
+            <div class = "is-going-field">
+                <div *ngIf="guest.isGoing">
+                    <mat-icon>check</mat-icon>
+                </div>
+                <div *ngIf="!guest.isGoing && !guest.isUndecided">
+                    <mat-icon>clear</mat-icon>
+                </div>
+                <div *ngIf="guest.isUndecided">
+                    <mat-icon>info</mat-icon>
+                </div>
+            </div>
+            <div class="actions">
+                <button mat-button>
+                    <mat-icon>edit</mat-icon>
+                </button>
+            
+                <button mat-button (click)="delete(guest)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
     </div>
 </div>

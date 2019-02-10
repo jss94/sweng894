@@ -1,5 +1,5 @@
 export interface Guest {
-    guestId: number;
+    guestId?: number;
     name: string;
     email: string;
     isGoing: boolean;
