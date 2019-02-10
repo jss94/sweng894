@@ -202,11 +202,11 @@ namespace UnitTests.Controllers
             // arrange
             var service = new VendorServices { id = 123 };
 
-            _vendorServicesQueryMock.Setup(x => x.DeactivateService(service.id))
+            _vendorServicesQueryMock.Setup(x => x.DeactivateService(service.id.Value))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Delete(service.id);
+            var task = _sut.Delete(service.id.Value);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
