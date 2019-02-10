@@ -138,8 +138,8 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"INSERT INTO occasions.vendors "
-                        + @"(userName, name, type, addressId, website, phone, active) "
-                        + @"VALUES(@userName, @name, @type, @addressId, @website, @phone, 1); "
+                        + @"(userName, name, addressId, website, phone, active) "
+                        + @"VALUES(@userName, @name, @addressId, @website, @phone, 1); "
                         + @"SELECT * FROM occasions.vendors WHERE id = LAST_INSERT_ID() AND active = 1;";
 
                     var newVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
