@@ -3,6 +3,8 @@ import { Guest } from './Models/guest.model';
 import { GuestsService } from './Services/guests.service';
 import { AuthService } from '../shared/services/auth.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component(
     {
@@ -13,16 +15,10 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 )
 export class GuestsComponent implements OnInit {
     public guests: Guest[];
-    private guest: Guest = {
-        guestId: 1,
-        firstName: 'Zach',
-        lastName: 'Eick',
-        email: 'zacharyeick@gmail.com',
-        isGoing: true,
-        eventId: 1
-    };
 
     constructor(
+        private iconRegistry: MatIconRegistry,
+        private sanitizer: DomSanitizer,
         private auth: AuthService,
         private guestService: GuestsService,
         private route: ActivatedRoute,
@@ -42,6 +38,14 @@ export class GuestsComponent implements OnInit {
             });
         });
 
+
+    }
+
+    addGuestClicked() {
+        
+    }
+
+    deleteSelectedClicked() {
 
     }
 

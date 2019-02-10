@@ -73,8 +73,8 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"INSERT INTO occasions.users (userName, firstName, lastName, email, isGoing, eventId) "
-                    + @"VALUES (@guest.firstName, @guest.lastName, @guest.email, @guest.isGoing, @guest.eventId) "
+                string query = @"INSERT INTO occasions.guests (name, email, isGoing, eventId) "
+                    + @"VALUES (@guest.name, @guest.email, @guest.isGoing, @guest.eventId) "
                     + @"SELECT * FROM occasions.guests WHERE guestId = LAST_INSERT_ID()";
 
                 var guestReturn = connection.QueryFirstAsync<Guest>(query, guest).Result;
@@ -95,8 +95,7 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.guests SET firstName = @guest.firstName, "
-                    + @"lastName = @guest.lastName, "
+                string query = @"UPDATE occasions.guests SET firstName = @guest.name, "
                     + @"email = @guest.email, "
                     + @"isGoing = @guest.isGoing "
                     + @"eventId =  @guest.eventId"

@@ -8,13 +8,31 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Is Going?</th>
+                    <th>test</th>
+                    <button type="submit" mat-button (click)="addGuestClicked()">
+                        <mat-icon>add_circle</mat-icon>
+                    </button>
+                    <button type="submit" mat-button (click)="deleteSelectedClicked()">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let guest of guests">
-                    <td>{{ guest.firstName }}</td>
+                    <td>{{ guest.name }}</td>
                     <td>{{ guest.email }}</td>
                     <td>{{ guest.isGoing }}</td>
+                    <td>
+                        <div ng-if="guest.isGoing == true">
+                            <mat-icon>check</mat-icon>
+                        </div>
+                        <div ng-if="guest.isGoing == false">
+                            <mat-icon>clear</mat-icon>
+                        </div>
+                        <div ng-if="guest.isGoing == null">
+                            <mat-icon>info</mat-icon>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

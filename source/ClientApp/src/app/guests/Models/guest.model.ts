@@ -1,8 +1,7 @@
 export interface Guest {
     guestId: number;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
-    isGoing: boolean;
+    isGoing: boolean | null;
     eventId: number
 }
