@@ -13,5 +13,10 @@ namespace source.Queries
         Task<Vendor> Update(Vendor vendor);
         Task<bool> Deactivate(int id);
         Task<bool> Delete(int id);
+        Task<List<Vendor>> GetVendorsByServiceTypes(string serviceType);
+        Task<VendorServices> InsertService(VendorServices service);
+        Task<VendorServices> UpdateService(VendorServices service);
+        Task<List<VendorServices>> GetServicesByVendor(int id);
+        Task<bool> DeactivateService(int id);
     }
 }

@@ -84,7 +84,7 @@ namespace source.Queries
                     return result.FirstOrDefault();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new Vendor();
             }
@@ -115,7 +115,7 @@ namespace source.Queries
                     return result.FirstOrDefault();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new Vendor();
             }
@@ -136,8 +136,8 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"INSERT INTO occasions.vendors "
-                        + @"(id, userName, name, type, addressId, website, phone, active) "
-                        + @"VALUES(@id, @userName, @name, @type, @addressId, @website, @phone, 1); "
+                        + @"(userName, name, type, addressId, website, phone, active) "
+                        + @"VALUES(@userName, @name, @type, @addressId, @website, @phone, 1); "
                         + @"SELECT * FROM occasions.vendors WHERE id = LAST_INSERT_ID() AND active = 1;";
 
                     var newVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
@@ -157,7 +157,7 @@ namespace source.Queries
                     return returnedVendor;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new Vendor();
             }
@@ -186,7 +186,7 @@ namespace source.Queries
                     return returnedVendor;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new Vendor();
             }
@@ -216,7 +216,7 @@ namespace source.Queries
                     return true;                   
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -229,20 +229,164 @@ namespace source.Queries
         /// <param name="id">Vendor ID.</param>
         public async Task<bool> Delete(int id)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"DELETE FROM occasions.vendors "
-                    + @"WHERE id = @id AND active = 1;"
-                    + @"DELETE FROM occasions.vendorServices "
-                    + @"WHERE vendorId = @id;";
+                    string query = @"DELETE FROM occasions.vendorServices "
+                        + @"WHERE vendorId = @id; "
+                        + @"DELETE FROM occasions.vendors "
+                        + @"WHERE id = @id AND active = 1;";
 
-                var returnedValue = connection.QueryAsync<Vendor>(query, new { id });
-                return true;
+                    var returnedValue = connection.ExecuteAsync(query, new { id });
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
             }
         }
 
+        /// <summary>
+        /// Gets vendors based on service type desired
+        /// </summary>
+        /// <param name="serviceType">Service type</param>
+        /// <returns>List of vendor</returns>
+        public async Task<List<Vendor>> GetVendorsByServiceTypes(string serviceType)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    string query = @"SELECT * from occasions.vendors WHERE active = 1 AND id IN (SELECT vendorId from occasions.vendorServices WHERE serviceType = @serviceType AND active = 1); "
+                        + @"SELECT * from occasions.vendorServices WHERE serviceType = @serviceType AND active = 1";
+
+                    var result = await connection.QueryMultiple(query, new { serviceType }).Map<Vendor, VendorServices, int?>
+                        (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
+                        (vendor, vendorservices) => {
+                            vendor.services = vendorservices.ToList();
+                        });
+
+                    return result.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new List<Vendor>();
+            }
+        }
+
+        /// <summary>
+        /// Inserts vendor service
+        /// </summary>
+        /// <param name="service">Vendor service</param>
+        /// <returns>Saved vendor service</returns>
+        public async Task<VendorServices> InsertService(VendorServices service)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"INSERT INTO occasions.vendorServices (vendorId, serviceType, serviceName, serviceDescription, flatFee, price, unitsAvailable, active) "
+                        + @"VALUES (@vendorId, @serviceType, @serviceName, @serviceDescription, @flatFee, @price, @unitsAvailable, 1); "
+                        + @"SELECT * FROM occasions.vendorServices WHERE id = LAST_INSERT_ID();";
+
+                    var addedService = connection.QueryAsync<VendorServices>(query, service).Result;
+                    return addedService.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new VendorServices();
+            }
+        }
+
+        /// <summary>
+        /// Updates vendor service
+        /// </summary>
+        /// <param name="service">Updated vendor service</param>
+        /// <returns>Saved vendor service</returns>
+        public async Task<VendorServices> UpdateService(VendorServices service)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"UPDATE occasions.vendorServices "
+                        + @"SET serviceType = @serviceType, serviceName = @serviceName, serviceDescription = @serviceDescription, "
+                        + @"flatFee = @flatFee, price = @price, unitsAvailable = @unitsAvailable "
+                        + @"WHERE vendorId = @vendorId AND id = @id; "
+                        + @"SELECT * FROM occasions.vendorServices WHERE id = @id;";
+
+                    var updatedService = connection.QueryFirstAsync<VendorServices>(query, service).Result;
+                    return updatedService;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new VendorServices();
+            }
+        }
+
+        /// <summary>
+        /// Gets all active services of a vendor
+        /// </summary>
+        /// <param name="id">Vendor's id</param>
+        /// <returns>List of vendor services</returns>
+        public async Task<List<VendorServices>> GetServicesByVendor(int id)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    string query = @"SELECT * from occasions.vendorServices "
+                    + @"WHERE vendorId = @id AND active = 1";
+
+                    var result = await connection.QueryAsync<VendorServices>(query, new { id });
+
+                    return result.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new List<VendorServices>();
+            }
+        }
+
+        public async Task<bool> DeactivateService(int id)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"UPDATE occasions.vendorServices "
+                        + @"SET active = 0 WHERE id = @id;";
+                        
+                    var result = connection.ExecuteAsync(query, new { id }).Result;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }
