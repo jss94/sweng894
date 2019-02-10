@@ -23,15 +23,11 @@ export class HomeComponent implements OnInit {
     this.auth.user$.subscribe((user) => {
       // Get any vendor information
       this.vendorService.getVendor(user.userName).subscribe((vendor) => {
-        console.log('VENDOR', vendor);
-        if (user && user.role === 'VENDOR' && vendor.id === null) {
-          this.router.navigate(['/register-vendor']);
-        } else {
-
           this.router.navigate(['/events']);
-        }
       }, (error) => {
-
+        if (error.status === 404 && user && user.role === 'VENDOR') {
+          this.router.navigate(['/register-vendor']);
+        }
       });
 
     });

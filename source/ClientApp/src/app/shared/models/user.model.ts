@@ -5,6 +5,4 @@ export interface User {
     userName: string;
     name: string;
     role: string;
-    // addressId: number;
-    address?: Address;
 }
