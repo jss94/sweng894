@@ -66,6 +66,7 @@ namespace source
             services.AddTransient<IUsersQuery, UsersQuery>();
             services.AddTransient<IEventQuery, EventQuery>();
             services.AddTransient<IVendorsQuery, VendorsQuery>();
+            services.AddTransient<IVendorServicesQuery, VendorServicesQuery>();
             services.AddTransient<ILoggerQuery, LoggerQuery>();
             services.AddTransient<ILogger, Logger>();
             services.AddTransient<IAddressesQuery, AddressesQuery>();
