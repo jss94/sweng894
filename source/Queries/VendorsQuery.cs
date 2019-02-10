@@ -103,12 +103,19 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT *"
-                        + @" FROM occasions.vendors"
-                        + @" WHERE userName = @userName AND active = 1;";
+                    string query = @"SELECT * FROM occasions.vendors v"
+                        + @" JOIN occasions.addresses a IN v.addressId = a.id"
+                        + @" WHERE userName = @userName AND active = 1";
 
-                    var vendor = connection.QueryFirstAsync<Vendor>(query, new { userName }).Result;
-                    return vendor;
+                    var result = await connection.QueryAsync<Vendor, Address, Vendor>(
+                        sql: query,
+                        map: (v, a) => { v.address = a; return v; },
+                        splitOn: "id",
+                        param: new { @userName }
+                        );
+
+
+                    return result.FirstOrDefault();
                 }
             }
             catch (Exception)
