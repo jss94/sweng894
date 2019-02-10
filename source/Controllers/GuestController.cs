@@ -52,7 +52,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>New Guest record</returns>
-        [HttpPost("{insert}")]
+        [HttpPost]
         public async Task<IActionResult> Insert([FromBody]Guest guest)
         {
             try
@@ -73,7 +73,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>Updated Guest record</returns>
-        [HttpPost("{update}")]
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody]Guest guest)
         {
             try
