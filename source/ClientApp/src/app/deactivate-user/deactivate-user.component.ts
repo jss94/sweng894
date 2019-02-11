@@ -30,13 +30,13 @@ import { MatSnackBar } from '@angular/material';
           .subscribe(result => {
             if (result === true) {
               this.userService.deactivateUser(this.authService.user).subscribe(() => {
+                this.authService.logout();
 
                 const message = 'Your account and all connected events have been disabled.';
                 this.snackbar.open(message, 'close', {
                   duration: 5000,
                 });
 
-                this.authService.logout();
               });
             }
           });

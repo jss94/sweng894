@@ -115,11 +115,10 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// PUT api/users/{userId}
-        /// Deactivate the specified userId.
+        /// Deactivate the specified userName.
         /// </summary>
-        /// <returns>The delete.</returns>
-        /// <param name="userName">User identifier.</param>
+        /// <returns>The deactivate.</returns>
+        /// <param name="userName">User name.</param>
         [HttpPut("deactivate/{userName}")]
         public async Task<IActionResult> Deactivate(string userName)
         {
@@ -137,18 +136,14 @@ namespace source.Controllers
             if (vendor != null)
             {
                 await _vendorsQuery.Deactivate(user.userName);
-                await _servicesQuery.Deactivate(user.id.Value);
+                await _servicesQuery.DeactivateByVendorId(vendor.id.Value);
 
                 var events = await _eventsQuery.GetAllEventsByUser(userName);
 
-                if (events.Count > 0)
+                if (events != null || events.Count > 0)
                 {
                     await _eventsQuery.DeleteByUserName(userName);
-
-                    foreach (var e in events)
-                    {
-                        await _guestsQuery.DeleteByEventId(e.eventId);
-                    }
+                    // guests are deleted automatically by DB
                 }
             }
 

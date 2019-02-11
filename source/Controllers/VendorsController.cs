@@ -176,7 +176,7 @@ namespace source.Controllers
 
                 await _vendorQuery.Deactivate(userName);
                 await _addressesQuery.Deactivate(userName);
-                await _servicesQuery.Deactivate(vendor.id.Value);
+                await _servicesQuery.DeactivateByVendorId(vendor.id.Value);
 
                 var events = await _eventsQuery.GetAllEventsByUser(userName);
 

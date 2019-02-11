@@ -120,8 +120,9 @@ namespace source.Queries
                 var addressQuery = @"SELECT * FROM occasions.addresses "
                     + @"WHERE userName = @userName AND active = 1;";
 
-                var address = await connection.QueryFirstAsync<Address>(addressQuery, new { userName });
-                vendor.address = address;
+                var address = await connection.QueryFirstOrDefaultAsync<Address>(addressQuery, new { userName });
+
+                vendor.address = address == null ? new Address(): address;
 
                 return vendor;
             }

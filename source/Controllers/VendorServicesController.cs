@@ -196,7 +196,7 @@ namespace source.Controllers
         {
             try
             {
-                bool result = await _vendorServicesQuery.Deactivate(id);
+                bool result = await _vendorServicesQuery.DeactivateByVendorId(id);
 
                 if (result == false)
                 {

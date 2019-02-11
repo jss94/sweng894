@@ -124,7 +124,7 @@ namespace source.Queries
                     var query = @"DELETE FROM occasions.guests "
                         + @"WHERE guestId = @guestId";
 
-                    var guestReturn = connection.QueryFirstAsync<Guest>(query, new { guestId }).Result;
+                    var guestReturn = connection.ExecuteAsync(query, new { guestId }).Result;
                     return true;
                 }
             }
@@ -150,7 +150,7 @@ namespace source.Queries
                 var query = @"DELETE FROM occasions.guests "
                     + @"WHERE eventId = @eventId";
 
-                await connection.QueryFirstAsync<Guest>(query, new { eventId });
+                await connection.ExecuteAsync(query, new { eventId });
 
                 return true;
             }

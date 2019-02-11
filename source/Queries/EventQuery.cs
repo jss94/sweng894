@@ -129,10 +129,9 @@ namespace source.Queries
 
                 string query = @"DELETE FROM occasions.events WHERE eventId = @id";
    
-                await connection.QueryAsync<Event>(query, new { id } );
+                await connection.ExecuteAsync(query, new { id } );
 
-                    return true;
-
+                return true;
             }
         }
 
@@ -150,10 +149,9 @@ namespace source.Queries
 
                 string query = @"DELETE FROM occasions.events WHERE userName = @userName";
 
-                await connection.QueryAsync<Event>(query, new { userName });
+                await connection.ExecuteAsync(query, new { userName });
 
                 return true;
-
             }
         }
     }
