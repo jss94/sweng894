@@ -8,13 +8,13 @@ namespace source.Models
 {
     public class VendorServices
     {
-        public int id { get; set; }
-        public int vendorId { get; set; }
+        public int? id { get; set; }
+        public int?vendorId { get; set; }
         public string serviceType { get; set; }
         public string serviceName { get; set; }
         public string serviceDescription { get; set; }
-        public bool flatFee { get; set; }
-        public float price { get; set; }
-        public int unitsAvailable { get; set; }
+        public bool? flatFee { get; set; }
+        public float? price { get; set; }
+        public int? unitsAvailable { get; set; }
     }
 }

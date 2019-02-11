@@ -14,13 +14,30 @@ namespace UnitTests.Controllers
         // System Under Test
         readonly UsersController _sut;
         readonly Mock<IUsersQuery> _usersQueryMock;
+        readonly Mock<IEventQuery> _eventQueryMock;
+        readonly Mock<IVendorsQuery> _vendorsQueryMock;
         readonly Mock<IAddressesQuery> _addressQueryMock;
+        readonly Mock<IVendorServicesQuery> _serviceQueryMock;
+        readonly Mock<IGuestQuery> _guestQueryMock;
+
 
         public UsersControllerShould()
         {
             _usersQueryMock = new Mock<IUsersQuery>();
             _addressQueryMock = new Mock<IAddressesQuery>();
-            _sut = new UsersController(_usersQueryMock.Object, _addressQueryMock.Object);
+            _eventQueryMock = new Mock<IEventQuery>();
+            _vendorsQueryMock = new Mock<IVendorsQuery>();
+            _serviceQueryMock = new Mock<IVendorServicesQuery>();
+            _guestQueryMock = new Mock<IGuestQuery>();
+
+
+            _sut = new UsersController(
+                _usersQueryMock.Object, 
+                _vendorsQueryMock.Object,
+                _eventQueryMock.Object,
+                _guestQueryMock.Object,
+                _addressQueryMock.Object,
+                _serviceQueryMock.Object);
         }
 
         [Fact]
@@ -62,7 +79,7 @@ namespace UnitTests.Controllers
                 address = new Address()
             };
 
-            _usersQueryMock.Setup(x => x.GetByUserName(user.userName))
+            _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
                 .Returns(Task.Factory.StartNew(() => user));
 
             // act
@@ -88,7 +105,7 @@ namespace UnitTests.Controllers
                 address = new Address()
             };
 
-            _usersQueryMock.Setup(x => x.GetByUserName(user.userName))
+            _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
                 .Returns(Task.Factory.StartNew(() => (User)null));
 
             // act
@@ -116,11 +133,10 @@ namespace UnitTests.Controllers
                 }
             };
 
-            _usersQueryMock.Setup(x => x.Insert(user))
-            .Returns(Task.Factory.StartNew(() => 55));
+            _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
+            .Returns(Task.Factory.StartNew(() => null as User));
 
-            _addressQueryMock.Setup(x => x.Insert(It.IsAny<Address>()))
-            .Returns(Task.Factory.StartNew(() => 99));
+            _usersQueryMock.Setup(x => x.Insert(user));
 
             // act
             var task = _sut.Post(user);
@@ -129,8 +145,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var userResult = result.Value as User;
-            Assert.Equal(99, user.addressId);
+            var userResult = result.Value as string;
+            Assert.Equal("User successfully added", userResult);
         }
 
 
@@ -153,7 +169,7 @@ namespace UnitTests.Controllers
                 }
             };
 
-            _usersQueryMock.Setup(x => x.GetByUserName(user.userName))
+            _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
             .Returns(Task.Factory.StartNew(() => user));
 
             _usersQueryMock.Setup(x => x.Update(user))

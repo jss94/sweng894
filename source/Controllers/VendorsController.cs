@@ -18,6 +18,9 @@ namespace source.Controllers
     {
         private IVendorsQuery _vendorQuery;
         private IAddressesQuery _addressesQuery;
+        private IVendorServicesQuery _servicesQuery;
+        private IEventQuery _eventsQuery;
+        private IGuestQuery _guestsQuery;
         private ILogger _logger;
 
         /// <summary>
@@ -26,10 +29,20 @@ namespace source.Controllers
         /// <param name="vendorQuery">IVendorsQuery obtained via dependency injection</param>
         /// <param name="addressQuery">IAddressQuery obtained via dependency injection</param>
         /// <param name="logger">ILogger obtained via dependency injection</param>
-        public VendorsController(IVendorsQuery vendorQuery, IAddressesQuery addressQuery, ILogger logger)
+        public VendorsController(
+            IVendorsQuery vendorQuery, 
+            IAddressesQuery addressQuery,
+            IVendorServicesQuery serviceQuery,
+            IEventQuery eventsQuery,
+            IGuestQuery guestsQuery,
+            ILogger logger)
         {
             _vendorQuery = vendorQuery;
             _addressesQuery = addressQuery;
+            _servicesQuery = serviceQuery;
+            _eventsQuery = eventsQuery;
+            _guestsQuery = guestsQuery;
+
             _logger = logger;
         }
 
@@ -87,7 +100,6 @@ namespace source.Controllers
             {
                 var vendor = await _vendorQuery.GetByUserName(userName);
 
-                Console.WriteLine(vendor);
                 if (vendor == null)
                     return new NotFoundResult();
 
@@ -150,16 +162,32 @@ namespace source.Controllers
         /// </summary>
         /// <param name="id">Vendor ID</param>
         /// <returns>True if successful</returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Deactivate(int id)
+        [HttpPut("{userName}")]
+        public async Task<IActionResult> Deactivate(string userName)
         {
             try
             {
-                var vendor = await _vendorQuery.GetById(id);
+                var vendor = await _vendorQuery.GetByUserName(userName);
 
                 if (vendor == null)
                 {
                     return new NotFoundResult();
+                }
+
+                await _vendorQuery.Deactivate(userName);
+                await _addressesQuery.Deactivate(userName);
+                await _servicesQuery.Deactivate(vendor.id.Value);
+
+                var events = await _eventsQuery.GetAllEventsByUser(userName);
+
+                if (events != null)
+                {
+                    await _eventsQuery.DeleteByUserName(userName);
+
+                    foreach(var e in events)
+                    {
+                        await _guestsQuery.DeleteByEventId(e.eventId);
+                    }
                 }
 
                 return new OkObjectResult(true);
@@ -196,155 +224,5 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
-
-        /// <summary>
-        /// Gets the list of service types for vendors' services
-        /// </summary>
-        /// <returns>List of vendor service types</returns>
-        [HttpGet("servicetypes")]
-        public async Task<IActionResult> GetVendorServiceTypes()
-        {
-            try
-            {
-                VendorServiceTypes types = new VendorServiceTypes();
-                return new OkObjectResult(types.GetVendorServiceTypes());
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogError(HttpContext.User, ex);
-                return new BadRequestResult();
-            }
-        }
-
-        /// <summary>
-        /// Gets list of vendors by service type
-        /// </summary>
-        /// <param name="service">Service type</param>
-        /// <returns>List of vendors with requested service type</returns>
-        [HttpGet("byservice/{service}")]
-        public async Task<ActionResult> GetVendorsByServiceType(string service)
-        {
-            try
-            {
-                List<Vendor> vendors = new List<Vendor>();
-                vendors = await _vendorQuery.GetVendorsByServiceTypes(service);
-
-                if (vendors == null)
-                {
-                    return new NotFoundResult();
-                }
-
-                return new OkObjectResult(vendors);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogError(HttpContext.User, ex);
-                return new BadRequestResult();
-            }
-        }
-
-        /// <summary>
-        /// Inserts a new vendor service
-        /// </summary>
-        /// <param name="service">The new vendor service</param>
-        /// <returns>Saved vendor service</returns>
-        [HttpPost("service")]
-        public async Task<IActionResult> InsertService([FromBody]VendorServices service)
-        {
-            try
-            {
-                VendorServices newService = await _vendorQuery.InsertService(service);
-                if (newService == null)
-                {
-                    return new NotFoundResult();
-                }
-
-                return new OkObjectResult(newService);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogError(HttpContext.User, ex);
-                return new BadRequestResult();
-            }
-        }
-
-        /// <summary>
-        /// Updates a vendors service
-        /// </summary>
-        /// <param name="service">Service to be updated</param>
-        /// <returns>Saved vendor service</returns>
-        [HttpPut("service")]
-        public async Task<IActionResult> UpdateService([FromBody]VendorServices service)
-        {
-            try
-            {
-                VendorServices newService = await _vendorQuery.UpdateService(service);
-                if (newService == null)
-                {
-                    return new NotFoundResult();
-                }
-
-                return new OkObjectResult(newService);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogError(HttpContext.User, ex);
-                return new BadRequestResult();
-            }
-        }
-
-        /// <summary>
-        /// Gets services by vendor
-        /// </summary>
-        /// <param name="id">Vendor id</param>
-        /// <returns>List of vendor services</returns>
-        [HttpGet("servicesbyvendor/{id}")]
-        public async Task<ActionResult> GetServicesByVendor(int id)
-        {
-            try
-            {
-                List<VendorServices> services = new List<VendorServices>();
-                services = await _vendorQuery.GetServicesByVendor(id);
-
-                if (services == null)
-                {
-                    return new NotFoundResult();
-                }
-
-                return new OkObjectResult(services);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogError(HttpContext.User, ex);
-                return new BadRequestResult();
-            }
-        }
-
-        /// <summary>
-        /// Deactivate a service
-        /// </summary>
-        /// <param name="id">Service id</param>
-        /// <returns>True/False</returns>
-        [HttpPut("deactivateservice/{id}")]
-        public async Task<ActionResult> DeactivateService(int id)
-        {
-            try
-            {
-                bool result = await _vendorQuery.DeactivateService(id);
-
-                if (result == false)
-                {
-                    return new NotFoundResult();
-                }
-
-                return new OkObjectResult(result);
-            }
-            catch (Exception ex)
-            {
-                await _logger.LogError(HttpContext.User, ex);
-                return new BadRequestResult();
-            }
-        }
     }
-
 }

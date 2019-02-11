@@ -9,6 +9,7 @@ using source.Models;
 using source.Framework;
 using source.Constants;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace UnitTests.Controllers
 {
@@ -20,16 +21,26 @@ namespace UnitTests.Controllers
         readonly Mock<ILogger> _loggerMock;
         readonly Mock<IVendorsQuery> _vendorsQueryMock;
         readonly Mock<IAddressesQuery> _addressQueryMock;
-        readonly Mock<VendorServices> _vendorServicesMock;
+        readonly Mock<IEventQuery> _eventsQueryMock;
+        readonly Mock<IGuestQuery> _guestQueryMock;
+        readonly Mock<IVendorServicesQuery> _vendorServicesQueryMock;
         
         public VendorsControllerShould()
         {
             _loggerMock = new Mock<ILogger>();
             _vendorsQueryMock = new Mock<IVendorsQuery>();
             _addressQueryMock = new Mock<IAddressesQuery>();
-            _vendorServicesMock = new Mock<VendorServices>();
+            _vendorServicesQueryMock = new Mock<IVendorServicesQuery>();
+            _eventsQueryMock = new Mock<IEventQuery>();
+            _guestQueryMock = new Mock<IGuestQuery>();
 
-            _sut = new VendorsController(_vendorsQueryMock.Object, _addressQueryMock.Object, _loggerMock.Object);
+            _sut = new VendorsController(
+                _vendorsQueryMock.Object, 
+                _addressQueryMock.Object,
+                _vendorServicesQueryMock.Object,
+                _eventsQueryMock.Object,
+                _guestQueryMock.Object,
+                _loggerMock.Object);
         }
 
         [Fact]
@@ -157,14 +168,14 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123 };
 
-            _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
+            _vendorsQueryMock.Setup(x => x.GetByUserName(It.IsAny<string>()))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
-            _vendorsQueryMock.Setup(x => x.Deactivate(vendor.id.Value))
+            _vendorsQueryMock.Setup(x => x.Deactivate(It.IsAny<string>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Deactivate(vendor.id.Value);
+            var task = _sut.Deactivate("aUser");
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -194,160 +205,5 @@ namespace UnitTests.Controllers
             Assert.True(usersResult.Value);
         }
 
-        [Fact]
-        public void GetVendorTypes_ReturnsServiceList()
-        {
-            // arrange
-            var serviceTypesMock = new Mock<VendorServiceTypes>().Object;
-            var serviceTypes = serviceTypesMock.GetVendorServiceTypes();
-
-            // act
-            var task = _sut.GetVendorServiceTypes();
-
-            // assert
-            Assert.IsType<OkObjectResult>(task.Result);
-
-            var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as List<string>;
-            Assert.Equal(serviceTypes, usersResult);
-        }
-
-        [Fact]
-        public void GetVendorsByService_ReturnsVendorsWithService()
-        {
-            // arrange
-            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            var service = new VendorServices
-            {
-                vendorId = 123,
-                flatFee = true,
-                price = 20,
-                serviceDescription = "desc",
-                serviceName = "svcName",
-                serviceType = "Venue"
-            };
-            vendor.services = new List<VendorServices> { service };
-            var vendors = new List<Vendor> { vendor, vendor, vendor };
-
-            _vendorsQueryMock.Setup(x => x.GetVendorsByServiceTypes("Venue"))
-                .Returns(Task.Factory.StartNew(() => vendors));
-
-            // act
-            var task = _sut.GetVendorsByServiceType("Venue");
-
-            // assert
-            Assert.IsType<OkObjectResult>(task.Result);
-
-            var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as List<Vendor>;
-            Assert.Equal(vendors[2].id, usersResult[2].id);
-            Assert.Equal("Venue", usersResult[0].services.FirstOrDefault().serviceType);
-        }
-
-        [Fact]
-        public void InsertServiceType_ReturnsNewServiceType()
-        {
-            // arrange
-            var service = new VendorServices
-            {
-                vendorId = 123,
-                flatFee = true,
-                price = 20,
-                serviceDescription = "desc",
-                serviceName = "svcName",
-                serviceType = "Venue"
-            };
-           
-            _vendorsQueryMock.Setup(x => x.InsertService(service))
-                .Returns(Task.Factory.StartNew(() => service));
-
-            // act
-            var task = _sut.InsertService(service);
-
-            // assert
-            Assert.IsType<OkObjectResult>(task.Result);
-
-            var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as VendorServices;
-            Assert.Equal(service, usersResult);
-        }
-
-        [Fact]
-        public void UpdateServiceType_ReturnsUpdatedServiceType()
-        {
-            // arrange
-            var service = new VendorServices
-            {
-                vendorId = 123,
-                flatFee = true,
-                price = 20,
-                serviceDescription = "desc",
-                serviceName = "svcName",
-                serviceType = "Venue"
-            };
-
-            _vendorsQueryMock.Setup(x => x.UpdateService(service))
-                .Returns(Task.Factory.StartNew(() => service));
-
-            // act
-            var task = _sut.UpdateService(service);
-
-            // assert
-            Assert.IsType<OkObjectResult>(task.Result);
-
-            var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as VendorServices;
-            Assert.Equal(service, usersResult);
-        }
-
-        [Fact]
-        public void GetServicesByVendor_ReturnsServicesOfVendor()
-        {
-            // arrange
-            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            var service = new VendorServices
-            {
-                vendorId = 123,
-                flatFee = true,
-                price = 20,
-                serviceDescription = "desc",
-                serviceName = "svcName",
-                serviceType = "Venue"
-            };
-            vendor.services = new List<VendorServices> { service };
-           
-            _vendorsQueryMock.Setup(x => x.GetServicesByVendor(vendor.id.Value))
-                .Returns(Task.Factory.StartNew(() => vendor.services));
-
-            // act
-            var task = _sut.GetServicesByVendor(vendor.id.Value);
-
-            // assert
-            Assert.IsType<OkObjectResult>(task.Result);
-
-            var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as List<VendorServices>;
-            Assert.Equal(vendor.services, usersResult);
-        }
-
-        [Fact]
-        public void DeactivateService_ReturnsTrue()
-        {
-            // arrange
-            var service = new VendorServices { id = 123 };
-
-            _vendorsQueryMock.Setup(x => x.DeactivateService(service.id))
-                .Returns(Task.Factory.StartNew(() => true));
-
-            // act
-            var task = _sut.DeactivateService(service.id);
-
-            // assert
-            Assert.IsType<OkObjectResult>(task.Result);
-
-            var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as bool?;
-            Assert.True(usersResult);
-        }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics.Tracing;
 
 namespace source.Controllers
 {
@@ -52,7 +53,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>New Guest record</returns>
-        [HttpPost("{insert}")]
+        [HttpPost]
         public async Task<IActionResult> Insert([FromBody]Guest guest)
         {
             try
@@ -73,7 +74,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>Updated Guest record</returns>
-        [HttpPost("{update}")]
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody]Guest guest)
         {
             try
@@ -99,7 +100,14 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _query.DeleteById(id));
+                var events = await _query.GetListByEventId(id);
+
+                if (events.ToList().Count == 0) 
+                {
+                    return new NotFoundResult();
+                }
+
+                return new OkObjectResult(await _query.DeleteByEventId(id));
             }
             catch (Exception)
             {

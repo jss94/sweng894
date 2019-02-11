@@ -73,11 +73,10 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"INSERT INTO occasions.users (userName, firstName, lastName, email, isGoing, eventId) "
-                    + @"VALUES (@guest.firstName, @guest.lastName, @guest.email, @guest.isGoing, @guest.eventId) "
-                    + @"SELECT * FROM occasions.guests WHERE guestId = LAST_INSERT_ID()";
+                string query = @"INSERT INTO occasions.guests (name, email, isGoing, eventId) "
+                    + @"VALUES (@name, @email, @isGoing, @eventId)";
 
-                var guestReturn = connection.QueryFirstAsync<Guest>(query, guest).Result;
+                Guest guestReturn = connection.QueryAsync<Guest>(query, guest).Result.ToList().FirstOrDefault();
                 return guestReturn;
             }
 
@@ -95,8 +94,7 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.guests SET firstName = @guest.firstName, "
-                    + @"lastName = @guest.lastName, "
+                string query = @"UPDATE occasions.guests SET firstName = @guest.name, "
                     + @"email = @guest.email, "
                     + @"isGoing = @guest.isGoing "
                     + @"eventId =  @guest.eventId"
@@ -114,7 +112,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="guestId">DB id of the guest</param>
         /// <returns>Success/Failure</returns>
-        public async Task<bool> DeleteById(int guestId)
+        public async Task<bool> DeleteByGuestId(int guestId)
         {
             try
             {
@@ -134,6 +132,27 @@ namespace source.Queries
             {
                 // TODO: Traditional Logging
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes event by event identifier.
+        /// </summary>
+        /// <returns>The by event identifier.</returns>
+        /// <param name="eventId">Event identifier.</param>
+        public async Task<bool> DeleteByEventId(int eventId)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var query = @"DELETE FROM occasions.guests "
+                    + @"WHERE eventId = @eventId";
+
+                await connection.QueryFirstAsync<Guest>(query, new { eventId });
+
+                return true;
             }
         }
     }

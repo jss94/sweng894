@@ -13,12 +13,27 @@ namespace source.Controllers
     public class UsersController : ControllerBase
     {
         IUsersQuery _usersQuery { get; set; }
+        IVendorsQuery _vendorsQuery { get; set; }
+        IEventQuery _eventsQuery { get; set; }
+        IGuestQuery _guestsQuery { get; set; }
         IAddressesQuery _addressesQuery { get; set; }
+        IVendorServicesQuery _servicesQuery { get; set; }
 
-        public UsersController(IUsersQuery usersQuery, IAddressesQuery addressesQuery)
+        public UsersController(
+            IUsersQuery usersQuery,
+            IVendorsQuery vendorsQuery,
+            IEventQuery eventQuery,
+            IGuestQuery guestQuery,
+            IAddressesQuery addressesQuery,
+            IVendorServicesQuery servicesQuery
+            )
         {
             _usersQuery = usersQuery;
+            _vendorsQuery = vendorsQuery;
+            _eventsQuery = eventQuery;
+            _guestsQuery = guestQuery;
             _addressesQuery = addressesQuery;
+            _servicesQuery = servicesQuery;
         }
 
         /// <summary>
@@ -57,18 +72,22 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// Post the specified user and address.
+        /// Insert the specified user.
         /// </summary>
         /// <returns>The post.</returns>
         /// <param name="user">User.</param>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]User user)
         {
-            var addressId = await _addressesQuery.Insert(user.address);
-            user.addressId = addressId;
+            var result = await _usersQuery.GetByUserName(user.userName);
 
-            await _usersQuery.Insert(user);
-            return new OkObjectResult(user);
+            if (result == null)
+            {
+                await _usersQuery.Insert(user);
+                return new OkObjectResult("User successfully added.");
+            }
+
+            return new BadRequestResult();
         }
 
         /// <summary>
@@ -89,14 +108,7 @@ namespace source.Controllers
             user.name = body.name;
             user.role = body.role;
 
-            user.address.street = body.address.street;
-            user.address.city = body.address.city;
-            user.address.state = body.address.state;
-            user.address.zip = body.address.zip;
-
             await _usersQuery.Update(user);
-
-            await _addressesQuery.Update(user.address);
 
             return new OkObjectResult(user);
 
@@ -108,15 +120,38 @@ namespace source.Controllers
         /// </summary>
         /// <returns>The delete.</returns>
         /// <param name="userId">User identifier.</param>
-        [HttpPut("deactivate/{userId}")]
-        public async Task<IActionResult> Deactivate(string userId)
+        [HttpPut("deactivate/{userName}")]
+        public async Task<IActionResult> Deactivate(string userName)
         {
-            var result = await _usersQuery.GetByUserName(userId);
+            var user = await _usersQuery.GetByUserName(userName);
 
-            if (result == null)
+            if (user == null)
                 return new NotFoundResult();
 
-            await _usersQuery.Deactivate(result);
+            await _usersQuery.Deactivate(user);
+
+            await _addressesQuery.Deactivate(userName);
+
+            var vendor = _vendorsQuery.GetByUserName(userName);
+
+            if (vendor != null)
+            {
+                await _vendorsQuery.Deactivate(user.userName);
+                await _servicesQuery.Deactivate(user.id.Value);
+
+                var events = await _eventsQuery.GetAllEventsByUser(userName);
+
+                if (events != null)
+                {
+                    await _eventsQuery.DeleteByUserName(userName);
+
+                    foreach (var e in events)
+                    {
+                        await _guestsQuery.DeleteByEventId(e.eventId);
+                    }
+                }
+            }
+
             return new OkResult();
 
         }
@@ -136,6 +171,7 @@ namespace source.Controllers
                 return new NotFoundResult();
 
             await _usersQuery.Reactivate(result);
+            await _vendorsQuery.Reactivate(result.userName);
             return new OkResult();
 
         }
