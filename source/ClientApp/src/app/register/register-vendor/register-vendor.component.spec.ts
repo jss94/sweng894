@@ -93,7 +93,6 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
 
       // act
       // done automatically by formgroup object
@@ -110,7 +109,6 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
       // act
       // done automatically by formgroup object
 
@@ -126,7 +124,6 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
 
       // act
       // done automatically by formgroup object
@@ -143,7 +140,6 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
 
       // act
       // done automatically by formgroup object

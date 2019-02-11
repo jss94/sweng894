@@ -119,7 +119,7 @@ namespace source.Controllers
         /// Deactivate the specified userId.
         /// </summary>
         /// <returns>The delete.</returns>
-        /// <param name="userId">User identifier.</param>
+        /// <param name="userName">User identifier.</param>
         [HttpPut("deactivate/{userName}")]
         public async Task<IActionResult> Deactivate(string userName)
         {
@@ -132,7 +132,7 @@ namespace source.Controllers
 
             await _addressesQuery.Deactivate(userName);
 
-            var vendor = _vendorsQuery.GetByUserName(userName);
+            var vendor = await _vendorsQuery.GetByUserName(userName);
 
             if (vendor != null)
             {
@@ -141,7 +141,7 @@ namespace source.Controllers
 
                 var events = await _eventsQuery.GetAllEventsByUser(userName);
 
-                if (events != null)
+                if (events.Count > 0)
                 {
                     await _eventsQuery.DeleteByUserName(userName);
 

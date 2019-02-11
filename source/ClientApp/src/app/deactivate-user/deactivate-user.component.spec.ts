@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DeactivateUserComponent } from './deactivate-user.component';
-import { MatDialogModule, MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { UsersService } from '../users/Services/users.service';
 import { MockUsersService } from '../users/Services/mock-users.service';
 import { AuthService } from '../shared/services/auth.service';
@@ -8,6 +8,11 @@ import { MockAuthService } from '../shared/services/mock-auth.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs/internal/observable/of';
 
+export class MockSnackBar {
+  open() {
+
+  }
+}
 export class MockMatDialogRef {
   afterClosed() {
     return of({});
@@ -33,7 +38,8 @@ describe('DeactivateUserComponent', () => {
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: MatDialog, useClass: MockMatDialog },
-        { provide: UsersService, useClass: MockUsersService }
+        { provide: UsersService, useClass: MockUsersService },
+        { provide: MatSnackBar, useClass: MockSnackBar },
       ]
     })
     .compileComponents();
