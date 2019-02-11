@@ -120,8 +120,9 @@ namespace source.Queries
                 var addressQuery = @"SELECT * FROM occasions.addresses "
                     + @"WHERE userName = @userName AND active = 1;";
 
-                var address = await connection.QueryFirstAsync<Address>(addressQuery, new { userName });
-                vendor.address = address;
+                var address = await connection.QueryFirstOrDefaultAsync<Address>(addressQuery, new { userName });
+
+                vendor.address = address == null ? new Address(): address;
 
                 return vendor;
             }
@@ -205,9 +206,9 @@ namespace source.Queries
         /// <summary>
         /// Deactivates a vendor record and all associated services
         /// </summary>
-        /// <param name="id">Vendor ID</param>
+        /// <param name="userName">User Name</param>
         /// <returns>True/False</returns>
-        public async Task<bool> Deactivate(int id)
+        public async Task<bool> Deactivate(string userName)
         {
             try
             {
@@ -218,17 +219,37 @@ namespace source.Queries
 
                     string query = @"UPDATE occasions.vendors "
                         + @"SET active = 0 "
-                        + @"WHERE id = @id AND active = 1;"
-                        + @"UPDATE occasions.vendorServices "
-                        + @"SET active = 0 WHERE vendorId = @id;";
+                        + @"WHERE userName = @userName AND active = 1;";
 
-                    var returnedValue = connection.QueryAsync<Vendor>(query, new { id });
+                    var returnedValue = connection.QueryAsync<Vendor>(query, new { userName });
                     return true;                   
                 }
             }
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Reactivate the specified userName.
+        /// </summary>
+        /// <returns>The reactivate.</returns>
+        /// <param name="userName">User name.</param>
+        public async Task<bool> Reactivate(string userName)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"UPDATE occasions.vendors "
+                    + @"SET active = 1 "
+                    + @"WHERE userName = @userName AND active = 0;";
+
+                var returnedValue = connection.QueryAsync<Vendor>(query, new { userName });
+                return true;
             }
         }
 

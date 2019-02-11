@@ -18,6 +18,9 @@ namespace source.Controllers
     {
         private IVendorsQuery _vendorQuery;
         private IAddressesQuery _addressesQuery;
+        private IVendorServicesQuery _servicesQuery;
+        private IEventQuery _eventsQuery;
+        private IGuestQuery _guestsQuery;
         private ILogger _logger;
 
         /// <summary>
@@ -26,10 +29,20 @@ namespace source.Controllers
         /// <param name="vendorQuery">IVendorsQuery obtained via dependency injection</param>
         /// <param name="addressQuery">IAddressQuery obtained via dependency injection</param>
         /// <param name="logger">ILogger obtained via dependency injection</param>
-        public VendorsController(IVendorsQuery vendorQuery, IAddressesQuery addressQuery, ILogger logger)
+        public VendorsController(
+            IVendorsQuery vendorQuery, 
+            IAddressesQuery addressQuery,
+            IVendorServicesQuery serviceQuery,
+            IEventQuery eventsQuery,
+            IGuestQuery guestsQuery,
+            ILogger logger)
         {
             _vendorQuery = vendorQuery;
             _addressesQuery = addressQuery;
+            _servicesQuery = serviceQuery;
+            _eventsQuery = eventsQuery;
+            _guestsQuery = guestsQuery;
+
             _logger = logger;
         }
 
@@ -149,16 +162,32 @@ namespace source.Controllers
         /// </summary>
         /// <param name="id">Vendor ID</param>
         /// <returns>True if successful</returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Deactivate(int id)
+        [HttpPut("{userName}")]
+        public async Task<IActionResult> Deactivate(string userName)
         {
             try
             {
-                var vendor = await _vendorQuery.GetById(id);
+                var vendor = await _vendorQuery.GetByUserName(userName);
 
                 if (vendor == null)
                 {
                     return new NotFoundResult();
+                }
+
+                await _vendorQuery.Deactivate(userName);
+                await _addressesQuery.Deactivate(userName);
+                await _servicesQuery.DeactivateByVendorId(vendor.id.Value);
+
+                var events = await _eventsQuery.GetAllEventsByUser(userName);
+
+                if (events != null)
+                {
+                    await _eventsQuery.DeleteByUserName(userName);
+
+                    foreach(var e in events)
+                    {
+                        await _guestsQuery.DeleteByEventId(e.eventId);
+                    }
                 }
 
                 return new OkObjectResult(true);

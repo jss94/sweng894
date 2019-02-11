@@ -3,7 +3,7 @@ import { User } from '../../shared/models/user.model';
 import { Observable, of } from 'rxjs';
 
 @Injectable()
-export class MockGetUsersService {
+export class MockUsersService {
     constructor() {
     }
 

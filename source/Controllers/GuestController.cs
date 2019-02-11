@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics.Tracing;
 
 namespace source.Controllers
 {
@@ -99,7 +100,14 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _query.DeleteById(id));
+                var events = await _query.GetListByEventId(id);
+
+                if (events.ToList().Count == 0) 
+                {
+                    return new NotFoundResult();
+                }
+
+                return new OkObjectResult(await _query.DeleteByEventId(id));
             }
             catch (Exception)
             {

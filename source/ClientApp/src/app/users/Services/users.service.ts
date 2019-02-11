@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { Address } from 'src/app/shared/models/address.model';
 
 @Injectable()
-export class GetUsersService {
+export class UsersService {
     constructor(
         private auth: AuthService,
         ) {
@@ -22,6 +22,14 @@ export class GetUsersService {
 
     registerUser(user: User): Observable<User> {
         return this.auth.post('users', user);
+    }
+
+    deactivateUser(user: User): Observable<boolean> {
+        return this.auth.put('users/deactivate/' + user.userName, {});
+    }
+
+    reactivateUser(userName: string): Observable<boolean> {
+        return this.auth.put('users/reactivate/' + userName, {});
     }
 
     deleteUser(user: User): Observable<Boolean> {

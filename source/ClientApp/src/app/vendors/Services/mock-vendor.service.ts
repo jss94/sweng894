@@ -1,6 +1,6 @@
 
 import { Observable, of } from 'rxjs';
-import { Vendor } from '../Models/vendor.model';
+import { Vendor } from '../../shared/models/vendor.model';
 import { Injectable } from '@angular/core';
 
 @Injectable()

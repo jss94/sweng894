@@ -13,6 +13,8 @@ namespace source.Queries
         Task<VendorServices> InsertService(VendorServices service);
         Task<VendorServices> UpdateService(VendorServices service);
         Task<List<VendorServices>> GetServicesByVendor(int id);
-        Task<bool> DeactivateService(int id);
+        Task<bool> DeactivateByServiceId(int id);
+        Task<bool> DeactivateByVendorId(int id);
+        Task<bool> ReactivateByVendorId(int id);
     }
 }

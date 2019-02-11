@@ -12,12 +12,19 @@ import { MockGuestsService } from './Services/mock-guests.service';
 import { HttpClient } from 'selenium-webdriver/http';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatSnackBar } from '@angular/material';
 
 describe('GuestsComponent', () => {
   let component: GuestsComponent;
   let fixture: ComponentFixture<GuestsComponent>;
   let mockGuestsService: GuestsService;
   let mockAuthService: AuthService;
+
+  class MockMatSnackBar {
+    open() {
+
+    }
+  }
 
   class MockAuthService {
     user$ = of(new FakeUser);
@@ -42,7 +49,8 @@ describe('GuestsComponent', () => {
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: GuestsService, useClass: MockGuestsService },
-        { provide: AuthService, useClass: MockAuthService }
+        { provide: AuthService, useClass: MockAuthService },
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();

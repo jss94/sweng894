@@ -116,9 +116,7 @@
 
   <ItemGroup>
     <Folder Include="Database\" />
-    <Folder Include="ClientApp\src\app\get-users\" />
     <Folder Include="ClientApp\src\app\get-users\Models\" />
-    <Folder Include="ClientApp\src\app\get-users\Services\" />
     <Folder Include="Auth\" />
   </ItemGroup>
   <ItemGroup>

@@ -24,18 +24,6 @@
         public string name { get; set; }
 
         /// <summary>
-        /// Gets or sets the address identifier.
-        /// </summary>
-        /// <value>The address identifier.</value>
-        public int? addressId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the address.
-        /// </summary>
-        /// <value>The address.</value>
-        public Address address { get; set; }
-
-        /// <summary>
         /// Gets or sets the role.
         /// </summary>
         /// <value>The role.</value>

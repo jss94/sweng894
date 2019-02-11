@@ -65,7 +65,7 @@ export class RegisterUserComponent {
         this.auth.login();
 
       }, (error) => {
-        message = error.error.description;
+        message = error.error.description || 'Error registering user, the user may already exist.';
 
         this.snackbar.open(message, '', {
           duration: 5000

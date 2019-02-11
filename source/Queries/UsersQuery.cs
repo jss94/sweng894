@@ -31,8 +31,11 @@ namespace source.Queries
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public async Task<User> GetByUserName(string username)
+        public async Task<User> GetByUserName(string username, bool isActive = true)
         {
+            var active = 0;
+            if (isActive) active = 1;
+
             try
             {
                 using (var db = _database)
@@ -41,9 +44,9 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string userQuery = @"SELECT userName, name, addressId, role "
-                        + @"FROM occasions.users WHERE userName = @username;";
+                        + @"FROM occasions.users WHERE userName = @username and active = @active;";
 
-                    var user = connection.QueryFirstAsync<User>(userQuery, new { username }).Result;
+                    var user = connection.QueryFirstAsync<User>(userQuery, new { username, active}).Result;
 
                     return user;
                 }
@@ -168,6 +171,35 @@ namespace source.Queries
                 await Task.CompletedTask;
             }
         }
+
+
+        /// <summary>
+        /// Reactivate the specified user.
+        /// </summary>
+        /// <returns>The deactivate.</returns>
+        /// <param name="user">User.</param>
+        public async Task Reactivate(User user)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"UPDATE occasions.users "
+                        + @"SET active = 1 WHERE username = @username;";
+
+                    var result = connection.QueryFirstAsync<Vendor>(query, user).Result;
+                    await Task.CompletedTask;
+                }
+            }
+            catch (Exception)
+            {
+                await Task.CompletedTask;
+            }
+        }
+
 
         /// <summary>
         /// Delete the specified user.
