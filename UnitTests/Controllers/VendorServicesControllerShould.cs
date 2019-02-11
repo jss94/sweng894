@@ -202,7 +202,7 @@ namespace UnitTests.Controllers
             // arrange
             var service = new VendorServices { id = 123 };
 
-            _vendorServicesQueryMock.Setup(x => x.Deactivate(It.IsAny<int>()))
+            _vendorServicesQueryMock.Setup(x => x.DeactivateService(It.IsAny<int>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act

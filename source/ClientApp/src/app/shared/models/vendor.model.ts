@@ -5,7 +5,6 @@ export interface Vendor {
     id?: number;
     userName: string;
     name: string;
-    type: string;
     website: string;
     phone: string;
     address?: Address;

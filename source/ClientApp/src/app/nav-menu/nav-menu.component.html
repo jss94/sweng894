@@ -10,6 +10,11 @@
         Events
       </button>
 
+      <button *ngIf="isVendor" mat-button [routerLink]='["/vendor-services"]'>
+        <mat-icon>event_notes</mat-icon>
+        My Services
+      </button>
+
       <button *ngIf="isOrginizor" mat-button [routerLink]='["/search-vendors"]' [routerLinkActive]='["link-active"]'>
         <mat-icon>search</mat-icon>
         <span>Search</span>
