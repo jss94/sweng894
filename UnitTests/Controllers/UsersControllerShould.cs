@@ -49,7 +49,6 @@ namespace UnitTests.Controllers
                 userName = "id1", 
                 name = "name1", 
                 role = "role1",
-                address = new Address()
             };
             var users = new List<User> { user, user, user };
 
@@ -76,7 +75,6 @@ namespace UnitTests.Controllers
                 userName = "id1",
                 name = "name1",
                 role = "role1",
-                address = new Address()
             };
 
             _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
@@ -102,7 +100,6 @@ namespace UnitTests.Controllers
                 userName = "id1",
                 name = "name1",
                 role = "role1",
-                address = new Address()
             };
 
             _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
@@ -124,19 +121,13 @@ namespace UnitTests.Controllers
                 userName = "id1",
                 name = "name1",
                 role = "role1",
-                address = new Address
-                {
-                    street = "test st",
-                    city = "City of Testers",
-                    state = "PA",
-                    zip = 10001
-                }
             };
 
             _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
             .Returns(Task.Factory.StartNew(() => null as User));
 
-            _usersQueryMock.Setup(x => x.Insert(user));
+            _usersQueryMock.Setup(x => x.Insert(user))
+            .Returns(Task.Factory.StartNew(() => 0));
 
             // act
             var task = _sut.Post(user);
@@ -146,7 +137,7 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var userResult = result.Value as string;
-            Assert.Equal("User successfully added", userResult);
+            Assert.Equal("User successfully added.", userResult);
         }
 
 
@@ -159,14 +150,6 @@ namespace UnitTests.Controllers
                 userName = "id1",
                 name = "name1",
                 role = "role1",
-                addressId = 99,
-                address = new Address
-                {
-                    street = "test st",
-                    city = "City of Testers",
-                    state = "PA",
-                    zip = 10000
-                }
             };
 
             _usersQueryMock.Setup(x => x.GetByUserName(user.userName, true))
@@ -174,10 +157,7 @@ namespace UnitTests.Controllers
 
             _usersQueryMock.Setup(x => x.Update(user))
             .Returns(Task.Factory.StartNew(() => (object)null));
-
-            _addressQueryMock.Setup(x => x.Update(It.IsAny<Address>()))
-            .Returns(Task.Factory.StartNew(() => (object)null));
-
+                
             // act
             var task = _sut.Put(user);
 
@@ -185,8 +165,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var userResult = result.Value as User;
-            Assert.Equal(99, userResult.addressId);
+            var userResult = result.Value as string;
+            Assert.Equal("User successfully updated.", userResult);
         }
 
 
@@ -199,13 +179,6 @@ namespace UnitTests.Controllers
                 userName = "id1",
                 name = "name1",
                 role = "role1",
-                address = new Address
-                {
-                    street = "test st",
-                    city = "City of Testers",
-                    state = "PA",
-                    zip = 10000
-                }
             };
 
             _usersQueryMock.Setup(x => x.Update(user))
