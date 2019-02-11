@@ -14,6 +14,8 @@ import { EventsComponent } from './events/events.component';
 import { GuestsComponent } from './guests/guests.component';
 import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
 import { ReactivateUserComponent } from './reactivate-user/reactivate-user.component';
+import { VendorServicesComponent } from './vendor-services/vendor-services.component';
+import { VendorComponent } from './vendors/vendor.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -41,6 +43,8 @@ const routes: Routes = [
         RegisterVendorComponent,
         DeactivateUserComponent,
         ReactivateUserComponent,
+        VendorComponent,
+        VendorServicesComponent,
     ],
 
     imports: [
