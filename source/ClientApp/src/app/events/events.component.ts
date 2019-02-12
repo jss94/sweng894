@@ -6,7 +6,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { EmailService } from '../send-email/Services/email.service';
-import { EmailModel } from '../send-email/Models/email.model';
 
 @Component({
   selector: 'app-events',
@@ -94,8 +93,7 @@ export class EventsComponent implements OnInit {
   }
 
   testEmail(evnt: OccEvent) {
-    const email = this.emailService.createTestEmail();
-    this.emailService.sendEmail(email);
+    this.emailService.sendEmail('hello world!');
   }
 
 }
