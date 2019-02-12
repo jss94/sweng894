@@ -9,6 +9,7 @@ using source.Models;
 using source.Framework;
 using source.Constants;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace UnitTests.Controllers
 {
@@ -20,16 +21,26 @@ namespace UnitTests.Controllers
         readonly Mock<ILogger> _loggerMock;
         readonly Mock<IVendorsQuery> _vendorsQueryMock;
         readonly Mock<IAddressesQuery> _addressQueryMock;
-        readonly Mock<VendorServices> _vendorServicesMock;
+        readonly Mock<IEventQuery> _eventsQueryMock;
+        readonly Mock<IGuestQuery> _guestQueryMock;
+        readonly Mock<IVendorServicesQuery> _vendorServicesQueryMock;
         
         public VendorsControllerShould()
         {
             _loggerMock = new Mock<ILogger>();
             _vendorsQueryMock = new Mock<IVendorsQuery>();
             _addressQueryMock = new Mock<IAddressesQuery>();
-            _vendorServicesMock = new Mock<VendorServices>();
+            _vendorServicesQueryMock = new Mock<IVendorServicesQuery>();
+            _eventsQueryMock = new Mock<IEventQuery>();
+            _guestQueryMock = new Mock<IGuestQuery>();
 
-            _sut = new VendorsController(_vendorsQueryMock.Object, _addressQueryMock.Object, _loggerMock.Object);
+            _sut = new VendorsController(
+                _vendorsQueryMock.Object, 
+                _addressQueryMock.Object,
+                _vendorServicesQueryMock.Object,
+                _eventsQueryMock.Object,
+                _guestQueryMock.Object,
+                _loggerMock.Object);
         }
 
         [Fact]
@@ -157,14 +168,14 @@ namespace UnitTests.Controllers
             // arrange
             var vendor = new Vendor { id = 123 };
 
-            _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
+            _vendorsQueryMock.Setup(x => x.GetByUserName(It.IsAny<string>()))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
-            _vendorsQueryMock.Setup(x => x.Deactivate(vendor.id.Value))
+            _vendorsQueryMock.Setup(x => x.Deactivate(It.IsAny<string>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Deactivate(vendor.id.Value);
+            var task = _sut.Deactivate("aUser");
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);

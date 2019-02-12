@@ -13,13 +13,19 @@ import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { EventsComponent } from './events/events.component';
 import { GuestsComponent } from './guests/guests.component';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { VendorServicesComponent } from './vendor-services/vendor-services.component';
 =======
+=======
+>>>>>>> master
 import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
 import { ReactivateUserComponent } from './reactivate-user/reactivate-user.component';
 import { VendorServicesComponent } from './vendor-services/vendor-services.component';
 import { VendorComponent } from './vendors/vendor.component';
+<<<<<<< HEAD
 >>>>>>> df0a4b9a6c3e8095dcec015f24d8f2592df9b00e
+=======
+>>>>>>> master
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -47,11 +53,17 @@ const routes: Routes = [
         RegisterUserComponent,
         RegisterVendorComponent,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         DeactivateUserComponent,
         ReactivateUserComponent,
         VendorComponent,
 >>>>>>> df0a4b9a6c3e8095dcec015f24d8f2592df9b00e
+=======
+        DeactivateUserComponent,
+        ReactivateUserComponent,
+        VendorComponent,
+>>>>>>> master
         VendorServicesComponent,
     ],
 

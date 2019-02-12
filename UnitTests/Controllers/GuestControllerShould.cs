@@ -98,11 +98,14 @@ namespace UnitTests.Controllers
             // arrange
             var guest = new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 };
 
-            _guestQueryMock.Setup(x => x.DeleteById(guest.guestId))
+            _guestQueryMock.Setup(x => x.GetListByEventId(It.IsAny<int>()))
+                .Returns(Task.Factory.StartNew(() => new List<Guest> { guest }));
+
+            _guestQueryMock.Setup(x => x.DeleteByEventId(It.IsAny<int>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Delete(guest.guestId);
+            var task = _sut.Delete(0);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);

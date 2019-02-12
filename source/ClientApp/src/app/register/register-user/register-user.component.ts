@@ -65,7 +65,15 @@ export class RegisterUserComponent {
         this.auth.login();
 
       }, (error) => {
-        message = error.error.description;
+        if (error === null) {
+          error = {
+            error: {
+              description: null
+            }
+          };
+        }
+
+        message = error.error.description || 'Error registering user.';
 
         this.snackbar.open(message, '', {
           duration: 5000

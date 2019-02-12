@@ -94,8 +94,11 @@ describe('RegisterVendorComponent', () => {
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
 <<<<<<< HEAD
+<<<<<<< HEAD
       
 =======
+=======
+>>>>>>> master
 
 >>>>>>> df0a4b9a6c3e8095dcec015f24d8f2592df9b00e
       // act
@@ -114,9 +117,12 @@ describe('RegisterVendorComponent', () => {
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
 <<<<<<< HEAD
+<<<<<<< HEAD
      
 =======
 >>>>>>> df0a4b9a6c3e8095dcec015f24d8f2592df9b00e
+=======
+>>>>>>> master
       // act
       // done automatically by formgroup object
 
@@ -133,8 +139,11 @@ describe('RegisterVendorComponent', () => {
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
 <<<<<<< HEAD
+<<<<<<< HEAD
      
 =======
+=======
+>>>>>>> master
 
 >>>>>>> df0a4b9a6c3e8095dcec015f24d8f2592df9b00e
       // act
@@ -153,8 +162,11 @@ describe('RegisterVendorComponent', () => {
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
 <<<<<<< HEAD
+<<<<<<< HEAD
       
 =======
+=======
+>>>>>>> master
 
 >>>>>>> df0a4b9a6c3e8095dcec015f24d8f2592df9b00e
       // act

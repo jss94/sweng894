@@ -112,7 +112,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="guestId">DB id of the guest</param>
         /// <returns>Success/Failure</returns>
-        public async Task<bool> DeleteById(int guestId)
+        public async Task<bool> DeleteByGuestId(int guestId)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace source.Queries
                     var query = @"DELETE FROM occasions.guests "
                         + @"WHERE guestId = @guestId";
 
-                    var guestReturn = connection.QueryFirstAsync<Guest>(query, new { guestId }).Result;
+                    var guestReturn = connection.ExecuteAsync(query, new { guestId }).Result;
                     return true;
                 }
             }
@@ -132,6 +132,27 @@ namespace source.Queries
             {
                 // TODO: Traditional Logging
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes event by event identifier.
+        /// </summary>
+        /// <returns>The by event identifier.</returns>
+        /// <param name="eventId">Event identifier.</param>
+        public async Task<bool> DeleteByEventId(int eventId)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var query = @"DELETE FROM occasions.guests "
+                    + @"WHERE eventId = @eventId";
+
+                await connection.ExecuteAsync(query, new { eventId });
+
+                return true;
             }
         }
     }

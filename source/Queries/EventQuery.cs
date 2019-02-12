@@ -115,33 +115,43 @@ namespace source.Queries
             }
         }
 
-        public async Task<bool> DeleteEvent(Event evnt)
+        /// <summary>
+        /// Deletes the by identifier.
+        /// </summary>
+        /// <returns>The by identifier.</returns>
+        /// <param name="id">Identifier.</param>
+        public async Task<bool> DeleteById(int id)
         {
             using (var db = _database)
             {
-             //   try
-               // {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                
-                    string query = @"DELETE FROM occasions.events"
-                        + " WHERE eventId =  @eventId";
-                //    connection.Execute(query, new { evnt.eventId}, commandType: CommandType.Text);
+                string query = @"DELETE FROM occasions.events WHERE eventId = @id";
+   
+                await connection.ExecuteAsync(query, new { id } );
 
-                await connection.QueryAsync<Event>(query, new { evnt.eventId } );
+                return true;
+            }
+        }
 
-                    return true;
-               // }
-               // catch (Exception ex)
-               // {
-                 //   Console.WriteLine(ex.StackTrace);
+        /// <summary>
+        /// Deletes the name of the by user.
+        /// </summary>
+        /// <returns>The by user name.</returns>
+        /// <param name="userName">Identifier.</param>
+        public async Task<bool> DeleteByUserName(string userName)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    //TODO: we should log our errors in the db
-                    //Errors should bubble up but this is super helpful during development
-                   // return false;
-              //  }
+                string query = @"DELETE FROM occasions.events WHERE userName = @userName";
 
+                await connection.ExecuteAsync(query, new { userName });
+
+                return true;
             }
         }
     }

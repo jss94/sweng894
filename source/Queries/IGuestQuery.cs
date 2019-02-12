@@ -11,6 +11,7 @@ namespace source.Queries
         Task<List<Guest>> GetListByEventId(int eventId);
         Task<Guest> Insert(Guest guest);
         Task<Guest> Update(Guest guest);
-        Task<bool> DeleteById(int guestId);
+        Task<bool> DeleteByGuestId(int guestId);
+        Task<bool> DeleteByEventId(int eventId);
     }
 }

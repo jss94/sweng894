@@ -163,25 +163,58 @@ namespace source.Queries
             }
         }
 
-        public async Task<bool> DeactivateService(int id)
+        public async Task<bool> DeactivateByServiceId(int id)
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"UPDATE occasions.vendorServices "
-                        + @"SET active = 0 WHERE id = @id;";
+                string query = @"UPDATE occasions.vendorServices "
+                    + @"SET active = 0 WHERE id = @id AND active = 1;";
 
-                    var result = connection.ExecuteAsync(query, new { id }).Result;
-                    return true;
-                }
+                var result = connection.ExecuteAsync(query, new { id }).Result;
+                return true;
             }
-            catch (Exception ex)
+        }
+
+        /// <summary>
+        /// Deactivate the specified id.
+        /// </summary>
+        /// <returns>The deactivate.</returns>
+        /// <param name="id">Identifier.</param>
+        public async Task<bool> DeactivateByVendorId(int id)
+        {
+            using (var db = _database)
             {
-                return false;
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"UPDATE occasions.vendorServices "
+                    + @"SET active = 0 WHERE vendorId = @id AND active = 1;";
+
+                await connection.ExecuteAsync(query, new { id });
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Reactivate the specified id.
+        /// </summary>
+        /// <returns>The reactivate.</returns>
+        /// <param name="id">Identifier.</param>
+        public async Task<bool> ReactivateByVendorId(int id)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"UPDATE occasions.vendorServices "
+                    + @"SET active = 1 WHERE vendorId = @id AND active = 0;";
+
+                await connection.ExecuteAsync(query, new { id });
+                return true;
             }
         }
     }

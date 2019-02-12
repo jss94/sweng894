@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testi
 import { VendorComponent } from './vendor.component';
 import { VendorService } from './Services/vendor.service';
 import { MockVendorService } from './Services/mock-vendor.service';
-import { FakeVendors } from './Models/fake-vendor.model';
+import { FakeVendors } from '../shared/models/fake-vendor.model';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs/internal/observable/of';
 

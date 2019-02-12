@@ -4,6 +4,7 @@ import * as auth0 from 'auth0-js';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, Subject } from 'rxjs';
 import { User } from 'src/app/shared/models/user.model';
+import { UsersComponent } from 'src/app/users/users.component';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,6 @@ export class AuthService {
   private _connection = 'Username-Password-Authentication';
 
   _userProfile: any;
-  isVendor = true;
 
   auth0 = new auth0.WebAuth({
     clientID: this._clientId,
@@ -26,7 +26,7 @@ export class AuthService {
     responseType: 'token id_token',
     redirectUri: 'https://localhost:5001/home',
     audience: 'https://localhost:5001/api',
-    scope: 'openid profile read:messages'
+    scope: 'openid profile read:messages delete:users delete:current_user'
   });
 
   constructor(
@@ -37,6 +37,10 @@ export class AuthService {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
+  }
+
+  get profile(): any {
+    return this._userProfile;
   }
 
   get user(): User {
@@ -138,7 +142,11 @@ export class AuthService {
     this.get('users/' + userProfile.name).subscribe(result => {
       this._user = result;
       this._user$.next(result);
+
       console.log('Hello', this._user.name);
+    }, (error) => {
+      this._user = null;
+      this._user$.next(null);
     });
   }
 
@@ -151,6 +159,9 @@ export class AuthService {
         'connection': this._connection,
     });
   }
+
+
+
 
   public get(endpoint: string): Observable<any> {
     const url = `${this.baseUrl}api/${endpoint}`;
