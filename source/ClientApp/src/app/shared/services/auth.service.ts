@@ -20,14 +20,7 @@ export class AuthService {
 
   _userProfile: any;
 
-  auth0 = new auth0.WebAuth({
-    clientID: this._clientId,
-    domain: this._domain,
-    responseType: 'token id_token',
-    redirectUri: 'https://localhost:5001/home',
-    audience: 'https://localhost:5001/api',
-    scope: 'openid profile read:messages delete:users delete:current_user'
-  });
+  auth0: any;
 
   constructor(
     @Inject('BASE_URL') private baseUrl: string,
@@ -37,6 +30,16 @@ export class AuthService {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
+
+    this.auth0 = new auth0.WebAuth({
+      clientID: this._clientId,
+      domain: this._domain,
+      responseType: 'token id_token',
+      redirectUri: `${baseUrl}home`,
+      audience: `${baseUrl}api`,
+      scope: 'openid profile read:messages delete:users delete:current_user'
+    });
+
   }
 
   get profile(): any {

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class NavMenuComponent {
 
   isVendor = false;
-  isOrginizor = false;
+  isOrganizer = false;
 
   constructor (
     public auth: AuthService,
@@ -22,7 +22,7 @@ export class NavMenuComponent {
 
       } else if (user && user.role.toUpperCase() === 'ADMIN') {
         this.isVendor = true;
-        this.isOrginizor = true;
+        this.isOrganizer = true;
       }
 
       if (user && user.role === 'VENDOR') {
