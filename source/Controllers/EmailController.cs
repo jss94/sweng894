@@ -25,13 +25,13 @@ namespace source.Controllers
         {}
 
         /// <summary>
-        /// Sends an Email
+        /// Sends an Email given a message
         /// </summary>
-        /// <param name="evnt">An Event. Initial Implementation.</param>
+        /// <param name="emailMsg">A EmailMessage. Initial Implementation.</param>
         [HttpPost]
-        public async Task<IActionResult> sendEmail([FromBody]Event evnt)
+        public async Task<IActionResult> sendEmail([FromBody]EmailMessage emailMsg)
         {
-            Console.WriteLine("Message Received:" + evnt.description);
+            Console.WriteLine("Message Received with Subject:" + emailMsg.subject);
 
             var client = new SendGridClient("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");
 
@@ -44,10 +44,25 @@ namespace source.Controllers
   ]
 }
 ";
-            Object json = JsonConvert.DeserializeObject<Object>(data);
-            data = json.ToString();
-            var response = await client.RequestAsync(method: SendGridClient.Method.POST, urlPath: "mail/send", requestBody: data);
-            Console.WriteLine(response.StatusCode);
+
+            // {"personalizations":[{"to":[{"email":"senky.joe@gmail.com"}]}],"content":[{"type":"type/plain","value":"Welcome!!!"}],"from":"jss94@psu.edu","subject":"Email from SWENG 894 Occasions"}
+            //  Object json = JsonConvert.DeserializeObject<Object>(data);
+            // data = json.ToString();
+
+            try
+            {
+                var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(emailMsg);
+                Console.WriteLine("HELLO!!!" + jsonString);
+
+                var response = await client.RequestAsync(method: SendGridClient.Method.POST, urlPath: "mail/send", requestBody: jsonString);
+                Console.WriteLine(response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new BadRequestResult();
+            }
+           
             return new OkObjectResult("success");
         }
     }

@@ -1,15 +1,13 @@
+import { EmailAddress } from './email.address.model';
+import { EmailContent } from './email.content.model';
+
 export class EmailModel {
   public personalizations: [
     {
-      to: [{
-        email: string;
-      }]
+      to: EmailAddress[];
     }
   ];
-  public from: string;
+  public from: EmailAddress;
   public subject: string;
-  public content: [{
-    type: string;
-    value: string;
-  }];
+  public content: EmailContent[];
 }

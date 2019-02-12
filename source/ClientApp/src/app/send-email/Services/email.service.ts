@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { EmailModel } from '../Models/email.model';
 
 @Injectable()
 export class EmailService {
@@ -12,9 +12,9 @@ export class EmailService {
       ) {
   }
 
-  sendEmail(msg: string) {
-    console.log('TEST HERE');
-    return this.auth.post('email/', msg);
+  sendEmail(emailModel: EmailModel) {
+    console.log('IN HERE NOW!!!');
+    return this.auth.post('Email/', emailModel);
   }
 
 }

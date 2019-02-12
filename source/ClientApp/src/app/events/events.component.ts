@@ -6,6 +6,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { EmailService } from '../send-email/Services/email.service';
+import { EmailModel } from '../send-email/Models/email.model';
+import { EmailAddress } from '../send-email/Models/email.address.model';
+import { EmailContent } from '../send-email/Models/email.content.model';
 
 @Component({
   selector: 'app-events',
@@ -93,7 +96,34 @@ export class EventsComponent implements OnInit {
   }
 
   testEmail(evnt: OccEvent) {
-    this.emailService.sendEmail('hello world!');
+
+    const toEmail = new EmailAddress();
+    toEmail.email = 'senky.joe@gmail.com';
+
+    const to: EmailAddress[] = [];
+    to.push(toEmail);
+
+    const fromEmail = new EmailAddress();
+    fromEmail.email = 'jss94@psu.edu';
+
+    const emailContent = new EmailContent();
+    emailContent.type = 'text/plain';
+    emailContent.value = 'Welcome!!!';
+
+    const content: EmailContent[] = [];
+    content.push(emailContent);
+
+    const emailModel = new EmailModel();
+    emailModel.personalizations = [({ 'to': to })];
+    emailModel.subject = 'Email from SWENG 894 Occasions';
+
+    emailModel.from = fromEmail;
+    emailModel.content = content;
+
+    console.log(JSON.stringify(emailModel));
+    this.emailService.sendEmail(emailModel).subscribe(response => {
+      console.log('BACK HERE');
+   });
   }
 
 }
