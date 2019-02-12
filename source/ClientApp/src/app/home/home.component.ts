@@ -22,11 +22,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.auth.user$.subscribe((user) => {
-      if (user.userName == null) {
+      if (user == null) {
         this.router.navigate(['/reactivate-user']);
       } else {
         this.routeToEvents(user);
       }
+    }, error => {
+
     });
 
   }

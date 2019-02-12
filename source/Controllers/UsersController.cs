@@ -84,7 +84,7 @@ namespace source.Controllers
             if (result == null)
             {
                 await _usersQuery.Insert(user);
-                return new OkObjectResult("User successfully added.");
+                return new OkObjectResult(true);
             }
 
             return new BadRequestResult();

@@ -4,6 +4,7 @@ import * as auth0 from 'auth0-js';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, Subject } from 'rxjs';
 import { User } from 'src/app/shared/models/user.model';
+import { UsersComponent } from 'src/app/users/users.component';
 
 @Injectable()
 export class AuthService {
@@ -143,6 +144,9 @@ export class AuthService {
       this._user$.next(result);
 
       console.log('Hello', this._user.name);
+    }, (error) => {
+      this._user = null;
+      this._user$.next(null);
     });
   }
 

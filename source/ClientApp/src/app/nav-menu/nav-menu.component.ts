@@ -18,14 +18,14 @@ export class NavMenuComponent {
     ) {
 
     auth.user$.subscribe((user) => {
-      if (!user.role) {
+      if (user && !user.role) {
 
-      } else if (user.role.toUpperCase() === 'ADMIN') {
+      } else if (user && user.role.toUpperCase() === 'ADMIN') {
         this.isVendor = true;
         this.isOrginizor = true;
       }
 
-      if (user.role === 'VENDOR') {
+      if (user && user.role === 'VENDOR') {
         this.isVendor = true;
       }
     });

@@ -11,7 +11,7 @@ namespace source.Queries
         Task<User> GetByUserName(string userName, bool isActive = true);
         Task Deactivate(User user);
         Task Reactivate(User user);
-        Task<int> Insert(User user);
+        Task Insert(User user);
         Task Update(User user);
         Task Delete(User user);
     }
