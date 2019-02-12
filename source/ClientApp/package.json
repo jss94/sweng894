@@ -26,6 +26,7 @@
     "@angular/platform-server": "6.1.10",
     "@angular/router": "6.1.10",
     "@nguniversal/module-map-ngfactory-loader": "6.0.0",
+    "@sendgrid/mail": "^6.3.1",
     "@types/googlemaps": "^3.30.16",
     "aspnet-prerendering": "^3.0.1",
     "auth0-js": "^9.9.0",

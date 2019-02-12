@@ -5,6 +5,8 @@ import { AuthService } from '../shared/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { EmailService } from '../send-email/Services/email.service';
+import { EmailModel } from '../send-email/Models/email.model';
 
 @Component({
   selector: 'app-events',
@@ -27,6 +29,7 @@ export class EventsComponent implements OnInit {
     private eventService: EventService,
     private router: Router,
     private snackbar: MatSnackBar,
+    private emailService: EmailService
     ) {
   }
 
@@ -88,6 +91,11 @@ export class EventsComponent implements OnInit {
         duration: 3000
       });
     });
+  }
+
+  testEmail(evnt: OccEvent) {
+    const email = this.emailService.createTestEmail();
+    this.emailService.sendEmail(email);
   }
 
 }
