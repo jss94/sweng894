@@ -122,7 +122,9 @@ export class EventsComponent implements OnInit {
 
     console.log(JSON.stringify(emailModel));
     this.emailService.sendEmail(emailModel).subscribe(response => {
-      console.log('BACK HERE');
+      this.snackbar.open('Successfully Sent Email Message ', '', {
+        duration: 3000
+      });
    });
   }
 
