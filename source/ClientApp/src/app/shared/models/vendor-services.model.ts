@@ -1,10 +1,10 @@
 export interface VendorServices {
-    id: number;
+    id?: number;
     vendorId: number;
     serviceType: string;
     serviceName: string;
     serviceDescription: string;
-    flatFee: boolean;
+    flatFee?: boolean;
     price: number;
-    unitsAvaible: number;
+    unitsAvailable?: number;
 }
