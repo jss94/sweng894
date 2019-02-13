@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { VendorServicesService } from './Services/vendor-services.service';
 import { VendorService } from '../vendors/Services/vendor.service';
-import { VendorServiceModel } from './Models/vendor-service.model';
+import { VendorServices } from '../shared/models/vendor-services.model';
 
 @Component({
   selector: 'app-vendor-services',
@@ -14,7 +14,7 @@ import { VendorServiceModel } from './Models/vendor-service.model';
 })
 export class VendorServicesComponent implements OnInit {
 
-  vendorServices: VendorServiceModel[];
+  vendorServices: VendorServices[];
 
   userName: string;
 
@@ -35,26 +35,30 @@ export class VendorServicesComponent implements OnInit {
   }
 
   ngOnInit() {
-    let vendor;
+
     if (this.auth.user) {
       this.userName = this.auth.user.userName;
-      this.vendorService.getVendor(this.userName).subscribe(response => {
-        let vendor = response;
-      });
-      this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
-        this.vendorServices = response;
-      });
-    } else {
-      this.auth.user$.subscribe((result) => {
-        this.userName = result.userName;
-        this.vendorService.getVendor(this.userName).subscribe(response => {
-          let vendor = response;
-        });
+      this.vendorService.getVendor(this.userName).subscribe(vendor => {
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
           this.vendorServices = response;
         });
       });
 
+    } else {
+      this.auth.user$.subscribe((result) => {
+        this.userName = result.userName;
+        this.vendorService.getVendor(this.userName).subscribe(vendor => {
+          this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
+            this.vendorServices = response;
+          });
+        });
+
+      });
+
     }
+  }
+
+  onCreate() {
+
   }
 }

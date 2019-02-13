@@ -21,7 +21,6 @@
       </button>
       
       <button *ngIf="!auth.isAuthenticated()"  mat-button class="clickable">
-        <mat-icon>person</mat-icon>
         <a class="nav-link text-dark" (click)="auth.login()">Login</a>
       </button>
 
