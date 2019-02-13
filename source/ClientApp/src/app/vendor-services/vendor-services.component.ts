@@ -13,7 +13,7 @@ import { VendorServiceModel } from './Models/vendor-service.model';
   styleUrls: ['./vendor-services.component.css']
 })
 export class VendorServicesComponent implements OnInit {
-  
+
   vendorServices: VendorServiceModel[];
 
   userName: string;
@@ -35,11 +35,11 @@ export class VendorServicesComponent implements OnInit {
   }
 
   ngOnInit() {
-    var vendor;
+    let vendor;
     if (this.auth.user) {
       this.userName = this.auth.user.userName;
       this.vendorService.getVendor(this.userName).subscribe(response => {
-        var vendor = response;
+        let vendor = response;
       });
       this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
         this.vendorServices = response;
@@ -48,13 +48,13 @@ export class VendorServicesComponent implements OnInit {
       this.auth.user$.subscribe((result) => {
         this.userName = result.userName;
         this.vendorService.getVendor(this.userName).subscribe(response => {
-          var vendor = response;
+          let vendor = response;
         });
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
           this.vendorServices = response;
         });
       });
 
+    }
   }
-}
 }

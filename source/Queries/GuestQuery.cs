@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Linq;
 using Dapper;
 using System.Threading.Tasks;
+using source.Framework;
 
 namespace source.Queries
 {
@@ -19,7 +20,7 @@ namespace source.Queries
         /// <summary>
         /// DB Object
         /// </summary>
-        public readonly IAppDatabase _database;
+        private readonly IAppDatabase _database;
 
         /// <summary>
         /// Constructor
@@ -28,6 +29,26 @@ namespace source.Queries
         public GuestQuery(IAppDatabase db)
         {
             _database = db;
+        }
+
+
+        /// <summary>
+        /// Get by guest ID
+        /// </summary>
+        /// <param name="eventId">DB id of the event you want to search for</param>
+        /// <returns>List of guests</returns>
+        public async Task<Guest> GetByGuestId(int id)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"SELECT * FROM occasions.guests WHERE guestId = @id";
+
+                var guest = await connection.QueryFirstOrDefaultAsync<Guest>(query, new { id });
+                return guest;
+            }
         }
 
         /// <summary>
@@ -66,7 +87,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="guest">Person being added</param>
         /// <returns>The guest back after successful addition</returns>
-        public async Task<Guest> Insert(Guest guest)
+        public async Task Insert(Guest guest)
         {
             using (var db = _database)
             {
@@ -76,8 +97,10 @@ namespace source.Queries
                 string query = @"INSERT INTO occasions.guests (name, email, isGoing, eventId) "
                     + @"VALUES (@name, @email, @isGoing, @eventId)";
 
-                Guest guestReturn = connection.QueryAsync<Guest>(query, guest).Result.ToList().FirstOrDefault();
-                return guestReturn;
+                await Task.CompletedTask;
+
+                await connection.ExecuteAsync(query, guest);
+
             }
 
         }
@@ -87,7 +110,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="guest">guest information going to be updated</param>
         /// <returns></returns>
-        public async Task<Guest> Update(Guest guest)
+        public async Task Update(Guest guest)
         {
             using (var db = _database)
             {
@@ -98,11 +121,12 @@ namespace source.Queries
                     + @"email = @guest.email, "
                     + @"isGoing = @guest.isGoing "
                     + @"eventId =  @guest.eventId"
-                    + @"WHERE guestId = @guest.guestId;"
-                    + @"SELECT * FROM occasions.guests WHERE guestId = @guestId";
+                    + @"WHERE guestId = @guest.guestId;";
 
-                var guestReturn = connection.QueryFirstAsync<Guest>(query, guest).Result;
-                return guestReturn;
+                await Task.CompletedTask;
+
+                await connection.ExecuteAsync(query, guest);
+
             }
 
         }
@@ -112,27 +136,23 @@ namespace source.Queries
         /// </summary>
         /// <param name="guestId">DB id of the guest</param>
         /// <returns>Success/Failure</returns>
-        public async Task<bool> DeleteByGuestId(int guestId)
+        public async Task DeleteByGuestId(int guestId)
         {
-            try
-            {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
 
-                    var query = @"DELETE FROM occasions.guests "
-                        + @"WHERE guestId = @guestId";
-
-                    var guestReturn = connection.ExecuteAsync(query, new { guestId }).Result;
-                    return true;
-                }
-            }
-            catch (Exception)
+            using (var db = _database)
             {
-                // TODO: Traditional Logging
-                return false;
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                var query = @"DELETE FROM occasions.guests "
+                    + @"WHERE guestId = @guestId";
+
+                await Task.CompletedTask;
+
+                await connection.ExecuteAsync(query, new { guestId });
+
             }
+
         }
 
         /// <summary>
@@ -140,7 +160,7 @@ namespace source.Queries
         /// </summary>
         /// <returns>The by event identifier.</returns>
         /// <param name="eventId">Event identifier.</param>
-        public async Task<bool> DeleteByEventId(int eventId)
+        public async Task DeleteByEventId(int eventId)
         {
             using (var db = _database)
             {
@@ -150,9 +170,10 @@ namespace source.Queries
                 var query = @"DELETE FROM occasions.guests "
                     + @"WHERE eventId = @eventId";
 
+                await Task.CompletedTask;
+
                 await connection.ExecuteAsync(query, new { eventId });
 
-                return true;
             }
         }
     }

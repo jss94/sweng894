@@ -23,7 +23,7 @@ export class AuthService {
   auth0: any;
 
   constructor(
-    @Inject('BASE_URL') private baseUrl: string,
+    @Inject('BASE_URL') private _baseUrl: string,
     public router: Router,
     private http: HttpClient
     ) {
@@ -35,8 +35,8 @@ export class AuthService {
       clientID: this._clientId,
       domain: this._domain,
       responseType: 'token id_token',
-      redirectUri: `${baseUrl}home`,
-      audience: `${baseUrl}api`,
+      redirectUri: `${_baseUrl}home`,
+      audience: `${_baseUrl}api`,
       scope: 'openid profile read:messages delete:users delete:current_user'
     });
 
@@ -114,7 +114,10 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.auth0.logout();
+    this.auth0.logout({
+      returnTo: this._baseUrl,
+      clientID: this._clientId
+    });
     // Remove tokens and expiry time
     this._accessToken = '';
     this._idToken = '';
@@ -123,7 +126,7 @@ export class AuthService {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('authResult');
     // Go back to the home route
-    this.router.navigate(['/']);
+    // this.router.navigate(['/home']);
   }
 
   public isAuthenticated(): boolean {
@@ -167,7 +170,7 @@ export class AuthService {
 
 
   public get(endpoint: string): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
@@ -176,7 +179,7 @@ export class AuthService {
   }
 
   public post(endpoint: string, body: any): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
@@ -185,7 +188,7 @@ export class AuthService {
   }
 
   public put(endpoint: string, body: any): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
@@ -194,7 +197,7 @@ export class AuthService {
   }
 
   public delete(endpoint: string): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
