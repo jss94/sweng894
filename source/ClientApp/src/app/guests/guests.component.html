@@ -1,4 +1,4 @@
-<div class="guest-container"> 
+<div class="page-container"> 
     
     <h1>Guest List</h1>
 
@@ -44,34 +44,32 @@
         </mat-expansion-panel>
     </mat-accordion>
 
-    <div class="item-container" *ngFor="let guest of guests">
+    <div class="guest-container" *ngFor="let guest of guests">
         <div class="guest-item">
 
-            <div class="guest-icon">
+            <div class="guest-field">
                 <mat-icon>person</mat-icon>
+                <h5>{{ guest.name }}</h5>
             </div>
-            <div class="name-field">
-                <div>
-                    <h5>{{ guest.name }}</h5>
-                </div>
-            </div>
+
             <div class="email-field">
                 <div>
-                    <h5>{{ guest.email }}</h5>
+                    <h6>{{ guest.email }}</h6>
                 </div>
             </div>
-            <div class = "is-going-field">
-                <div *ngIf="guest.isGoing">
-                    <mat-icon>check</mat-icon>
+
+            <div class="icons">
+
+                <div class="status">
+                    <mat-icon *ngIf="guest.isGoing">check</mat-icon>
                 </div>
-                <div *ngIf="!guest.isGoing && !guest.isUndecided">
-                    <mat-icon>clear</mat-icon>
+                <div class="status">
+                    <mat-icon *ngIf="!guest.isGoing && !guest.isUndecided">clear</mat-icon>
                 </div>
-                <div *ngIf="guest.isUndecided">
-                    <mat-icon>info</mat-icon>
+                <div class="status">
+                    <mat-icon *ngIf="guest.isUndecided">info</mat-icon>
                 </div>
-            </div>
-            <div class="actions">
+                
                 <button mat-button>
                     <mat-icon>edit</mat-icon>
                 </button>
@@ -79,6 +77,8 @@
                 <button mat-button (click)="delete(guest)">
                     <mat-icon>delete</mat-icon>
                 </button>
+                
+
             </div>
         </div>
     </div>

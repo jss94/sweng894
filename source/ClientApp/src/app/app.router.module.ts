@@ -29,6 +29,7 @@ const routes: Routes = [
     { path: 'reactivate-user', component: ReactivateUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
     { path: 'guests/:eventId', component: GuestsComponent },
+    { path: 'vendor-services', component: VendorServicesComponent },
   ];
 
 @NgModule({

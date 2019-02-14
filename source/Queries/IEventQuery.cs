@@ -8,10 +8,10 @@ namespace source.Queries
     {
         Task<List<Event>> GetAllEventsByUser(string username);
         Task<Event> GetEventById(int id);
-        Task<Event> CreateEvent(Event evnt);
-        Task<Event> UpdateEvent(Event evnt);
-        Task<bool> DeleteById(int id);
-        Task<bool> DeleteByUserName(string userName);
+        Task CreateEvent(Event evnt);
+        Task UpdateEvent(Event evnt);
+        Task DeleteById(int id);
+        Task DeleteByUserName(string userName);
 
     }
 }

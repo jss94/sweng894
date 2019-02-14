@@ -20,8 +20,6 @@ export class GuestsComponent implements OnInit {
     private eventId: string;
 
     constructor(
-        private iconRegistry: MatIconRegistry,
-        private sanitizer: DomSanitizer,
         private auth: AuthService,
         private guestService: GuestsService,
         private route: ActivatedRoute,

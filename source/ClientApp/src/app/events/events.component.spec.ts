@@ -55,7 +55,7 @@ describe('EventsComponent', () => {
 
   const routes: Routes = [
     { path: 'guests/:id', component: GuestsComponent },
-];
+  ];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

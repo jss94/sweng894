@@ -1,3 +1,83 @@
-<p>
-  vendor-services works!
-</p>
+<div class="vendor-services-container">
+
+  <h1>My Services</h1>
+
+  <div class="vendor-services-list">
+
+
+  </div>
+  
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Create Service
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form class="form" [formGroup]="vendorServiceForm" (ngSubmit)="onCreate()">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Service Name</mat-label>
+          <input
+            matInput
+            placeholder="Service Name"
+            formControlName="serviceName"
+            >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Service Description</mat-label>
+            <input
+              matInput
+              placeholder="Service Description"
+              formControlName="serviceDescription"
+              >
+          </mat-form-field>
+
+        <mat-action-row>
+          <button type="submit" mat-button [disabled]="!vendorServiceForm.valid">
+            <mat-icon>add</mat-icon>
+            Add Service
+          </button>
+        </mat-action-row>
+
+      </form>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+<div class="item-container" *ngFor="let service of vendorServices">
+  <div class="vendor-services-item">
+    <div class="header">
+      <div class="vendor-services-icon">
+        <mat-icon>service</mat-icon>
+      </div>
+      <div>
+        <div>
+          <h5>{{service.name}}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div>
+        <h6>{{service.description}}</h6>
+      </div>
+
+    <div class="actions">
+      <button *ngIf="!service.isEditable" (click)="service.isEditable=!service.isEditable">
+          <mat-icon>edit</mat-icon>
+      </button>
+      <button *ngIf="service.isEditable" (click)="service.isEditable=!service.isEditable; updateService(name.value, description.value, service)">
+          <mat-icon>save</mat-icon>
+      </button>
+      
+      <button mat-button (click)="deleteService(service)">
+          <mat-icon>delete_forever</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+</div>

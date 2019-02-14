@@ -4,6 +4,7 @@ import * as auth0 from 'auth0-js';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, Subject } from 'rxjs';
 import { User } from 'src/app/shared/models/user.model';
+import { UsersComponent } from 'src/app/users/users.component';
 
 @Injectable()
 export class AuthService {
@@ -19,23 +20,26 @@ export class AuthService {
 
   _userProfile: any;
 
-  auth0 = new auth0.WebAuth({
-    clientID: this._clientId,
-    domain: this._domain,
-    responseType: 'token id_token',
-    redirectUri: 'https://localhost:5001/home',
-    audience: 'https://localhost:5001/api',
-    scope: 'openid profile read:messages delete:users delete:current_user'
-  });
+  auth0: any;
 
   constructor(
-    @Inject('BASE_URL') private baseUrl: string,
+    @Inject('BASE_URL') private _baseUrl: string,
     public router: Router,
     private http: HttpClient
     ) {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
+
+    this.auth0 = new auth0.WebAuth({
+      clientID: this._clientId,
+      domain: this._domain,
+      responseType: 'token id_token',
+      redirectUri: `${_baseUrl}home`,
+      audience: `${_baseUrl}api`,
+      scope: 'openid profile read:messages delete:users delete:current_user'
+    });
+
   }
 
   get profile(): any {
@@ -110,7 +114,10 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.auth0.logout();
+    this.auth0.logout({
+      returnTo: this._baseUrl,
+      clientID: this._clientId
+    });
     // Remove tokens and expiry time
     this._accessToken = '';
     this._idToken = '';
@@ -119,7 +126,7 @@ export class AuthService {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('authResult');
     // Go back to the home route
-    this.router.navigate(['/']);
+    // this.router.navigate(['/home']);
   }
 
   public isAuthenticated(): boolean {
@@ -143,6 +150,9 @@ export class AuthService {
       this._user$.next(result);
 
       console.log('Hello', this._user.name);
+    }, (error) => {
+      this._user = null;
+      this._user$.next(null);
     });
   }
 
@@ -156,11 +166,8 @@ export class AuthService {
     });
   }
 
-
-
-
   public get(endpoint: string): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
@@ -169,7 +176,7 @@ export class AuthService {
   }
 
   public post(endpoint: string, body: any): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
@@ -178,7 +185,7 @@ export class AuthService {
   }
 
   public put(endpoint: string, body: any): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };
@@ -187,7 +194,7 @@ export class AuthService {
   }
 
   public delete(endpoint: string): Observable<any> {
-    const url = `${this.baseUrl}api/${endpoint}`;
+    const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
       headers: new HttpHeaders().set('Authorization', `Bearer ${this._accessToken}`).set('Content-Type', 'application/json'),
     };

@@ -20,6 +20,7 @@ export class RegisterService {
     }
 
     registerUser(user: User, password: string): Observable<[User, any]> {
+        // return this.auth.post('users', user);
         return forkJoin(
             this.auth.post('users', user),
             this.auth.auth0Signup(user, password)

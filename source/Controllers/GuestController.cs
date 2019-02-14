@@ -58,7 +58,8 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _query.Insert(guest));
+                await _query.Insert(guest);
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
@@ -79,7 +80,8 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _query.Update(guest));
+                await _query.Update(guest);
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
@@ -93,21 +95,22 @@ namespace source.Controllers
         /// DELETE api/guest/{id}
         /// Deletes a guest
         /// </summary>
-        /// <param name="id">Guest Id</param>
+        /// <param name="id">Event Id</param>
         /// <returns>True if successful</returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteByGuestId(int id)
         {
             try
             {
-                var events = await _query.GetListByEventId(id);
+                var events = await _query.GetByGuestId(id);
 
-                if (events.ToList().Count == 0) 
+                if (events == null) 
                 {
                     return new NotFoundResult();
                 }
 
-                return new OkObjectResult(await _query.DeleteByEventId(id));
+                await _query.DeleteByGuestId(id);
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
@@ -116,5 +119,6 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
+
     }
 }

@@ -7,26 +7,30 @@ import { Router } from '@angular/router';
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css']
 })
-export class NavMenuComponent {
+export class NavMenuComponent implements OnInit {
 
   isVendor = false;
-  isOrginizor = false;
+  isOrganizer = false;
 
   constructor (
     public auth: AuthService,
-    private router: Router
-    ) {
+    ) { }
 
-    auth.user$.subscribe((user) => {
-      if (!user.role) {
-
-      } else if (user.role.toUpperCase() === 'ADMIN') {
+  ngOnInit() {
+    this.auth.user$.subscribe((user) => {
+      if (user && user.role.toUpperCase() === 'ADMIN') {
+        this.isOrganizer = true;
         this.isVendor = true;
-        this.isOrginizor = true;
       }
 
-      if (user.role === 'VENDOR') {
+      if (user && user.role === 'VENDOR') {
+        this.isOrganizer = false;
         this.isVendor = true;
+      }
+
+      if (user && user.role === 'ORGANIZER') {
+        this.isOrganizer = true;
+        this.isVendor = false;
       }
     });
   }
