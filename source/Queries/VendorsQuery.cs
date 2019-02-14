@@ -97,34 +97,40 @@ namespace source.Queries
         /// <returns>Vendor</returns>
         public async Task<Vendor> GetByUserName(string userName)
         {
-
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
-                var query = @"SELECT * FROM occasions.vendors WHERE userName = @userName AND active = 1; "
-                    + @"SELECT * FROM occasions.vendorServices WHERE active = 1";
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    var query = @"SELECT * FROM occasions.vendors WHERE userName = @userName AND active = 1; "
+                        + @"SELECT * FROM occasions.vendorServices WHERE active = 1";
 
-                var vendorResult = await connection.QueryMultiple(query, new { userName })
-                .Map<Vendor, VendorServices, int?>
-                    (v => v.id, s => s.vendorId,
-                    (v, s) =>
-                    {
-                        v.services = s.ToList();
-                    });
+                    var vendorResult = await connection.QueryMultiple(query, new { userName })
+                    .Map<Vendor, VendorServices, int?>
+                        (v => v.id, s => s.vendorId,
+                        (v, s) =>
+                        {
+                            v.services = s.ToList();
+                        });
 
-                var vendor = vendorResult.FirstOrDefault();
+                    var vendor = vendorResult.FirstOrDefault();
 
-                if (vendor == null) return null;
+                    if (vendor == null) return null;
 
-                var addressQuery = @"SELECT * FROM occasions.addresses "
-                    + @"WHERE userName = @userName AND active = 1;";
+                    var addressQuery = @"SELECT * FROM occasions.addresses "
+                        + @"WHERE userName = @userName AND active = 1;";
 
-                var address = await connection.QueryFirstOrDefaultAsync<Address>(addressQuery, new { userName });
+                    var address = await connection.QueryFirstOrDefaultAsync<Address>(addressQuery, new { userName });
 
-                vendor.address = address == null ? new Address(): address;
+                    vendor.address = address == null ? new Address() : address;
 
-                return vendor;
+                    return vendor;
+                }
+            }
+            catch(Exception ex)
+            {
+                return new Vendor();
             }
 
         }

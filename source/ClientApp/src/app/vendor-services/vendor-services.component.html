@@ -57,6 +57,15 @@
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field  appearance="outline">
+          <mat-label>Units Available</mat-label>
+          <input
+            matInput
+            placeholder="Units Available"
+            formControlName="serviceUnitsAvailable"
+            >
+        </mat-form-field>
+
         <mat-action-row>
           <button type="submit" mat-button [disabled]="!vendorServiceForm.valid">
             <mat-icon>add</mat-icon>

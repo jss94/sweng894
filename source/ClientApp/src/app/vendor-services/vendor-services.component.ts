@@ -15,7 +15,7 @@ import { VendorServices } from '../shared/models/vendor-services.model';
 export class VendorServicesComponent implements OnInit {
 
   vendorServices: VendorServices[];
-  vendorId: number;
+  vendorId = 0;
   userName: string;
 
   svcs = [
@@ -66,6 +66,7 @@ export class VendorServicesComponent implements OnInit {
     serviceDescription: new FormControl('', [ Validators.required ]),
     serviceFlatFee: new FormControl('', [ Validators.required ]),
     servicePrice: new FormControl('', [ Validators.required ]),
+    serviceUnitsAvailable: new FormControl('', [ Validators.required ]),
   });
 
   constructor(
@@ -78,11 +79,19 @@ export class VendorServicesComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.vendorServiceForm.controls["serviceFlatFee"].valueChanges.subscribe(
+      (value) => { 
+        if (value){
+          this.vendorServiceForm.controls['serviceUnitsAvailable'].disable()
+       }else
+        this.vendorServiceForm.controls['serviceUnitsAvailable'].enable()
+      }
+    );
     if (this.auth.user) {
       this.userName = this.auth.user.userName;
       this.vendorService.getVendor(this.userName).subscribe(vendor => {
         this.vendorId = vendor.id;
+        debugger
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
           this.vendorServices = response;
         });
@@ -92,6 +101,8 @@ export class VendorServicesComponent implements OnInit {
       this.auth.user$.subscribe((result) => {
         this.userName = result.userName;
         this.vendorService.getVendor(this.userName).subscribe(vendor => {
+          this.vendorId = vendor.id;
+          debugger
           this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
             this.vendorServices = response;
           });
@@ -110,7 +121,7 @@ export class VendorServicesComponent implements OnInit {
       serviceDescription:  this.vendorServiceForm.controls['serviceDescription'].value,
       flatFee: this.vendorServiceForm.controls['serviceFlatFee'].value,
       price: this.vendorServiceForm.controls['servicePrice'].value,
-     // unitsAvailable: this.vendorServiceForm.controls["serviceUnits"].value,
+      unitsAvailable: this.vendorServiceForm.controls["serviceUnitsAvailable"].value,
      };
 
     this.vendorServicesService.createNewVendorService(svc).subscribe(response => {
