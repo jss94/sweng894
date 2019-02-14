@@ -10,7 +10,7 @@ namespace source.Models
 
     {
         public EmailPersonalization[] personalizations;
-        public EmailAddress from { get; set; }
+        public EmailRecipient from { get; set; }
         public string subject { get; set; }
         public EmailContent[] content;
 

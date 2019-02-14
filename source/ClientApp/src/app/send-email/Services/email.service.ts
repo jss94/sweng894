@@ -12,9 +12,12 @@ export class EmailService {
       ) {
   }
 
-  sendEmail(emailModel: EmailModel) {
-    console.log('IN HERE NOW!!!');
-    return this.auth.post('Email/', emailModel);
+  sendVendorQuestionEmail(vendorId: number, emailModel: EmailModel) {
+    return this.auth.post('Email/vendor/question/' + vendorId, emailModel);
+  }
+
+  sendEventInvitationEmail(eventId: number, emailModel: EmailModel) {
+    return this.auth.post('Email/event/invitation/' + eventId, emailModel);
   }
 
 }

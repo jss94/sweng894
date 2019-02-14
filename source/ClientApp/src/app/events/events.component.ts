@@ -95,19 +95,20 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  testEmail(evnt: OccEvent) {
+  emailGuestList(evnt: OccEvent) {
 
     const toEmail = new EmailAddress();
-    toEmail.email = 'senky.joe@gmail.com';
+    toEmail.email = evnt.userName; // place holder, will be replaced by backend
 
     const to: EmailAddress[] = [];
     to.push(toEmail);
 
     const fromEmail = new EmailAddress();
-    fromEmail.email = 'jss94@psu.edu';
+    fromEmail.email = evnt.userName;
 
     const emailContent = new EmailContent();
     emailContent.type = 'text/plain';
+    // TODO - replace with user entered invite text, event name, event description, event date/time, etc.
     emailContent.value = 'Welcome!!!';
 
     const content: EmailContent[] = [];
@@ -115,14 +116,17 @@ export class EventsComponent implements OnInit {
 
     const emailModel = new EmailModel();
     emailModel.personalizations = [({ 'to': to })];
-    emailModel.subject = 'Email from SWENG 894 Occasions';
+    emailModel.subject = 'Needs to be updated with User Entered Subject';
 
     emailModel.from = fromEmail;
     emailModel.content = content;
 
-    console.log(JSON.stringify(emailModel));
-    this.emailService.sendEmail(emailModel).subscribe(response => {
-      this.snackbar.open('Successfully Sent Email Message ', '', {
+    this.emailService.sendEventInvitationEmail(evnt.eventId, emailModel).subscribe(response => {
+      let statusMsg = 'Successfully Sent Email Message;';
+      if (response !== 202) {
+        statusMsg = 'An error occurred sending the email, please contact your administrator.';
+      }
+      this.snackbar.open(statusMsg, '', {
         duration: 3000
       });
    });

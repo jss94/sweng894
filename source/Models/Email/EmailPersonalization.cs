@@ -7,6 +7,6 @@ namespace source.Models.Email
 {
     public class EmailPersonalization
     {
-        public EmailTo[] to;
+        public EmailRecipient[] to { get; set; }
     }
 }
