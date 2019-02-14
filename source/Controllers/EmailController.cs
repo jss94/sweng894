@@ -43,11 +43,9 @@ namespace source.Controllers
             Vendor vendor = await _vendorQuery.GetById(id);
 
             if (vendor == null)
-                return HttpStatusCode.BadRequest;
-
-            // TODO - is the vendor.userName the Vendor's email address?
-            // if not, how do we get that?
-            // Future - Do we want to always bcc an email account set up for occasions?
+                return HttpStatusCode.NotFound;
+            
+            // TODO - Future - Do we want to always bcc the event organizer?
             emailMsg.personalizations[0].to[0].email = vendor.userName;
             return await sendEmail(emailMsg);
         }
@@ -64,8 +62,8 @@ namespace source.Controllers
             List<Guest> eventGuests = await _guestsQuery.GetListByEventId(id);
 
             // check if guests are returned
-            if (eventGuests == null)
-                return HttpStatusCode.BadRequest;
+            if (eventGuests == null || eventGuests.ToArray().Length ==0)
+                return HttpStatusCode.NotFound;
 
             // create to list and set
             List<EmailRecipient> emailTos = new List<EmailRecipient>();
@@ -76,6 +74,7 @@ namespace source.Controllers
 
             // add to list to email body
             // [0] because we currently only support "to". We do not support "cc" or "bcc" or any other personalizations.
+            // Future - Do we want to always bcc the event organizer?
             emailMsg.personalizations[0].to = emailTos.ToArray();
 
             //send email

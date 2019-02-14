@@ -122,10 +122,14 @@ export class EventsComponent implements OnInit {
     emailModel.content = content;
 
     this.emailService.sendEventInvitationEmail(evnt.eventId, emailModel).subscribe(response => {
-      let statusMsg = 'Successfully Sent Email Message;';
-      if (response !== 202) {
+      let statusMsg = 'Successfully emailed your guests!';
+
+      if (response === 404) {
+        statusMsg = evnt.name + ' has no guests! Add one and try again!';
+      } else if (response !== 202) {
         statusMsg = 'An error occurred sending the email, please contact your administrator.';
       }
+
       this.snackbar.open(statusMsg, '', {
         duration: 3000
       });
