@@ -86,8 +86,7 @@ namespace source.Queries
                 string query = @"INSERT INTO occasions.users (userName, name, role) "
                     + @"VALUES (@userName, @name, @role);";
 
-                await connection.QueryAsync(query, user);
-                await Task.CompletedTask;
+                await connection.ExecuteAsync(query, user);
             }
         }
 
@@ -110,7 +109,6 @@ namespace source.Queries
                     + @" SELECT * FROM occasions.users WHERE id = @id AND active = 1;";
 
                 await connection.ExecuteAsync(query, user);
-                await Task.CompletedTask;
             }
 
         }

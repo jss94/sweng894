@@ -5,7 +5,7 @@ import { User } from './user.model';
 export class FakeUser implements User {
     userName =  'my@UserName.com';
     name = 'My First and Last Name';
-    role = 'ADMIN';
+    role = '';
     address = new FakeAddress();
 }
 

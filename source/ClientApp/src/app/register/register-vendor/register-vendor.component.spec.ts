@@ -93,7 +93,7 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      
+
       // act
       // done automatically by formgroup object
 

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { ReactivateUserComponent } from './reactivate-user.component';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { AuthService } from '../shared/services/auth.service';
@@ -25,6 +25,7 @@ describe('ReactivateUserComponent', () => {
   let fixture: ComponentFixture<ReactivateUserComponent>;
   let authService: AuthService;
   let usersService: UsersService;
+  let fakeMatDialog: MatDialog;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -46,10 +47,23 @@ describe('ReactivateUserComponent', () => {
     component = fixture.componentInstance;
     authService = TestBed.get(AuthService);
     usersService = TestBed.get(UsersService);
-    fixture.detectChanges();
+    fakeMatDialog = TestBed.get(MatDialog);
+
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+
+  it('should request user response', fakeAsync(() => {
+    // assign
+    spyOn(fakeMatDialog, 'open').and.returnValue(new MockMatDialogRef);
+
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(fakeMatDialog.open).toHaveBeenCalledTimes(1);
+  }));
 });
