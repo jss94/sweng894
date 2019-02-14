@@ -6,6 +6,7 @@ using source.Database;
 using source.Models;
 using Dapper;
 using System.Linq;
+using System.Threading;
 
 namespace source.Queries
 {
@@ -54,8 +55,8 @@ namespace source.Queries
         /// Inserts a new event
         /// </summary>
         /// <param name="evnt"></param>
-        /// <returns>Event</returns>
-        public async Task<Event> CreateEvent(Event evnt)
+        /// <returns></returns>
+        public async Task CreateEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -66,12 +67,12 @@ namespace source.Queries
                 string query = @"INSERT INTO occasions.events (userName, name, description, dateTime) "
                     + @"VALUES (@userName, @name, @description, @dateTime)";
 
+                await Task.CompletedTask;
+
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
-                Event createdEvent = connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
-
-
-                return createdEvent;
+                await connection.ExecuteAsync(query, evnt);
+               
             }
         }
 
@@ -100,7 +101,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="evnt"></param>
         /// <returns></returns>
-        public async Task<Event> UpdateEvent(Event evnt)
+        public async Task UpdateEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -111,16 +112,18 @@ namespace source.Queries
                     + " SET name=@name, description=@description, dateTime=STR_TO_DATE(@dateTime,'%m/%d/%Y %h:%i:%s %p')"
                     + " WHERE eventId =  @eventId";
 
-                return connection.QueryAsync<Event>(query, new { evnt.name, evnt.description, evnt.dateTime, evnt.eventId}).Result.ToList().FirstOrDefault();
+                await Task.CompletedTask;
+                await connection.ExecuteAsync(query, new { evnt.name, evnt.description, evnt.dateTime, evnt.eventId});
+
             }
         }
 
         /// <summary>
         /// Deletes the by identifier.
         /// </summary>
-        /// <returns>The by identifier.</returns>
+        /// <returns></returns>
         /// <param name="id">Identifier.</param>
-        public async Task<bool> DeleteById(int id)
+        public async Task DeleteById(int id)
         {
             using (var db = _database)
             {
@@ -128,19 +131,18 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 string query = @"DELETE FROM occasions.events WHERE eventId = @id";
-   
-                await connection.ExecuteAsync(query, new { id } );
 
-                return true;
+                await Task.CompletedTask;
+                await connection.ExecuteAsync(query, new { id } );
             }
         }
 
         /// <summary>
         /// Deletes the name of the by user.
         /// </summary>
-        /// <returns>The by user name.</returns>
+        /// <returns></returns>
         /// <param name="userName">Identifier.</param>
-        public async Task<bool> DeleteByUserName(string userName)
+        public async Task DeleteByUserName(string userName)
         {
             using (var db = _database)
             {
@@ -149,9 +151,9 @@ namespace source.Queries
 
                 string query = @"DELETE FROM occasions.events WHERE userName = @userName";
 
-                await connection.ExecuteAsync(query, new { userName });
+                await Task.CompletedTask;
 
-                return true;
+                await connection.ExecuteAsync(query, new { userName });
             }
         }
     }

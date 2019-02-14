@@ -105,7 +105,7 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Delete(0);
+            var task = _sut.DeleteByGuestId(0);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
