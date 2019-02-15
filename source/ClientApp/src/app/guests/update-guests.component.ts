@@ -7,6 +7,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { stringify } from 'querystring';
 
 @Component(
     {
@@ -16,14 +17,20 @@ import { MatSnackBar } from '@angular/material';
     }
 )
 
+
 export class UpdateGuestsComponent implements OnInit {
     private guest: Guest;
     private guestId: string;
+    public selectedValue: string;
+    public options: DropDownOption[] = [
+        {value: "undecided", viewValue: "UNDECIDED"},
+        {value: "yes", viewValue: "YES"},
+        {value: "no", viewValue: "NO"},
+    ]
 
     updateGuestForm = new FormGroup({
         name: new FormControl('', [ Validators.required ]),
         email: new FormControl('', [ Validators.required, Validators.email] ),
-        isGoing: new FormControl('', [ Validators.required ] ),
       });
 
     constructor(
@@ -45,7 +52,7 @@ export class UpdateGuestsComponent implements OnInit {
                 
                 this.updateGuestForm.controls['name'].setValue(this.guest.name);
                 this.updateGuestForm.controls['email'].setValue(this.guest.email);
-                this.updateGuestForm.controls['isGoing'].setValue(this.guest.isGoing);
+                this.setSelected(this.guest.isGoing);
             });
         });
     }
@@ -53,7 +60,7 @@ export class UpdateGuestsComponent implements OnInit {
     onSave() {
         this.guest.name = this.updateGuestForm.controls['name'].value;
         this.guest.email = this.updateGuestForm.controls['email'].value;
-        this.guest.isGoing = Boolean(this.updateGuestForm.controls['isGoing'].value);
+        this.setIsGoing(this.selectedValue);
         this.guestService.update(this.guest);
         this.router.navigate(['/guests/' + this.guest.eventId]);
     }
@@ -61,4 +68,39 @@ export class UpdateGuestsComponent implements OnInit {
     onCancel() {
         this.router.navigate(['/guests/' + this.guest.eventId]);
     }
+
+    setIsGoing(value: string) {
+        if(value === "yes")
+        {
+            this.guest.isGoing = true;
+        }
+        else if(value === "no")
+        {
+            this.guest.isGoing = false;
+        }
+        else
+        {
+            this.guest.isGoing = null;
+        }
+    }
+
+    setSelected(value: boolean) {
+        if(value === true)
+        {
+            this.selectedValue = "yes"
+        }
+        else if(value === false)
+        {
+            this.selectedValue = "no"
+        }
+        else
+        {
+            this.selectedValue = "undecided"
+        }
+    }
+}
+
+export interface DropDownOption {
+    value: string;
+    viewValue: string;
 }

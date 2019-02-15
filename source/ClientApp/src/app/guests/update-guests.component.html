@@ -24,10 +24,10 @@
 
         <mat-form-field>
             <mat-label>Is Going?</mat-label>
-            <mat-select [(ngModel)]="guest.isGoing" formControlName="isGoing">
-                <mat-option value = "null">None</mat-option>
-                <mat-option value = "true">Yes</mat-option>
-                <mat-option value = "false">No</mat-option>
+            <mat-select [(value)]="selectedValue">
+                <mat-option *ngFor="let option of options" [value]="option.value">
+                    {{option.viewValue}}
+                </mat-option>
             </mat-select>
         </mat-form-field>    
 
