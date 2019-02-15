@@ -15,14 +15,58 @@ import { VendorServices } from '../shared/models/vendor-services.model';
 export class VendorServicesComponent implements OnInit {
 
   vendorServices: VendorServices[];
-
+  vendorId = 0;
   userName: string;
+
+  svcs = [
+    {
+      value: 'Venue',
+      viewValue: 'Venue'
+    },
+    {
+      value: 'Catering',
+      viewValue: 'Catering'
+    },
+    {
+      value: 'Flowers',
+      viewValue: 'Flowers'
+    },
+    {
+      value: 'Supplies',
+      viewValue: 'Supplies'
+    },
+    {
+      value: 'Lodging',
+      viewValue: 'Lodging'
+    },
+    {
+      value: 'Activities',
+      viewValue: 'Activities'
+    },
+    {
+      value: 'Other',
+      viewValue: 'Other'
+    },
+  ];
+
+  fees = [
+    {
+      value: true,
+      viewValue: 'This is a flat fee'
+    },
+    {
+      value: false,
+      viewValue: 'This is not a flat fee'
+    },
+  ];
 
   vendorServiceForm = new FormGroup({
     serviceType: new FormControl('', [ Validators.required ]),
     serviceName: new FormControl('', [ Validators.required ]),
     serviceDescription: new FormControl('', [ Validators.required ]),
-    price: new FormControl('', [ Validators.required ]),
+    serviceFlatFee: new FormControl('', [ Validators.required ]),
+    servicePrice: new FormControl('', [ Validators.required ]),
+    serviceUnitsAvailable: new FormControl('', [ Validators.required ]),
   });
 
   constructor(
@@ -35,10 +79,19 @@ export class VendorServicesComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.vendorServiceForm.controls["serviceFlatFee"].valueChanges.subscribe(
+      (value) => { 
+        if (value){
+          this.vendorServiceForm.controls['serviceUnitsAvailable'].disable()
+       }else
+        this.vendorServiceForm.controls['serviceUnitsAvailable'].enable()
+      }
+    );
     if (this.auth.user) {
       this.userName = this.auth.user.userName;
       this.vendorService.getVendor(this.userName).subscribe(vendor => {
+        this.vendorId = vendor.id;
+        debugger
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
           this.vendorServices = response;
         });
@@ -48,6 +101,8 @@ export class VendorServicesComponent implements OnInit {
       this.auth.user$.subscribe((result) => {
         this.userName = result.userName;
         this.vendorService.getVendor(this.userName).subscribe(vendor => {
+          this.vendorId = vendor.id;
+          debugger
           this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
             this.vendorServices = response;
           });
@@ -58,7 +113,23 @@ export class VendorServicesComponent implements OnInit {
     }
   }
 
-  onCreate() {
+  onCreate(): void {
+    const svc: VendorServices = {
+      vendorId: this.vendorId,
+      serviceType: this.vendorServiceForm.controls['serviceType'].value,
+      serviceName:  this.vendorServiceForm.controls['serviceName'].value,
+      serviceDescription:  this.vendorServiceForm.controls['serviceDescription'].value,
+      flatFee: this.vendorServiceForm.controls['serviceFlatFee'].value,
+      price: this.vendorServiceForm.controls['servicePrice'].value,
+      unitsAvailable: this.vendorServiceForm.controls["serviceUnitsAvailable"].value,
+     };
 
+    this.vendorServicesService.createNewVendorService(svc).subscribe(response => {
+      this.ngOnInit();
+      this.vendorServiceForm.reset();
+      this.snackbar.open('Successfully Created ' + svc.serviceName, '', {
+        duration: 1500
+      });
+    });
   }
 }
