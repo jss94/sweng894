@@ -35,18 +35,18 @@ namespace source.Queries
         /// <summary>
         /// Get by guest ID
         /// </summary>
-        /// <param name="eventId">DB id of the event you want to search for</param>
+        /// <param name="guestId">DB id of the guest you want to search for</param>
         /// <returns>List of guests</returns>
-        public async Task<Guest> GetByGuestId(int id)
+        public async Task<Guest> GetByGuestId(int guestId)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"SELECT * FROM occasions.guests WHERE guestId = @id";
+                string query = @"SELECT * FROM occasions.guests WHERE guestId = @guestId";
 
-                var guest = await connection.QueryFirstOrDefaultAsync<Guest>(query, new { id });
+                var guest = await connection.QueryFirstOrDefaultAsync<Guest>(query, new { guestId });
                 return guest;
             }
         }

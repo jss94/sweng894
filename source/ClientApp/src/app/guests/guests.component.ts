@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Guest } from './Models/guest.model';
 import { GuestsService } from './Services/guests.service';
 import { AuthService } from '../shared/services/auth.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -23,6 +23,7 @@ export class GuestsComponent implements OnInit {
         private auth: AuthService,
         private guestService: GuestsService,
         private route: ActivatedRoute,
+        private router: Router,
         private snackbar: MatSnackBar,
         ) {
 
@@ -63,12 +64,7 @@ export class GuestsComponent implements OnInit {
             duration: 1500
           });
         });
-    
       }
-
-    addGuestClicked() {
-        
-    }
 
     delete(guest: Guest) {
         this.guestService.delete(guest.guestId+"").subscribe(response => {
@@ -78,6 +74,10 @@ export class GuestsComponent implements OnInit {
                 duration: 3000
             });
         });
+    }
+
+    editClicked(guest: Guest) {
+        this.router.navigate(['/update-guests/' + guest.guestId]);
     }
 
 }

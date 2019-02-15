@@ -70,7 +70,7 @@
                     <mat-icon *ngIf="guest.isUndecided">info</mat-icon>
                 </div>
                 
-                <button mat-button>
+                <button mat-button (click)="editClicked(guest)">
                     <mat-icon>edit</mat-icon>
                 </button>
             
