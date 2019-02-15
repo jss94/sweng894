@@ -166,9 +166,6 @@ export class AuthService {
     });
   }
 
-
-
-
   public get(endpoint: string): Observable<any> {
     const url = `${this._baseUrl}api/${endpoint}`;
     const opt = {
