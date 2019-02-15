@@ -21,15 +21,17 @@ namespace source.Controllers
         private IVendorsQuery _vendorQuery;
         private IGuestQuery _guestsQuery;
         private ILogger _logger;
+        private IEmailQuery _emailQuery;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EmailController(IVendorsQuery vendorQuery, IGuestQuery guestsQuery, ILogger logger)
+        public EmailController(IVendorsQuery vendorQuery, IGuestQuery guestsQuery, ILogger logger, IEmailQuery emailQuery)
         {
             _vendorQuery = vendorQuery;
             _guestsQuery = guestsQuery;
             _logger = logger;
+            _emailQuery = emailQuery;
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace source.Controllers
             
             // TODO - Future - Do we want to always bcc the event organizer?
             emailMsg.personalizations[0].to[0].email = vendor.userName;
-            return await sendEmail(emailMsg);
+            return await _emailQuery.sendEmailViaPostAsync(emailMsg);
         }
 
         /// <summary>
@@ -66,41 +68,22 @@ namespace source.Controllers
                 return HttpStatusCode.NotFound;
 
             // create to list and set
+            List<EmailPersonalization> personalizations = new List<EmailPersonalization>();
             List<EmailRecipient> emailTos = new List<EmailRecipient>();
+            EmailPersonalization personalization = new EmailPersonalization();
 
             eventGuests.ForEach(guest => {
                 emailTos.Add(new EmailRecipient(guest.name, guest.email));
             });
-
-            // add to list to email body
-            // [0] because we currently only support "to". We do not support "cc" or "bcc" or any other personalizations.
-            // Future - Do we want to always bcc the event organizer?
-            emailMsg.personalizations[0].to = emailTos.ToArray();
+            personalization.to = emailTos;
+            personalizations.Add(personalization);
+          
+            emailMsg.personalizations = personalizations;
 
             //send email
-            return await sendEmail(emailMsg);
+            return await _emailQuery.sendEmailViaPostAsync(emailMsg);
         }
 
-        /// <summary>
-        /// Private method that given an EmailMessage object, converts it to JSON and sends it via the sendGrid API.
-        /// </summary>
-        /// <param name="emailMsg">A EmailMessage.</param>
-        private async Task<HttpStatusCode> sendEmail(EmailMessage emailMsg)
-        {
-            var client = new SendGridClient(Constants.EmailApiKey.SEND_GRID_API_KEY);
-
-            try
-            {
-                var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(emailMsg);
-                var response = await client.RequestAsync(method: SendGridClient.Method.POST, urlPath: "mail/send", requestBody: jsonString);
-                return response.StatusCode;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                await _logger.LogError(HttpContext.User, ex);
-                return HttpStatusCode.BadRequest;
-            }
-        }
+       
     }
 }

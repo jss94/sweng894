@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 namespace source.Models
 {
     public class EmailMessage
-
     {
-        public EmailPersonalization[] personalizations;
+        public EmailMessage()
+        {
+            personalizations = new List<EmailPersonalization>();
+            content = new List<EmailContent>();
+        }
+
+        public List<EmailPersonalization> personalizations;
         public EmailRecipient from { get; set; }
         public string subject { get; set; }
-        public EmailContent[] content;
+        public List<EmailContent> content;
 
     }
 }

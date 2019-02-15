@@ -7,6 +7,16 @@ namespace source.Models.Email
 {
     public class EmailContent
     {
+        public EmailContent()
+        {
+            // empty constructor
+        }
+
+        public EmailContent(string type, string value)
+        {
+            this.type = type;
+            this.value = value;
+        }
         public string type { get; set; }
 
         public string value { get; set; }
