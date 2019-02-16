@@ -90,8 +90,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var eventsResult = result.Value as Event;
-            Assert.Equal(evt2.description, eventsResult.description);
+            var eventResult = result.Value as bool?;
+            Assert.True(eventResult);
 
         }
 
