@@ -86,28 +86,37 @@
           </div>
           <div>
             <div>
-              <h5>{{service.name}}</h5>
-            </div>
+              <h5 class='vendor-services-text'>{{service.serviceType}}</h5>
+            </div>            
           </div>
         </div>
     
         <div>
-            <h6>{{service.description}}</h6>
-          </div>
-    
-        <div class="actions">
-          <button *ngIf="!service.isEditable" (click)="service.isEditable=!service.isEditable">
-              <mat-icon>edit</mat-icon>
-          </button>
-          <button *ngIf="service.isEditable" (click)="service.isEditable=!service.isEditable; updateService(name.value, description.value, service)">
-              <mat-icon>save</mat-icon>
-          </button>
-          
-          <button mat-button (click)="deleteService(service)">
+            <h6>{{service.serviceName}}</h6>
+        </div>
+        <div>
+            <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
+        </div>
+        <div>
+            <h6 *ngIf="service.flatFee">Flat fee</h6>
+            <h6 *ngIf="!service.flatFee">Price per unit</h6>
+        </div>
+        <div>
+            <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
+        </div>
+        <div>
+            <h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
+        </div>
+         
+        <mat-action-row>
+        <button mat-button (click)="editClicked(service)">
+            <mat-icon>edit</mat-icon>
+        </button>
+
+         <button mat-button (click)="deleteVendorService(service)">
               <mat-icon>delete_forever</mat-icon>
           </button>
-        </div>
-      </div>
-    
+    </mat-action-row>
     
     </div>
+  </div>

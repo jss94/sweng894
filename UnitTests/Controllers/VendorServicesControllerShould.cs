@@ -215,5 +215,34 @@ namespace UnitTests.Controllers
             var usersResult = result.Value as bool?;
             Assert.True(usersResult);
         }
+
+        [Fact]
+        public void GetById_ReturnsVendorService()
+        {
+            // arrange
+            var service = new VendorServices
+            {
+                id = 1,
+                vendorId = 123,
+                flatFee = true,
+                price = 20,
+                serviceDescription = "desc",
+                serviceName = "svcName",
+                serviceType = "Venue"
+            };
+
+            _vendorServicesQueryMock.Setup(x => x.GetById(1))
+                .Returns(Task.Factory.StartNew(() => service));
+
+            // act
+            var task = _sut.GetServiceById(1);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as VendorServices;
+            Assert.Equal(service, usersResult);
+        }
     }
 }

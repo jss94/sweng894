@@ -83,6 +83,7 @@ export class VendorServicesComponent implements OnInit {
       (value) => { 
         if (value){
           this.vendorServiceForm.controls['serviceUnitsAvailable'].disable()
+          this.vendorServiceForm.controls['serviceUnitsAvailable'].setValue('')
        }else
         this.vendorServiceForm.controls['serviceUnitsAvailable'].enable()
       }
@@ -91,9 +92,8 @@ export class VendorServicesComponent implements OnInit {
       this.userName = this.auth.user.userName;
       this.vendorService.getVendor(this.userName).subscribe(vendor => {
         this.vendorId = vendor.id;
-        debugger
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
-          this.vendorServices = response;
+          this.vendorServices = response;          
         });
       });
 
@@ -102,7 +102,6 @@ export class VendorServicesComponent implements OnInit {
         this.userName = result.userName;
         this.vendorService.getVendor(this.userName).subscribe(vendor => {
           this.vendorId = vendor.id;
-          debugger
           this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
             this.vendorServices = response;
           });
@@ -132,4 +131,11 @@ export class VendorServicesComponent implements OnInit {
       });
     });
   }
+
+  editClicked(service): void {
+    this.router.navigate(['/update-vendor-services/' + service.id]);
+  }
+
+
+
 }

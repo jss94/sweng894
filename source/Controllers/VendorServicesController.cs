@@ -107,8 +107,6 @@ namespace source.Controllers
             }
         }
 
-
-
         /// <summary>
         /// Inserts a new vendor service
         /// </summary>
@@ -204,6 +202,30 @@ namespace source.Controllers
                 }
 
                 return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets a vendor service by vendor service id
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetServiceById(int id)
+        {
+            try
+            {
+                VendorServices service = await _vendorServicesQuery.GetById(id);
+                if (service == null)
+                {
+                    return new NotFoundResult();
+                }
+
+                return new OkObjectResult(service);
             }
             catch (Exception ex)
             {
