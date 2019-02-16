@@ -13,28 +13,19 @@ import { GuestsComponent } from '../guests/guests.component';
 import { MatSnackBar } from '@angular/material';
 import { MockUserProfileService } from './Services/mock-user-profile.service';
 import { EventService } from '../events/Services/event.service';
+import { UserProfileService } from './Services/user-profile.service';
+import { FakeVendor } from '../shared/models/fake-vendor.model';
+import { MockAuthService } from '../shared/services/mock-auth.service';
 
-describe('ProfileComponent', () => {
+fdescribe('ProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
-  let mockEventService: EventService;
+  let mockUserProfileService: UserProfileService;
   let mockAuthService: AuthService;
-
-  class MockAuthService {
-    user$ = of(new FakeUser);
-
-    get(aString: string): Observable<any> {
-      return of(new FakeUser);
-    }
-  }
 
   class MockMatSnackBar {
     open() {}
   }
-
-  const fakeUserProfile: any = {
-    nickname: 'jss94'
-  };
 
   const routes: Routes = [
     { path: 'guests/:id', component: GuestsComponent },
@@ -54,7 +45,7 @@ describe('ProfileComponent', () => {
       ],
       providers: [
         { provide: MatSnackBar, useClass: MockMatSnackBar },
-        { provide: EventService, useClass: MockUserProfileService },
+        { provide: UserProfileService, useClass: MockUserProfileService },
         { provide: AuthService, useClass: MockAuthService },
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -62,7 +53,7 @@ describe('ProfileComponent', () => {
   }));
 
   beforeEach(() => {
-    mockEventService = TestBed.get(EventService);
+    mockUserProfileService = TestBed.get(UserProfileService);
     mockAuthService = TestBed.get(AuthService);
     fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
@@ -72,16 +63,39 @@ describe('ProfileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all events', fakeAsync(() => {
+  it('should display vendor profile', fakeAsync(() => {
     // arrange
-    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+    const user = new FakeUser();
+    user.role = 'VENDOR';
+    const vendor = new FakeVendor();
+    spyOnProperty(mockAuthService, 'user').and.returnValue(user);
+    spyOnProperty(mockAuthService, 'user$').and.returnValue(of(user));
+    spyOn(mockUserProfileService, 'getVendor').and.returnValue(of([user, vendor]));
 
     // act
     fixture.detectChanges();
 
     // assert
-    expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-    expect(component.events.length).toBe(3);
+    expect(mockUserProfileService.getVendor).toHaveBeenCalledTimes(1);
+    expect(component.profileForm.controls['name'].value).toBe(user.name);
+
+  }));
+
+  it('should display organizer profile', fakeAsync(() => {
+    // arrange
+    const user = new FakeUser();
+    user.role = 'ORGANIZER';
+    const vendor = new FakeVendor();
+    spyOnProperty(mockAuthService, 'user').and.returnValue(user);
+    spyOnProperty(mockAuthService, 'user$').and.returnValue(of(user));
+    spyOn(mockUserProfileService, 'getOrganizer').and.returnValue(of(user));
+
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(mockUserProfileService.getOrganizer).toHaveBeenCalledTimes(1);
+    expect(component.profileForm.controls['name'].value).toBe(user.name);
 
   }));
 

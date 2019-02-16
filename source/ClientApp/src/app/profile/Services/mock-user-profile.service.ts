@@ -6,11 +6,19 @@ import { Vendor } from 'src/app/shared/models/vendor.model';
 
 @Injectable()
 export class MockUserProfileService {
-    get(): Observable<[User, Vendor]> {
-        return of(null);
+    getVendor(): Observable<[User, Vendor]> {
+      return of(null);
     }
 
-    update(user: User, vendor?: Vendor): Observable<boolean> {
+    getOrganizer(): Observable<User> {
+      return of(null);
+    }
+
+    updateVendor(user: User, vendor?: Vendor): Observable<boolean> {
+      return of(null);
+    }
+
+    updateOrganizer(user: User): Observable<boolean> {
       return of(null);
     }
 }

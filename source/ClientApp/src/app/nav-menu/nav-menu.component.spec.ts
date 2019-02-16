@@ -22,7 +22,7 @@ export class MockMatDialog {
   }
 }
 
-describe('NavMenuComponent', () => {
+fdescribe('NavMenuComponent', () => {
   let component: NavMenuComponent;
   let fixture: ComponentFixture<NavMenuComponent>;
   let authService: AuthService;

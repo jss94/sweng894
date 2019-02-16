@@ -3,12 +3,9 @@ import { UserProfileService } from './Services/user-profile.service';
 import { AuthService } from '../shared/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
 import { User } from '../shared/models/user.model';
 import { Vendor } from '../shared/models/vendor.model';
 import { Address } from '../shared/models/address.model';
-import { P } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +16,8 @@ export class UserProfileComponent implements OnInit {
 
   user: User;
   vendor: Vendor;
+
+  isVendor = false;
 
   profileForm = new FormGroup({
     name: new FormControl('', [ Validators.required ]),
@@ -49,26 +48,54 @@ export class UserProfileComponent implements OnInit {
   }
 
   setUserProfile(user: User) {
-    this.profile.get(user.userName).subscribe(([u, v]) => {
-      this.user = u;
-      this.vendor = v;
+    if (user.role === 'VENDOR') {
+      this.profile.getVendor(user.userName).subscribe(([u, v]) => {
+        this.user = u;
+        this.vendor = v;
 
-      if (this.vendor.address.zip === 0) {
-        this.vendor.address.zip = undefined;
-      }
+        this.isVendor = true;
 
-      this.profileForm.controls['name'].setValue(this.user.name);
-      this.profileForm.controls['companyName'].setValue(this.vendor.name);
-      this.profileForm.controls['companyWebsite'].setValue(this.vendor.website);
-      this.profileForm.controls['companyPhone'].setValue(this.vendor.phone);
-      this.profileForm.controls['companyStreet'].setValue(this.vendor.address.street);
-      this.profileForm.controls['companyCity'].setValue(this.vendor.address.city);
-      this.profileForm.controls['companyState'].setValue(this.vendor.address.state);
-      this.profileForm.controls['companyZip'].setValue(this.vendor.address.zip);
-    });
+        if (this.vendor.address.zip === 0) {
+          this.vendor.address.zip = undefined;
+        }
+
+        this.profileForm.controls['name'].setValue(this.user.name);
+        this.profileForm.controls['companyName'].setValue(this.vendor.name);
+        this.profileForm.controls['companyWebsite'].setValue(this.vendor.website);
+        this.profileForm.controls['companyPhone'].setValue(this.vendor.phone);
+        this.profileForm.controls['companyStreet'].setValue(this.vendor.address.street);
+        this.profileForm.controls['companyCity'].setValue(this.vendor.address.city);
+        this.profileForm.controls['companyState'].setValue(this.vendor.address.state);
+        this.profileForm.controls['companyZip'].setValue(this.vendor.address.zip);
+      });
+    } else {
+      this.profile.getOrganizer(user.userName).subscribe(u => {
+        this.user = u;
+
+        this.isVendor = false;
+
+        this.profileForm.controls['name'].setValue(this.user.name);
+
+        this.profileForm.controls['companyName'].disable();
+        this.profileForm.controls['companyWebsite'].disable();
+        this.profileForm.controls['companyPhone'].disable();
+        this.profileForm.controls['companyStreet'].disable();
+        this.profileForm.controls['companyCity'].disable();
+        this.profileForm.controls['companyState'].disable();
+        this.profileForm.controls['companyZip'].disable();
+      });
+    }
   }
 
   onUpdateUser() {
+    if (this.isVendor) {
+      this.updateVendor();
+    } else {
+      this.updateOrganizer();
+    }
+  }
+
+  updateVendor() {
     this.user = {
       id: this.user.id,
       userName: this.user.userName,
@@ -91,7 +118,7 @@ export class UserProfileComponent implements OnInit {
       address: address,
     };
 
-    this.profile.update(this.user, this.vendor).subscribe(result => {
+    this.profile.updateVendor(this.user, this.vendor).subscribe(result => {
       const message = 'User was successfully updated';
       this.snackbar.open(message, 'Updated', {
         duration: 2000,
@@ -105,5 +132,26 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  updateOrganizer() {
+    this.user = {
+      id: this.user.id,
+      userName: this.user.userName,
+      name: this.profileForm.controls['name'].value,
+      role: this.user.role,
+    };
+
+    this.profile.updateOrganizer(this.user).subscribe(result => {
+      const message = 'User was successfully updated';
+      this.snackbar.open(message, 'Updated', {
+        duration: 2000,
+      });
+    }, (error) => {
+      console.log(error);
+      const message = 'Problem updating the user information.';
+      this.snackbar.open(message, 'Failed', {
+        duration: 5000,
+      });
+    });
+  }
 
 }

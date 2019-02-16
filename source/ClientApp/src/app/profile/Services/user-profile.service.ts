@@ -13,26 +13,29 @@ export class UserProfileService {
       ) {
   }
 
-  get(userName: string): Observable<[User, Vendor]> {
+  getVendor(userName: string): Observable<[User, Vendor]> {
       return forkJoin(
         this.auth.get('users/' + userName),
         this.auth.get('vendors/' + userName)
     );
-
   }
 
-  update(user: User, vendor?: Vendor): Observable<[boolean]> {
-    if (vendor) {
-      return forkJoin(
-        this.auth.put('users', user),
-        this.auth.put('vendors', vendor)
-      ).pipe(
-        map(([didUser, didVendor]) => {
-          return didUser && didVendor;
-        })
-      );
-    } else {
-      return this.auth.put('users', user);
-    }
+  getOrganizer(userName: string): Observable<User> {
+    return this.auth.get('users/' + userName);
+  }
+
+  updateVendor(user: User, vendor: Vendor): Observable<boolean> {
+    return forkJoin(
+      this.auth.put('users', user),
+      this.auth.put('vendors', vendor)
+    ).pipe(
+      map(([didUser, didVendor]) => {
+        return didUser && didVendor;
+      })
+    );
+  }
+
+  updateOrganizer(user: User): Observable<boolean> {
+    return this.auth.put('users', user);
   }
 }
