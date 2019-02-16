@@ -136,8 +136,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var userResult = result.Value as string;
-            Assert.Equal("User successfully added.", userResult);
+            var userResult = result.Value as bool?;
+            Assert.True(userResult);
         }
 
 
