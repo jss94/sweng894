@@ -132,7 +132,7 @@ export class UpdateVendorServicesComponent implements OnInit {
 }
 
 onCancel() {
-  this.router.navigate(['/vendorservices/']);
+  this.router.navigate(['/vendor-services/']);
 }
 
 }

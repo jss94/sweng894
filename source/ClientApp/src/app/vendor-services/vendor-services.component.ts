@@ -136,6 +136,16 @@ export class VendorServicesComponent implements OnInit {
     this.router.navigate(['/update-vendor-services/' + service.id]);
   }
 
+  onDelete(service): void {
+    this.vendorServicesService.deleteVendorService(service).subscribe(response => {
+      this.ngOnInit();
+      this.vendorServiceForm.reset();
+      this.snackbar.open('Successfully Removed ' + service.serviceName, '', {
+        duration: 1500
+      });
+    });   
+  }
+
 
 
 }

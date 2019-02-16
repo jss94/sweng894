@@ -36,7 +36,7 @@ namespace source.Controllers
             _vendorServicesQuery = vendorServicesQuery;
             _logger = logger;
         }
-                
+
         /// <summary>
         /// Gets the list of service types for vendors' services
         /// </summary>
@@ -189,12 +189,12 @@ namespace source.Controllers
         /// </summary>
         /// <param name="id">Service id</param>
         /// <returns>True/False</returns>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                bool result = await _vendorServicesQuery.DeactivateByVendorId(id);
+                bool result = await _vendorServicesQuery.DeactivateByServiceId(id);
 
                 if (result == false)
                 {
