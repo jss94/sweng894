@@ -53,6 +53,26 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void GetGuestById_ReturnsGuest()
+        {
+            // arrange
+            Guest guest = new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 };
+
+            _guestQueryMock.Setup(x => x.GetByGuestId(guest.guestId))
+                .Returns(Task.Factory.StartNew(() => guest));
+
+            // act
+            var task = _sut.GetGuestById(guest.guestId);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var guestResult = result.Value as Guest;
+            Assert.Equal(guest, guestResult);
+        }
+
+        [Fact]
         public void Insert_ReturnsGuest()
         {
             // arrange

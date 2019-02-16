@@ -12,6 +12,7 @@ import { RegisterVendorComponent } from './register/register-vendor/register-ven
 import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { EventsComponent } from './events/events.component';
 import { GuestsComponent } from './guests/guests.component';
+import { UpdateGuestsComponent } from './guests/update-guests.component';
 import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
 import { ReactivateUserComponent } from './reactivate-user/reactivate-user.component';
 import { VendorServicesComponent } from './vendor-services/vendor-services.component';
@@ -30,6 +31,7 @@ const routes: Routes = [
     { path: 'reactivate-user', component: ReactivateUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
     { path: 'guests/:eventId', component: GuestsComponent },
+    { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
   ];
@@ -42,6 +44,7 @@ const routes: Routes = [
         UsersComponent,
         EventsComponent,
         GuestsComponent,
+        UpdateGuestsComponent,
         RegisterUserComponent,
         RegisterVendorComponent,
         DeactivateUserComponent,

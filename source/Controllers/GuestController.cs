@@ -27,17 +27,38 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// GET api/guest/{id}
+        /// GET api/guest/event/{eventId}
         /// Gets the list of guests for an event
         /// </summary>
-        /// <param name="id">Event Id</param>
+        /// <param name="eventId">Event Id</param>
         /// <returns>List of guests</returns>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetListByEventId (int id)
+        [HttpGet("event/{eventId}")]
+        public async Task<IActionResult> GetListByEventId (int eventId)
         {
             try
             {
-                return new OkObjectResult(await _query.GetListByEventId(id));
+                return new OkObjectResult(await _query.GetListByEventId(eventId));
+            }
+            catch (Exception)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
+        /// GET api/guest/{guestId}
+        /// Gets the list of guests for an event
+        /// </summary>
+        /// <param name="guestId">Guest Id</param>
+        /// <returns>List of guests</returns>
+        [HttpGet("{guestId}")]
+        public async Task<IActionResult> GetGuestById(int guestId)
+        {
+            try
+            {
+                return new OkObjectResult(await _query.GetByGuestId(guestId));
             }
             catch (Exception)
             {
