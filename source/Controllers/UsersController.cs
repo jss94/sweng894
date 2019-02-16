@@ -110,7 +110,7 @@ namespace source.Controllers
 
             await _usersQuery.Update(user);
 
-            return new OkObjectResult("User successfully updated.");
+            return new OkObjectResult(true);
 
         }
 

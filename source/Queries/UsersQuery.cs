@@ -104,9 +104,8 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 string query = @"UPDATE occasions.users"
-                    + @" SET username = @username, name = @name, addressId = @addressId, role = @role "
-                    + @" WHERE username = @username;"
-                    + @" SELECT * FROM occasions.users WHERE id = @id AND active = 1;";
+                    + @" SET username = @username, name = @name, role = @role "
+                    + @" WHERE username = @username;";
 
                 await connection.ExecuteAsync(query, user);
             }

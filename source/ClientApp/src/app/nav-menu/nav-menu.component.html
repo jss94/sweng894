@@ -31,10 +31,11 @@
       </button>
       <mat-menu #userMenu="matMenu">
         <button mat-button class="clickable">
-          <span class="nav-link text-dark" [routerLink]='["/deactivate-user"]' [routerLinkActive]='["link-active"]'>Deactivate</span>
+          <span class="nav-link" [routerLink]='["/user-profile"]' [routerLinkActive]='["link-active"]'>Profile</span>
         </button>
+        <br>
         <button mat-button class="clickable">
-          <span class="nav-link text-dark" (click)="auth.logout()">Logout</span>
+          <span class="nav-link" (click)="auth.logout()">Logout</span>
         </button>
       </mat-menu>
 

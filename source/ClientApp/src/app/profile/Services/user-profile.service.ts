@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { User } from 'src/app/shared/models/user.model';
-import { Vendor } from 'src/app/vendors/Models/vendor.model';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Vendor } from 'src/app/shared/models/vendor.model';
 
 @Injectable()
-export class ProfileService {
+export class UserProfileService {
   constructor(
       private auth: AuthService,
       ) {

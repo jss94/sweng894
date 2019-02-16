@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { ProfileComponent } from './profile.component';
-import { EventService } from './Services/profile.service';
+import { UserProfileComponent } from './user-profile.component';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -12,11 +11,12 @@ import { Routes } from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import { GuestsComponent } from '../guests/guests.component';
 import { MatSnackBar } from '@angular/material';
-import { MockProfileService } from './Services/mock-profile.service';
+import { MockUserProfileService } from './Services/mock-user-profile.service';
+import { EventService } from '../events/Services/event.service';
 
 describe('ProfileComponent', () => {
-  let component: ProfileComponent;
-  let fixture: ComponentFixture<ProfileComponent>;
+  let component: UserProfileComponent;
+  let fixture: ComponentFixture<UserProfileComponent>;
   let mockEventService: EventService;
   let mockAuthService: AuthService;
 
@@ -43,7 +43,7 @@ describe('ProfileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ProfileComponent,
+        UserProfileComponent,
         GuestsComponent,
       ],
       imports: [
@@ -54,7 +54,7 @@ describe('ProfileComponent', () => {
       ],
       providers: [
         { provide: MatSnackBar, useClass: MockMatSnackBar },
-        { provide: EventService, useClass: MockProfileService },
+        { provide: EventService, useClass: MockUserProfileService },
         { provide: AuthService, useClass: MockAuthService },
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -64,7 +64,7 @@ describe('ProfileComponent', () => {
   beforeEach(() => {
     mockEventService = TestBed.get(EventService);
     mockAuthService = TestBed.get(AuthService);
-    fixture = TestBed.createComponent(ProfileComponent);
+    fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
   });
 

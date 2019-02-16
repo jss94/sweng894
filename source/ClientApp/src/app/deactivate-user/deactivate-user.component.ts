@@ -4,6 +4,7 @@ import { WarningDialogComponent } from '../shared/components/warning-dialog/warn
 import { AuthService } from '../shared/services/auth.service';
 import { UsersService } from '../users/Services/users.service';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-deactivate-user',
@@ -11,6 +12,7 @@ import { MatSnackBar } from '@angular/material';
   })
   export class DeactivateUserComponent implements OnInit {
       constructor(
+        private router: Router,
         private dialog: MatDialog,
         private userService: UsersService,
         private authService: AuthService,
@@ -40,6 +42,8 @@ import { MatSnackBar } from '@angular/material';
               });
 
             });
+          } else {
+            this.router.navigate(['/user-profile']);
           }
         });
       }

@@ -148,7 +148,13 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _vendorQuery.Update(vendor));
+                var result = await _vendorQuery.GetByUserName(vendor.userName);
+
+                if (result == null)
+                    return new NotFoundResult();
+
+                await _vendorQuery.Update(vendor);
+                return new OkObjectResult(true);
             }
             catch (Exception ex)
             {
