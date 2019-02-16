@@ -16,5 +16,6 @@ namespace source.Queries
         Task<bool> DeactivateByServiceId(int id);
         Task<bool> DeactivateByVendorId(int id);
         Task<bool> ReactivateByVendorId(int id);
+        Task<VendorServices> GetById(int id);
     }
 }

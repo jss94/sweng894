@@ -17,6 +17,7 @@ import { DeactivateUserComponent } from './deactivate-user/deactivate-user.compo
 import { ReactivateUserComponent } from './reactivate-user/reactivate-user.component';
 import { VendorServicesComponent } from './vendor-services/vendor-services.component';
 import { VendorComponent } from './vendors/vendor.component';
+import { UpdateVendorServicesComponent } from './vendor-services/update-vendor-services.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -32,6 +33,7 @@ const routes: Routes = [
     { path: 'guests/:eventId', component: GuestsComponent },
     { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
+    { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
   ];
 
 @NgModule({
@@ -49,6 +51,7 @@ const routes: Routes = [
         ReactivateUserComponent,
         VendorComponent,
         VendorServicesComponent,
+        UpdateVendorServicesComponent,
     ],
 
     imports: [
