@@ -1,0 +1,46 @@
+<div class="page-container">
+
+    <h1>Update Guest</h1>
+
+    <form class="form" [formGroup]="updateGuestForm" (ngSubmit)="onSave()" (ngCancel)="onCancel()"> 
+
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input
+            matInput
+            placeholder="Name"
+            formControlName="name"
+            >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input
+            matInput
+            placeholder="Email"
+            formControlName="email"
+            >
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Is Going?</mat-label>
+            <mat-select [(value)]="selectedValue">
+                <mat-option *ngFor="let option of options" [value]="option.value">
+                    {{option.viewValue}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>    
+
+        <mat-action-row>
+            <button type="submit" mat-button [disabled]="!updateGuestForm.valid" (click)="onSave()">
+                <mat-icon>save</mat-icon>
+                Save
+            </button>
+            <button type="cancel" mat-button (click)="onCancel()">
+                <mat-icon>cancel</mat-icon>
+                Cancel
+            </button>        
+        </mat-action-row>
+
+    </form>
+</div>
