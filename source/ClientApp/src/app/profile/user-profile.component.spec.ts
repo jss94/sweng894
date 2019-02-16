@@ -17,7 +17,7 @@ import { UserProfileService } from './Services/user-profile.service';
 import { FakeVendor } from '../shared/models/fake-vendor.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 
-fdescribe('ProfileComponent', () => {
+describe('ProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
   let mockUserProfileService: UserProfileService;
