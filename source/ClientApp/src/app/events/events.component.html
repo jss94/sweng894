@@ -53,7 +53,7 @@
 
 <div class="item-container" *ngFor="let event of events">
   <div class="event-item">
-    
+
 
     <div class="header">
       <div class="event-icon">
@@ -80,13 +80,18 @@
       <button *ngIf="event.isEditable" (click)="event.isEditable=!event.isEditable; updateEvent(name.value, description.value, event)">
           <mat-icon>save</mat-icon>
       </button> -->
-      <button mat-button (click)="onGuestsClicked(event)">
+      <button mat-button (click)="onGuestsClicked(event)" matTooltip="View Guest List">
         <mat-icon>people</mat-icon>
       </button>
 
-      <button mat-button (click)="deleteEvent(event)">
+      <button mat-button (click)="deleteEvent(event)" matTooltip="Delete Event">
           <mat-icon>delete_forever</mat-icon>
       </button>
+
+      <button mat-button (click)="showInvite(event)" matTooltip="Email Guest List">
+          <mat-icon>email</mat-icon>
+    </button>
+
     </div>
   </div>
 </div>

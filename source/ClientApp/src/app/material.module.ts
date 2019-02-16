@@ -16,6 +16,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { WarningDialogComponent } from './shared/components/warning-dialog/warning-dialog.component';
 import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
+import { EmailDialogComponent } from './shared/components/email-dialog/email-dialog.component';
+
 
 @NgModule({
   imports: [
@@ -56,10 +58,12 @@ import { DeactivateUserComponent } from './deactivate-user/deactivate-user.compo
   declarations: [
     SnackbarComponent,
     WarningDialogComponent,
+    EmailDialogComponent
   ],
   entryComponents: [
     SnackbarComponent,
-    WarningDialogComponent
+    WarningDialogComponent,
+    EmailDialogComponent,
   ]
 })
 export class MaterialModule { }
