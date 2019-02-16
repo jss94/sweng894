@@ -2,3 +2,11 @@
 .email-content {
   width: 450px;
 }
+
+
+
+.subject-title{
+ border:1px solid #000;
+ width:200px;
+ padding:0px;
+}

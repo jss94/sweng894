@@ -2,15 +2,24 @@
   <mat-icon>{{ data.iconName }}</mat-icon>
   {{ data.title }}
 </h2>
-<mat-form-field class="email-content">
-    <textarea cdkTextareaAutosize cdkTextareaAutosize
-    cdkAutosizeMinRows="2"
-    cdkAutosizeMaxRows="5"
-    #autosize="cdkTextareaAutosize"
-    matInput>
-      {{data.content}}
-    </textarea>
-  </mat-form-field>
+
+<div class="email-subject">
+    <span>Subject:&nbsp;&nbsp;</span>
+    <input class="subject-title" matInput value="{{ data.subject }}">
+</div>
+
+<br>
+
+<div class="email-content">
+  <textarea cdkTextareaAutosize cdkTextareaAutosize
+  cdkAutosizeMinRows="2"
+  cdkAutosizeMaxRows="3"
+  #autosize="cdkTextareaAutosize"
+  matInput>
+    {{data.content}}
+  </textarea>
+</div>
+
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>{{ data.buttonText1 }}</button>
   <button mat-button mat-dialog-close (click)="onClickAffirm()">{{ data.buttonText2 }}</button>

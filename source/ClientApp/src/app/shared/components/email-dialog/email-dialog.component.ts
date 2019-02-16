@@ -3,10 +3,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface EmailDialogData {
   iconName: string;
-    title: string;
-    content: string;
-    buttonText1: string;
-    buttonText2: string;
+  title: string;
+  subject: string;
+  content: string;
+  buttonText1: string;
+  buttonText2: string;
 }
 
 @Component({

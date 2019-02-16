@@ -1,16 +1,8 @@
-﻿
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using source.Database;
+﻿using System.Threading.Tasks;
 using source.Models;
-using Dapper;
-using System.Linq;
-using System.Threading;
 using System.Net;
 using SendGrid;
 using System;
-using Microsoft.AspNetCore.Http;
 
 namespace source.Queries
 {

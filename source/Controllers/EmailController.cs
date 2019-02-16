@@ -64,7 +64,7 @@ namespace source.Controllers
             List<Guest> eventGuests = await _guestsQuery.GetListByEventId(id);
 
             // check if guests are returned
-            if (eventGuests == null || eventGuests.ToArray().Length ==0)
+            if (eventGuests == null || eventGuests.ToArray().Length == 0)
                 return HttpStatusCode.NotFound;
 
             // create to list and set
@@ -72,6 +72,8 @@ namespace source.Controllers
             List<EmailRecipient> emailTos = new List<EmailRecipient>();
             EmailPersonalization personalization = new EmailPersonalization();
 
+            // TODO - Instead of emailing all of the guests in one email, they should probably
+            // be emailed individually.  This would allow for a RSVP link to be embedded into the content.
             eventGuests.ForEach(guest => {
                 emailTos.Add(new EmailRecipient(guest.name, guest.email));
             });

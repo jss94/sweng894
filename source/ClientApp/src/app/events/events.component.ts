@@ -106,7 +106,8 @@ export class EventsComponent implements OnInit {
       width: '600px',
       data: {
           iconName: 'event',
-          title: evnt.name + ' - Invitation',
+        title: evnt.name + ' - Invitation',
+          subject: 'You\'re Invited!',
           content: inviteTemplate,
           buttonText1: 'Cancel',
           buttonText2: 'Send'
@@ -119,8 +120,9 @@ export class EventsComponent implements OnInit {
     .subscribe(result => {
       if (result === true) {
         const invitationText = dialogRef.componentInstance.data.content;
+        const invitationSubject = dialogRef.componentInstance.data.subject;
 
-        const emailModel: EmailModel = this.createEmailModel(invitationText, evnt.userName);
+        const emailModel: EmailModel = this.emailService.createEmailModel(invitationSubject, invitationText, evnt.userName);
 
         this.emailService.sendEventInvitationEmail(evnt.eventId, emailModel).subscribe(response => {
           let statusMsg = 'Successfully emailed your guests!';
@@ -138,32 +140,5 @@ export class EventsComponent implements OnInit {
       }
     });
 }
-
-  createEmailModel(invitationText: string, evntUserName: string): EmailModel {
-    const toEmail = new EmailAddress();
-    toEmail.email = evntUserName; // place holder, will be replaced by backend
-
-    const to: EmailAddress[] = [];
-    to.push(toEmail);
-
-    const fromEmail = new EmailAddress();
-    fromEmail.email = evntUserName;
-
-    const emailContent = new EmailContent();
-    emailContent.type = 'text/plain';
-    emailContent.value = invitationText;
-
-    const content: EmailContent[] = [];
-    content.push(emailContent);
-
-    const emailModel = new EmailModel();
-    emailModel.personalizations = [({ 'to': to })];
-    emailModel.subject = 'Needs to be updated with User Entered Subject';
-
-    emailModel.from = fromEmail;
-    emailModel.content = content;
-
-    return emailModel;
-  }
 
 }
