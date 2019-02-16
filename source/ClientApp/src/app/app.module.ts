@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { GetUsersService } from './get-users/Services/get-users.service';
+import { UsersService } from './users/Services/users.service';
 import { EventService } from './events/Services/event.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RoutingModule } from './app.router.module';
@@ -39,7 +39,7 @@ import { ProfileService } from './profile/Services/profile.service';
   ],
   providers: [
     AuthService,
-    GetUsersService,
+    UsersService,
     EventService,
     GoogleMapsService,
     GuestsService,

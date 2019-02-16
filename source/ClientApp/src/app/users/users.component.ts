@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../shared/models/user.model';
-import { GetUsersService } from './Services/get-users.service';
+import { UsersService } from './Services/users.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatExpansionPanel } from '@angular/material';
@@ -8,10 +8,10 @@ import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-get-users',
-  templateUrl: './get-users.component.html',
-  styleUrls: [ './get-users.component.css']
+  templateUrl: './users.component.html',
+  styleUrls: [ './users.component.css']
 })
-export class GetUsersComponent implements OnInit {
+export class UsersComponent implements OnInit {
 
   @ViewChild(MatExpansionPanel) expansion: MatExpansionPanel;
 
@@ -39,7 +39,7 @@ export class GetUsersComponent implements OnInit {
   });
 
   constructor(
-    private service: GetUsersService,
+    private service: UsersService,
     private snackbar: MatSnackBar,
     ) { }
 
@@ -54,12 +54,6 @@ export class GetUsersComponent implements OnInit {
       userName: this.userForm.controls['email'].value,
       name: this.userForm.controls['name'].value,
       role: this.userForm.controls['role'].value.toUpperCase(),
-      address: {
-        street: this.userForm.controls['street'].value,
-        city: this.userForm.controls['city'].value,
-        state: this.userForm.controls['state'].value.toUpperCase(),
-        zip: this.userForm.controls['zip'].value,
-      }
     };
 
     this.service.registerUser(user).subscribe((result) => {

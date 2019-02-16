@@ -6,7 +6,6 @@ export class FakeVendor implements Vendor {
     id = 1001;
     userName = 'vendor@email.com';
     name = 'Vendor Name';
-    type = 'VENDOR';
     website = 'www.avendor.com';
     phone = '5555555';
     address = new FakeAddress();

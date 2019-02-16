@@ -7,7 +7,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../../shared/models/fake-user.model';
-import { FakeVendor } from 'src/app/vendors/Models/fake-vendor.model';
+import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 import { of } from 'rxjs/internal/observable/of';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GuestsComponent } from 'src/app/guests/guests.component';
@@ -93,7 +93,6 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
 
       // act
       // done automatically by formgroup object
@@ -110,7 +109,7 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
+
       // act
       // done automatically by formgroup object
 
@@ -126,7 +125,6 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
 
       // act
       // done automatically by formgroup object
@@ -143,7 +141,6 @@ describe('RegisterVendorComponent', () => {
 
       // the following are required fields in the form
       component.vendorForm.controls['name'].setValue( vendor.name );
-      component.vendorForm.controls['type'].setValue( vendor.type );
 
       // act
       // done automatically by formgroup object

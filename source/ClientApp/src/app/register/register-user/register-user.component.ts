@@ -30,10 +30,6 @@ export class RegisterUserComponent {
     password: new FormControl('', [ Validators.required, Validators.minLength(8) ]),
     confirm: new FormControl('', [ Validators.required, Validators.minLength(8) ]),
     name: new FormControl(''),
-    street: new FormControl(''),
-    city: new FormControl(''),
-    state: new FormControl('', [ Validators.minLength(2), Validators.maxLength(2) ]),
-    zip: new FormControl('', [ Validators.min(10), Validators.max(99999) ]),
     role: new FormControl('', Validators.required)
   });
 
@@ -48,12 +44,6 @@ export class RegisterUserComponent {
       userName: this.userForm.controls['email'].value,
       name: this.userForm.controls['name'].value,
       role: this.userForm.controls['role'].value.toUpperCase(),
-      address: {
-        street: this.userForm.controls['street'].value,
-        city: this.userForm.controls['city'].value,
-        state: this.userForm.controls['state'].value.toUpperCase(),
-        zip: this.userForm.controls['zip'].value,
-      }
     };
 
     const password = this.userForm.controls['password'].value;
@@ -75,7 +65,15 @@ export class RegisterUserComponent {
         this.auth.login();
 
       }, (error) => {
-        message = error.error.description;
+        if (error === null) {
+          error = {
+            error: {
+              description: null
+            }
+          };
+        }
+
+        message = error.error.description || 'Error registering user.';
 
         this.snackbar.open(message, '', {
           duration: 5000

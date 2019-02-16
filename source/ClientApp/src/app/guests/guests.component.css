@@ -1,20 +1,55 @@
-h1 
-{
-    color: #369;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 250%;
+h1 {
+    padding: 10px;
 }
-.guest-list {
-    float: left;
-    overflow: scroll;
-    height: 75vh;
-  }
+  
+.page-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 mat-form-field {
-    padding-top: 10px;
+    padding-top: 20px;
     padding-right: 20px;
 }
 
-.options {
-    padding-left: 10px;
+.guest-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+.guest-item {
+    width: 100%;
+    margin-top: 10px;
+    padding: 0px;
+    background-color: #E5E8EC;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.guest-item:hover {
+    background-color: rgb(193, 198, 206);
+}
+
+.guest-field {
+    display: flex;
+    width: 30%;
+}
+
+mat-icon, h5, .email-field {
+    margin: 10px;
+}
+
+.guest-item .icons {
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    padding-right: 30px;
+}
+  

@@ -72,19 +72,20 @@ namespace source.Queries
                 {
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
+                    string query = @"SELECT * from occasions.vendors WHERE id = @id and active = 1; "
+                        + @"SELECT * from occasions.vendorServices WHERE active = 1";
 
-                    string query = @"SELECT id, userName, name, type, website, phone "
-                        + @"FROM occasions.vendors "
-                        + @"WHERE id = @id AND active = 1;";
+                    var result = await connection.QueryMultiple(query, new { id = id }).Map<Vendor, VendorServices, int?>
+                        (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
+                        (vendor, vendorservices) => {
+                            vendor.services = vendorservices.ToList();
+                      });
 
-                    var vendor = connection.QueryFirstAsync<Vendor>(query, new { id }).Result;
-                    return vendor;
+                    return result.FirstOrDefault();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
                 return new Vendor();
             }
         }
@@ -102,25 +103,40 @@ namespace source.Queries
                 {
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
+                    var query = @"SELECT * FROM occasions.vendors WHERE userName = @userName AND active = 1; "
+                        + @"SELECT * FROM occasions.vendorServices WHERE active = 1";
 
-                    string query = @"SELECT * FROM occasions.vendors v "
-                        + @" JOIN occasions.addresses a ON v.addressId = a.id "
-                        + @" WHERE v.userName = @userName AND v.active = 1;";
-                        
-                    var vendor = connection.QueryFirstAsync<Vendor>(query, new { userName }).Result;
+                    var vendorResult = await connection.QueryMultiple(query, new { userName })
+                    .Map<Vendor, VendorServices, int?>
+                        (v => v.id, s => s.vendorId,
+                        (v, s) =>
+                        {
+                            v.services = s.ToList();
+                        });
+
+                    var vendor = vendorResult.FirstOrDefault();
+
+                    if (vendor == null) return null;
+
+                    var addressQuery = @"SELECT * FROM occasions.addresses "
+                        + @"WHERE userName = @userName AND active = 1;";
+
+                    var address = await connection.QueryFirstOrDefaultAsync<Address>(addressQuery, new { userName });
+
+                    vendor.address = address == null ? new Address() : address;
+
                     return vendor;
                 }
             }
-            catch (Exception)
+            catch(Exception ex)
             {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
                 return new Vendor();
             }
+
         }
 
         /// <summary>
-        /// Inserts a new vendor record
+        /// Inserts a new vendor record; if services are added as part of the vendor, adds services to vendor
         /// </summary>
         /// <param name="vendor">Vendor</param>
         /// <returns>New vendor record</returns>
@@ -134,19 +150,32 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"INSERT INTO occasions.vendors "
-                        + @"(id, userName, name, type, addressId, website, phone, active) "
-                        + @"VALUES(@id, @userName, @name, @type, @addressId, @website, @phone, 1); "
+                        + @"(userName, name, addressId, website, phone, active) "
+                        + @"VALUES(@userName, @name, @addressId, @website, @phone, 1); "
                         + @"SELECT * FROM occasions.vendors WHERE id = LAST_INSERT_ID() AND active = 1;";
 
+                    var newVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
 
-                    var returnedVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
+                    //If services are added at the same time as vendor, add services
+                    if (vendor.services != null)
+                    {
+                        foreach (VendorServices v in vendor.services)
+                        {
+                            v.vendorId = newVendor.id.Value;
+                            string servicesQuery = @"INSERT INTO occasions.vendorServices "
+                                + @"(vendorId, serviceType, serviceName, serviceDescription, flatFee, price, unitsAvailable, active) "
+                                + @"VALUES(@vendorId, @serviceType, @serviceName, @serviceDescription, @flatFee, @price, @unitsAvailable, 1); ";
+
+                            var addedService = connection.ExecuteAsync(servicesQuery, v).Result;
+                        }
+                    }
+
+                    var returnedVendor = await GetById(newVendor.id.Value);
                     return returnedVendor;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
                 return new Vendor();
             }
         }
@@ -174,20 +203,18 @@ namespace source.Queries
                     return returnedVendor;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
                 return new Vendor();
             }
         }
 
         /// <summary>
-        /// Deactivates a vendor record
+        /// Deactivates a vendor record and all associated services
         /// </summary>
-        /// <param name="id">Vendor ID</param>
+        /// <param name="userName">User Name</param>
         /// <returns>True/False</returns>
-        public async Task<bool> Deactivate(int id)
+        public async Task<bool> Deactivate(string userName)
         {
             try
             {
@@ -198,20 +225,39 @@ namespace source.Queries
 
                     string query = @"UPDATE occasions.vendors "
                         + @"SET active = 0 "
-                        + @"WHERE id = @id AND active = 1;";
+                        + @"WHERE userName = @userName AND active = 1;";
 
-                    var returnedValue = connection.QueryAsync<Vendor>(query, new { id });
+                    var returnedValue = connection.QueryAsync<Vendor>(query, new { userName });
                     return true;                   
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: we should log our errors in the db
-                //Errors should bubble up but this is super helpful during development
                 return false;
             }
         }
 
+
+        /// <summary>
+        /// Reactivate the specified userName.
+        /// </summary>
+        /// <returns>The reactivate.</returns>
+        /// <param name="userName">User name.</param>
+        public async Task<bool> Reactivate(string userName)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"UPDATE occasions.vendors "
+                    + @"SET active = 1 "
+                    + @"WHERE userName = @userName AND active = 0;";
+
+                var returnedValue = connection.QueryAsync<Vendor>(query, new { userName });
+                return true;
+            }
+        }
 
         /// <summary>
         /// Delete the specified vendor.
@@ -220,18 +266,26 @@ namespace source.Queries
         /// <param name="id">Vendor ID.</param>
         public async Task<bool> Delete(int id)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"DELETE FROM occasions.vendors "
-                    + @"WHERE id = @id AND active = 1;";
+                    string query = @"DELETE FROM occasions.vendorServices "
+                        + @"WHERE vendorId = @id; "
+                        + @"DELETE FROM occasions.vendors "
+                        + @"WHERE id = @id AND active = 1;";
 
-                var returnedValue = connection.QueryAsync<Vendor>(query, new { id });
-                return true;
+                    var returnedValue = connection.ExecuteAsync(query, new { id });
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
             }
         }
-
     }
 }

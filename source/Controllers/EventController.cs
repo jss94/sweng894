@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using source.Framework;
 using source.Models;
 using source.Queries;
 
@@ -18,6 +19,7 @@ namespace source.Controllers
     {
 
         IEventQuery _eventQuery { get; set; }
+        ILogger _logger { get; set; }
 
 
         /// <summary>
@@ -66,8 +68,17 @@ namespace source.Controllers
         [HttpPost]
         public async Task<IActionResult>Create([FromBody]Event evnt)
         {
-            await _eventQuery.CreateEvent(evnt);
-            return new OkObjectResult(evnt);
+            try
+            {
+                await _eventQuery.CreateEvent(evnt);
+                return new OkObjectResult(true);
+            }
+            catch(Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+
         }
 
         /// <summary>
@@ -94,7 +105,7 @@ namespace source.Controllers
             if (result == null)
                 return new NotFoundResult();
 
-            await _eventQuery.DeleteEvent(result);
+            await _eventQuery.DeleteById(result.eventId);
             return new OkObjectResult(true);
         }
     }

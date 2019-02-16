@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RegisterService } from '../Services/register.service';
-import { Vendor } from 'src/app/vendors/Models/vendor.model';
+import { Vendor } from 'src/app/shared/models/vendor.model';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -17,7 +17,6 @@ export class RegisterVendorComponent {
 
   vendorForm = new FormGroup({
     name: new FormControl('', [ Validators.required ]),
-    type: new FormControl('', [ Validators.required, Validators.minLength(5) ]),
     website: new FormControl('', [ Validators.minLength(8) ]),
     phone: new FormControl('', [Validators.minLength(10), Validators.maxLength(11)]),
     street: new FormControl(''),
@@ -37,7 +36,6 @@ export class RegisterVendorComponent {
     const vendor: Vendor = {
       userName: this.auth.user.userName,
       name: this.vendorForm.controls['name'].value,
-      type: this.vendorForm.controls['type'].value,
       website: this.vendorForm.controls['website'].value,
       phone: this.vendorForm.controls['phone'].value,
       address: {
@@ -58,8 +56,7 @@ export class RegisterVendorComponent {
 
       // reload page
       this.vendorForm.reset();
-      this.router.navigate(['/home']);
-      console.log(result);
+      this.router.navigate(['/events']);
 
     }, (error) => {
       message = error.error.description;

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics.Tracing;
 
 namespace source.Controllers
 {
@@ -26,17 +27,38 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// GET api/guest/{id}
+        /// GET api/guest/event/{eventId}
         /// Gets the list of guests for an event
         /// </summary>
-        /// <param name="id">Event Id</param>
+        /// <param name="eventId">Event Id</param>
         /// <returns>List of guests</returns>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetListByEventId (int id)
+        [HttpGet("event/{eventId}")]
+        public async Task<IActionResult> GetListByEventId (int eventId)
         {
             try
             {
-                return new OkObjectResult(await _query.GetListByEventId(id));
+                return new OkObjectResult(await _query.GetListByEventId(eventId));
+            }
+            catch (Exception)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
+        /// GET api/guest/{guestId}
+        /// Gets the list of guests for an event
+        /// </summary>
+        /// <param name="guestId">Guest Id</param>
+        /// <returns>List of guests</returns>
+        [HttpGet("{guestId}")]
+        public async Task<IActionResult> GetGuestById(int guestId)
+        {
+            try
+            {
+                return new OkObjectResult(await _query.GetByGuestId(guestId));
             }
             catch (Exception)
             {
@@ -52,12 +74,13 @@ namespace source.Controllers
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>New Guest record</returns>
-        [HttpPost("{insert}")]
+        [HttpPost]
         public async Task<IActionResult> Insert([FromBody]Guest guest)
         {
             try
             {
-                return new OkObjectResult(await _query.Insert(guest));
+                await _query.Insert(guest);
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
@@ -73,12 +96,13 @@ namespace source.Controllers
         /// </summary>
         /// <param name="guest">Guest</param>
         /// <returns>Updated Guest record</returns>
-        [HttpPost("{update}")]
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody]Guest guest)
         {
             try
             {
-                return new OkObjectResult(await _query.Update(guest));
+                await _query.Update(guest);
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
@@ -92,14 +116,22 @@ namespace source.Controllers
         /// DELETE api/guest/{id}
         /// Deletes a guest
         /// </summary>
-        /// <param name="id">Guest Id</param>
+        /// <param name="id">Event Id</param>
         /// <returns>True if successful</returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteByGuestId(int id)
         {
             try
             {
-                return new OkObjectResult(await _query.DeleteById(id));
+                var events = await _query.GetByGuestId(id);
+
+                if (events == null) 
+                {
+                    return new NotFoundResult();
+                }
+
+                await _query.DeleteByGuestId(id);
+                return new OkObjectResult(true);
             }
             catch (Exception)
             {
@@ -108,5 +140,6 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
+
     }
 }

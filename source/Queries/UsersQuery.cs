@@ -27,32 +27,28 @@ namespace source.Queries
         }
 
         /// <summary>
-        /// Gets a single user by username
+        /// Gets the name of the by user.
         /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<User> GetByUserName(string username)
+        /// <returns>The by user name.</returns>
+        /// <param name="username">Username.</param>
+        /// <param name="isActive">If set to <c>true</c> is active.</param>
+        public async Task<User> GetByUserName(string username, bool isActive = true)
         {
-            try
+            var active = 0;
+            if (isActive) active = 1;
+
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string userQuery = @"SELECT userName, name, addressId, role "
-                        + @"FROM occasions.users WHERE userName = @username;";
+                string userQuery = @"SELECT userName, name, addressId, role "
+                    + @"FROM occasions.users WHERE userName = @username and active = @active;";
 
-                    var user = connection.QueryFirstAsync<User>(userQuery, new { username }).Result;
+                var user = await connection.QueryFirstOrDefaultAsync<User>(userQuery, new { username, active});
 
-                    return user;
-                }
+                return user;
             }
-            catch (Exception)
-            {
-                return new User();
-            }
-
         }
 
         /// <summary>
@@ -61,26 +57,18 @@ namespace source.Queries
         /// <returns></returns>
         public async Task<List<User>> GetAll()
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"SELECT userName, name, addressId, role "
-                        + @"FROM occasions.users "
-                        + @"WHERE active = 1 ORDER BY userName DESC;";
+                string query = @"SELECT userName, name, addressId, role "
+                    + @"FROM occasions.users "
+                    + @"WHERE active = 1 ORDER BY userName DESC;";
 
-                    var users = connection.QueryAsync<User>(query).Result.ToList();
-                    return users;
-                }
+                var users = connection.QueryAsync<User>(query).Result.ToList();
+                return users;
             }
-            catch (Exception)
-            {
-                return new List<User>();
-            }
-
         }
 
         /// <summary>
@@ -88,28 +76,18 @@ namespace source.Queries
         /// </summary>
         /// <returns>The insert.</returns>
         /// <param name="user">User.</param>
-        public async Task<int> Insert(User user)
+        public async Task Insert(User user)
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"INSERT INTO occasions.users (userName, name, addressId, role) "
-                        + @"VALUES (@userName, @name, @addressId, @role);"
-                        + @"SELECT LAST_INSERT_ID() FROM occasions.users WHERE active = 1;";
+                string query = @"INSERT INTO occasions.users (userName, name, role) "
+                    + @"VALUES (@userName, @name, @role);";
 
-                    var result = connection.QueryFirstAsync<int>(query, user).Result;
-                    return result;
-                }
-            } 
-            catch(Exception)
-            {
-                return new int();
+                await connection.ExecuteAsync(query, user);
             }
-
         }
 
         /// <summary>
@@ -119,25 +97,18 @@ namespace source.Queries
         /// <returns></returns>
         public async Task Update(User user)
         {
-            try
-            {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
 
-                    string query = @"UPDATE occasions.users"
-                        + @" SET username = @username, name = @name, addressId = @addressId, role = @role "
-                        + @" WHERE username = @username;"
-                        + @" SELECT * FROM occasions.users WHERE id = @id AND active = 1;";
-
-                    var updatedUser = connection.QueryFirstAsync<User>(query, user).Result;
-                    await Task.CompletedTask;
-                }
-            }
-            catch (Exception)
+            using (var db = _database)
             {
-                await Task.CompletedTask;
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"UPDATE occasions.users"
+                    + @" SET username = @username, name = @name, addressId = @addressId, role = @role "
+                    + @" WHERE username = @username;"
+                    + @" SELECT * FROM occasions.users WHERE id = @id AND active = 1;";
+
+                await connection.ExecuteAsync(query, user);
             }
 
         }
@@ -149,25 +120,40 @@ namespace source.Queries
         /// <param name="user">User.</param>
         public async Task Deactivate(User user)
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"UPDATE occasions.users "
-                        + @"SET active = 0 WHERE username = @username;";
+                string query = @"UPDATE occasions.users "
+                    + @"SET active = 0 WHERE username = @username;";
 
-                    var result = connection.QueryFirstAsync<Vendor>(query, user).Result;
-                    await Task.CompletedTask;
-                }
-            }
-            catch (Exception)
-            {
                 await Task.CompletedTask;
+                await connection.ExecuteAsync(query, user);
             }
         }
+
+        /// <summary>
+        /// Reactivate the specified user.
+        /// </summary>
+        /// <returns>The reactivate.</returns>
+        /// <param name="user">User.</param>
+        public async Task Reactivate(User user)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"UPDATE occasions.users "
+                    + @"SET active = 1 WHERE username = @username;";
+
+                await Task.CompletedTask;
+                await connection.ExecuteAsync(query, user);
+
+            }
+        }
+
 
         /// <summary>
         /// Delete the specified user.
@@ -176,22 +162,15 @@ namespace source.Queries
         /// <param name="user">User.</param>
         public async Task Delete(User user)
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"DELETE FROM occasions.users "
-                        + @"WHERE active = 1 AND username = @username;";
+                string query = @"DELETE FROM occasions.users "
+                    + @"WHERE active = 1 AND username = @username;";
 
-                    var result = connection.QueryFirstAsync<Vendor>(query, user).Result;
-                    await Task.CompletedTask;
-                }
-            }
-            catch (Exception)
-            {
+                await connection.ExecuteAsync(query, user);
                 await Task.CompletedTask;
             }
         }

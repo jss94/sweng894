@@ -8,9 +8,17 @@ import { User } from '../models/user.model';
 export class MockAuthService {
 
   user: User = new FakeUser();
-  user$: Observable<User> = of(new FakeUser());
+  _user$: Observable<User> = of(new FakeUser());
+
+  get user$() {
+    return this._user$;
+  }
 
   userProfile: any = {};
+
+  isAuthenticated(): any {
+    return null;
+  }
 
   getUserProfile(): any {
     return this.userProfile;

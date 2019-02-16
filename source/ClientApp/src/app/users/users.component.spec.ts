@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { GetUsersComponent } from './get-users.component';
-import { GetUsersService } from './Services/get-users.service';
-import { MockGetUsersService } from './Services/mock-get-users.service';
+import { UsersComponent as UsersComponent } from './users.component';
+import { UsersService } from './Services/users.service';
+import { MockUsersService } from './Services/mock-users.service';
 import { FakeUser } from '../shared/models/fake-user.model';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -11,9 +11,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs/internal/observable/of';
 
 describe('GetUsersComponent', () => {
-  let component: GetUsersComponent;
-  let fixture: ComponentFixture<GetUsersComponent>;
-  let mockUsersService: GetUsersService;
+  let component: UsersComponent;
+  let fixture: ComponentFixture<UsersComponent>;
+  let mockUsersService: UsersService;
 
   class MockMatSnackBar {
     open() {
@@ -24,10 +24,10 @@ describe('GetUsersComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        GetUsersComponent,
+        UsersComponent,
       ],
       providers: [
-        { provide: GetUsersService, useClass: MockGetUsersService },
+        { provide: UsersService, useClass: MockUsersService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
       ],
       imports: [
@@ -45,9 +45,9 @@ describe('GetUsersComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GetUsersComponent);
+    fixture = TestBed.createComponent(UsersComponent);
     component = fixture.componentInstance;
-    mockUsersService = TestBed.get(GetUsersService);
+    mockUsersService = TestBed.get(UsersService);
     fixture.detectChanges();
   });
 

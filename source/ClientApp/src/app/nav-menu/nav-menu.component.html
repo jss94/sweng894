@@ -5,14 +5,19 @@
     </span>
 
     <div class="align-right">
-      <button *ngIf="isOrginizor || isVendor" mat-button [routerLink]='["/events"]'>
+      <button *ngIf="isOrganizer || isVendor" mat-button [routerLink]='["/events"]'>
         <mat-icon>event_notes</mat-icon>
         Events
       </button>
 
-      <button *ngIf="isOrginizor" mat-button [routerLink]='["/search-vendors"]' [routerLinkActive]='["link-active"]'>
+      <button *ngIf="isVendor" mat-button [routerLink]='["/vendor-services"]'>
+        <mat-icon>store</mat-icon>
+        Services
+      </button>
+
+      <button *ngIf="isOrganizer" mat-button [routerLink]='["/search-vendors"]' [routerLinkActive]='["link-active"]'>
         <mat-icon>search</mat-icon>
-        <span>Search</span>
+        Search
       </button>
       
       <button *ngIf="!auth.isAuthenticated()"  mat-button>
@@ -25,10 +30,10 @@
         <span class="text-grey">{{ auth?.user?.name }}</span>
       </button>
       <mat-menu #userMenu="matMenu">
-        <button mat-button [routerLinkActive]='["link-active"]'>
-          <span class="nav-link text-dark" [routerLink]='["/profile"]'>Profile</span>
+        <button mat-button class="clickable">
+          <span class="nav-link text-dark" [routerLink]='["/deactivate-user"]' [routerLinkActive]='["link-active"]'>Deactivate</span>
         </button>
-        <button mat-button [routerLinkActive]='["link-active"]'>
+        <button mat-button class="clickable">
           <span class="nav-link text-dark" (click)="auth.logout()">Logout</span>
         </button>
       </mat-menu>
@@ -43,7 +48,7 @@
         </button>
       </mat-menu>
 
-      <button *ngIf="isVendor && isOrginizor" mat-button [matMenuTriggerFor]="adminMenu">
+      <button *ngIf="isVendor && isOrganizer" mat-button [matMenuTriggerFor]="adminMenu">
         <mat-icon>verified_user</mat-icon>
         Admin
       </button>

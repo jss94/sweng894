@@ -6,6 +6,7 @@ using source.Database;
 using source.Models;
 using Dapper;
 using System.Linq;
+using System.Threading;
 
 namespace source.Queries
 {
@@ -54,8 +55,8 @@ namespace source.Queries
         /// Inserts a new event
         /// </summary>
         /// <param name="evnt"></param>
-        /// <returns>Event</returns>
-        public async Task<Event> CreateEvent(Event evnt)
+        /// <returns></returns>
+        public async Task CreateEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -66,12 +67,12 @@ namespace source.Queries
                 string query = @"INSERT INTO occasions.events (userName, name, description, dateTime) "
                     + @"VALUES (@userName, @name, @description, @dateTime)";
 
+                await Task.CompletedTask;
+
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
-                Event createdEvent = connection.QueryAsync<Event>(query, evnt).Result.ToList().FirstOrDefault();
-
-
-                return createdEvent;
+                await connection.ExecuteAsync(query, evnt);
+               
             }
         }
 
@@ -100,7 +101,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="evnt"></param>
         /// <returns></returns>
-        public async Task<Event> UpdateEvent(Event evnt)
+        public async Task UpdateEvent(Event evnt)
         {
             using (var db = _database)
             {
@@ -111,37 +112,48 @@ namespace source.Queries
                     + " SET name=@name, description=@description, dateTime=STR_TO_DATE(@dateTime,'%m/%d/%Y %h:%i:%s %p')"
                     + " WHERE eventId =  @eventId";
 
-                return connection.QueryAsync<Event>(query, new { evnt.name, evnt.description, evnt.dateTime, evnt.eventId}).Result.ToList().FirstOrDefault();
+                await Task.CompletedTask;
+                await connection.ExecuteAsync(query, new { evnt.name, evnt.description, evnt.dateTime, evnt.eventId});
+
             }
         }
 
-        public async Task<bool> DeleteEvent(Event evnt)
+        /// <summary>
+        /// Deletes the by identifier.
+        /// </summary>
+        /// <returns></returns>
+        /// <param name="id">Identifier.</param>
+        public async Task DeleteById(int id)
         {
             using (var db = _database)
             {
-             //   try
-               // {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                
-                    string query = @"DELETE FROM occasions.events"
-                        + " WHERE eventId =  @eventId";
-                //    connection.Execute(query, new { evnt.eventId}, commandType: CommandType.Text);
+                string query = @"DELETE FROM occasions.events WHERE eventId = @id";
 
-                await connection.QueryAsync<Event>(query, new { evnt.eventId } );
+                await Task.CompletedTask;
+                await connection.ExecuteAsync(query, new { id } );
+            }
+        }
 
-                    return true;
-               // }
-               // catch (Exception ex)
-               // {
-                 //   Console.WriteLine(ex.StackTrace);
+        /// <summary>
+        /// Deletes the name of the by user.
+        /// </summary>
+        /// <returns></returns>
+        /// <param name="userName">Identifier.</param>
+        public async Task DeleteByUserName(string userName)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    //TODO: we should log our errors in the db
-                    //Errors should bubble up but this is super helpful during development
-                   // return false;
-              //  }
+                string query = @"DELETE FROM occasions.events WHERE userName = @userName";
 
+                await Task.CompletedTask;
+
+                await connection.ExecuteAsync(query, new { userName });
             }
         }
     }

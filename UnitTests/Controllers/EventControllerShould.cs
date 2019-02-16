@@ -128,7 +128,7 @@ namespace UnitTests.Controllers
             __eventQueryMock.Setup(x => x.GetEventById(evnt.eventId))
                 .Returns(Task.Factory.StartNew(() => evnt));
 
-            __eventQueryMock.Setup(x => x.DeleteEvent(evnt))
+            __eventQueryMock.Setup(x => x.DeleteById(evnt.eventId))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act

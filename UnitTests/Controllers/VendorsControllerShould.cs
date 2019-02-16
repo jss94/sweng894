@@ -7,6 +7,9 @@ using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using source.Models;
 using source.Framework;
+using source.Constants;
+using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace UnitTests.Controllers
 {
@@ -18,16 +21,26 @@ namespace UnitTests.Controllers
         readonly Mock<ILogger> _loggerMock;
         readonly Mock<IVendorsQuery> _vendorsQueryMock;
         readonly Mock<IAddressesQuery> _addressQueryMock;
-
-
-
+        readonly Mock<IEventQuery> _eventsQueryMock;
+        readonly Mock<IGuestQuery> _guestQueryMock;
+        readonly Mock<IVendorServicesQuery> _vendorServicesQueryMock;
+        
         public VendorsControllerShould()
         {
             _loggerMock = new Mock<ILogger>();
             _vendorsQueryMock = new Mock<IVendorsQuery>();
             _addressQueryMock = new Mock<IAddressesQuery>();
+            _vendorServicesQueryMock = new Mock<IVendorServicesQuery>();
+            _eventsQueryMock = new Mock<IEventQuery>();
+            _guestQueryMock = new Mock<IGuestQuery>();
 
-            _sut = new VendorsController(_vendorsQueryMock.Object, _addressQueryMock.Object, _loggerMock.Object);
+            _sut = new VendorsController(
+                _vendorsQueryMock.Object, 
+                _addressQueryMock.Object,
+                _vendorServicesQueryMock.Object,
+                _eventsQueryMock.Object,
+                _guestQueryMock.Object,
+                _loggerMock.Object);
         }
 
         [Fact]
@@ -35,6 +48,9 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var service = new VendorServices { vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue" };
+            vendor.services = new List<VendorServices> { service };
             var vendors = new List<Vendor> { vendor, vendor, vendor };
 
             _vendorsQueryMock.Setup(x => x.GetAll())
@@ -49,6 +65,7 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as List<Vendor>;
             Assert.Equal(usersResult[2].id, vendors[2].id);
+            Assert.Equal(usersResult[0].services, vendors[0].services);
         }
 
         [Fact]
@@ -56,7 +73,10 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            
+            var service = new VendorServices{ vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue" };
+            vendor.services = new List<VendorServices> { service };
+
             _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
@@ -68,7 +88,7 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as Vendor;
-            Assert.Equal(vendor, usersResult);
+            Assert.Equal(vendor, usersResult);            
         }
 
         [Fact]
@@ -76,7 +96,11 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
-            
+            var service = new VendorServices{ vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue"
+            };
+            vendor.services = new List<VendorServices> { service };
+
             _vendorsQueryMock.Setup(x => x.GetByUserName(vendor.userName))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
@@ -96,6 +120,10 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var service = new VendorServices{ vendorId = 123, flatFee = true, price = 20,
+                serviceDescription = "desc", serviceName = "svcName", serviceType = "Venue"
+            };
+            vendor.services = new List<VendorServices> { service };
 
             _addressQueryMock.Setup(x => x.Insert(It.IsAny<Address>()))
                 .Returns(Task.Factory.StartNew(() => 999));
@@ -135,19 +163,19 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void DeactivateVendor_ReturnsNull()
+        public void DeactivateVendor_ReturnsTrue()
         {
             // arrange
             var vendor = new Vendor { id = 123 };
 
-            _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
+            _vendorsQueryMock.Setup(x => x.GetByUserName(It.IsAny<string>()))
                 .Returns(Task.Factory.StartNew(() => vendor));
 
-            _vendorsQueryMock.Setup(x => x.Deactivate(vendor.id.Value))
+            _vendorsQueryMock.Setup(x => x.Deactivate(It.IsAny<string>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.Deactivate(vendor.id.Value);
+            var task = _sut.Deactivate("aUser");
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);
@@ -158,13 +186,10 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void DeleteVendor_ReturnsNull()
+        public void DeleteVendor_ReturnsTrue()
         {
             // arrange
             var vendor = new Vendor { id = 123 };
-
-            _vendorsQueryMock.Setup(x => x.GetById(vendor.id.Value))
-                .Returns(Task.Factory.StartNew(() => vendor));
 
             _vendorsQueryMock.Setup(x => x.Delete(vendor.id.Value))
                 .Returns(Task.Factory.StartNew(() => true));
@@ -177,10 +202,8 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as bool?;
-            Assert.True(usersResult);
+            Assert.True(usersResult.Value);
         }
-
-
 
     }
 }
