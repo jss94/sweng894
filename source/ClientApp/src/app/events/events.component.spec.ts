@@ -13,13 +13,17 @@ import { Observable } from 'rxjs';
 import { Router, Routes } from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import { GuestsComponent } from '../guests/guests.component';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
+import { EmailService } from '../send-email/Services/email.service';
+import { EmailModel } from '../send-email/Models/email.model';
 
 describe('EventsComponent', () => {
   let component: EventsComponent;
   let fixture: ComponentFixture<EventsComponent>;
   let mockEventService: EventService;
   let mockAuthService: AuthService;
+  let mockEmailService: EmailService;
 
   class MockAuthService {
     user$ = of(new FakeUser);
@@ -31,6 +35,16 @@ describe('EventsComponent', () => {
 
   class MockMatSnackBar {
     open() {}
+  }
+
+  class MockEmailService {
+    sendVendorQuestionEmail(vendorId: number, emailModel: EmailModel) {
+
+    }
+
+    sendEventInvitationEmail(eventId: number, emailModel: EmailModel) {
+
+    }
   }
 
   const fakeEvent: OccEvent = {
@@ -57,6 +71,8 @@ describe('EventsComponent', () => {
     { path: 'guests/:id', component: GuestsComponent },
   ];
 
+  let fakeMatDialog: MatDialog;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -70,6 +86,8 @@ describe('EventsComponent', () => {
         RouterTestingModule.withRoutes(routes),
       ],
       providers: [
+        { provide: EmailService, useClass: MockEmailService },
+        { provide: MatDialog, useClass: MockMatDialog },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
@@ -83,6 +101,8 @@ describe('EventsComponent', () => {
     mockAuthService = TestBed.get(AuthService);
     fixture = TestBed.createComponent(EventsComponent);
     component = fixture.componentInstance;
+    fakeMatDialog = TestBed.get(MatDialog);
+    mockEmailService = TestBed.get(EmailService);
   });
 
   it('should create', () => {

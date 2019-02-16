@@ -71,6 +71,7 @@ namespace source
             services.AddTransient<ILogger, Logger>();
             services.AddTransient<IAddressesQuery, AddressesQuery>();
             services.AddTransient<IGuestQuery, GuestQuery>();
+            services.AddTransient<IEmailQuery, EmailQuery>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>

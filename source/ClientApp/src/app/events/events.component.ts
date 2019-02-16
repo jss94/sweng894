@@ -5,6 +5,12 @@ import { AuthService } from '../shared/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { EmailService } from '../send-email/Services/email.service';
+import { EmailModel } from '../send-email/Models/email.model';
+import { EmailAddress } from '../send-email/Models/email.address.model';
+import { EmailContent } from '../send-email/Models/email.content.model';
+import { MatDialog } from '@angular/material/dialog';
+import { EmailDialogComponent } from '../shared/components/email-dialog/email-dialog.component';
 
 @Component({
   selector: 'app-events',
@@ -23,10 +29,12 @@ export class EventsComponent implements OnInit {
   });
 
   constructor(
+    private dialog: MatDialog,
     private auth: AuthService,
     private eventService: EventService,
     private router: Router,
     private snackbar: MatSnackBar,
+    private emailService: EmailService
     ) {
   }
 
@@ -47,7 +55,6 @@ export class EventsComponent implements OnInit {
 
   }
 
-  // TODO: Add time!!!
   onCreate(): void {
     const event: OccEvent = {
       userName: this.userName,
@@ -89,5 +96,49 @@ export class EventsComponent implements OnInit {
       });
     });
   }
+
+  showInvite(evnt: OccEvent) {
+
+    const inviteTemplate = 'You are invited to celebrate ' + evnt.description +
+      ' which is occurring on ' + evnt.dateTime;
+
+    const dialogRef = this.dialog.open(EmailDialogComponent, {
+      width: '600px',
+      data: {
+          iconName: 'event',
+        title: evnt.name + ' - Invitation',
+          subject: 'You\'re Invited!',
+          content: inviteTemplate,
+          buttonText1: 'Cancel',
+          buttonText2: 'Send'
+      }
+    });
+
+
+
+    dialogRef.afterClosed()
+    .subscribe(result => {
+      if (result === true) {
+        const invitationText = dialogRef.componentInstance.data.content;
+        const invitationSubject = dialogRef.componentInstance.data.subject;
+
+        const emailModel: EmailModel = this.emailService.createEmailModel(invitationSubject, invitationText, evnt.userName);
+
+        this.emailService.sendEventInvitationEmail(evnt.eventId, emailModel).subscribe(response => {
+          let statusMsg = 'Successfully emailed your guests!';
+
+          if (response === 404) {
+            statusMsg = evnt.name + ' has no guests! Add one and try again!';
+          } else if (response !== 202) {
+            statusMsg = 'An error occurred sending the email, please contact your administrator.';
+          }
+
+          this.snackbar.open(statusMsg, '', {
+            duration: 3000
+          });
+       });
+      }
+    });
+}
 
 }
