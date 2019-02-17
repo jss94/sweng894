@@ -167,6 +167,7 @@ namespace source.Controllers
 
             await _usersQuery.Reactivate(result);
             await _vendorsQuery.Reactivate(result.userName);
+            await _addressesQuery.Reactivate(result.userName);
             return new OkResult();
 
         }
