@@ -88,8 +88,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var guestResult = result.Value as Guest;
-            Assert.Equal(guest, guestResult);
+            var guestResult = result.Value as bool?;
+            Assert.True(guestResult);
         }
 
         [Fact]
@@ -108,8 +108,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var guestResult = result.Value as Guest;
-            Assert.Equal(guest, guestResult);
+            var guestResult = result.Value as bool?;
+            Assert.True(guestResult);
         }
 
         [Fact]
@@ -118,10 +118,10 @@ namespace UnitTests.Controllers
             // arrange
             var guest = new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 };
 
-            _guestQueryMock.Setup(x => x.GetListByEventId(It.IsAny<int>()))
-                .Returns(Task.Factory.StartNew(() => new List<Guest> { guest }));
+            _guestQueryMock.Setup(x => x.GetByGuestId(It.IsAny<int>()))
+                .Returns(Task.Factory.StartNew(() => guest ));
 
-            _guestQueryMock.Setup(x => x.DeleteByEventId(It.IsAny<int>()))
+            _guestQueryMock.Setup(x => x.DeleteByGuestId(It.IsAny<int>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act

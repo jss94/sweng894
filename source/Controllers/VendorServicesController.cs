@@ -36,7 +36,7 @@ namespace source.Controllers
             _vendorServicesQuery = vendorServicesQuery;
             _logger = logger;
         }
-                
+
         /// <summary>
         /// Gets the list of service types for vendors' services
         /// </summary>
@@ -106,8 +106,6 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
-
-
 
         /// <summary>
         /// Inserts a new vendor service
@@ -191,12 +189,12 @@ namespace source.Controllers
         /// </summary>
         /// <param name="id">Service id</param>
         /// <returns>True/False</returns>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                bool result = await _vendorServicesQuery.DeactivateByVendorId(id);
+                bool result = await _vendorServicesQuery.DeactivateByServiceId(id);
 
                 if (result == false)
                 {
@@ -204,6 +202,30 @@ namespace source.Controllers
                 }
 
                 return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets a vendor service by vendor service id
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetServiceById(int id)
+        {
+            try
+            {
+                VendorServices service = await _vendorServicesQuery.GetById(id);
+                if (service == null)
+                {
+                    return new NotFoundResult();
+                }
+
+                return new OkObjectResult(service);
             }
             catch (Exception ex)
             {
