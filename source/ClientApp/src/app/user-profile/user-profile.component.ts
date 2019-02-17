@@ -48,43 +48,48 @@ export class UserProfileComponent implements OnInit {
   }
 
   setUserProfile(user: User) {
+    this.user = user;
+
     if (user.role === 'VENDOR') {
-      this.profile.getVendor(user.userName).subscribe(([u, v]) => {
-        this.user = u;
-        this.vendor = v;
-
-        this.isVendor = true;
-
-        if (this.vendor.address.zip === 0) {
-          this.vendor.address.zip = undefined;
-        }
-
-        this.profileForm.controls['name'].setValue(this.user.name);
-        this.profileForm.controls['companyName'].setValue(this.vendor.name);
-        this.profileForm.controls['companyWebsite'].setValue(this.vendor.website);
-        this.profileForm.controls['companyPhone'].setValue(this.vendor.phone);
-        this.profileForm.controls['companyStreet'].setValue(this.vendor.address.street);
-        this.profileForm.controls['companyCity'].setValue(this.vendor.address.city);
-        this.profileForm.controls['companyState'].setValue(this.vendor.address.state);
-        this.profileForm.controls['companyZip'].setValue(this.vendor.address.zip);
-      });
+      this.setVendorProfile(user);
     } else {
-      this.profile.getOrganizer(user.userName).subscribe(u => {
-        this.user = u;
-
-        this.isVendor = false;
-
-        this.profileForm.controls['name'].setValue(this.user.name);
-
-        this.profileForm.controls['companyName'].disable();
-        this.profileForm.controls['companyWebsite'].disable();
-        this.profileForm.controls['companyPhone'].disable();
-        this.profileForm.controls['companyStreet'].disable();
-        this.profileForm.controls['companyCity'].disable();
-        this.profileForm.controls['companyState'].disable();
-        this.profileForm.controls['companyZip'].disable();
-      });
+      this.setOrganizerProfile(user);
     }
+  }
+
+  setVendorProfile(user: User) {
+    this.profile.getVendor(user.userName).subscribe((vendor) => {
+      this.vendor = vendor;
+
+      this.isVendor = true;
+
+      if (this.vendor.address.zip === 0) {
+        this.vendor.address.zip = undefined;
+      }
+
+      this.profileForm.controls['name'].setValue(this.user.name);
+      this.profileForm.controls['companyName'].setValue(this.vendor.name);
+      this.profileForm.controls['companyWebsite'].setValue(this.vendor.website);
+      this.profileForm.controls['companyPhone'].setValue(this.vendor.phone);
+      this.profileForm.controls['companyStreet'].setValue(this.vendor.address.street);
+      this.profileForm.controls['companyCity'].setValue(this.vendor.address.city);
+      this.profileForm.controls['companyState'].setValue(this.vendor.address.state);
+      this.profileForm.controls['companyZip'].setValue(this.vendor.address.zip);
+    });
+  }
+
+  setOrganizerProfile(user: User) {
+      this.isVendor = false;
+
+      this.profileForm.controls['name'].setValue(this.user.name);
+
+      this.profileForm.controls['companyName'].disable();
+      this.profileForm.controls['companyWebsite'].disable();
+      this.profileForm.controls['companyPhone'].disable();
+      this.profileForm.controls['companyStreet'].disable();
+      this.profileForm.controls['companyCity'].disable();
+      this.profileForm.controls['companyState'].disable();
+      this.profileForm.controls['companyZip'].disable();
   }
 
   onUpdateUser() {
@@ -104,6 +109,7 @@ export class UserProfileComponent implements OnInit {
     };
 
     const address: Address = {
+      userName: this.user.userName,
       street: this.profileForm.controls['companyStreet'].value,
       city: this.profileForm.controls['companyCity'].value,
       state: this.profileForm.controls['companyState'].value,

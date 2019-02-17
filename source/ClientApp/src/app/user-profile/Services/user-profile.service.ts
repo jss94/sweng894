@@ -13,11 +13,8 @@ export class UserProfileService {
       ) {
   }
 
-  getVendor(userName: string): Observable<[User, Vendor]> {
-      return forkJoin(
-        this.auth.get('users/' + userName),
-        this.auth.get('vendors/' + userName)
-    );
+  getVendor(userName: string): Observable<Vendor> {
+    return this.auth.get('vendors/' + userName);
   }
 
   getOrganizer(userName: string): Observable<User> {

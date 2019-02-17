@@ -6,7 +6,7 @@
         <img  src="./assets/img/baseline-person-24px.svg" alt="User">
         <button mat-button [routerLink]='["/deactivate-user"]' [routerLinkActive]='["link-active"]'>
           <mat-icon>warning</mat-icon>
-          Deactivate User
+          Deactivate {{ user?.userName }}
         </button>
       </div>
       <div>

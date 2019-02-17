@@ -68,11 +68,11 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
 
-                    string query = @"SELECT id, street, city, state, zip"
+                    string query = @"SELECT userName, id, street, city, state, zip"
                         + @" FROM occasions.addresses "
                         + @" WHERE id = @id AND active = 1;";
 
-                    var result = connection.QueryFirstAsync<Address>(query, new { id }).Result;
+                    var result = connection.QueryFirstOrDefaultAsync<Address>(query, new { id }).Result;
                     return result;
                 }
             }
@@ -84,12 +84,34 @@ namespace source.Queries
             }
         }
 
+
+        /// <summary>
+        /// Gets the name of the by user.
+        /// </summary>
+        /// <returns>The by user name.</returns>
+        /// <param name="userName">User name.</param>
+        public async Task<Address> GetByUserName(string userName)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"SELECT userName, id, street, city, state, zip"
+                    + @" FROM occasions.addresses "
+                    + @" WHERE userName = @userName AND active = 1;";
+
+                var result = await connection.QueryFirstOrDefaultAsync<Address>(query, new { userName });
+                return result;
+            }
+        }
+
         /// <summary>
         /// Insert the specified address.
         /// </summary>
         /// <returns>The insert.</returns>
         /// <param name="address">Address.</param>
-        public async Task<int> Insert(Address address)
+        public async Task Insert(Address address)
         {
             try
             {
@@ -99,19 +121,17 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"INSERT INTO occasions.addresses "
-                        + @"(street, city, state, zip)"
-                        + @" VALUES(@street, @city, @state, @zip); "
-                        + @" SELECT id FROM occasions.addresses WHERE id = LAST_INSERT_ID() AND active = 1; ";
+                        + @"(userName street, city, state, zip)"
+                        + @" VALUES(@userName, @street, @city, @state, @zip); ";
 
-                    var result = connection.QueryFirstAsync<int>(query, address).Result;
-                    return result;
+                    await connection.ExecuteAsync(query, address);
                 }
             }
             catch (Exception)
             {
                 //TODO: we should log our errors in the db
                 //Errors should bubble up but this is super helpful during development
-                return new int();
+                await Task.CompletedTask;
             }
         }
 
@@ -130,12 +150,10 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"UPDATE occasions.addresses "
-                        + @"SET street = @street, city = @city, state = @state, zip = @zip"
-                        + @" WHERE id = @id; "
-                        + @" SELECT * FROM occasions.addresses WHERE id = @id AND active = 1;";
+                        + @" SET street = @street, city = @city, state = @state, zip = @zip"
+                        + @" WHERE userName = @userName; ";
 
-                    var result = connection.QueryFirstAsync<Address>(query, address).Result;
-                    await Task.CompletedTask;
+                    await connection.ExecuteAsync(query, address);
                 }
             }
             catch (Exception)
