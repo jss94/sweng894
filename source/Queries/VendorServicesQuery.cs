@@ -53,7 +53,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new List<Vendor>();
+                return null;
             }
         }
 
@@ -74,7 +74,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new List<VendorServices>();
+                return null;
             }
         }
 
@@ -102,7 +102,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new VendorServices();
+                return null;
             }
         }
 
@@ -132,7 +132,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new VendorServices();
+                return null;
             }
         }
 
@@ -159,7 +159,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new List<VendorServices>();
+                return null;
             }
         }
 
@@ -215,6 +215,32 @@ namespace source.Queries
 
                 await connection.ExecuteAsync(query, new { id });
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Get a vendor service by vendor service id
+        /// </summary>
+        /// <param name="id">Vendor service id</param>
+        /// <returns>Vendor service</returns>
+        public async Task<VendorServices> GetById(int id)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"SELECT * FROM occasions.vendorServices WHERE id = @id AND active = 1;";
+
+                    var result = connection.QueryFirstAsync<VendorServices>(query, new { id }).Result;
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
     }

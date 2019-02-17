@@ -25,8 +25,12 @@ export class VendorServicesService {
       return this.auth.put('vendorServices/', svc);
     }
 
-    deleteEvent(svc: VendorServices): Observable<any> {
+    deleteVendorService(svc: VendorServices): Observable<any> {
       return this.auth.delete('vendorServices/' + svc.id);
+    }
+
+    getVendorServiceById(id?: number): Observable<VendorServices> {
+      return this.auth.get('vendorServices/id/' + id);
     }
 
 }
