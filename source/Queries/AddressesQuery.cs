@@ -121,7 +121,7 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"INSERT INTO occasions.addresses "
-                        + @"(userName street, city, state, zip)"
+                        + @"(userName, street, city, state, zip)"
                         + @" VALUES(@userName, @street, @city, @state, @zip); ";
 
                     await connection.ExecuteAsync(query, address);
