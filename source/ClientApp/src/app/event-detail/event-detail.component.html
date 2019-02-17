@@ -1,0 +1,19 @@
+<div *ngIf="theEvent">
+  <div class="header">
+    <h1>{{theEvent.name}}</h1>
+    <p>{{theEvent.dateTime}}</p>
+  </div>
+
+  <div class="row">
+    <div class="main">
+      <h2>Event Details</h2>      
+      <p>{{theEvent.description}}</p>
+      <div *ngIf="auth.user">
+        <a routerLink="/guests/{{theEvent.eventId}}">View Guest List</a>
+      </div>
+    </div>
+    <div class="side">
+      <div class="fakemap" style="height:200px;">Map?</div>
+    </div>
+  </div>
+</div>
