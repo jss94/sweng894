@@ -79,13 +79,14 @@ export class VendorServicesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.vendorServiceForm.controls["serviceFlatFee"].valueChanges.subscribe(
-      (value) => { 
-        if (value){
-          this.vendorServiceForm.controls['serviceUnitsAvailable'].disable()
-          this.vendorServiceForm.controls['serviceUnitsAvailable'].setValue('')
-       }else
-        this.vendorServiceForm.controls['serviceUnitsAvailable'].enable()
+    this.vendorServiceForm.controls['serviceFlatFee'].valueChanges.subscribe(
+      (value) => {
+        if (value) {
+          this.vendorServiceForm.controls['serviceUnitsAvailable'].disable();
+          this.vendorServiceForm.controls['serviceUnitsAvailable'].setValue('');
+       } else {
+        this.vendorServiceForm.controls['serviceUnitsAvailable'].enable();
+       }
       }
     );
     if (this.auth.user) {
@@ -93,7 +94,7 @@ export class VendorServicesComponent implements OnInit {
       this.vendorService.getVendor(this.userName).subscribe(vendor => {
         this.vendorId = vendor.id;
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
-          this.vendorServices = response;          
+          this.vendorServices = response;
         });
       });
 
@@ -120,14 +121,19 @@ export class VendorServicesComponent implements OnInit {
       serviceDescription:  this.vendorServiceForm.controls['serviceDescription'].value,
       flatFee: this.vendorServiceForm.controls['serviceFlatFee'].value,
       price: this.vendorServiceForm.controls['servicePrice'].value,
-      unitsAvailable: this.vendorServiceForm.controls["serviceUnitsAvailable"].value,
+      unitsAvailable: this.vendorServiceForm.controls['serviceUnitsAvailable'].value,
      };
 
     this.vendorServicesService.createNewVendorService(svc).subscribe(response => {
       this.ngOnInit();
       this.vendorServiceForm.reset();
-      this.snackbar.open('Successfully Created ' + svc.serviceName, '', {
+      this.snackbar.open('Successfully Created ' + svc.serviceName, 'Created', {
         duration: 1500
+      });
+    }, error => {
+      console.log(error);
+      this.snackbar.open('Failed to create ' + svc.serviceName, 'Failed', {
+        duration: 3500
       });
     });
   }
@@ -143,7 +149,7 @@ export class VendorServicesComponent implements OnInit {
       this.snackbar.open('Successfully Removed ' + service.serviceName, '', {
         duration: 1500
       });
-    });   
+    });
   }
 
 
