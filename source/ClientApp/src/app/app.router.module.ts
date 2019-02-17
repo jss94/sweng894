@@ -17,12 +17,14 @@ import { DeactivateUserComponent } from './deactivate-user/deactivate-user.compo
 import { ReactivateUserComponent } from './reactivate-user/reactivate-user.component';
 import { VendorServicesComponent } from './vendor-services/vendor-services.component';
 import { VendorComponent } from './vendors/vendor.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UpdateVendorServicesComponent } from './vendor-services/update-vendor-services.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'admin', component: UsersComponent },
+    { path: 'user-profile', component: UserProfileComponent },
     { path: 'learn-more', component: LearnMoreComponent},
     { path: 'search-vendors', component: GoogleMapComponent },
     { path: 'events', component: EventsComponent },
@@ -47,6 +49,7 @@ const routes: Routes = [
         UpdateGuestsComponent,
         RegisterUserComponent,
         RegisterVendorComponent,
+        UserProfileComponent,
         DeactivateUserComponent,
         ReactivateUserComponent,
         VendorComponent,

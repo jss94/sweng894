@@ -24,11 +24,14 @@ namespace source.Controllers
         private ILogger _logger;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="T:source.Controllers.VendorsController"/> class.
         /// </summary>
-        /// <param name="vendorQuery">IVendorsQuery obtained via dependency injection</param>
-        /// <param name="addressQuery">IAddressQuery obtained via dependency injection</param>
-        /// <param name="logger">ILogger obtained via dependency injection</param>
+        /// <param name="vendorQuery">Vendor query.</param>
+        /// <param name="addressQuery">Address query.</param>
+        /// <param name="serviceQuery">Service query.</param>
+        /// <param name="eventsQuery">Events query.</param>
+        /// <param name="guestsQuery">Guests query.</param>
+        /// <param name="logger">Logger.</param>
         public VendorsController(
             IVendorsQuery vendorQuery, 
             IAddressesQuery addressQuery,
@@ -122,10 +125,9 @@ namespace source.Controllers
         {
             try
             {
-                if (vendor.address != null && vendor.address.city != null)
+                if (vendor.address != null)
                 {
-                    var addressId = await _addressesQuery.Insert(vendor.address);
-                    vendor.addressId = addressId;
+                    await _addressesQuery.Insert(vendor.address);
                 }
 
                 await _vendorQuery.Insert(vendor);
@@ -148,7 +150,23 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _vendorQuery.Update(vendor));
+                var address = await _addressesQuery.GetByUserName(vendor.userName);
+                if (address == null)
+                {
+                    await _addressesQuery.Insert(vendor.address);
+                } 
+                else
+                {
+                    await _addressesQuery.Update(vendor.address);
+                }
+
+                var result = await _vendorQuery.GetByUserName(vendor.userName);
+
+                if (result == null)
+                    return new NotFoundResult();
+
+                await _vendorQuery.Update(vendor);
+                return new OkObjectResult(true);
             }
             catch (Exception ex)
             {
@@ -158,10 +176,10 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// Marks a vendor record as inactive
+        /// Deactivate the specified userName.
         /// </summary>
-        /// <param name="id">Vendor ID</param>
-        /// <returns>True if successful</returns>
+        /// <returns>The deactivate.</returns>
+        /// <param name="userName">User name.</param>
         [HttpPut("{userName}")]
         public async Task<IActionResult> Deactivate(string userName)
         {

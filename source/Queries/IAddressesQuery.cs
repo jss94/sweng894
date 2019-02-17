@@ -9,8 +9,9 @@ namespace source.Queries
         Task Deactivate(string userName);
         Task Reactivate(string userName);
         Task<List<Address>> GetAll();
+        Task<Address> GetByUserName(string userName);
         Task<Address> GetById(int id);
-        Task<int> Insert(Address address);
+        Task Insert(Address address);
         Task Update(Address address);
     }
 }
