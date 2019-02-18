@@ -19,7 +19,8 @@ export class UpdateVendorServicesComponent implements OnInit {
 
   vendorServiceId = 0;
   vendorService: VendorServices;
-  
+  selected: any;
+
   svcs = [
     {
       value: 'Venue',
@@ -80,13 +81,14 @@ export class UpdateVendorServicesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.updateVendorServiceForm.controls["serviceFlatFee"].valueChanges.subscribe(
-      (value) => { 
-        if (value){
-          this.updateVendorServiceForm.controls['serviceUnitsAvailable'].disable()
-          this.updateVendorServiceForm.controls['serviceUnitsAvailable'].setValue('') 
-       }else
-        this.updateVendorServiceForm.controls['serviceUnitsAvailable'].enable()
+    this.updateVendorServiceForm.controls['serviceFlatFee'].valueChanges.subscribe(
+      (value) => {
+        if (value) {
+          this.updateVendorServiceForm.controls['serviceUnitsAvailable'].disable();
+          this.updateVendorServiceForm.controls['serviceUnitsAvailable'].setValue('');
+       } else {
+        this.updateVendorServiceForm.controls['serviceUnitsAvailable'].enable();
+       }
       }
     );
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -112,7 +114,7 @@ export class UpdateVendorServicesComponent implements OnInit {
       serviceDescription:  this.updateVendorServiceForm.controls['serviceDescription'].value,
       flatFee: this.updateVendorServiceForm.controls['serviceFlatFee'].value,
       price: this.updateVendorServiceForm.controls['servicePrice'].value,
-      unitsAvailable: this.updateVendorServiceForm.controls["serviceUnitsAvailable"].value,
+      unitsAvailable: this.updateVendorServiceForm.controls['serviceUnitsAvailable'].value,
      };
      this.vendorServicesService.updateVendorService(svc).subscribe((result: VendorServices) => {
       this.vendorService = result;
@@ -138,7 +140,4 @@ onCancel() {
 }
 
 
-
-
-    
 

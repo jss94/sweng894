@@ -17,7 +17,7 @@ export class VendorServicesComponent implements OnInit {
   vendorServices: VendorServices[];
   vendorId = 0;
   userName: string;
-
+  selected;
   svcs = [
     {
       value: 'Venue',
