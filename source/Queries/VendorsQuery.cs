@@ -42,7 +42,7 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
                     string query = @"SELECT * from occasions.vendors WHERE active = 1; "
-                        + @"SELECT * from occasions.vendorServices WHERE active = 1";
+                        + @"SELECT * from occasions.vendorServices WHERE active = 1;";
 
                     var result = await connection.QueryMultiple(query).Map<Vendor, VendorServices, int?>
                         (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
@@ -185,27 +185,18 @@ namespace source.Queries
         /// </summary>
         /// <param name="vendor">Vendor</param>
         /// <returns>Updated vendor record</returns>
-        public async Task<Vendor> Update(Vendor vendor)
+        public async Task Update(Vendor vendor)
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"UPDATE occasions.vendors "
-                        + @"SET name = @name, type = @type, addressId = @addressId, website = @website, phone = @phone "
-                        + @"WHERE id = @id; "
-                        + @"SELECT * FROM occasions.vendors WHERE id = @id AND active = 1;";
+                string query = @"UPDATE occasions.vendors "
+                    + @"SET name = @name, addressId = @addressId, website = @website, phone = @phone "
+                    + @"WHERE userName = @userName;";
 
-                    var returnedVendor = connection.QueryFirstAsync<Vendor>(query, vendor).Result;
-                    return returnedVendor;
-                }
-            }
-            catch (Exception ex)
-            {
-                return new Vendor();
+                await connection.ExecuteAsync(query, vendor);
             }
         }
 

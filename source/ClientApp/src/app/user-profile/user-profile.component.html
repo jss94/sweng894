@@ -1,0 +1,114 @@
+
+
+    <div class="center">
+
+      <div class="person-logo">
+        <img  src="./assets/img/baseline-person-24px.svg" alt="User">
+        <button mat-button [routerLink]='["/deactivate-user"]' [routerLinkActive]='["link-active"]'>
+          <mat-icon>warning</mat-icon>
+          Deactivate {{ user?.userName }}
+        </button>
+      </div>
+      <div>
+        <form class="form" [formGroup]="profileForm" (ngSubmit)="onUpdateUser()">
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input 
+                autocomplete="name" 
+                matInput 
+                placeholder="Evan Pugh"
+                formControlName="name"
+                >
+            </mat-form-field>
+
+            <mat-form-field *ngIf="isVendor" appearance="outline">
+              <mat-label>Vendor Name</mat-label>
+              <input 
+                required 
+                matInput 
+                placeholder="Penn State"
+                formControlName="companyName"
+                >
+            </mat-form-field>
+
+          </div>
+
+          <div *ngIf="isVendor" >
+
+            <mat-form-field appearance="outline">
+              <mat-label>Website</mat-label>
+              <input 
+                autocomplete="website" 
+                matInput 
+                placeholder="www.psu.edu"
+                formControlName="companyWebsite"
+                >
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Phone Number</mat-label>
+              <input 
+                autocomplete="phone" 
+                matInput 
+                placeholder="5558179"
+                formControlName="companyPhone"
+                >
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Address</mat-label>
+              <input 
+                autocomplete="address-line1" 
+                matInput 
+                placeholder="Old Main"
+                formControlName="companyStreet"
+                >
+            </mat-form-field>
+
+          </div>
+
+          <div *ngIf="isVendor" >
+
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input 
+                autocomplete="address-level2" 
+                matInput 
+                placeholder="State College"
+                formControlName="companyCity"
+                >
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>State</mat-label>
+              <input 
+                autocomplete="address-level1" 
+                matInput 
+                placeholder="PA"
+                formControlName="companyState"
+              >
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Zipcode</mat-label>
+              <input 
+                autocomplete="postal-code" 
+                matInput 
+                placeholder="16801"
+                formControlName="companyZip"
+                >
+            </mat-form-field>
+          
+          </div>
+
+          <mat-action-row>
+            <button type="submit" mat-button [disabled]="!profileForm.valid && !profileForm.dirty">
+              <mat-icon>person_outline</mat-icon>
+              Update Profile
+            </button>
+          </mat-action-row>
+      </form>
+    </div>
+  </div>
+

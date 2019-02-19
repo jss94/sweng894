@@ -20,7 +20,7 @@
         Search
       </button>
       
-      <button *ngIf="!auth.isAuthenticated()"  mat-button class="clickable">
+      <button *ngIf="!auth.isAuthenticated()"  mat-button>
         <a class="nav-link text-dark" (click)="auth.login()">Login</a>
       </button>
 
@@ -31,10 +31,11 @@
       </button>
       <mat-menu #userMenu="matMenu">
         <button mat-button class="clickable">
-          <span class="nav-link text-dark" [routerLink]='["/deactivate-user"]' [routerLinkActive]='["link-active"]'>Deactivate</span>
+          <span class="nav-link" [routerLink]='["/user-profile"]' [routerLinkActive]='["link-active"]'>Profile</span>
         </button>
+        <br>
         <button mat-button class="clickable">
-          <span class="nav-link text-dark" (click)="auth.logout()">Logout</span>
+          <span class="nav-link" (click)="auth.logout()">Logout</span>
         </button>
       </mat-menu>
 
@@ -43,7 +44,7 @@
         Guest
       </button>
       <mat-menu #guestMenu="matMenu">
-        <button mat-menu-item [routerLink]='["/guests"]' [routerLinkActive]='["link-active"]'> 
+        <button mat-menu-item [routerLink]="['/guests']" [routerLinkActive]="['link-active']"> 
           Guest List
         </button>
       </mat-menu>

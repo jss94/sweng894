@@ -39,6 +39,7 @@ export class RegisterVendorComponent {
       website: this.vendorForm.controls['website'].value,
       phone: this.vendorForm.controls['phone'].value,
       address: {
+        userName: this.auth.user.userName,
         street: this.vendorForm.controls['street'].value,
         city: this.vendorForm.controls['city'].value,
         state: this.vendorForm.controls['state'].value.toUpperCase(),

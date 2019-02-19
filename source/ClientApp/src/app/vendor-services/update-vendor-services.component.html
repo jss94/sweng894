@@ -1,9 +1,9 @@
 <div class="vendor-services-container">
 
     <h1>Update Service</h1>
-  
+
         <form class="form" [formGroup]="updateVendorServiceForm" (ngSubmit)="onCreate()">
-  
+
           <mat-form-field class="options">
              <mat-select placeholder="Select service type" formControlName="serviceType">
              <mat-option *ngFor="let svc of svcs" [value]="svc.value">
@@ -11,7 +11,7 @@
              </mat-option>
              </mat-select>
           </mat-form-field>
-  
+
           <mat-form-field appearance="outline">
             <mat-label>Service Name</mat-label>
             <input
@@ -20,7 +20,7 @@
               formControlName="serviceName"
               >
           </mat-form-field>
-  
+
           <mat-form-field appearance="outline">
               <mat-label>Service Description</mat-label>
               <input
@@ -29,9 +29,9 @@
                 formControlName="serviceDescription"
                 >
             </mat-form-field>
-  
+
             <br/>
-           
+
           <mat-form-field appearance="outline">
                 <mat-label>Price</mat-label>
                 <input
@@ -40,7 +40,7 @@
                   formControlName="servicePrice"
                   >
              </mat-form-field>
-  
+
           <mat-form-field class="options">
             <mat-select  [(value)]="selected" formControlName="serviceFlatFee" placeholder="Flat Fee" >
               <mat-option *ngFor="let fee of fees" [value]="fee.value">
@@ -48,7 +48,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-  
+
           <mat-form-field  appearance="outline">
             <mat-label>Units Available</mat-label>
             <input
@@ -67,7 +67,7 @@
             <button type="cancel" mat-button (click)="onCancel()">
                 <mat-icon>cancel</mat-icon>
                 Cancel
-            </button>        
+            </button>
         </mat-action-row>
 
     </form>

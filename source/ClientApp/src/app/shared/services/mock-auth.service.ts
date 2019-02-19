@@ -7,11 +7,15 @@ import { User } from '../models/user.model';
 @Injectable()
 export class MockAuthService {
 
-  user: User = new FakeUser();
+  _user: User = new FakeUser();
   _user$: Observable<User> = of(new FakeUser());
 
   get user$() {
     return this._user$;
+  }
+
+  get user() {
+    return this.user;
   }
 
   userProfile: any = {};

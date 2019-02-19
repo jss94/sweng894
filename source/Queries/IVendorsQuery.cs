@@ -10,7 +10,7 @@ namespace source.Queries
         Task<Vendor> GetById(int id);
         Task<Vendor> GetByUserName(string userName);
         Task<Vendor> Insert(Vendor vendor);
-        Task<Vendor> Update(Vendor vendor);
+        Task Update(Vendor vendor);
         Task<bool> Deactivate(string userName);
         Task<bool> Reactivate(string userName);
         Task<bool> Delete(int id);
