@@ -2,7 +2,6 @@
 using source.Framework;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SendGrid;
 using source.Models;
 using source.Queries;
 using System.Collections.Generic;
@@ -85,7 +84,7 @@ namespace source.Controllers
                 personalizations.Add(personalization);
                 emailMsg.personalizations = personalizations;
                 
-                emailContents.Add(updateEmailContentToIncludeRSVP(eventId, guest.guestId, originalContent));
+                emailContents.Add(updateEmailContentToIncludeRSVP(guest.guestId, originalContent));
                 emailMsg.content = emailContents;
 
                 Task<HttpStatusCode> response = _emailQuery.sendEmailViaPostAsync(emailMsg);
@@ -109,26 +108,24 @@ namespace source.Controllers
             }
         }
 
-        private EmailContent updateEmailContentToIncludeRSVP(int eventId, int guestId, string content)
+        private EmailContent updateEmailContentToIncludeRSVP(int guestId, string content)
         {
             StringBuilder htmlBuilder = new StringBuilder("<html>");
-            htmlBuilder.Append("<body>").Append(content).Append(createRsvpLinkContent(eventId, guestId));
+            htmlBuilder.Append("<body>").Append(content).Append(createRsvpLinkContent(guestId));
 
             EmailContent emailContent = new EmailContent("type/html", htmlBuilder.ToString());
             return emailContent;
         }
 
-        private string createRsvpLinkContent(int eventId, int guestId)
+        private string createRsvpLinkContent(int guestId)
         {
             String hostName = System.Net.Dns.GetHostName();
             StringBuilder sb = new StringBuilder();
             sb.Append("<div>RSVP</div>");
-            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/reservations/event/");
-            sb.Append(eventId).Append("/");
+            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/guest/rsvp/");
             sb.Append(guestId).Append("?isGoing=true");
             sb.Append("'>Going</a></div>");
-            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/reservations/event/");
-            sb.Append(eventId).Append("/");
+            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/guest/rsvp/");
             sb.Append(guestId).Append("?isGoing=false");
             sb.Append("'>Not Going</a></div>"); ;
             return sb.ToString();

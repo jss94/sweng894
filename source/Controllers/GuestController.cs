@@ -113,6 +113,37 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// Updates a guest record to include the RSVP
+        /// </summary>
+        /// <param name="guestId">Guest</param>
+        /// <param name="isGoing">Query parameter either true or false, to specify the RSVP.</param>
+        /// <returns>Updated RSVP for Guest record</returns>
+        [HttpPut("rsvp/{guestId}")]
+        public async Task<IActionResult> UpdateRsvp(int guestId, [FromQuery]String isGoing)
+        {
+            try
+            {
+                Guest guest = await _query.GetByGuestId(guestId);
+
+                if(isGoing.Equals("true"))
+                {
+                    guest.isGoing = true;
+                } else
+                {
+                    guest.isGoing = false;
+                }
+                await _query.Update(guest);
+                return new OkObjectResult(true);
+            }
+            catch (Exception e)
+            {
+                //TODO: we should log our errors in the db
+                Console.WriteLine("OH NO!:" + e.StackTrace);
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
         /// DELETE api/guest/{id}
         /// Deletes a guest
         /// </summary>
