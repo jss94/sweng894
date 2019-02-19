@@ -72,7 +72,7 @@ namespace UnitTests.Controllers
             List<Guest> guests = new List<Guest>();
             guests.Add(new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 });
             guests.Add(new Guest { guestId = 124, name = "Guest2", email = "test2@psu.edu", isGoing = true, eventId = 1 });
-
+            
             var emailMsg = new EmailMessage();
 
             emailMsg.from = new source.Models.Email.EmailRecipient("unit@testEmail.com");
@@ -98,9 +98,7 @@ namespace UnitTests.Controllers
             
             // assert
             Assert.IsType<HttpStatusCode>(task.Result);
-
-            Assert.True(task.Result.Equals(HttpStatusCode.Accepted));
-
+            Assert.Equal(HttpStatusCode.Accepted, task.Result);
         }
     }
 }

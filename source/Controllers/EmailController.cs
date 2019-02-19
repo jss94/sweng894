@@ -8,6 +8,7 @@ using source.Queries;
 using System.Collections.Generic;
 using source.Models.Email;
 using System.Net;
+using System.Text;
 
 namespace source.Controllers
 {
@@ -55,37 +56,84 @@ namespace source.Controllers
         /// <summary>
         /// Sends the given email to a list of Guests for the given event id.
         /// </summary>
-        /// <param name="id">The id of the Event.</param>
+        /// <param name="eventId">The id of the Event.</param>
         /// <param name="emailMsg">A EmailMessage. Initial Implementation - Converts to JSON and sends to SendGrid API.</param>
-        [HttpPost("event/invitation/{id}")]
-        public async Task<HttpStatusCode> PostEventInviteToGuests(int id, [FromBody]EmailMessage emailMsg)
+        [HttpPost("event/invitation/{eventId}")]
+        public async Task<HttpStatusCode> PostEventInviteToGuests(int eventId, [FromBody]EmailMessage emailMsg)
         {
             // retrieve guest emails via event id
-            List<Guest> eventGuests = await _guestsQuery.GetListByEventId(id);
+            List<Guest> eventGuests = await _guestsQuery.GetListByEventId(eventId);
 
             // check if guests are returned
             if (eventGuests == null || eventGuests.ToArray().Length == 0)
                 return HttpStatusCode.NotFound;
 
-            // create to list and set
-            List<EmailPersonalization> personalizations = new List<EmailPersonalization>();
-            List<EmailRecipient> emailTos = new List<EmailRecipient>();
-            EmailPersonalization personalization = new EmailPersonalization();
+            String originalContent = emailMsg.content[0].value;
 
+            Boolean isSuccessful = true;
             // TODO - Instead of emailing all of the guests in one email, they should probably
             // be emailed individually.  This would allow for a RSVP link to be embedded into the content.
             eventGuests.ForEach(guest => {
-                emailTos.Add(new EmailRecipient(guest.name, guest.email));
-            });
-            personalization.to = emailTos;
-            personalizations.Add(personalization);
-          
-            emailMsg.personalizations = personalizations;
+                // create to list and set
+                List<EmailPersonalization> personalizations = new List<EmailPersonalization>();
+                List<EmailRecipient> emailTos = new List<EmailRecipient>();
+                List<EmailContent> emailContents = new List<EmailContent>();
+                EmailPersonalization personalization = new EmailPersonalization();
 
-            //send email
-            return await _emailQuery.sendEmailViaPostAsync(emailMsg);
+                emailTos.Add(new EmailRecipient(guest.name, guest.email));
+                personalization.to = emailTos;
+                personalizations.Add(personalization);
+                emailMsg.personalizations = personalizations;
+                
+                emailContents.Add(updateEmailContentToIncludeRSVP(eventId, guest.guestId, originalContent));
+                emailMsg.content = emailContents;
+
+                Task<HttpStatusCode> response = _emailQuery.sendEmailViaPostAsync(emailMsg);
+                if ( response.Result.Equals(HttpStatusCode.Accepted))
+                {
+                    Console.WriteLine("Successfully sent email to " + guest.email);
+                } else
+                {
+                    isSuccessful = false;
+                    Console.WriteLine("Error sending email to " + guest.guestId + " at " + guest.email);
+                }
+            });
+          
+
+            if(isSuccessful)
+            {
+                return HttpStatusCode.Accepted;
+            } else
+            {
+                return HttpStatusCode.BadRequest;
+            }
         }
 
-       
+        private EmailContent updateEmailContentToIncludeRSVP(int eventId, int guestId, string content)
+        {
+            StringBuilder htmlBuilder = new StringBuilder("<html>");
+            htmlBuilder.Append("<body>").Append(content).Append(createRsvpLinkContent(eventId, guestId));
+
+            EmailContent emailContent = new EmailContent("type/html", htmlBuilder.ToString());
+            return emailContent;
+        }
+
+        private string createRsvpLinkContent(int eventId, int guestId)
+        {
+            String hostName = System.Net.Dns.GetHostName();
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<div>RSVP</div>");
+            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/reservations/event/");
+            sb.Append(eventId).Append("/");
+            sb.Append(guestId).Append("?isGoing=true");
+            sb.Append("'>Going</a></div>");
+            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/reservations/event/");
+            sb.Append(eventId).Append("/");
+            sb.Append(guestId).Append("?isGoing=false");
+            sb.Append("'>Not Going</a></div>"); ;
+            return sb.ToString();
+        }
+
+
     }
 }
