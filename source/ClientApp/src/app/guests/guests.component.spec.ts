@@ -12,6 +12,7 @@ import { MockGuestsService } from './Services/mock-guests.service';
 import { HttpClient } from 'selenium-webdriver/http';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router, Routes } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 describe('GuestsComponent', () => {
@@ -20,6 +21,10 @@ describe('GuestsComponent', () => {
   let mockGuestsService: GuestsService;
   let mockAuthService: AuthService;
 
+
+  const routes: Routes = [
+    { path: 'guests/:id', component: GuestsComponent },
+  ];
   class MockMatSnackBar {
     open() {
 
@@ -45,6 +50,7 @@ describe('GuestsComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
+        RouterTestingModule.withRoutes(routes),
       ],
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },

@@ -17,6 +17,7 @@ import { MatSnackBar, MatDialog } from '@angular/material';
 import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
 import { EmailService } from '../send-email/Services/email.service';
 import { EmailModel } from '../send-email/Models/email.model';
+import { MockAuthService } from '../shared/services/mock-auth.service';
 
 describe('EventsComponent', () => {
   let component: EventsComponent;
@@ -24,14 +25,6 @@ describe('EventsComponent', () => {
   let mockEventService: EventService;
   let mockAuthService: AuthService;
   let mockEmailService: EmailService;
-
-  class MockAuthService {
-    user$ = of(new FakeUser);
-
-    get(aString: string): Observable<any> {
-      return of(new FakeUser);
-    }
-  }
 
   class MockMatSnackBar {
     open() {}
@@ -62,10 +55,6 @@ describe('EventsComponent', () => {
     fakeEvent,
     fakeEvent,
   ];
-
-  const fakeUserProfile: any = {
-    nickname: 'jss94'
-  };
 
   const routes: Routes = [
     { path: 'guests/:id', component: GuestsComponent },
