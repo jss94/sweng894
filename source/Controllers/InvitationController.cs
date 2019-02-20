@@ -9,7 +9,7 @@ using source.Models;
 namespace source.Controllers
 {
     /// <summary>
-    /// Email controller.
+    /// Invitation controller.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -28,7 +28,7 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// Saves the given invitation with the associated event id.
+        /// Saves the given invitation.
         /// </summary>
         /// <param name="invitation">The content of the invitation</param>
         [HttpPost]
@@ -59,7 +59,7 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// Updates an invitation associated with the given event id.
+        /// Updates an invitation with the given one
         /// </summary>
         /// <param name="invitation">The id of the Event.</param>
         [HttpPut]
@@ -90,6 +90,7 @@ namespace source.Controllers
                 return true;
             }catch(Exception e)
             {
+                Console.WriteLine(e.StackTrace);
                 return false;
             }
         }

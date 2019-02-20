@@ -72,6 +72,11 @@ namespace source.Queries
             }
         }
 
+        /// <summary>
+        /// Updates the invitation in the database with the given one.
+        /// </summary>
+        /// <param name="invitation"></param>
+        /// <returns></returns>
         public async Task updateInvitation(Invitation invitation)
         {
             using (var db = _database)
@@ -89,6 +94,11 @@ namespace source.Queries
             }
         }
 
+        /// <summary>
+        /// Deletes the invitation in the database associated to the given eventId.
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
         public async Task deleteInvitation(int eventId)
         {
             using (var db = _database)

@@ -1,21 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace source.Models
 {
+    /// <summary>
+    /// Invitation model.
+    /// </summary>
     public class Invitation
 
     {
-        // unique number for invitation 
+        /// <summary>
+        /// unique number for invitation 
+        /// </summary> 
         public int invitationId { get; set; }
 
-        // unique number for event identifier
+        /// <summary>
+        /// The event id that this invitation is associated to.
+        /// </summary> 
         public int eventId { get; set; }
 
+        /// <summary>
+        /// The invitation subject (i.e email subject)
+        /// </summary> 
         public String subject { get; set; }
-        
+
+        /// <summary>
+        /// The user provided invitation content.
+        /// </summary> 
         public String content { get; set; }
  
     }
