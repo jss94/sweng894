@@ -51,9 +51,9 @@ namespace source.Queries
         /// Saves an invitation
         /// </summary>
         /// <param name="eventId"></param>
-        /// <param name="invitationContent"></param>
+        /// <param name="content"></param>
         /// <returns>true if the save was successful, false otherwise</returns>
-        public async Task saveInvitation(int eventId, String invitationContent)
+        public async Task saveInvitation(int eventId, String content)
         {
             using (var db = _database)
             {
@@ -69,7 +69,7 @@ namespace source.Queries
 
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
-                await connection.ExecuteAsync(query, new { eventId, invitationContent });
+                await connection.ExecuteAsync(query, new { eventId, content });
             }
         }
 

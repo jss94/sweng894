@@ -4,11 +4,11 @@ namespace source.Queries
 {
     public interface IInvitationQuery
     {
-        Task saveInvitation(int eventId, string invitationContent);
+        Task saveInvitation(int eventId, string content);
 
         Task<string> getInvitation(int eventId);
 
-        Task updateInvitation(int eventId, string invitationContent);
+        Task updateInvitation(int eventId, string content);
 
         Task deleteInvitation(int eventId);
     }

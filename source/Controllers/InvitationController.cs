@@ -32,7 +32,7 @@ namespace source.Controllers
         /// <param name="eventId">The id of the Event for which the invitation is for.</param>
         /// <param name="invitationContent">The content of the invitation</param>
         [HttpPost]
-        public async Task<HttpStatusCode> PostInvitation(int eventId, [FromBody]String invitationContent)
+        public async Task<HttpStatusCode> postInvitation(int eventId, [FromBody]String invitationContent)
         {
             try
             {
@@ -57,8 +57,13 @@ namespace source.Controllers
             
         }
 
+        /// <summary>
+        /// Updates an invitation associated with the given event id.
+        /// </summary>
+        /// <param name="eventId">The id of the Event.</param>
+        /// <param name="content">The content of the invitation.</param>
         [HttpPut]
-        public async Task<bool> updateInvitation(int eventId, String content)
+        public async Task<bool> putInvitation(int eventId, String content)
         {
             try
             {
@@ -70,7 +75,10 @@ namespace source.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Deletes an invitation associated with the given event id.
+        /// </summary>
+        /// <param name="eventId">The id of the Event.</param>
         [HttpDelete]
         public async Task<bool> deleteInvitation(int eventId)
         {
