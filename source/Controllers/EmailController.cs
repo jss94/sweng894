@@ -110,10 +110,10 @@ namespace source.Controllers
 
         private EmailContent updateEmailContentToIncludeRSVP(int guestId, string content)
         {
-            StringBuilder htmlBuilder = new StringBuilder("<html><body>");
+            StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.AppendLine("<div>").Append(content).Append("</div>");
             htmlBuilder.AppendLine(createRsvpLinkContent(guestId));
-            htmlBuilder.AppendLine("</body></html>");
+           // htmlBuilder.AppendLine("</body></html>");
 
             EmailContent emailContent = new EmailContent("text/html", htmlBuilder.ToString());
             return emailContent;
