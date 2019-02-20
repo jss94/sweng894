@@ -113,7 +113,6 @@ namespace source.Controllers
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.AppendLine("<div>").Append(content).Append("</div>");
             htmlBuilder.AppendLine(createRsvpLinkContent(guestId));
-           // htmlBuilder.AppendLine("</body></html>");
 
             EmailContent emailContent = new EmailContent("text/html", htmlBuilder.ToString());
             return emailContent;
