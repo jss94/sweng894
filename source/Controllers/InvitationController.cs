@@ -50,7 +50,7 @@ namespace source.Controllers
         /// Gets the invitation associated with the given event id.
         /// </summary>
         /// <param name="eventId">The id of the Event.</param>
-        [HttpGet]
+        [HttpGet("{eventId}")]
         public async Task<Invitation> getInvitation(int eventId)
         {
             // retrieve invitation associated to event.

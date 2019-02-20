@@ -85,7 +85,7 @@ namespace source.Queries
                     + " WHERE eventId =  @eventId";
 
                 await Task.CompletedTask;
-                await connection.ExecuteAsync(query, new { invitation});
+                await connection.ExecuteAsync(query, invitation);
             }
         }
 

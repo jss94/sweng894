@@ -134,30 +134,32 @@ export class EventsComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(result => {
 
+        // update content and subject of invitation
         this.invitationModel.content = result.data.content;
         this.invitationModel.subject = result.data.subject;
 
-        this.persistInvitation();
-        if (result.button === true) {
-          // save and send the invitation
-           this.sendEmail(evnt);
-        }
+        // save the invitation first
+        this.persistInvitation().subscribe(response => {
+          this.displayInvitationFeedback(response, 'Invitation Updated', 'An error occurred saving your invitation');
+          if (result.data.button === true) {
+              // send the invitation
+              this.sendEmail(evnt).subscribe(emailResponse => {
+              this.displayEmailFeedback(evnt, emailResponse);
+            });
+          }
+        });
     });
   }
 
-  persistInvitation() {
+  persistInvitation(): Observable<any> {
     if (this.invitationModel.invitationId) {
-      this.invitationService.updateInvitation(this.invitationModel).subscribe(updateResponse => {
-        this.displayFeedback(updateResponse, 'Invitation Updated', 'An error occurred updating your invitation');
-      });
+        return this.invitationService.updateInvitation(this.invitationModel);
     } else {
-      this.invitationService.createNewInvitation(this.invitationModel).subscribe(createResponse => {
-        this.displayFeedback(createResponse, 'Invitation Saved', 'An error occurred updating your invitation');
-      });
+      return this.invitationService.createNewInvitation(this.invitationModel);
     }
   }
 
-  displayFeedback(responseCode: any, successMsg: any, failureMsg: any) {
+  displayInvitationFeedback(responseCode: any, successMsg: any, failureMsg: any) {
     let status = successMsg;
     if (responseCode !== 200) {
       status = failureMsg;
@@ -167,23 +169,23 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  sendEmail(evnt: OccEvent) {
-    const emailModel: EmailModel = this.emailService.createEmailModel(this.invitationModel.subject,
-      this.invitationModel.content, evnt.userName);
+  displayEmailFeedback(evnt: OccEvent, response: any) {
+    let statusMsg = 'Successfully emailed your guests!';
 
-    this.emailService.sendEventInvitationEmail(this.invitationModel.eventId, emailModel).subscribe(response => {
-      let statusMsg = 'Successfully emailed your guests!';
+    if (response === 404) {
+      statusMsg = evnt.name + ' has no guests! Add one and try again!';
+    } else if (response !== 202) {
+      statusMsg = 'An error occurred sending the email, please contact your administrator.';
+    }
 
-      if (response === 404) {
-        statusMsg = evnt.name + ' has no guests! Add one and try again!';
-      } else if (response !== 202) {
-        statusMsg = 'An error occurred sending the email, please contact your administrator.';
-      }
-
-      this.snackbar.open(statusMsg, '', {
-        duration: 3000
-      });
+    this.snackbar.open(statusMsg, '', {
+      duration: 3000
     });
+  }
 
+  sendEmail(evnt: OccEvent): Observable<any> {
+    const emailModel: EmailModel = this.emailService.createEmailModel(this.invitationModel.subject,
+    this.invitationModel.content, evnt.userName);
+    return this.emailService.sendEventInvitationEmail(this.invitationModel.eventId, emailModel);
   }
 }
