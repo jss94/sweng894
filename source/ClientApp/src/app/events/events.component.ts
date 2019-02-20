@@ -23,6 +23,8 @@ export class EventsComponent implements OnInit {
 
   userName: string;
 
+  invitationModel: InvitationModel;
+
   eventForm = new FormGroup({
     date: new FormControl('', [ Validators.required ]),
     name: new FormControl('', [ Validators.required ]),
@@ -103,73 +105,73 @@ export class EventsComponent implements OnInit {
 
     this.invitationService.getInvitation(evnt.eventId).subscribe(invitationResponse => {
       // invitation exists
-      const invitationModel: InvitationModel = invitationResponse;
-      this.showInviteDialog(evnt, invitationModel);
+      this.invitationModel = invitationResponse;
+      this.showInviteDialog(evnt);
     }, error => {
         // invitation does not exist
-        const invitationModel: InvitationModel = ({
+       this.invitationModel = ({
           eventId: evnt.eventId,
           subject: 'You\'re Invited!',
           content: 'You are invited to celebrate ' + evnt.description
         });
-        this.showInviteDialog(evnt, invitationModel);
+        this.showInviteDialog(evnt);
     });
   }
 
-  showInviteDialog(evnt: OccEvent, invitationModel: InvitationModel) {
+  showInviteDialog(evnt: OccEvent) {
     const dialogRef = this.dialog.open(EmailDialogComponent, {
       width: '600px',
       data: {
           iconName: 'event',
           title: evnt.name + ' - Invitation',
-          subject: invitationModel.subject,
-          content: invitationModel.content,
+          subject: this.invitationModel.subject,
+          content: this.invitationModel.content,
           buttonText1: 'Save & Close',
           buttonText2: 'Send'
       }
     });
 
     dialogRef.afterClosed()
-    .subscribe(result => {
-      if (result === true) {
-        // save and send the invitation
-        const invitationText = dialogRef.componentInstance.data.content;
-        const invitationSubject = dialogRef.componentInstance.data.subject;
+      .subscribe(result => {
 
-        this.persistInvitation(invitationModel);
+        this.invitationModel.content = result.data.content;
+        this.invitationModel.subject = result.data.subject;
 
-        this.sendEmail(evnt, invitationModel);
-
-      } else {
-        // only save the invitation
-        this.persistInvitation(invitationModel);
-      }
+        this.persistInvitation();
+        if (result.button === true) {
+          // save and send the invitation
+           this.sendEmail(evnt);
+        }
     });
   }
 
-  persistInvitation(invitationModel: InvitationModel) {
-    if (invitationModel.id) {
-      this.invitationService.updateInvitation(invitationModel).subscribe(updateResponse => {
-        // TODO - handle response if error, or success
-        this.snackbar.open('Invitation Updated!', '', {
-          duration: 3000
-        });
+  persistInvitation() {
+    if (this.invitationModel.invitationId) {
+      this.invitationService.updateInvitation(this.invitationModel).subscribe(updateResponse => {
+        this.displayFeedback(updateResponse, 'Invitation Updated', 'An error occurred updating your invitation');
       });
     } else {
-      this.invitationService.createNewInvitation(invitationModel).subscribe(createResponse => {
-        // TODO - handle response if error, or success
-        this.snackbar.open('Invitation Saved!', '', {
-          duration: 3000
-        });
+      this.invitationService.createNewInvitation(this.invitationModel).subscribe(createResponse => {
+        this.displayFeedback(createResponse, 'Invitation Saved', 'An error occurred updating your invitation');
       });
     }
   }
 
-  sendEmail(evnt: OccEvent, invitationModel: InvitationModel) {
-    const emailModel: EmailModel = this.emailService.createEmailModel(invitationModel.subject,
-      invitationModel.content, evnt.userName);
+  displayFeedback(responseCode: any, successMsg: any, failureMsg: any) {
+    let status = successMsg;
+    if (responseCode !== 200) {
+      status = failureMsg;
+    }
+    this.snackbar.open(status, '', {
+      duration: 3000
+    });
+  }
 
-    this.emailService.sendEventInvitationEmail(invitationModel.eventId, emailModel).subscribe(response => {
+  sendEmail(evnt: OccEvent) {
+    const emailModel: EmailModel = this.emailService.createEmailModel(this.invitationModel.subject,
+      this.invitationModel.content, evnt.userName);
+
+    this.emailService.sendEventInvitationEmail(this.invitationModel.eventId, emailModel).subscribe(response => {
       let statusMsg = 'Successfully emailed your guests!';
 
       if (response === 404) {

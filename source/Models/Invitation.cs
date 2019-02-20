@@ -9,7 +9,7 @@ namespace source.Models
 
     {
         // unique number for invitation 
-        public int id { get; set; }
+        public int invitationId { get; set; }
 
         // unique number for event identifier
         public int eventId { get; set; }

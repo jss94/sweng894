@@ -1,6 +1,6 @@
 export interface InvitationModel {
 
-  id?: number;
+  invitationId?: number;
   eventId: number;
   subject: string;
   content: string;

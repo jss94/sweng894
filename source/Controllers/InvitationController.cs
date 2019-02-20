@@ -40,6 +40,7 @@ namespace source.Controllers
                 return HttpStatusCode.OK;
             } catch (Exception e)
             {
+                Console.WriteLine(e.StackTrace);
                 return HttpStatusCode.BadRequest;
             }
 
@@ -70,6 +71,8 @@ namespace source.Controllers
                 return HttpStatusCode.OK;
             }catch(Exception e)
             {
+
+                Console.WriteLine(e.StackTrace);
                 return HttpStatusCode.BadRequest;
             }
         }

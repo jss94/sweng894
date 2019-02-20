@@ -68,7 +68,7 @@ namespace source.Queries
 
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
-                await connection.ExecuteAsync(query, new { invitation });
+                await connection.ExecuteAsync(query, invitation);
             }
         }
 
