@@ -1,14 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using source.Models;
+using System.Threading.Tasks;
 
 namespace source.Queries
 {
     public interface IInvitationQuery
     {
-        Task saveInvitation(int eventId, string content);
+        Task saveInvitation(Invitation invitation);
 
-        Task<string> getInvitation(int eventId);
+        Task<Invitation> getInvitation(int eventId);
 
-        Task updateInvitation(int eventId, string content);
+        Task updateInvitation(Invitation invitation);
 
         Task deleteInvitation(int eventId);
     }

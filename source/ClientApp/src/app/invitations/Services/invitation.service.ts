@@ -12,12 +12,12 @@ export class InvitationService {
       ) {
   }
 
-  getInvitation(eventId: string): Observable<InvitationModel> {
+  getInvitation(eventId: number): Observable<InvitationModel> {
       return this.auth.get('invitation/' + eventId);
   }
 
   createNewInvitation(invitation: InvitationModel): Observable<any> {
-    return this.auth.post('event/', invitation);
+    return this.auth.post('invitation/', invitation);
   }
 
 

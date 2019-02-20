@@ -2,7 +2,7 @@
 using MySql.Data.MySqlClient;
 using source.Database;
 using Dapper;
-using System;
+using source.Models;
 
 namespace source.Queries
 {
@@ -30,7 +30,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        public async Task<String> getInvitation(int eventId)
+        public async Task<Invitation> getInvitation(int eventId)
         {
             using (var db = _database)
             {
@@ -42,7 +42,7 @@ namespace source.Queries
                 // Use the structure new { object } when you are passing in a single param
                 // If you pass in the object without the new { } Dapper will look for the 
                 // field eventId in the object eventId (ie. eventId.eventId)
-                var result = await connection.QueryFirstAsync<String>(query, new { eventId });
+                var result = await connection.QueryFirstAsync<Invitation>(query, new { eventId });
                 return result;
             }
         }
@@ -50,10 +50,9 @@ namespace source.Queries
         /// <summary>
         /// Saves an invitation
         /// </summary>
-        /// <param name="eventId"></param>
-        /// <param name="content"></param>
+        /// <param name="invitation"></param>
         /// <returns>true if the save was successful, false otherwise</returns>
-        public async Task saveInvitation(int eventId, String content)
+        public async Task saveInvitation(Invitation invitation)
         {
             using (var db = _database)
             {
@@ -62,18 +61,18 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 // I left these all caps because Dapper doesnt care
-                string query = @"INSERT INTO occasions.invitations (eventId, content) "
-                    + @"VALUES (@eventId, @content)";
+                string query = @"INSERT INTO occasions.invitations (eventId, content, subject) "
+                    + @"VALUES (@eventId, @content, @subject)";
 
                 await Task.CompletedTask;
 
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
-                await connection.ExecuteAsync(query, new { eventId, content });
+                await connection.ExecuteAsync(query, new { invitation });
             }
         }
 
-        public async Task updateInvitation(int eventId, string content)
+        public async Task updateInvitation(Invitation invitation)
         {
             using (var db = _database)
             {
@@ -82,10 +81,11 @@ namespace source.Queries
 
                 string query = @"UPDATE occasions.invitations"
                     + " SET content=@content,"
+                    + " subject=@subject"
                     + " WHERE eventId =  @eventId";
 
                 await Task.CompletedTask;
-                await connection.ExecuteAsync(query, new { content, eventId });
+                await connection.ExecuteAsync(query, new { invitation});
             }
         }
 

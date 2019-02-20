@@ -7,10 +7,11 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { EmailService } from '../send-email/Services/email.service';
 import { EmailModel } from '../send-email/Models/email.model';
-import { EmailAddress } from '../send-email/Models/email.address.model';
-import { EmailContent } from '../send-email/Models/email.content.model';
 import { MatDialog } from '@angular/material/dialog';
 import { EmailDialogComponent } from '../shared/components/email-dialog/email-dialog.component';
+import { InvitationService } from '../invitations/Services/invitation.service';
+import { InvitationModel } from '../invitations/Models/invitation.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-events',
@@ -34,7 +35,8 @@ export class EventsComponent implements OnInit {
     private eventService: EventService,
     private router: Router,
     private snackbar: MatSnackBar,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private invitationService: InvitationService,
     ) {
   }
 
@@ -97,48 +99,89 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  showInvite(evnt: OccEvent) {
+  loadInvite(evnt: OccEvent) {
 
-    const inviteTemplate = 'You are invited to celebrate ' + evnt.description +
-      ' which is occurring on ' + evnt.dateTime;
+    this.invitationService.getInvitation(evnt.eventId).subscribe(invitationResponse => {
+      // invitation exists
+      const invitationModel: InvitationModel = invitationResponse;
+      this.showInviteDialog(evnt, invitationModel);
+    }, error => {
+        // invitation does not exist
+        const invitationModel: InvitationModel = ({
+          eventId: evnt.eventId,
+          subject: 'You\'re Invited!',
+          content: 'You are invited to celebrate ' + evnt.description
+        });
+        this.showInviteDialog(evnt, invitationModel);
+    });
+  }
 
+  showInviteDialog(evnt: OccEvent, invitationModel: InvitationModel) {
     const dialogRef = this.dialog.open(EmailDialogComponent, {
       width: '600px',
       data: {
           iconName: 'event',
-        title: evnt.name + ' - Invitation',
-          subject: 'You\'re Invited!',
-          content: inviteTemplate,
-          buttonText1: 'Cancel',
+          title: evnt.name + ' - Invitation',
+          subject: invitationModel.subject,
+          content: invitationModel.content,
+          buttonText1: 'Save & Close',
           buttonText2: 'Send'
       }
     });
 
-
-
     dialogRef.afterClosed()
     .subscribe(result => {
       if (result === true) {
+        // save and send the invitation
         const invitationText = dialogRef.componentInstance.data.content;
         const invitationSubject = dialogRef.componentInstance.data.subject;
 
-        const emailModel: EmailModel = this.emailService.createEmailModel(invitationSubject, invitationText, evnt.userName);
+        this.persistInvitation(invitationModel);
 
-        this.emailService.sendEventInvitationEmail(evnt.eventId, emailModel).subscribe(response => {
-          let statusMsg = 'Successfully emailed your guests!';
+        this.sendEmail(evnt, invitationModel);
 
-          if (response === 404) {
-            statusMsg = evnt.name + ' has no guests! Add one and try again!';
-          } else if (response !== 202) {
-            statusMsg = 'An error occurred sending the email, please contact your administrator.';
-          }
-
-          this.snackbar.open(statusMsg, '', {
-            duration: 3000
-          });
-       });
+      } else {
+        // only save the invitation
+        this.persistInvitation(invitationModel);
       }
     });
-}
+  }
 
+  persistInvitation(invitationModel: InvitationModel) {
+    if (invitationModel.id) {
+      this.invitationService.updateInvitation(invitationModel).subscribe(updateResponse => {
+        // TODO - handle response if error, or success
+        this.snackbar.open('Invitation Updated!', '', {
+          duration: 3000
+        });
+      });
+    } else {
+      this.invitationService.createNewInvitation(invitationModel).subscribe(createResponse => {
+        // TODO - handle response if error, or success
+        this.snackbar.open('Invitation Saved!', '', {
+          duration: 3000
+        });
+      });
+    }
+  }
+
+  sendEmail(evnt: OccEvent, invitationModel: InvitationModel) {
+    const emailModel: EmailModel = this.emailService.createEmailModel(invitationModel.subject,
+      invitationModel.content, evnt.userName);
+
+    this.emailService.sendEventInvitationEmail(invitationModel.eventId, emailModel).subscribe(response => {
+      let statusMsg = 'Successfully emailed your guests!';
+
+      if (response === 404) {
+        statusMsg = evnt.name + ' has no guests! Add one and try again!';
+      } else if (response !== 202) {
+        statusMsg = 'An error occurred sending the email, please contact your administrator.';
+      }
+
+      this.snackbar.open(statusMsg, '', {
+        duration: 3000
+      });
+    });
+
+  }
 }

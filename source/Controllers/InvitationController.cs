@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using source.Queries;
 using System.Net;
+using source.Models;
 
 namespace source.Controllers
 {
@@ -29,14 +30,13 @@ namespace source.Controllers
         /// <summary>
         /// Saves the given invitation with the associated event id.
         /// </summary>
-        /// <param name="eventId">The id of the Event for which the invitation is for.</param>
-        /// <param name="invitationContent">The content of the invitation</param>
+        /// <param name="invitation">The content of the invitation</param>
         [HttpPost]
-        public async Task<HttpStatusCode> postInvitation(int eventId, [FromBody]String invitationContent)
+        public async Task<HttpStatusCode> postInvitation([FromBody]Invitation invitation)
         {
             try
             {
-                await _invitationQuery.saveInvitation(eventId, invitationContent);
+                await _invitationQuery.saveInvitation(invitation);
                 return HttpStatusCode.OK;
             } catch (Exception e)
             {
@@ -50,7 +50,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="eventId">The id of the Event.</param>
         [HttpGet]
-        public async Task<String> getInvitation(int eventId)
+        public async Task<Invitation> getInvitation(int eventId)
         {
             // retrieve invitation associated to event.
             return await _invitationQuery.getInvitation(eventId);
@@ -60,18 +60,17 @@ namespace source.Controllers
         /// <summary>
         /// Updates an invitation associated with the given event id.
         /// </summary>
-        /// <param name="eventId">The id of the Event.</param>
-        /// <param name="content">The content of the invitation.</param>
+        /// <param name="invitation">The id of the Event.</param>
         [HttpPut]
-        public async Task<bool> putInvitation(int eventId, String content)
+        public async Task<HttpStatusCode> putInvitation(Invitation invitation)
         {
             try
             {
-                await _invitationQuery.updateInvitation(eventId, content);
-                return true;
+                await _invitationQuery.updateInvitation(invitation);
+                return HttpStatusCode.OK;
             }catch(Exception e)
             {
-                return false;
+                return HttpStatusCode.BadRequest;
             }
         }
 
