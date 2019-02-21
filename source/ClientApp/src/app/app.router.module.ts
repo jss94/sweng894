@@ -17,6 +17,7 @@ import { DeactivateUserComponent } from './deactivate-user/deactivate-user.compo
 import { ReactivateUserComponent } from './reactivate-user/reactivate-user.component';
 import { VendorServicesComponent } from './vendor-services/vendor-services.component';
 import { VendorComponent } from './vendors/vendor.component';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UpdateVendorServicesComponent } from './vendor-services/update-vendor-services.component';
 
@@ -28,6 +29,7 @@ const routes: Routes = [
     { path: 'learn-more', component: LearnMoreComponent},
     { path: 'search-vendors', component: GoogleMapComponent },
     { path: 'events', component: EventsComponent },
+    { path: 'events/:userName/:eventId', component: EventDetailComponent },
     { path: 'register-user', component: RegisterUserComponent },
     { path: 'deactivate-user', component: DeactivateUserComponent },
     { path: 'reactivate-user', component: ReactivateUserComponent },
@@ -54,6 +56,7 @@ const routes: Routes = [
         ReactivateUserComponent,
         VendorComponent,
         VendorServicesComponent,
+        EventDetailComponent,
         UpdateVendorServicesComponent,
     ],
 
