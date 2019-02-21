@@ -1,0 +1,28 @@
+.header {
+    padding: 20px;
+    text-align: center;
+    background: #ffffff;
+}
+/* Column container */
+.row {  
+    display: flex;
+    flex-wrap: wrap;
+}  
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.main {
+    flex: 60%;
+    background-color:#F5F5F5;
+    padding: 20px;
+}
+.side {
+    flex: 40%;
+    background-color: #F5F5F5;
+    padding: 20px;
+}
+/* Fake map placeholder */
+.fakemap {
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
+}
