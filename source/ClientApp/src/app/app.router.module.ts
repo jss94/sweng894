@@ -19,6 +19,7 @@ import { VendorServicesComponent } from './vendor-services/vendor-services.compo
 import { VendorComponent } from './vendors/vendor.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UpdateVendorServicesComponent } from './vendor-services/update-vendor-services.component';
+import { VendorDetailsComponent } from './vendor-details/vendor-details.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -36,6 +37,7 @@ const routes: Routes = [
     { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
+    { path: 'vendor-details/:id', component: VendorDetailsComponent },
   ];
 
 @NgModule({
@@ -55,6 +57,7 @@ const routes: Routes = [
         VendorComponent,
         VendorServicesComponent,
         UpdateVendorServicesComponent,
+        VendorDetailsComponent,
     ],
 
     imports: [
