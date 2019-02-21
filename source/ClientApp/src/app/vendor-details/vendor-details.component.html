@@ -1,0 +1,58 @@
+<div *ngIf="vendor">
+<div class="vendor-details-container">
+  <div class='header'><h1>{{vendor.name}}</h1></div>
+</div>
+
+    <div class='box'>
+    <h5>{{address.street}}</h5>
+    <h5>{{address.city}}, {{address.state}}  {{address.zip}}</h5>
+    <h5>{{vendor.phone}}</h5>
+    <h5>{{vendor.website}}</h5>
+  </div>
+
+<div class="vendor-details-container">
+   <h2>Vendor Services</h2>      
+   <div class="item-container" *ngFor="let service of vendorServices">
+        <div class="vendor-services-item">
+          <div class='side'>
+              <div [ngSwitch]="service.serviceType">
+                  <div *ngSwitchCase="'Venue'">
+                    <mat-icon class="large">location_city</mat-icon>
+                  </div>
+                  <div  *ngSwitchCase="'Catering'">
+                    <mat-icon class="large">local_dining</mat-icon>
+                  </div>
+                  <div *ngSwitchCase="'Flowers'">
+                    <mat-icon class="large">local_florist</mat-icon>
+                  </div>
+                  <div *ngSwitchCase="'Activities'">
+                    <mat-icon class="large">golf_course</mat-icon>
+                  </div>
+                  <div *ngSwitchCase="'Lodging'">
+                      <mat-icon class="large">local_hotel</mat-icon>
+                  </div>
+                  <div *ngSwitchCase="'Supplies'">
+                      <mat-icon class="large">golf_course</mat-icon>
+                  </div>
+                  <div *ngSwitchCase="'Other'">
+                    <mat-icon class="large">grade</mat-icon>
+                  </div>
+              </div>
+            
+          </div>
+        
+          <div class='main'>
+             <div><h5 class='vendor-services-text'>{{service.serviceType}}: {{service.serviceName}}</h5></div>
+             <div><h6>{{service.serviceDescription}}</h6></div>
+            <div>
+              <h6 *ngIf="service.flatFee">Flat fee</h6>
+              <h6 *ngIf="!service.flatFee">Price per unit</h6>
+            </div>
+            <div><h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6></div>
+            <div><h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6></div>
+          </div>
+        </div>
+   </div>
+</div>
+
+</div>
