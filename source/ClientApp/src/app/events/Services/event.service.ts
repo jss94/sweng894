@@ -16,6 +16,10 @@ export class EventService {
       return this.auth.get('event/' + id);
   }
 
+  getEvent(userName: string, eventId: number): Observable<OccEvent> {
+    return this.auth.get('event/' + userName + '/' + eventId);
+  }
+
   createNewEvent(evt: OccEvent): Observable<any> {
     return this.auth.post('event/', evt);
   }

@@ -91,6 +91,10 @@ export class EventsComponent implements OnInit {
     this.router.navigate(['/guests/' + event.eventId]);
    }
 
+   onViewEventClicked(event: OccEvent): void {
+    this.router.navigate(['/events/' + event.userName + '/' + event.eventId]);
+   }
+
    deleteEvent(evnt: OccEvent): void {
     this.eventService.deleteEvent(evnt).subscribe(response => {
       // reload page
