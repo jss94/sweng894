@@ -60,6 +60,15 @@ namespace source.Controllers
         [HttpPost("event/invitation/{eventId}")]
         public async Task<HttpStatusCode> PostEventInviteToGuests(int eventId, [FromBody]EmailMessage emailMsg)
         {
+
+            String rsvpUrlBase = "http://";
+            if(HttpContext.Request.IsHttps)
+            {
+                rsvpUrlBase = "https://";
+            }
+
+            rsvpUrlBase = rsvpUrlBase + HttpContext.Request.Host.ToString();
+            
             // retrieve guest emails via event id
             List<Guest> eventGuests = await _guestsQuery.GetListByEventId(eventId);
 
@@ -84,7 +93,7 @@ namespace source.Controllers
                 personalizations.Add(personalization);
                 emailMsg.personalizations = personalizations;
                 
-                emailContents.Add(updateEmailContentToIncludeRSVP(guest.guestId, originalContent));
+                emailContents.Add(updateEmailContentToIncludeRSVP(guest.guestId, originalContent, rsvpUrlBase));
                 emailMsg.content = emailContents;
 
                 Task<HttpStatusCode> response = _emailQuery.sendEmailViaPostAsync(emailMsg);
@@ -108,25 +117,25 @@ namespace source.Controllers
             }
         }
 
-        private EmailContent updateEmailContentToIncludeRSVP(int guestId, string content)
+        private EmailContent updateEmailContentToIncludeRSVP(int guestId, string content, string rsvpBaseUrl)
         {
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.AppendLine("<div>").Append(content).Append("</div>");
-            htmlBuilder.AppendLine(createRsvpLinkContent(guestId));
+            htmlBuilder.AppendLine(createRsvpLinkContent(rsvpBaseUrl, guestId));
 
             EmailContent emailContent = new EmailContent("text/html", htmlBuilder.ToString());
             return emailContent;
         }
 
-        private string createRsvpLinkContent(int guestId)
+        private string createRsvpLinkContent(String rsvpBaseUrl, int guestId)
         {
             String hostName = System.Net.Dns.GetHostName();
             StringBuilder sb = new StringBuilder();
             sb.Append("<div>RSVP</div>");
-            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/guest/rsvp/");
+            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
             sb.Append(guestId).Append("?isGoing=true");
             sb.Append("'>Going</a></div>");
-            sb.AppendLine("<div><a href='https://").Append(hostName).Append(":5001/guest/rsvp/");
+            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
             sb.Append(guestId).Append("?isGoing=false");
             sb.Append("'>Not Going</a></div>"); ;
             return sb.ToString();

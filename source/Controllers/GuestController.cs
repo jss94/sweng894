@@ -118,7 +118,7 @@ namespace source.Controllers
         /// <param name="guestId">Guest</param>
         /// <param name="isGoing">Query parameter either true or false, to specify the RSVP.</param>
         /// <returns>Updated RSVP for Guest record</returns>
-        [HttpPut("rsvp/{guestId}")]
+        [HttpGet("rsvp/{guestId}")]
         public async Task<IActionResult> UpdateRsvp(int guestId, [FromQuery]String isGoing)
         {
             try
