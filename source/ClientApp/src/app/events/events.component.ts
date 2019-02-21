@@ -7,10 +7,11 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { EmailService } from '../send-email/Services/email.service';
 import { EmailModel } from '../send-email/Models/email.model';
-import { EmailAddress } from '../send-email/Models/email.address.model';
-import { EmailContent } from '../send-email/Models/email.content.model';
 import { MatDialog } from '@angular/material/dialog';
 import { EmailDialogComponent } from '../shared/components/email-dialog/email-dialog.component';
+import { InvitationService } from '../invitations/Services/invitation.service';
+import { InvitationModel } from '../invitations/Models/invitation.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-events',
@@ -21,6 +22,8 @@ export class EventsComponent implements OnInit {
   events: OccEvent[];
 
   userName: string;
+
+  invitationModel: InvitationModel;
 
   eventForm = new FormGroup({
     date: new FormControl('', [ Validators.required ]),
@@ -34,7 +37,8 @@ export class EventsComponent implements OnInit {
     private eventService: EventService,
     private router: Router,
     private snackbar: MatSnackBar,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private invitationService: InvitationService,
     ) {
   }
 
@@ -101,48 +105,91 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  showInvite(evnt: OccEvent) {
+  loadInvite(evnt: OccEvent) {
 
-    const inviteTemplate = 'You are invited to celebrate ' + evnt.description +
-      ' which is occurring on ' + evnt.dateTime;
+    this.invitationService.getInvitation(evnt.eventId).subscribe(invitationResponse => {
+      // invitation exists
+      this.invitationModel = invitationResponse;
+      this.showInviteDialog(evnt);
+    }, error => {
+        // invitation does not exist
+       this.invitationModel = ({
+          eventId: evnt.eventId,
+          subject: 'You\'re Invited!',
+          content: 'You are invited to celebrate ' + evnt.description
+        });
+        this.showInviteDialog(evnt);
+    });
+  }
 
+  showInviteDialog(evnt: OccEvent) {
     const dialogRef = this.dialog.open(EmailDialogComponent, {
       width: '600px',
       data: {
           iconName: 'event',
-        title: evnt.name + ' - Invitation',
-          subject: 'You\'re Invited!',
-          content: inviteTemplate,
-          buttonText1: 'Cancel',
+          title: evnt.name + ' - Invitation',
+          subject: this.invitationModel.subject,
+          content: this.invitationModel.content,
+          buttonText1: 'Save & Close',
           buttonText2: 'Send'
       }
     });
 
-
-
     dialogRef.afterClosed()
-    .subscribe(result => {
-      if (result === true) {
-        const invitationText = dialogRef.componentInstance.data.content;
-        const invitationSubject = dialogRef.componentInstance.data.subject;
+      .subscribe(result => {
 
-        const emailModel: EmailModel = this.emailService.createEmailModel(invitationSubject, invitationText, evnt.userName);
+        // update content and subject of invitation
+        this.invitationModel.content = result.data.content;
+        this.invitationModel.subject = result.data.subject;
 
-        this.emailService.sendEventInvitationEmail(evnt.eventId, emailModel).subscribe(response => {
-          let statusMsg = 'Successfully emailed your guests!';
-
-          if (response === 404) {
-            statusMsg = evnt.name + ' has no guests! Add one and try again!';
-          } else if (response !== 202) {
-            statusMsg = 'An error occurred sending the email, please contact your administrator.';
+        // save the invitation first
+        this.persistInvitation().subscribe(response => {
+          this.displayInvitationFeedback(response, 'Invitation Updated', 'An error occurred saving your invitation');
+          if (result.data.button === true) {
+              // send the invitation
+              this.sendEmail(evnt).subscribe(emailResponse => {
+              this.displayEmailFeedback(evnt, emailResponse);
+            });
           }
-
-          this.snackbar.open(statusMsg, '', {
-            duration: 3000
-          });
-       });
-      }
+        });
     });
-}
+  }
 
+  persistInvitation(): Observable<any> {
+    if (this.invitationModel.invitationId) {
+        return this.invitationService.updateInvitation(this.invitationModel);
+    } else {
+      return this.invitationService.createNewInvitation(this.invitationModel);
+    }
+  }
+
+  displayInvitationFeedback(responseCode: any, successMsg: any, failureMsg: any) {
+    let status = successMsg;
+    if (responseCode !== 200) {
+      status = failureMsg;
+    }
+    this.snackbar.open(status, '', {
+      duration: 3000
+    });
+  }
+
+  displayEmailFeedback(evnt: OccEvent, response: any) {
+    let statusMsg = 'Successfully emailed your guests!';
+
+    if (response === 404) {
+      statusMsg = evnt.name + ' has no guests! Add one and try again!';
+    } else if (response !== 202) {
+      statusMsg = 'An error occurred sending the email, please contact your administrator.';
+    }
+
+    this.snackbar.open(statusMsg, '', {
+      duration: 3000
+    });
+  }
+
+  sendEmail(evnt: OccEvent): Observable<any> {
+    const emailModel: EmailModel = this.emailService.createEmailModel(this.invitationModel.subject,
+    this.invitationModel.content, evnt.userName);
+    return this.emailService.sendEventInvitationEmail(this.invitationModel.eventId, emailModel);
+  }
 }

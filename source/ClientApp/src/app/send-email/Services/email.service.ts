@@ -33,7 +33,7 @@ export class EmailService {
     fromEmail.email = evntUserName;
 
     const emailContent = new EmailContent();
-    emailContent.type = 'text/plain';
+    emailContent.type = 'text/html';
     emailContent.value = invitationText;
 
     const content: EmailContent[] = [];

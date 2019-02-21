@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ElementRef, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface EmailDialogData {
@@ -16,13 +16,22 @@ export interface EmailDialogData {
     styleUrls: [ './email-dialog.component.css']
   })
 export class EmailDialogComponent {
+
+  @ViewChild('contentInput') contentInput: ElementRef;
+  @ViewChild('subjectInput') subjectInput: ElementRef;
+
       constructor(
         public dialogRef: MatDialogRef<any>,
         @Inject(MAT_DIALOG_DATA) public data: EmailDialogData
       ) {}
 
-      onClickAffirm(): void {
-          this.dialogRef.close(true);
+      onClick(affirm: boolean): void {
+        this.dialogRef.close({
+          data: {
+            subject: this.subjectInput.nativeElement.value,
+            content: this.contentInput.nativeElement.value,
+            button: affirm
+          } });
       }
 
   }

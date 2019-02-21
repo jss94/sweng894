@@ -2,20 +2,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using source.Auth;
 using source.Database;
-using source.Models;
 using source.Queries;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
 using System.Reflection;
-using source.Controllers;
 using source.Framework;
 
 namespace source
@@ -72,6 +69,7 @@ namespace source
             services.AddTransient<IAddressesQuery, AddressesQuery>();
             services.AddTransient<IGuestQuery, GuestQuery>();
             services.AddTransient<IEmailQuery, EmailQuery>();
+            services.AddTransient<IInvitationQuery, InvitationQuery>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
