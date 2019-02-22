@@ -31,6 +31,10 @@
       </button>
       <mat-menu #userMenu="matMenu">
         <button mat-button class="clickable">
+          <span class="nav-link" [routerLink]='["/user-calendar"]' [routerLinkActive]='["link-active"]'>My Calendar</span>
+        </button>
+        <br>
+        <button mat-button class="clickable">
           <span class="nav-link" [routerLink]='["/user-profile"]' [routerLinkActive]='["link-active"]'>Profile</span>
         </button>
         <br>

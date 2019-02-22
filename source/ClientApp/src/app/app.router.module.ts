@@ -20,6 +20,8 @@ import { VendorComponent } from './vendors/vendor.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UpdateVendorServicesComponent } from './vendor-services/update-vendor-services.component';
+import { GoogleCalendarComponent } from './google-calendar/google-calendar.component';
+import { GoogleCalendarModule } from './google-calendar/google-calendar.module';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -38,6 +40,7 @@ const routes: Routes = [
     { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
+    { path: 'user-calendar', component: GoogleCalendarComponent },
   ];
 
 @NgModule({
@@ -65,6 +68,7 @@ const routes: Routes = [
         CommonModule,
         BrowserModule,
         MaterialModule,
+        GoogleCalendarModule,
         ReactiveFormsModule,
     ],
     exports: [ RouterModule ]
