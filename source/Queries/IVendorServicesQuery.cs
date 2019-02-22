@@ -1,7 +1,5 @@
 ﻿using source.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace source.Queries
@@ -17,5 +15,6 @@ namespace source.Queries
         Task<bool> DeactivateByVendorId(int id);
         Task<bool> ReactivateByVendorId(int id);
         Task<VendorServices> GetById(int id);
+        Task<List<VendorServices>> Search(VendorSearchProperties properties);
     }
 }
