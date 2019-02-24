@@ -1,4 +1,6 @@
-﻿using source.Models;
+﻿using Microsoft.AspNetCore.Http;
+using source.Models;
+using source.Models.Email;
 using System.Threading.Tasks;
 
 namespace source.Queries
@@ -13,7 +15,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="invitation"></param>
         /// <returns></returns>
-        Task saveInvitation(Invitation invitation);
+        Task<bool> saveInvitation(Invitation invitation);
 
         /// <summary>
         /// Retrieves the Invitation associated with the given eventId
@@ -27,13 +29,18 @@ namespace source.Queries
         /// </summary>
         /// <param name="invitation"></param>
         /// <returns></returns>
-        Task updateInvitation(Invitation invitation);
+        Task<bool> updateInvitation(Invitation invitation);
 
         /// <summary>
         /// Deletes the invitation associated to the given eventId
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        Task deleteInvitation(int eventId);
+        Task<bool> deleteInvitation(int eventId);
+
+        /// <summary>
+        /// Takes the given EmailContent and returns an EmailContent that includes RSVP links for the invitation.
+        /// </summary>
+        EmailContent updateInvitationContentToIncludeRSVP(int guestId, EmailContent emailContent, HttpContext httpContext);
     }
 }

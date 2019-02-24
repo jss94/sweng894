@@ -116,12 +116,12 @@ namespace source.Queries
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
-
-                string query = @"UPDATE occasions.guests SET firstName = @guest.name, "
-                    + @"email = @guest.email, "
-                    + @"isGoing = @guest.isGoing "
-                    + @"eventId =  @guest.eventId"
-                    + @"WHERE guestId = @guest.guestId;";
+                
+                string query = @"UPDATE occasions.guests SET name = @name, "
+                    + "email = @email, "
+                    + "isGoing = @isGoing, "
+                    + "eventId =  @eventId "
+                    + "WHERE guestId = @guestId;";
 
                 await Task.CompletedTask;
 

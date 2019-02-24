@@ -82,16 +82,16 @@ namespace source.Controllers
         /// </summary>
         /// <param name="eventId">The id of the Event.</param>
         [HttpDelete]
-        public async Task<bool> deleteInvitation(int eventId)
+        public async Task<HttpStatusCode> deleteInvitation(int eventId)
         {
             try
             {
                 await _invitationQuery.deleteInvitation(eventId);
-                return true;
+                return HttpStatusCode.OK;
             }catch(Exception e)
             {
                 Console.WriteLine(e.StackTrace);
-                return false;
+                return HttpStatusCode.BadRequest;
             }
         }
     }

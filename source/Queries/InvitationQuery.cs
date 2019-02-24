@@ -3,6 +3,10 @@ using MySql.Data.MySqlClient;
 using source.Database;
 using Dapper;
 using source.Models;
+using System.Text;
+using source.Models.Email;
+using System;
+using Microsoft.AspNetCore.Http;
 
 namespace source.Queries
 {
@@ -52,7 +56,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="invitation"></param>
         /// <returns>true if the save was successful, false otherwise</returns>
-        public async Task saveInvitation(Invitation invitation)
+        public async Task<bool> saveInvitation(Invitation invitation)
         {
             using (var db = _database)
             {
@@ -69,6 +73,7 @@ namespace source.Queries
                 // Here we pass in the entire event without the new  { }
                 // Dapper will rightly look for fields like evnt.eventName doing this
                 await connection.ExecuteAsync(query, invitation);
+                return true;
             }
         }
 
@@ -77,7 +82,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="invitation"></param>
         /// <returns></returns>
-        public async Task updateInvitation(Invitation invitation)
+        public async Task<bool> updateInvitation(Invitation invitation)
         {
             using (var db = _database)
             {
@@ -91,6 +96,7 @@ namespace source.Queries
 
                 await Task.CompletedTask;
                 await connection.ExecuteAsync(query, invitation);
+                return true;
             }
         }
 
@@ -99,7 +105,7 @@ namespace source.Queries
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        public async Task deleteInvitation(int eventId)
+        public async Task<bool> deleteInvitation(int eventId)
         {
             using (var db = _database)
             {
@@ -110,7 +116,44 @@ namespace source.Queries
 
                 await Task.CompletedTask;
                 await connection.ExecuteAsync(query, new { eventId });
+                return true;
             }
         }
+
+        public EmailContent updateInvitationContentToIncludeRSVP(int guestId, EmailContent emailContent, HttpContext httpContext)
+        {
+            HttpRequest request = httpContext.Request;
+            string content = emailContent.value;
+            StringBuilder htmlBuilder = new StringBuilder();
+            htmlBuilder.AppendLine("<div>").Append(content).Append("</div>");
+            htmlBuilder.AppendLine(createRsvpLinkContent(createBaseUrl(request.IsHttps, request.Host.ToString()), guestId));
+
+            return new EmailContent("text/html", htmlBuilder.ToString());
+        }
+
+        private string createBaseUrl(bool isHttps, string host)
+        {
+            string rsvpUrlBase = "http://";
+            if (isHttps)
+            {
+                rsvpUrlBase = "https://";
+            }
+
+            return rsvpUrlBase + host;
+        }
+
+        private string createRsvpLinkContent(string rsvpBaseUrl, int guestId)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<div>RSVP</div>");
+            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
+            sb.Append(guestId).Append("?isGoing=true");
+            sb.Append("'>Going</a></div>");
+            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
+            sb.Append(guestId).Append("?isGoing=false");
+            sb.Append("'>Not Going</a></div>"); ;
+            return sb.ToString();
+        }
+        
     }
 }
