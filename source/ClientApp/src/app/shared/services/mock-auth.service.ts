@@ -14,18 +14,12 @@ export class MockAuthService {
     return this._user$;
   }
 
-  get user() {
-    return this.user;
-  }
-
-  userProfile: any = {};
-
   isAuthenticated(): any {
     return null;
   }
 
   getUserProfile(): any {
-    return this.userProfile;
+    return {};
   }
 
   login(): any {

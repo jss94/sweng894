@@ -43,9 +43,10 @@ export class EventsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.auth.user) {
-      this.userName = this.auth.user.userName;
-      this.eventService.getEvents(this.auth.user.userName).subscribe(response => {
+    const user = this.auth.user;
+    if (user) {
+      this.userName = user.userName;
+      this.eventService.getEvents(user.userName).subscribe(response => {
         this.events = response;
       });
     } else {

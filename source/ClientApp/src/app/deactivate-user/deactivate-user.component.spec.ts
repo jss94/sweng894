@@ -7,6 +7,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs/internal/observable/of';
+import { Router } from '@angular/router';
 
 export class MockMatSnackBar {
   open() {
@@ -42,6 +43,7 @@ describe('DeactivateUserComponent', () => {
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: UsersService, useClass: MockUsersService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: Router, useValue: { navigate: () => {} } }
       ]
     })
     .compileComponents();

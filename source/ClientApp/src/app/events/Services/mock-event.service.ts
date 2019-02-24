@@ -5,7 +5,12 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class MockEventService {
-    getEvents(organizerId: string): Observable<OccEvent[]> {
+
+  getEvent(userName: string, eventId: number): Observable<OccEvent> {
+    return of(null);
+  }
+
+  getEvents(organizerId: string): Observable<OccEvent[]> {
         return of(null);
     }
 

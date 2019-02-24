@@ -11,7 +11,7 @@ import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 import { of } from 'rxjs/internal/observable/of';
 import { RouterTestingModule } from '@angular/router/testing';
 import { GuestsComponent } from 'src/app/guests/guests.component';
-import { Routes } from '@angular/router';
+import { Routes, Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
 
@@ -26,10 +26,6 @@ describe('RegisterVendorComponent', () => {
     }
   }
 
-  const routes: Routes = [
-    { path: 'guests/:id', component: GuestsComponent },
-  ];
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -39,7 +35,8 @@ describe('RegisterVendorComponent', () => {
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: RegisterService, useClass: MockRegisterService },
-        { provide: MatSnackBar, useClass: MockMatSnackbar},
+        { provide: MatSnackBar, useClass: MockMatSnackbar },
+        { provide: Router, useValue: { navigate: () => {} } }
       ],
       imports: [
         FormsModule,
@@ -48,7 +45,6 @@ describe('RegisterVendorComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         NoopAnimationsModule,
-        RouterTestingModule.withRoutes(routes),
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
@@ -74,6 +70,7 @@ describe('RegisterVendorComponent', () => {
         fakeUser,
         {email_verified: true}
       ]));
+
 
       // act
       component.onAddVendor();

@@ -68,7 +68,6 @@ describe('ProfileComponent', () => {
     const user = new FakeUser();
     user.role = 'VENDOR';
     const vendor = new FakeVendor();
-    spyOnProperty(mockAuthService, 'user').and.returnValue(user);
     spyOnProperty(mockAuthService, 'user$').and.returnValue(of(user));
     spyOn(mockUserProfileService, 'getVendor').and.returnValue(of([user, vendor]));
 
@@ -86,7 +85,6 @@ describe('ProfileComponent', () => {
     const user = new FakeUser();
     user.role = 'ORGANIZER';
     const vendor = new FakeVendor();
-    spyOnProperty(mockAuthService, 'user').and.returnValue(user);
     spyOnProperty(mockAuthService, 'user$').and.returnValue(of(user));
     spyOn(mockUserProfileService, 'getOrganizer').and.returnValue(of(user));
 

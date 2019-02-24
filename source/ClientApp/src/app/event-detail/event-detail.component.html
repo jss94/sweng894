@@ -6,7 +6,7 @@
 
   <div class="row">
     <div class="main">
-      <h2>Event Details</h2>      
+      <h2>Event Details</h2>
       <p>{{theEvent.description}}</p>
       <div *ngIf="auth.user">
         <a routerLink="/guests/{{theEvent.eventId}}">View Guest List</a>

@@ -5,18 +5,14 @@ import { MockEventService } from './Services/mock-event.service';
 import { OccEvent } from './Models/occ-event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FakeUser } from '../shared/models/fake-user.model';
-import { Observable } from 'rxjs';
-import { Router, Routes } from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
+import { Router } from '@angular/router';
 import { GuestsComponent } from '../guests/guests.component';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
 import { EmailService } from '../send-email/Services/email.service';
-import { EmailModel } from '../send-email/Models/email.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { InvitationService } from '../invitations/Services/invitation.service';
 
@@ -24,9 +20,6 @@ describe('EventsComponent', () => {
   let component: EventsComponent;
   let fixture: ComponentFixture<EventsComponent>;
   let mockEventService: EventService;
-  let mockAuthService: AuthService;
-  let mockEmailService: EmailService;
-  let mockInvitationService: InvitationService;
 
   class MockInvitationService {
 
@@ -37,11 +30,11 @@ describe('EventsComponent', () => {
   }
 
   class MockEmailService {
-    sendVendorQuestionEmail(vendorId: number, emailModel: EmailModel) {
+    sendVendorQuestionEmail() {
 
     }
 
-    sendEventInvitationEmail(eventId: number, emailModel: EmailModel) {
+    sendEventInvitationEmail() {
 
     }
   }
@@ -62,11 +55,6 @@ describe('EventsComponent', () => {
     fakeEvent,
   ];
 
-  const routes: Routes = [
-    { path: 'guests/:id', component: GuestsComponent },
-  ];
-
-  let fakeMatDialog: MatDialog;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -78,7 +66,6 @@ describe('EventsComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
-        RouterTestingModule.withRoutes(routes),
       ],
       providers: [
         { provide: EmailService, useClass: MockEmailService },
@@ -86,7 +73,8 @@ describe('EventsComponent', () => {
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
-        { provide: InvitationService, useClass: MockInvitationService},
+        { provide: InvitationService, useClass: MockInvitationService },
+        { provide: Router, useValue: { navigate: () => {} } }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
@@ -94,12 +82,8 @@ describe('EventsComponent', () => {
 
   beforeEach(() => {
     mockEventService = TestBed.get(EventService);
-    mockAuthService = TestBed.get(AuthService);
     fixture = TestBed.createComponent(EventsComponent);
     component = fixture.componentInstance;
-    fakeMatDialog = TestBed.get(MatDialog);
-    mockEmailService = TestBed.get(EmailService);
-    mockInvitationService = TestBed.get(InvitationService);
   });
 
   it('should create', () => {

@@ -18,10 +18,11 @@ describe('VendorDetailsComponent', () => {
   let mockVendorServicesService: VendorServicesService;
   let mockVendorService: VendorService;
   let mockVendorServices: VendorServices;
-  
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VendorDetailsComponent ]
+      declarations: [VendorDetailsComponent],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));
