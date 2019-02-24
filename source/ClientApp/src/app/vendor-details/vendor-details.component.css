@@ -1,18 +1,23 @@
 h1 {
     padding: 10px;
-  }
-  
-  .vendor-details-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+}
 
-  .header {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background: #ffffff;
+.vendor-details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #ffffff;
+}
+
+.address {
+  display: flex;
+  justify-content: center;
 }
 
 .vendor-services-list {

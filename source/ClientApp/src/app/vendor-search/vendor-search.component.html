@@ -60,33 +60,36 @@
 
 <div class="item-container" *ngFor="let service of vendorServices">
   <div class="vendor-services-item">
+
     <div class="header">
-      <div class="vendor-services-icon">
-        <mat-icon>service</mat-icon>
+      <h6>{{service.serviceName}}</h6>
+    </div>
+    
+    <div class="description">
+        <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
+    </div>
+
+    <div class="value">
+      <div>
+          <h6 *ngIf="service.flatFee">Flat fee</h6>
+          <h6 *ngIf="!service.flatFee">Price per unit</h6>
       </div>
       <div>
-        <div>
-          <h5 class='vendor-services-text'>{{service.serviceType}}</h5>
-        </div>            
+          <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
+      </div>
+      <div>
+          <h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
       </div>
     </div>
 
-    <div>
-        <h6>{{service.serviceName}}</h6>
+    <div class="actions">
+      
+        <button mat-button (click)="onViewClicked(service)">
+            <mat-icon>remove_red_eye</mat-icon>
+        </button>
+        
     </div>
-    <div>
-        <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
-    </div>
-    <div>
-        <h6 *ngIf="service.flatFee">Flat fee</h6>
-        <h6 *ngIf="!service.flatFee">Price per unit</h6>
-    </div>
-    <div>
-        <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
-    </div>
-    <div>
-        <h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
-    </div>
+
 
   </div>
 </div>

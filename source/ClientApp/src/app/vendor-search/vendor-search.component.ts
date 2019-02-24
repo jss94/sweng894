@@ -4,8 +4,8 @@ import { AuthService } from '../shared/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
-import { EmailDialogComponent } from '../shared/components/email-dialog/email-dialog.component';
 import { VendorServices } from '../shared/models/vendor-services.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-search',
@@ -58,6 +58,7 @@ export class VendorSearchComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private auth: AuthService,
+    private router: Router,
     private vendorSearchService: VendorSearchService,
     private snackbar: MatSnackBar,
     ) {
@@ -71,7 +72,7 @@ export class VendorSearchComponent implements OnInit {
   onSearchClicked() {
     const properties = {
       maxPrice: this.searchForm.controls['price'].value || 999999,
-      maxCapacity: this.searchForm.controls['capacity'].value || 999999,
+      maxCapacity: this.searchForm.controls['capacity'].value || 0,
       zip: this.searchForm.controls['zip'].value,
       type: this.searchForm.controls['category'].value,
     };
@@ -82,5 +83,13 @@ export class VendorSearchComponent implements OnInit {
     }, error => {
       console.log('SEARCH ERROR', error);
     });
+  }
+
+  onResetClicked() {
+    this.searchForm.reset();
+  }
+
+  onViewClicked(service: VendorServices) {
+    this.router.navigate(['vendor-details/' + service.vendorId]);
   }
 }

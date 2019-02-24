@@ -2,6 +2,18 @@ h1 {
   padding: 10px;
 }
 
+.header {
+  width: 25%;
+}
+
+.description {
+  width: 25%;
+}
+
+.value {
+  width: 25%;
+}
+
 .search-container {
   display: flex;
   flex-direction: column;
@@ -62,7 +74,7 @@ mat-form-field {
 .vendor-services-item {
   width: 100%;
   margin-top: 10px;
-  padding: 0px;
+  padding: 10px;
   background-color: #E5E8EC;
   display: flex;
   justify-content: space-between;

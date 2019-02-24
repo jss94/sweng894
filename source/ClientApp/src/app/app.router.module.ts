@@ -40,7 +40,7 @@ const routes: Routes = [
     { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
-    { path: 'vendor-details/:id', component: VendorDetailsComponent },
+    { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
   ];
 
 @NgModule({
