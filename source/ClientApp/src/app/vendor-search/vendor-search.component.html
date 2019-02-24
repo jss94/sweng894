@@ -35,7 +35,7 @@
     </mat-form-field>
 
     <mat-form-field class="options">
-      <mat-select  [(value)]="selected" formControlName="category" placeholder="Type of Vendor" >
+      <mat-select formControlName="category" placeholder="Type of Vendor" >
         <mat-option *ngFor="let type of svcs" [value]="type.value">
           {{type.viewValue}}
         </mat-option>
