@@ -104,10 +104,10 @@ namespace source.Controllers
                 await _query.Update(guest);
                 return new OkObjectResult(true);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 //TODO: we should log our errors in the db
-
+                Console.WriteLine(e.StackTrace);
                 return new BadRequestResult();
             }
         }
@@ -124,21 +124,25 @@ namespace source.Controllers
             try
             {
                 Guest guest = await _query.GetByGuestId(guestId);
-
-                if(isGoing.Equals("true"))
+                OkObjectResult response = null;
+                if(Boolean.Parse(isGoing))
                 {
+                    response = new OkObjectResult("Great! Can't wait to see you!");
                     guest.isGoing = true;
                 } else
                 {
+                    response = new OkObjectResult("Sorry to see you can't make it :(");
                     guest.isGoing = false;
                 }
+
                 await _query.Update(guest);
-                return new OkObjectResult(true);
+                
+                return response;
             }
             catch (Exception e)
             {
                 //TODO: we should log our errors in the db
-                Console.WriteLine("OH NO!:" + e.StackTrace);
+                Console.WriteLine(e.StackTrace);
                 return new BadRequestResult();
             }
         }
@@ -171,6 +175,6 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
-
+        
     }
 }

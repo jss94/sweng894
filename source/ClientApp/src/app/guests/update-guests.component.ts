@@ -49,7 +49,7 @@ export class UpdateGuestsComponent implements OnInit {
             this.guestService.getGuest(this.guestId).subscribe((result: Guest) => {
                 this.guest = result;
                 console.log(result);
-                
+
                 this.updateGuestForm.controls['name'].setValue(this.guest.name);
                 this.updateGuestForm.controls['email'].setValue(this.guest.email);
                 this.setSelected(this.guest.isGoing);
@@ -61,8 +61,10 @@ export class UpdateGuestsComponent implements OnInit {
         this.guest.name = this.updateGuestForm.controls['name'].value;
         this.guest.email = this.updateGuestForm.controls['email'].value;
         this.setIsGoing(this.selectedValue);
-        this.guestService.update(this.guest);
-        this.router.navigate(['/guests/' + this.guest.eventId]);
+        this.guestService.update(this.guest).subscribe(response => {
+          this.router.navigate(['/guests/' + this.guest.eventId]);
+       });
+
     }
 
     onCancel() {

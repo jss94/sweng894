@@ -7,7 +7,6 @@ using source.Queries;
 using System.Collections.Generic;
 using source.Models.Email;
 using System.Net;
-using System.Text;
 
 namespace source.Controllers
 {
@@ -22,16 +21,18 @@ namespace source.Controllers
         private IGuestQuery _guestsQuery;
         private ILogger _logger;
         private IEmailQuery _emailQuery;
+        private IInvitationQuery _invitationQuery;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EmailController(IVendorsQuery vendorQuery, IGuestQuery guestsQuery, ILogger logger, IEmailQuery emailQuery)
+        public EmailController(IVendorsQuery vendorQuery, IGuestQuery guestsQuery, ILogger logger, IEmailQuery emailQuery, IInvitationQuery invitationQuery)
         {
             _vendorQuery = vendorQuery;
             _guestsQuery = guestsQuery;
             _logger = logger;
             _emailQuery = emailQuery;
+            _invitationQuery = invitationQuery;
         }
 
         /// <summary>
@@ -60,14 +61,6 @@ namespace source.Controllers
         [HttpPost("event/invitation/{eventId}")]
         public async Task<HttpStatusCode> PostEventInviteToGuests(int eventId, [FromBody]EmailMessage emailMsg)
         {
-
-            String rsvpUrlBase = "http://";
-            if(HttpContext.Request.IsHttps)
-            {
-                rsvpUrlBase = "https://";
-            }
-
-            rsvpUrlBase = rsvpUrlBase + HttpContext.Request.Host.ToString();
             
             // retrieve guest emails via event id
             List<Guest> eventGuests = await _guestsQuery.GetListByEventId(eventId);
@@ -75,9 +68,7 @@ namespace source.Controllers
             // check if guests are returned
             if (eventGuests == null || eventGuests.ToArray().Length == 0)
                 return HttpStatusCode.NotFound;
-
-            String originalContent = emailMsg.content[0].value;
-
+            
             Boolean isSuccessful = true;
             // TODO - Instead of emailing all of the guests in one email, they should probably
             // be emailed individually.  This would allow for a RSVP link to be embedded into the content.
@@ -93,7 +84,7 @@ namespace source.Controllers
                 personalizations.Add(personalization);
                 emailMsg.personalizations = personalizations;
                 
-                emailContents.Add(updateEmailContentToIncludeRSVP(guest.guestId, originalContent, rsvpUrlBase));
+                emailContents.Add(_invitationQuery.updateInvitationContentToIncludeRSVP(guest.guestId, emailMsg.content[0], HttpContext));
                 emailMsg.content = emailContents;
 
                 Task<HttpStatusCode> response = _emailQuery.sendEmailViaPostAsync(emailMsg);
@@ -116,31 +107,6 @@ namespace source.Controllers
                 return HttpStatusCode.BadRequest;
             }
         }
-
-        private EmailContent updateEmailContentToIncludeRSVP(int guestId, string content, string rsvpBaseUrl)
-        {
-            StringBuilder htmlBuilder = new StringBuilder();
-            htmlBuilder.AppendLine("<div>").Append(content).Append("</div>");
-            htmlBuilder.AppendLine(createRsvpLinkContent(rsvpBaseUrl, guestId));
-
-            EmailContent emailContent = new EmailContent("text/html", htmlBuilder.ToString());
-            return emailContent;
-        }
-
-        private string createRsvpLinkContent(String rsvpBaseUrl, int guestId)
-        {
-            String hostName = System.Net.Dns.GetHostName();
-            StringBuilder sb = new StringBuilder();
-            sb.Append("<div>RSVP</div>");
-            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
-            sb.Append(guestId).Append("?isGoing=true");
-            sb.Append("'>Going</a></div>");
-            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
-            sb.Append(guestId).Append("?isGoing=false");
-            sb.Append("'>Not Going</a></div>"); ;
-            return sb.ToString();
-        }
-
-
+        
     }
 }

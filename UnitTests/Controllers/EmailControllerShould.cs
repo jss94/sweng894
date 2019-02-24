@@ -8,7 +8,7 @@ using source.Framework;
 using System.Net;
 using source.Models.Email;
 using System.Collections.Generic;
-using static SendGrid.SendGridClient;
+using Microsoft.AspNetCore.Http;
 
 namespace UnitTests.Controllers
 {
@@ -20,6 +20,7 @@ namespace UnitTests.Controllers
         readonly Mock<IGuestQuery> _guestQueryMock;
         readonly Mock<ILogger> _loggerMock;
         readonly EmailController _emailController;
+        readonly Mock<IInvitationQuery> _invitationQueryMock;
 
         public EmailControllerShould()
         {
@@ -27,7 +28,8 @@ namespace UnitTests.Controllers
             _guestQueryMock = new Mock<IGuestQuery>();
             _loggerMock = new Mock<ILogger>();
             _emailQueryMock = new Mock<IEmailQuery>();
-            _emailController = new EmailController(_vendorQueryMock.Object, _guestQueryMock.Object, _loggerMock.Object, _emailQueryMock.Object);
+            _invitationQueryMock = new Mock<IInvitationQuery>();
+            _emailController = new EmailController(_vendorQueryMock.Object, _guestQueryMock.Object, _loggerMock.Object, _emailQueryMock.Object, _invitationQueryMock.Object);
         }
         
         [Fact]
@@ -87,7 +89,10 @@ namespace UnitTests.Controllers
             List<EmailContent> contents = new List<EmailContent>();
             contents.Add(new EmailContent("text/plain", "unit content"));
             emailMsg.content = contents;
-            
+
+            _invitationQueryMock.Setup(x => x.updateInvitationContentToIncludeRSVP(It.IsAny<int>(), It.IsAny<EmailContent>(), It.IsAny<HttpContext>()))
+                .Returns(new EmailContent("text/html", "mocked content"));
+
             _guestQueryMock.Setup(x => x.GetListByEventId(guests[0].eventId))
                 .Returns(Task.Factory.StartNew(() => guests));
 
