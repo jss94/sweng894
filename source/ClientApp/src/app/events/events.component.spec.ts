@@ -18,6 +18,7 @@ import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec
 import { EmailService } from '../send-email/Services/email.service';
 import { EmailModel } from '../send-email/Models/email.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
+import { InvitationService } from '../invitations/Services/invitation.service';
 
 describe('EventsComponent', () => {
   let component: EventsComponent;
@@ -25,6 +26,11 @@ describe('EventsComponent', () => {
   let mockEventService: EventService;
   let mockAuthService: AuthService;
   let mockEmailService: EmailService;
+  let mockInvitationService: InvitationService;
+
+  class MockInvitationService {
+
+  }
 
   class MockMatSnackBar {
     open() {}
@@ -80,6 +86,7 @@ describe('EventsComponent', () => {
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
+        { provide: InvitationService, useClass: MockInvitationService},
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
@@ -92,6 +99,7 @@ describe('EventsComponent', () => {
     component = fixture.componentInstance;
     fakeMatDialog = TestBed.get(MatDialog);
     mockEmailService = TestBed.get(EmailService);
+    mockInvitationService = TestBed.get(InvitationService);
   });
 
   it('should create', () => {
