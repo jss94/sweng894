@@ -1,30 +1,25 @@
 import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { EventsComponent } from './vendor-search.component';
-import { EventService } from './Services/vendor-search.service';
-import { MockEventService } from './Services/mock-vendor-search.service';
-import { OccEvent } from './Models/occ-event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FakeUser } from '../shared/models/fake-user.model';
-import { Observable } from 'rxjs';
-import { Router, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import { GuestsComponent } from '../guests/guests.component';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog, MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
-import { EmailService } from '../send-email/Services/email.service';
 import { EmailModel } from '../send-email/Models/email.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
+import { VendorSearchComponent } from './vendor-search.component';
+import { VendorSearchService } from './Services/vendor-search.service';
+import { FakeVendorServicesGroup } from '../shared/models/fake-vendor-services.model';
+import { MockVendorSearchService } from './Services/mock-vendor-search.service';
 
-describe('EventsComponent', () => {
-  let component: EventsComponent;
-  let fixture: ComponentFixture<EventsComponent>;
-  let mockEventService: EventService;
-  let mockAuthService: AuthService;
-  let mockEmailService: EmailService;
+describe('VendorSearchComponent', () => {
+  let component: VendorSearchComponent;
+  let fixture: ComponentFixture<VendorSearchComponent>;
+  let mockVendorSearchService: VendorSearchService;
 
   class MockMatSnackBar {
     open() {}
@@ -40,21 +35,6 @@ describe('EventsComponent', () => {
     }
   }
 
-  const fakeEvent: OccEvent = {
-    userName: 'organizerId',
-    description: 'fake description',
-    name: 'event name',
-    dateTime: '2019/04/01',
-    eventId: 0,
-    guestListId: 0,
-    created: 'null'
-  };
-
-  const fakeEvents: OccEvent[] = [
-    fakeEvent,
-    fakeEvent,
-    fakeEvent,
-  ];
 
   const routes: Routes = [
     { path: 'guests/:id', component: GuestsComponent },
@@ -65,20 +45,20 @@ describe('EventsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        EventsComponent,
+        VendorSearchComponent,
         GuestsComponent,
       ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
+        MatSelectModule,
+        MatInputModule,
         RouterTestingModule.withRoutes(routes),
       ],
       providers: [
-        { provide: EmailService, useClass: MockEmailService },
+        { provide: VendorSearchService, useClass: MockVendorSearchService },
         { provide: MatDialog, useClass: MockMatDialog },
-        { provide: MatSnackBar, useClass: MockMatSnackBar },
-        { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
@@ -86,29 +66,29 @@ describe('EventsComponent', () => {
   }));
 
   beforeEach(() => {
-    mockEventService = TestBed.get(EventService);
-    mockAuthService = TestBed.get(AuthService);
-    fixture = TestBed.createComponent(EventsComponent);
+    fixture = TestBed.createComponent(VendorSearchComponent);
     component = fixture.componentInstance;
     fakeMatDialog = TestBed.get(MatDialog);
-    mockEmailService = TestBed.get(EmailService);
+    mockVendorSearchService = TestBed.get(VendorSearchService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all events', fakeAsync(() => {
-    // arrange
-    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+  describe('onSearchClicked()', () => {
+    it ('should return search results', () => {
+        // arrange
+        const fakeVendorServices = new FakeVendorServicesGroup().arr;
+        spyOn(mockVendorSearchService, 'searchVendorServices').and.returnValue(of(fakeVendorServices));
 
-    // act
-    fixture.detectChanges();
+        // act
+        component.onSearchClicked();
 
-    // assert
-    expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-    expect(component.events.length).toBe(3);
+        // assert
+        expect(mockVendorSearchService.searchVendorServices).toHaveBeenCalledTimes(1);
+        expect(component.vendorServices.length).toBe(3);
 
-  }));
-
+    });
+  });
 });

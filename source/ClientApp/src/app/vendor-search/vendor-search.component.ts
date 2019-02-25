@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VendorSearchService } from './Services/vendor-search.service';
-import { AuthService } from '../shared/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
-import { MatDialog } from '@angular/material/dialog';
 import { VendorServices } from '../shared/models/vendor-services.model';
 import { Router } from '@angular/router';
 
@@ -56,11 +53,8 @@ export class VendorSearchComponent implements OnInit {
   ];
 
   constructor(
-    private dialog: MatDialog,
-    private auth: AuthService,
     private router: Router,
     private vendorSearchService: VendorSearchService,
-    private snackbar: MatSnackBar,
     ) {
   }
 
