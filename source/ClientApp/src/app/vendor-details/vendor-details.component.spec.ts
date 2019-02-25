@@ -15,10 +15,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 describe('VendorDetailsComponent', () => {
   let component: VendorDetailsComponent;
   let fixture: ComponentFixture<VendorDetailsComponent>;
-  let mockVendorServicesService: VendorServicesService;
-  let mockVendorService: VendorService;
-  let mockVendorServices: VendorServices;
-  
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ VendorDetailsComponent ]

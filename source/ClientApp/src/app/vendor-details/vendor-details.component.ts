@@ -17,8 +17,6 @@ export class VendorDetailsComponent implements OnInit {
 
   vendor: Vendor;
   vendorServices: VendorServices[];
-  vendorId = 0;
-  userName: string;
 
   constructor(
     private auth: AuthService,
@@ -29,19 +27,12 @@ export class VendorDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.auth.user) {
-      this.setVendor(this.auth.user);
-    } else {
-      this.auth.user$.subscribe((result) => {
-        this.setVendor(result);
-      });
-    }
+    this.setVendor();
   }
 
-  setVendor(user: User) {
+  setVendor() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const vendorId = +params.get('vendorId');
-      this.userName = user.userName;
       this.vendorService.getVendorById(vendorId).subscribe(vendor => {
         this.vendor = vendor;
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
