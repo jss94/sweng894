@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using source.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using source.Models;
+using System;
 
 namespace UnitTests.Controllers
 {
@@ -165,8 +166,7 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var userResult = result.Value as string;
-            Assert.Equal("User successfully updated.", userResult);
+            Assert.Equal(true, result.Value);
         }
 
 

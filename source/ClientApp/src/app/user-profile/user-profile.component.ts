@@ -79,6 +79,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   setOrganizerProfile(user: User) {
+    this.profile.getOrganizer(user.userName).subscribe((organizer) => {
       this.isVendor = false;
 
       this.profileForm.controls['name'].setValue(this.user.name);
@@ -90,6 +91,7 @@ export class UserProfileComponent implements OnInit {
       this.profileForm.controls['companyCity'].disable();
       this.profileForm.controls['companyState'].disable();
       this.profileForm.controls['companyZip'].disable();
+    });
   }
 
   onUpdateUser() {

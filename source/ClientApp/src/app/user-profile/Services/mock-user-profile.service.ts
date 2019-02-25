@@ -6,7 +6,7 @@ import { Vendor } from 'src/app/shared/models/vendor.model';
 
 @Injectable()
 export class MockUserProfileService {
-    getVendor(): Observable<[User, Vendor]> {
+    getVendor(): Observable<Vendor> {
       return of(null);
     }
 
