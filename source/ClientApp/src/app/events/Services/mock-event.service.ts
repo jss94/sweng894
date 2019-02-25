@@ -14,7 +14,7 @@ export class MockEventService {
         return of(null);
     }
 
-    createNewEvent(evnt: OccEvent): Observable<OccEvent> {
-      return of(null);
-    }
+  createNewEvent(evnt: OccEvent): Observable<OccEvent> {
+    return of(null);
+  }
 }

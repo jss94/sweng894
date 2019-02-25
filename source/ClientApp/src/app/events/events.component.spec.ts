@@ -2,8 +2,6 @@ import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testi
 import { EventsComponent } from './events.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
-import { OccEvent } from './Models/occ-event.model';
-import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +13,9 @@ import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec
 import { EmailService } from '../send-email/Services/email.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { InvitationService } from '../invitations/Services/invitation.service';
+import { FakeOccEvents } from './Models/fake-occ-event.model';
+import { FakeUser } from '../shared/models/fake-user.model';
+import { of } from 'rxjs/internal/observable/of';
 
 describe('EventsComponent', () => {
   let component: EventsComponent;
@@ -38,23 +39,6 @@ describe('EventsComponent', () => {
 
     }
   }
-
-  const fakeEvent: OccEvent = {
-    userName: 'organizerId',
-    description: 'fake description',
-    name: 'event name',
-    dateTime: '2019/04/01',
-    eventId: 0,
-    guestListId: 0,
-    created: 'null'
-  };
-
-  const fakeEvents: OccEvent[] = [
-    fakeEvent,
-    fakeEvent,
-    fakeEvent,
-  ];
-
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -92,15 +76,28 @@ describe('EventsComponent', () => {
 
   it('should display all events', fakeAsync(() => {
     // arrange
-    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+    spyOn(component, 'setEvents').and.callThrough();
 
     // act
     fixture.detectChanges();
 
     // assert
-    expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-    expect(component.events.length).toBe(3);
-
+    expect(component.setEvents).toHaveBeenCalledTimes(1);
   }));
 
+  describe('setEvents()', () => {
+    it('should populate events property', () => {
+      // arrange
+      const fakeUser = new FakeUser();
+      const fakeEvents = new FakeOccEvents().arr;
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+
+      // act
+      component.setEvents(fakeUser);
+
+      // assert
+      expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
+      expect(component.events[2].description).toEqual(fakeEvents[2].description);
+    });
+  });
 });

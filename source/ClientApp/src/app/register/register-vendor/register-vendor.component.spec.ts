@@ -19,6 +19,7 @@ describe('RegisterVendorComponent', () => {
   let component: RegisterVendorComponent;
   let fixture: ComponentFixture<RegisterVendorComponent>;
   let mockRegisterService: RegisterService;
+  let mockAuthService: AuthService;
 
   class MockMatSnackbar {
     open() {
@@ -55,6 +56,7 @@ describe('RegisterVendorComponent', () => {
     fixture = TestBed.createComponent(RegisterVendorComponent);
     component = fixture.componentInstance;
     mockRegisterService = TestBed.get(RegisterService);
+    mockAuthService = TestBed.get(AuthService);
     fixture.detectChanges();
   });
 
@@ -66,11 +68,11 @@ describe('RegisterVendorComponent', () => {
     it('should call the correct service', () => {
       // arrange
       const fakeUser = new FakeUser();
+      spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
       spyOn(mockRegisterService, 'registerVendor').and.returnValue(of([
         fakeUser,
         {email_verified: true}
       ]));
-
 
       // act
       component.onAddVendor();

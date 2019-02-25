@@ -12,6 +12,7 @@ import { EmailDialogComponent } from '../shared/components/email-dialog/email-di
 import { InvitationService } from '../invitations/Services/invitation.service';
 import { InvitationModel } from '../invitations/Models/invitation.model';
 import { Observable } from 'rxjs';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-events',
@@ -45,19 +46,19 @@ export class EventsComponent implements OnInit {
   ngOnInit() {
     const user = this.auth.user;
     if (user) {
-      this.userName = user.userName;
-      this.eventService.getEvents(user.userName).subscribe(response => {
-        this.events = response;
-      });
+      this.setEvents(user);
     } else {
       this.auth.user$.subscribe((result) => {
-        this.userName = result.userName;
-        this.eventService.getEvents(result.userName).subscribe(response => {
-          this.events = response;
-        });
+        this.setEvents(result);
       });
     }
+  }
 
+  setEvents(user: User) {
+    this.userName = user.userName;
+    this.eventService.getEvents(user.userName).subscribe(response => {
+      this.events = response;
+    });
   }
 
   onCreate(): void {
