@@ -9,9 +9,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../../shared/models/fake-user.model';
 import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 import { of } from 'rxjs/internal/observable/of';
-import { RouterTestingModule } from '@angular/router/testing';
 import { GuestsComponent } from 'src/app/guests/guests.component';
-import { Routes, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
 

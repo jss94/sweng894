@@ -7,7 +7,16 @@ import { AuthService } from '../shared/services/auth.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs/internal/observable/of';
-import { Router } from '@angular/router';
+import { Router, Routes } from '@angular/router';
+import { VendorServicesService } from '../vendor-services/Services/vendor-services.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+const routes: Routes = [
+  { path: 'user-profile', component: UserProfileComponent },
+];
 
 export class MockMatSnackBar {
   open() {
@@ -34,16 +43,23 @@ describe('DeactivateUserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeactivateUserComponent ],
+      declarations: [
+        DeactivateUserComponent,
+        UserProfileComponent,
+      ],
       imports: [
+        ReactiveFormsModule,
         NoopAnimationsModule,
+        RouterTestingModule.withRoutes(routes),
       ],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: UsersService, useClass: MockUsersService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
-        { provide: Router, useValue: { navigate: () => {} } }
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA,
       ]
     })
     .compileComponents();

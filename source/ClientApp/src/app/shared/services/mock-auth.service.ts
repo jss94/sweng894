@@ -14,6 +14,10 @@ export class MockAuthService {
     return this._user;
   }
 
+  set user(value) {
+    this._user = value;
+  }
+
   get user$(): Observable<User> {
     return this._user$;
   }

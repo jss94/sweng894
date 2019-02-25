@@ -1,17 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventDetailComponent } from './event-detail.component';
 import { EventService } from '../events/Services/event.service';
-import { AuthService } from '../shared/services/auth.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { MockAuthService } from '../shared/services/mock-auth.service';
 import { MockEventService } from '../events/Services/mock-event.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { convertToParamMap } from '@angular/router';
-import { Observable, of  } from 'rxjs';
+import { FakeOccEvent, FakeOccEvents } from '../events/Models/fake-occ-event.model';
+import { of } from 'rxjs/internal/observable/of';
+import { AuthService } from '../shared/services/auth.service';
+import { MockAuthService } from '../shared/services/mock-auth.service';
+import { FakeUser } from '../shared/models/fake-user.model';
 
 describe('EventDetailComponent', () => {
   let component: EventDetailComponent;
   let fixture: ComponentFixture<EventDetailComponent>;
+  let mockEventService: EventService;
+  let mockAuthService: AuthService;
 
   class MockActivedRoute {
     public snapshot = {
@@ -34,8 +37,8 @@ describe('EventDetailComponent', () => {
       ],
       providers: [
         { provide: EventService, useClass: MockEventService },
-        { provide: AuthService, useClass: MockAuthService },
-        { provide: ActivatedRoute, useClass: MockActivedRoute }
+        { provide: ActivatedRoute, useClass: MockActivedRoute },
+        { provide: AuthService, useClass: MockAuthService }
       ],
     })
     .compileComponents();
@@ -44,10 +47,27 @@ describe('EventDetailComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EventDetailComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockEventService = TestBed.get(EventService);
+    mockAuthService = TestBed.get(AuthService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should get the details of the event', () => {
+    // assign
+    const fakeEvent = new FakeOccEvent();
+    const fakeUser = new FakeUser();
+    spyOn(mockEventService, 'getEvent').and.returnValue(of(fakeEvent));
+    spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
+
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(mockEventService.getEvent).toHaveBeenCalledTimes(1);
+    expect(component.theEvent.name).toEqual(fakeEvent.name);
+
   });
 });

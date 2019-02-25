@@ -11,8 +11,8 @@ export class MockEventService {
   }
 
   getEvents(organizerId: string): Observable<OccEvent[]> {
-        return of(null);
-    }
+    return of(null);
+  }
 
   createNewEvent(evnt: OccEvent): Observable<OccEvent> {
     return of(null);
