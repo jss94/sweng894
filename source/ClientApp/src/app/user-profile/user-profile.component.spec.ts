@@ -63,7 +63,7 @@ describe('UserProfileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('should display vendor profile', fakeAsync(() => {
+  it('should display vendor profile', fakeAsync(() => {
     // arrange
     const user = new FakeUser();
     user.role = 'VENDOR';
