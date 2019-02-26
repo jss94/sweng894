@@ -15,6 +15,11 @@ h1 {
   background: #ffffff;
 }
 
+.options {
+ display: flex;
+ justify-content: left;
+}
+
 .address {
   display: flex;
   justify-content: center;
@@ -26,11 +31,11 @@ h1 {
     height: 75vh;
     width: 100%;
   }
-  
+
   .item-container {
     width: 100%;
   }
-  
+
   .vendor-services-item {
     width: 100%;
     margin-top: 10px;
@@ -40,11 +45,11 @@ h1 {
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .vendor-services-item:hover {
     background-color: rgb(193, 198, 206);
-  }  
-  
+  }
+
 .main {
     flex: 80%;
     padding: 20px;
@@ -64,5 +69,5 @@ h1 {
 
 
 .large {
-    font-size: 96px; 
+    font-size: 96px;
 }
