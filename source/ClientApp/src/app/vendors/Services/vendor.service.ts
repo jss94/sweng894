@@ -18,4 +18,8 @@ export class VendorService {
     getVendor(userName: string): Observable<Vendor> {
         return this.auth.get('vendors/' + userName);
     }
+
+    getVendorById(vendorId: number): Observable<Vendor> {
+        return this.auth.get('vendors/id/' + vendorId);
+    }
 }

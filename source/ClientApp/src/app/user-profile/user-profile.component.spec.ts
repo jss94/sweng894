@@ -6,13 +6,11 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../shared/models/fake-user.model';
-import { Observable } from 'rxjs';
 import { Routes } from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import { GuestsComponent } from '../guests/guests.component';
 import { MatSnackBar } from '@angular/material';
 import { MockUserProfileService } from './Services/mock-user-profile.service';
-import { EventService } from '../events/Services/event.service';
 import { UserProfileService } from './Services/user-profile.service';
 import { FakeVendor } from '../shared/models/fake-vendor.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
@@ -68,8 +66,7 @@ describe('UserProfileComponent', () => {
     const user = new FakeUser();
     user.role = 'VENDOR';
     const vendor = new FakeVendor();
-
-    spyOnProperty(mockAuthService, 'user').and.returnValue(of(user));
+    spyOnProperty(mockAuthService, 'user').and.returnValue(user);
     spyOn(mockUserProfileService, 'getVendor').and.returnValue(of(vendor));
     spyOn(component, 'setUserProfile').and.callThrough();
     spyOn(component, 'setVendorProfile').and.callThrough();

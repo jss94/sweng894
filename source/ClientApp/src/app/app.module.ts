@@ -18,6 +18,7 @@ import { VendorService } from './vendors/Services/vendor.service';
 import { GuestsService } from './guests/Services/guests.service';
 import { UserProfileService } from './user-profile/Services/user-profile.service';
 import { EmailService } from './send-email/Services/email.service';
+import { VendorSearchService } from './vendor-search/Services/vendor-search.service';
 import { InvitationService } from './invitations/Services/invitation.service';
 
 
@@ -51,6 +52,7 @@ import { InvitationService } from './invitations/Services/invitation.service';
     VendorService,
     MatSnackBar,
     UserProfileService,
+    VendorSearchService,
     InvitationService,
   ],
   bootstrap: [AppComponent]

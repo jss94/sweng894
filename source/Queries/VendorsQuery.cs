@@ -41,7 +41,8 @@ namespace source.Queries
                 {
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
-                    string query = @"SELECT * from occasions.vendors WHERE active = 1; "
+                    string query = 
+                          @"SELECT * from occasions.vendors WHERE active = 1; "
                         + @"SELECT * from occasions.vendorServices WHERE active = 1;";
 
                     var result = await connection.QueryMultiple(query).Map<Vendor, VendorServices, int?>
@@ -72,16 +73,28 @@ namespace source.Queries
                 {
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
-                    string query = @"SELECT * from occasions.vendors WHERE id = @id and active = 1; "
+                    string query = 
+                          @"SELECT * from occasions.vendors WHERE id = @id and active = 1; "
                         + @"SELECT * from occasions.vendorServices WHERE active = 1";
 
-                    var result = await connection.QueryMultiple(query, new { id = id }).Map<Vendor, VendorServices, int?>
-                        (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
-                        (vendor, vendorservices) => {
-                            vendor.services = vendorservices.ToList();
-                      });
+                    var vendorResult = await connection.QueryMultiple(query, new { id })
+                    .Map<Vendor, VendorServices, int?>
+                        (v => v.id, s => s.vendorId,
+                        (v, s) => { v.services = s.ToList(); });
 
-                    return result.FirstOrDefault();
+                    var vendor = vendorResult.FirstOrDefault();
+
+                    if (vendor == null) return null;
+
+                    var addressQuery = 
+                          @"SELECT * FROM occasions.addresses "
+                        + @"WHERE userName = @userName AND active = 1;";
+
+                    var address = await connection.QueryFirstOrDefaultAsync<Address>(addressQuery, new { vendor.userName });
+
+                    vendor.address = address == null ? new Address() : address;
+
+                    return vendor;
                 }
             }
             catch (Exception ex)
@@ -103,8 +116,9 @@ namespace source.Queries
                 {
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
-                    var query = @"SELECT * FROM occasions.vendors WHERE userName = @userName AND active = 1; "
-                        + @"SELECT * FROM occasions.vendorServices WHERE active = 1";
+                    var query = 
+                            @"SELECT * FROM occasions.vendors WHERE userName = @userName AND active = 1; "
+                          + @"SELECT * FROM occasions.vendorServices WHERE active = 1";
 
                     var vendorResult = await connection.QueryMultiple(query, new { userName })
                     .Map<Vendor, VendorServices, int?>

@@ -3,13 +3,14 @@
   <div class='header'><h1>{{vendor.name}}</h1></div>
 </div>
 
-    <div class='box'>
-    <h5>{{address.street}}</h5>
-    <h5>{{address.city}}, {{address.state}}  {{address.zip}}</h5>
+  <div class="address">
+    <div class="box">
+    <h5>{{vendor.address.street}}</h5>
+    <h5>{{vendor.address.city}}, {{vendor.address.state}}  {{vendor.address.zip}}</h5>
     <h5>{{vendor.phone}}</h5>
     <h5>{{vendor.website}}</h5>
+    </div>
   </div>
-
 <div class="vendor-details-container">
    <h2>Vendor Services</h2>      
    <div class="item-container" *ngFor="let service of vendorServices">

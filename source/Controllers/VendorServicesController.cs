@@ -233,6 +233,26 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
+
+        /// <summary>
+        /// Gets a vendor service by vendor service id
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("search")]
+        public async Task<IActionResult> Search([FromBody] VendorSearchProperties properties)
+        {
+            try
+            {
+                var result = await _vendorServicesQuery.Search(properties);
+
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
     }
 
 }

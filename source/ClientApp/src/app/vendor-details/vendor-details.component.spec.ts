@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { AuthService } from '../shared/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { VendorServices } from '../shared/models/vendor-services.model';
 import { Vendor } from '../shared/models/vendor.model';
@@ -17,7 +17,14 @@ describe('VendorDetailsComponent', () => {
   let fixture: ComponentFixture<VendorDetailsComponent>;
   let mockAuthService: AuthService;
   let mockVendorSvc: VendorService;
-  let mockRouter: Router;
+
+  const mockParamMap = {
+    get() {}
+  };
+
+  class MockActivedRoute {
+      paramMap = of(mockParamMap);
+  }
 
   const fakeAddress: Address = {
     userName: 'vendor@example.com',
@@ -59,6 +66,7 @@ describe('VendorDetailsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ VendorDetailsComponent ],
       providers: [
+        { provide: ActivatedRoute, useClass: MockActivedRoute },
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useValue: { navigate: () => {} } },
         { provide: VendorService, useClass: VendorService }
@@ -74,7 +82,6 @@ describe('VendorDetailsComponent', () => {
     .compileComponents();
   }));
 
-    
   beforeEach(() => {
     mockAuthService = TestBed.get(AuthService);
     mockVendorSvc = TestBed.get(VendorService);

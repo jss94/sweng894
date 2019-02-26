@@ -243,5 +243,22 @@ namespace source.Queries
                 return null;
             }
         }
+
+
+        public async Task<List<VendorServices>> Search(VendorSearchProperties properties)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = @"SELECT * FROM occasions.vendorServices "
+                            + @" WHERE (active = 1 AND serviceType = @type AND price <= @maxPrice) " 
+                            + @"   AND (unitsAvailable >= @maxCapacity OR unitsAvailable IS NULL)";
+
+                var result = await connection.QueryAsync<VendorServices>(query, properties);
+                return result.ToList();
+            }
+        }
     }
 }

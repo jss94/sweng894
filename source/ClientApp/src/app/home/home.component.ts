@@ -40,6 +40,8 @@ export class HomeComponent implements OnInit {
       }, (error) => {
         if (error.status === 404 && user && user.role === 'VENDOR') {
           this.router.navigate(['/register-vendor']);
+        } else {
+          this.router.navigate(['/events']);
         }
       });
   }

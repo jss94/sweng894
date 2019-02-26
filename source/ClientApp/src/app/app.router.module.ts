@@ -20,6 +20,7 @@ import { VendorComponent } from './vendors/vendor.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UpdateVendorServicesComponent } from './vendor-services/update-vendor-services.component';
+import { VendorSearchComponent } from './vendor-search/vendor-search.component';
 import { VendorDetailsComponent } from './vendor-details/vendor-details.component';
 
 const routes: Routes = [
@@ -28,7 +29,7 @@ const routes: Routes = [
     { path: 'admin', component: UsersComponent },
     { path: 'user-profile', component: UserProfileComponent },
     { path: 'learn-more', component: LearnMoreComponent},
-    { path: 'search-vendors', component: GoogleMapComponent },
+    { path: 'search-vendors', component: VendorSearchComponent },
     { path: 'events', component: EventsComponent },
     { path: 'events/:userName/:eventId', component: EventDetailComponent },
     { path: 'register-user', component: RegisterUserComponent },
@@ -39,7 +40,7 @@ const routes: Routes = [
     { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
-    { path: 'vendor-details/:id', component: VendorDetailsComponent },
+    { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
   ];
 
 @NgModule({
@@ -60,6 +61,7 @@ const routes: Routes = [
         VendorServicesComponent,
         EventDetailComponent,
         UpdateVendorServicesComponent,
+        VendorSearchComponent,
         VendorDetailsComponent,
     ],
 
