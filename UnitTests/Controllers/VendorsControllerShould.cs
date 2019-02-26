@@ -10,6 +10,7 @@ using source.Framework;
 using source.Constants;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using System;
 
 namespace UnitTests.Controllers
 {
@@ -147,9 +148,16 @@ namespace UnitTests.Controllers
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var address = new Address { id = 456, userName = "vendor@example.com", street = "123 Main St", city = "State College", state = "PA", zip = 16803 };
 
             _vendorsQueryMock.Setup(x => x.Update(vendor))
                 .Returns(Task.Factory.StartNew(() => vendor));
+
+            _addressQueryMock.Setup(x => x.GetByUserName("vendor@example.com"))
+                .Returns(Task.Factory.StartNew(() => address));
+
+             _vendorsQueryMock.Setup(x => x.GetByUserName("vendor@example.com"))
+                 .Returns(Task.Factory.StartNew(() => vendor));
 
             // act
             var task = _sut.Update(vendor);
@@ -158,8 +166,7 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as Vendor;
-            Assert.Equal(vendor, usersResult);
+            Assert.Equal(true, result.Value);
         }
 
         [Fact]

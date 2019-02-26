@@ -17,7 +17,7 @@ import { UserProfileService } from './Services/user-profile.service';
 import { FakeVendor } from '../shared/models/fake-vendor.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 
-describe('ProfileComponent', () => {
+describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
   let mockUserProfileService: UserProfileService;
@@ -68,14 +68,20 @@ describe('ProfileComponent', () => {
     const user = new FakeUser();
     user.role = 'VENDOR';
     const vendor = new FakeVendor();
-    spyOnProperty(mockAuthService, 'user').and.returnValue(user);
-    spyOnProperty(mockAuthService, 'user$').and.returnValue(of(user));
-    spyOn(mockUserProfileService, 'getVendor').and.returnValue(of([user, vendor]));
+
+    spyOnProperty(mockAuthService, 'user').and.returnValue(of(user));
+    spyOn(mockUserProfileService, 'getVendor').and.returnValue(of(vendor));
+    spyOn(component, 'setUserProfile').and.callThrough();
+    spyOn(component, 'setVendorProfile').and.callThrough();
+    spyOn(component, 'setOrganizerProfile').and.callThrough();
 
     // act
     fixture.detectChanges();
 
     // assert
+    expect(component.setOrganizerProfile).toHaveBeenCalledTimes(0);
+    expect(component.setUserProfile).toHaveBeenCalledTimes(1);
+    expect(component.setVendorProfile).toHaveBeenCalledTimes(1);
     expect(mockUserProfileService.getVendor).toHaveBeenCalledTimes(1);
     expect(component.profileForm.controls['name'].value).toBe(user.name);
 
@@ -86,7 +92,6 @@ describe('ProfileComponent', () => {
     const user = new FakeUser();
     user.role = 'ORGANIZER';
     const vendor = new FakeVendor();
-    spyOnProperty(mockAuthService, 'user').and.returnValue(user);
     spyOnProperty(mockAuthService, 'user$').and.returnValue(of(user));
     spyOn(mockUserProfileService, 'getOrganizer').and.returnValue(of(user));
 

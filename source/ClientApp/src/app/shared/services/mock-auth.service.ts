@@ -10,22 +10,20 @@ export class MockAuthService {
   _user: User = new FakeUser();
   _user$: Observable<User> = of(new FakeUser());
 
-  get user$() {
+  get user(): User {
+    return this._user;
+  }
+
+  get user$(): Observable<User> {
     return this._user$;
   }
-
-  get user() {
-    return this.user;
-  }
-
-  userProfile: any = {};
 
   isAuthenticated(): any {
     return null;
   }
 
   getUserProfile(): any {
-    return this.userProfile;
+    return {};
   }
 
   login(): any {

@@ -2,31 +2,25 @@ import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testi
 import { EventsComponent } from './events.component';
 import { EventService } from './Services/event.service';
 import { MockEventService } from './Services/mock-event.service';
-import { OccEvent } from './Models/occ-event.model';
-import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FakeUser } from '../shared/models/fake-user.model';
-import { Observable } from 'rxjs';
-import { Router, Routes } from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
+import { Router } from '@angular/router';
 import { GuestsComponent } from '../guests/guests.component';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
 import { EmailService } from '../send-email/Services/email.service';
-import { EmailModel } from '../send-email/Models/email.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { InvitationService } from '../invitations/Services/invitation.service';
+import { FakeOccEvents } from './Models/fake-occ-event.model';
+import { FakeUser } from '../shared/models/fake-user.model';
+import { of } from 'rxjs/internal/observable/of';
 
 describe('EventsComponent', () => {
   let component: EventsComponent;
   let fixture: ComponentFixture<EventsComponent>;
   let mockEventService: EventService;
-  let mockAuthService: AuthService;
-  let mockEmailService: EmailService;
-  let mockInvitationService: InvitationService;
 
   class MockInvitationService {
 
@@ -37,36 +31,14 @@ describe('EventsComponent', () => {
   }
 
   class MockEmailService {
-    sendVendorQuestionEmail(vendorId: number, emailModel: EmailModel) {
+    sendVendorQuestionEmail() {
 
     }
 
-    sendEventInvitationEmail(eventId: number, emailModel: EmailModel) {
+    sendEventInvitationEmail() {
 
     }
   }
-
-  const fakeEvent: OccEvent = {
-    userName: 'organizerId',
-    description: 'fake description',
-    name: 'event name',
-    dateTime: '2019/04/01',
-    eventId: 0,
-    guestListId: 0,
-    created: 'null'
-  };
-
-  const fakeEvents: OccEvent[] = [
-    fakeEvent,
-    fakeEvent,
-    fakeEvent,
-  ];
-
-  const routes: Routes = [
-    { path: 'guests/:id', component: GuestsComponent },
-  ];
-
-  let fakeMatDialog: MatDialog;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -78,7 +50,6 @@ describe('EventsComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
-        RouterTestingModule.withRoutes(routes),
       ],
       providers: [
         { provide: EmailService, useClass: MockEmailService },
@@ -86,7 +57,8 @@ describe('EventsComponent', () => {
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
-        { provide: InvitationService, useClass: MockInvitationService},
+        { provide: InvitationService, useClass: MockInvitationService },
+        { provide: Router, useValue: { navigate: () => {} } }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
@@ -94,12 +66,8 @@ describe('EventsComponent', () => {
 
   beforeEach(() => {
     mockEventService = TestBed.get(EventService);
-    mockAuthService = TestBed.get(AuthService);
     fixture = TestBed.createComponent(EventsComponent);
     component = fixture.componentInstance;
-    fakeMatDialog = TestBed.get(MatDialog);
-    mockEmailService = TestBed.get(EmailService);
-    mockInvitationService = TestBed.get(InvitationService);
   });
 
   it('should create', () => {
@@ -108,15 +76,28 @@ describe('EventsComponent', () => {
 
   it('should display all events', fakeAsync(() => {
     // arrange
-    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+    spyOn(component, 'setEvents').and.callThrough();
 
     // act
     fixture.detectChanges();
 
     // assert
-    expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-    expect(component.events.length).toBe(3);
-
+    expect(component.setEvents).toHaveBeenCalledTimes(1);
   }));
 
+  describe('setEvents()', () => {
+    it('should populate events property', () => {
+      // arrange
+      const fakeUser = new FakeUser();
+      const fakeEvents = new FakeOccEvents().arr;
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+
+      // act
+      component.setEvents(fakeUser);
+
+      // assert
+      expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
+      expect(component.events[2].description).toEqual(fakeEvents[2].description);
+    });
+  });
 });
