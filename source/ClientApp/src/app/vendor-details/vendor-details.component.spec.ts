@@ -8,15 +8,27 @@ import { Vendor } from '../shared/models/vendor.model';
 import { Address } from '../shared/models/address.model';
 import { VendorDetailsComponent } from './vendor-details.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar, MatExpansionModule } from '@angular/material';
+import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar, MatExpansionModule, MatDialog } from '@angular/material';
 import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs';
+import { MockMatDialog } from '../deactivate-user/deactivate-user.component.spec';
+import { EmailService } from '../send-email/Services/email.service';
 
 describe('VendorDetailsComponent', () => {
   let component: VendorDetailsComponent;
   let fixture: ComponentFixture<VendorDetailsComponent>;
   let mockAuthService: AuthService;
   let mockVendorSvc: VendorService;
+
+  class MockEmailService {
+    sendVendorQuestionEmail() {
+
+    }
+
+    sendEventInvitationEmail() {
+
+    }
+  }
 
   const mockParamMap = {
     get() {}
@@ -57,6 +69,9 @@ describe('VendorDetailsComponent', () => {
     services: fakeSvcsArray
   };
 
+  class MockMatSnackBar {
+    open() {}
+  }
 
   class MockAuthService {
     user$ = of(new FakeUser);
@@ -69,7 +84,10 @@ describe('VendorDetailsComponent', () => {
         { provide: ActivatedRoute, useClass: MockActivedRoute },
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useValue: { navigate: () => {} } },
-        { provide: VendorService, useClass: VendorService }
+        { provide: VendorService, useClass: VendorService },
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: MatDialog, useClass: MockMatDialog },
+        { provide: EmailService, useClass: MockEmailService },
       ],
       imports: [
         MatSelectModule,

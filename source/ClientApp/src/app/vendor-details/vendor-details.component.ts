@@ -91,7 +91,7 @@ export class VendorDetailsComponent implements OnInit {
   }
 
   displayEmailFeedback(response: any) {
-    let statusMsg = 'Successfully emailed your guests!';
+    let statusMsg = 'Successfully sent your question to ' + this.vendor.name + '!';
 
     if (response !== 202) {
       statusMsg = 'An error occurred sending the email, please contact your administrator.';
