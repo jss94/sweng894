@@ -5,6 +5,12 @@
     </span>
 
     <div class="align-right">
+
+      <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/reservations-vendor"]' [routerLinkActive]='["link-active"]'>
+        <mat-icon>list</mat-icon>
+        Reservations
+      </button>
+
       <button *ngIf="isOrganizer || isVendor" mat-button [routerLink]='["/events"]'>
         <mat-icon>event_notes</mat-icon>
         Events
@@ -14,6 +20,7 @@
         <mat-icon>store</mat-icon>
         Services
       </button>
+      
 
       <button *ngIf="isOrganizer" mat-button [routerLink]='["/search-vendors"]' [routerLinkActive]='["link-active"]'>
         <mat-icon>search</mat-icon>
