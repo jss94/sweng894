@@ -3,14 +3,14 @@
   <div class='header'><h1>{{vendor.name}}</h1></div>
 </div>
 
-  <div>
-      <div class="options">
-          <button mat-button (click)="loadQuestion()">
-              <mat-icon>email</mat-icon>
-              <span>Ask a Question</span>
-        </button>
+  <div class="address">
+    <div class="column left">
+      <button mat-button (click)="loadQuestion()">
+          <mat-icon>email</mat-icon>
+          <span>Ask a Question</span>
+      </button>
     </div>
-    <div class="address">
+    <div class="column right">
         <div class="box">
         <h5>{{vendor.address.street}}</h5>
         <h5>{{vendor.address.city}}, {{vendor.address.state}}  {{vendor.address.zip}}</h5>
