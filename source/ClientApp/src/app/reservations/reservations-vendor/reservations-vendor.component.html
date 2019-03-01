@@ -1,0 +1,15 @@
+<div class="page-container"> 
+    
+    <h1>Reservations</h1>
+    
+    <h2 ngOnInit="let x = newCount">New ({{newCount}})</h2>
+    <mat-accordion multi="true" class="accordion">
+
+        <div *ngFor="let newReservation of newReservations">
+            <mat-expansion-panel class="outer-expansion">
+                <mat-expansion-panel-header>{{newReservation}}</mat-expansion-panel-header>
+                    <div *ngFor="let service of services">{{service}}</div>
+            </mat-expansion-panel>
+        </div>
+    </mat-accordion>
+</div>
