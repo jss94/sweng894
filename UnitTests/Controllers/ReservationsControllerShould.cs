@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using source.Constants;
 
 namespace UnitTests.Controllers
 {
@@ -267,5 +268,24 @@ namespace UnitTests.Controllers
             // assert
             Assert.ThrowsAsync<Exception>(() => _sut.GetByUser(userName));
         }
+
+        [Fact]
+        public void GetReservationStatusList_ReturnsStatusList()
+        {
+            // arrange
+            var statusTypesMock = new Mock<ReservationStatus>().Object;
+            var statusTypes = statusTypesMock.GetReservationStatuses();
+
+            // act
+            var task = _sut.GetReservationStatusTypes();
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as List<string>;
+            Assert.Equal(statusTypes, usersResult);
+        }
+
     }
 }
