@@ -67,8 +67,7 @@ namespace source.Queries
                 // I left these all caps because Dapper doesnt care
                 string query = @"INSERT INTO occasions.invitations (eventId, content, subject, eventGuid) "
                     + @"VALUES (@eventId, @content, @subject, @eventGuid)";
-
-                Console.WriteLine(">>>>" + query);
+                
                 await Task.CompletedTask;
 
                 // Here we pass in the entire event without the new  { }
@@ -95,7 +94,6 @@ namespace source.Queries
                     + " subject=@subject"
                     + " WHERE eventId =  @eventId";
 
-                Console.WriteLine("#####:" + query);
                 await Task.CompletedTask;
                 await connection.ExecuteAsync(query, invitation);
                 return true;
