@@ -43,14 +43,14 @@ export class EventDetailComponent implements OnInit {
 
   loadInvite(evnt: OccEvent) {
 
-    this.invitationService.getInvitation(evnt.eventId).subscribe(invitationResponse => {
+    this.invitationService.getInvitation(evnt.guid).subscribe(invitationResponse => {
       // invitation exists
       this.invitationModel = invitationResponse;
       this.showInviteDialog(evnt);
     }, error => {
         // invitation does not exist
        this.invitationModel = ({
-          eventId: evnt.eventId,
+          eventGuid: evnt.guid,
           subject: 'You\'re Invited!',
           content: 'You are invited to celebrate ' + evnt.description
         });
@@ -126,7 +126,7 @@ export class EventDetailComponent implements OnInit {
   sendEmail(evnt: OccEvent): Observable<any> {
     const emailModel: EmailModel = this.emailService.createEmailModel(this.invitationModel.subject,
     this.invitationModel.content, evnt.userName);
-    return this.emailService.sendEventInvitationEmail(this.invitationModel.eventId, emailModel);
+    return this.emailService.sendEventInvitationEmail(this.invitationModel.eventGuid, emailModel);
   }
 
 }

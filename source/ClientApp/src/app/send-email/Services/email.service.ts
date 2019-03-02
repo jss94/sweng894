@@ -23,15 +23,16 @@ export class EmailService {
     return this.auth.post('Email/event/invitation/' + eventGuid, emailModel);
   }
 
- createEmailModel(invitationSubject: string, invitationText: string, evnt: OccEvent): EmailModel {
+
+  createEmailModel(invitationSubject: string, invitationText: string, from: string): EmailModel {
     const toEmail = new EmailAddress();
-    toEmail.email = evnt.userName; // place holder, will be replaced by backend
+    toEmail.email = from; // place holder, will be replaced by backend
 
     const to: EmailAddress[] = [];
     to.push(toEmail);
 
     const fromEmail = new EmailAddress();
-    fromEmail.email = evnt.userName;
+    fromEmail.email = from;
 
     const emailContent = new EmailContent();
     emailContent.type = 'text/html';
