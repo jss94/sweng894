@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { EmailModel } from '../Models/email.model';
 import { EmailAddress } from '../Models/email.address.model';
 import { EmailContent } from '../Models/email.content.model';
+import { OccEvent } from 'src/app/events/Models/occ-event.model';
 
 @Injectable()
 export class EmailService {
@@ -18,19 +19,19 @@ export class EmailService {
     return this.auth.post('Email/vendor/question/' + vendorId, emailModel);
   }
 
-  sendEventInvitationEmail(eventId: number, emailModel: EmailModel) {
-    return this.auth.post('Email/event/invitation/' + eventId, emailModel);
+  sendEventInvitationEmail(eventGuid: string, emailModel: EmailModel) {
+    return this.auth.post('Email/event/invitation/' + eventGuid, emailModel);
   }
 
- createEmailModel(invitationSubject: string, invitationText: string, evntUserName: string): EmailModel {
+ createEmailModel(invitationSubject: string, invitationText: string, evnt: OccEvent): EmailModel {
     const toEmail = new EmailAddress();
-    toEmail.email = evntUserName; // place holder, will be replaced by backend
+    toEmail.email = evnt.userName; // place holder, will be replaced by backend
 
     const to: EmailAddress[] = [];
     to.push(toEmail);
 
     const fromEmail = new EmailAddress();
-    fromEmail.email = evntUserName;
+    fromEmail.email = evnt.userName;
 
     const emailContent = new EmailContent();
     emailContent.type = 'text/html';

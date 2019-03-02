@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router, Routes } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { FakeGuests, FakeGuest } from './Models/fake.guest.model';
 
 describe('GuestsComponent', () => {
   let component: GuestsComponent;
@@ -23,7 +24,7 @@ describe('GuestsComponent', () => {
 
 
   const routes: Routes = [
-    { path: 'guests/:id', component: GuestsComponent },
+    { path: 'guests/:guid', component: GuestsComponent },
   ];
   class MockMatSnackBar {
     open() {
@@ -39,8 +40,15 @@ describe('GuestsComponent', () => {
     }
   }
 
-  class MockActivatedRoute {
 
+  class MockParam {
+    get(params: string): string {
+      return '1';
+    }
+  }
+
+  class MockActivatedRoute {
+    paramMap = of(new MockParam()) ;
   }
 
   beforeEach(async(() => {
@@ -73,4 +81,33 @@ describe('GuestsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should populate with guests', () => {
+    // assign
+    const fakeGuests = new FakeGuests().arr;
+    spyOn(mockGuestsService, 'getGuests').and.returnValue(of(fakeGuests));
+
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(component.guests).toEqual(fakeGuests);
+  });
+
+  describe('onCreate', () => {
+    it('shold create user', () => {
+      // assign
+      const fakeGuest = new FakeGuest();
+      component.guestForm.controls['name'].setValue(fakeGuest.name);
+      component.guestForm.controls['email'].setValue(fakeGuest.email);
+      spyOn(mockGuestsService, 'insert').and.returnValue(of(true));
+      spyOn(component.guestForm, 'reset').and.callThrough();
+
+      // act
+      component.onCreate();
+
+      // assert
+      expect(mockGuestsService.insert).toHaveBeenCalledTimes(1);
+      expect(component.guestForm.reset).toHaveBeenCalledTimes(1);
+    });
+  });
 });

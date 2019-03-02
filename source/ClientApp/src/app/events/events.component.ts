@@ -90,11 +90,11 @@ export class EventsComponent implements OnInit {
    }
 
    onGuestsClicked(event: OccEvent): void {
-    this.router.navigate(['/guests/' + event.eventId]);
+    this.router.navigate(['/guests/' + event.guid]);
    }
 
    onViewEventClicked(event: OccEvent): void {
-    this.router.navigate(['/events/' + event.userName + '/' + event.eventId]);
+    this.router.navigate(['/events/' + event.guid]);
    }
 
    deleteEvent(evnt: OccEvent): void {
@@ -109,14 +109,14 @@ export class EventsComponent implements OnInit {
 
   loadInvite(evnt: OccEvent) {
 
-    this.invitationService.getInvitation(evnt.eventId).subscribe(invitationResponse => {
+    this.invitationService.getInvitation(evnt.guid).subscribe(invitationResponse => {
       // invitation exists
       this.invitationModel = invitationResponse;
       this.showInviteDialog(evnt);
     }, error => {
         // invitation does not exist
        this.invitationModel = ({
-          eventId: evnt.eventId,
+          eventGuid: evnt.guid,
           subject: 'You\'re Invited!',
           content: 'You are invited to celebrate ' + evnt.description
         });
@@ -150,7 +150,7 @@ export class EventsComponent implements OnInit {
           if (result.data.button === true) {
               // send the invitation
               this.sendEmail(evnt).subscribe(emailResponse => {
-              this.displayEmailFeedback(evnt, emailResponse);
+                this.displayEmailFeedback(evnt, emailResponse);
             });
           }
         });
@@ -167,6 +167,7 @@ export class EventsComponent implements OnInit {
 
   displayInvitationFeedback(responseCode: any, successMsg: any, failureMsg: any) {
     let status = successMsg;
+    console.log(responseCode)
     if (responseCode !== 200) {
       status = failureMsg;
     }
@@ -190,8 +191,10 @@ export class EventsComponent implements OnInit {
   }
 
   sendEmail(evnt: OccEvent): Observable<any> {
-    const emailModel: EmailModel = this.emailService.createEmailModel(this.invitationModel.subject,
-    this.invitationModel.content, evnt.userName);
-    return this.emailService.sendEventInvitationEmail(this.invitationModel.eventId, emailModel);
+    const emailModel: EmailModel = this.emailService.createEmailModel(
+      this.invitationModel.subject,
+      this.invitationModel.content,
+      evnt);
+    return this.emailService.sendEventInvitationEmail(this.invitationModel.eventGuid, emailModel);
   }
 }

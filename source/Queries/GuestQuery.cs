@@ -83,6 +83,25 @@ namespace source.Queries
         }
 
         /// <summary>
+        /// Get a list of guests by event
+        /// </summary>
+        /// <param name="guid">Guid of the event you want</param>
+        /// <returns>List of guests</returns>
+        public async Task<List<Guest>> GetListByEventGuid(string guid)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+                
+                string query = @"SELECT * FROM occasions.guests WHERE eventGuid = @guid";
+
+                var guests = await connection.QueryAsync<Guest>(query, new { guid });
+                return guests.ToList();
+            }
+        }
+
+        /// <summary>
         /// Add a guest to the DB
         /// </summary>
         /// <param name="guest">Person being added</param>
@@ -94,8 +113,8 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"INSERT INTO occasions.guests (name, email, isGoing, eventId) "
-                    + @"VALUES (@name, @email, @isGoing, @eventId)";
+                string query = @"INSERT INTO occasions.guests (name, email, isGoing, eventGuid) "
+                    + @"VALUES (@name, @email, @isGoing, @eventGuid)";
 
                 await Task.CompletedTask;
 
@@ -117,18 +136,14 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
                 
-                string query = @"UPDATE occasions.guests SET name = @name, "
+                string query = @"UPDATE occasions.guests SET "
+                    + "name = @name, "
                     + "email = @email, "
-                    + "isGoing = @isGoing, "
-                    + "eventId =  @eventId "
+                    + "isGoing = @isGoing "
                     + "WHERE guestId = @guestId;";
 
-                await Task.CompletedTask;
-
                 await connection.ExecuteAsync(query, guest);
-
             }
-
         }
 
         /// <summary>
@@ -138,7 +153,6 @@ namespace source.Queries
         /// <returns>Success/Failure</returns>
         public async Task DeleteByGuestId(int guestId)
         {
-
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
@@ -146,13 +160,9 @@ namespace source.Queries
 
                 var query = @"DELETE FROM occasions.guests "
                     + @"WHERE guestId = @guestId";
-
-                await Task.CompletedTask;
-
+                    
                 await connection.ExecuteAsync(query, new { guestId });
-
             }
-
         }
 
         /// <summary>

@@ -74,6 +74,45 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void GetEventByGuid_ReturnsOneEvent()
+        {
+            //arrange
+            var guid = Guid.NewGuid().ToString();
+            var e = new Event { eventId = 2, userName = "jss94", guid = guid };
+
+            //act
+            __eventQueryMock.Setup(x => x.GetEventByGuid(e.guid))
+                .Returns(Task.Factory.StartNew(() => e));
+
+            var task = _evntController.Get(guid);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void GetEventByGuid_ReturnsNoEvent()
+        {
+
+            //arrange
+            var guid = Guid.NewGuid().ToString();
+            var e = new Event { eventId = 2, userName = "jss94", guid = guid };
+
+            //act
+            __eventQueryMock.Setup(x => x.GetEventById(2))
+                .Returns(Task.Factory.StartNew(() => e));
+
+            var task = _evntController.Get("jss94", 2);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var eventsResult = result.Value as Event;
+            Assert.Equal(e.description, eventsResult.description);
+        }
+
+        [Fact]
         public void CreateNewEvent()
         {
 

@@ -9,7 +9,7 @@
       <h2>Event Details</h2>
       <p>{{theEvent.description}}</p>
       <div *ngIf="auth.user">
-        <a routerLink="/guests/{{theEvent.eventId}}">View Guest List</a>
+        <a routerLink="/guests/{{theEvent.guid}}">View Guest List</a>
       </div>
     </div>
     <div class="side">

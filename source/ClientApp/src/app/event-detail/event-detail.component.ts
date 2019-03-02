@@ -24,10 +24,8 @@ export class EventDetailComponent implements OnInit {
   }
 
   getEvent(): void {
-    // the + converts the id parameter from a string to a number
-    const eventId = +this.route.snapshot.paramMap.get('eventId');
-    const userName = this.route.snapshot.paramMap.get('userName');
-    this.eventService.getEvent(userName, eventId).subscribe(event => this.theEvent = event);
+    const guid = this.route.snapshot.paramMap.get('guid');
+    this.eventService.getEvent(guid).subscribe(event => this.theEvent = event);
   }
 
 }

@@ -58,15 +58,15 @@ namespace source.Controllers
         /// </summary>
         /// <param name="eventId">The id of the Event.</param>
         /// <param name="emailMsg">A EmailMessage. Initial Implementation - Converts to JSON and sends to SendGrid API.</param>
-        [HttpPost("event/invitation/{eventId}")]
-        public async Task<HttpStatusCode> PostEventInviteToGuests(int eventId, [FromBody]EmailMessage emailMsg)
+        [HttpPost("event/invitation/{eventGuid}")]
+        public async Task<HttpStatusCode> PostEventInviteToGuests(string eventGuid, [FromBody]EmailMessage emailMsg)
         {
-            
+
             // retrieve guest emails via event id
-            List<Guest> eventGuests = await _guestsQuery.GetListByEventId(eventId);
+            List<Guest> eventGuests = await _guestsQuery.GetListByEventGuid(eventGuid);
 
             // check if guests are returned
-            if (eventGuests == null || eventGuests.ToArray().Length == 0)
+            if (eventGuests == null || eventGuests.Count == 0)
                 return HttpStatusCode.NotFound;
             
             Boolean isSuccessful = true;
@@ -84,7 +84,7 @@ namespace source.Controllers
                 personalizations.Add(personalization);
                 emailMsg.personalizations = personalizations;
                 
-                emailContents.Add(_invitationQuery.updateInvitationContentToIncludeRSVP(guest.guestId, emailMsg.content[0], HttpContext));
+                emailContents.Add(_invitationQuery.updateInvitationContentToIncludeRSVP(guest, emailMsg.content[0], HttpContext));
                 emailMsg.content = emailContents;
 
                 Task<HttpStatusCode> response = _emailQuery.sendEmailViaPostAsync(emailMsg);

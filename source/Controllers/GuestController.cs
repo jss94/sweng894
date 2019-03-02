@@ -48,6 +48,32 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// GET api/guest/event/{eventId}
+        /// Gets the list of guests for an event
+        /// </summary>
+        /// <param name="guid">GUID</param>
+        /// <returns>List of guests</returns>
+        [HttpGet("event/guid/{guid}")]
+        public async Task<IActionResult> GetListByEventGuid(string guid)
+        {
+            try
+            {
+                var guests = await _query.GetListByEventGuid(guid);
+
+                if (guests == null || guests.Count == 0)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(guests);
+            }
+            catch (Exception)
+            {
+                //TODO: we should log our errors in the db
+
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
         /// GET api/guest/{guestId}
         /// Gets the list of guests for an event
         /// </summary>
@@ -101,7 +127,13 @@ namespace source.Controllers
         {
             try
             {
+                var existingGuest = _query.GetByGuestId(guest.guestId);
+
+                if (existingGuest == null)
+                    return new NotFoundResult();
+
                 await _query.Update(guest);
+
                 return new OkObjectResult(true);
             }
             catch (Exception e)
