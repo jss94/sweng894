@@ -7,6 +7,11 @@ import { VendorServices } from '../shared/models/vendor-services.model';
 import { Vendor } from '../shared/models/vendor.model';
 import { Address } from '../shared/models/address.model';
 import { User } from '../shared/models/user.model';
+import { EmailService } from '../send-email/Services/email.service';
+import { EmailDialogComponent } from '../shared/components/email-dialog/email-dialog.component';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { Observable } from 'rxjs';
+import { EmailModel } from '../send-email/Models/email.model';
 
 @Component({
   selector: 'app-vendor-details',
@@ -23,6 +28,9 @@ export class VendorDetailsComponent implements OnInit {
     private vendorServicesService: VendorServicesService,
     private vendorService: VendorService,
     private route: ActivatedRoute,
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog,
+    private emailService: EmailService,
     ) {
   }
 
@@ -44,4 +52,53 @@ export class VendorDetailsComponent implements OnInit {
     });
   }
 
+  loadQuestion() {
+    console.log('Let\'s ask a Questoin');
+
+    const dialogRef = this.dialog.open(EmailDialogComponent, {
+      width: '600px',
+      data: {
+          iconName: 'question_answer',
+          title: 'Ask a Question',
+          subject: 'Regarding ' + this.vendor.name,
+          content: 'Enter your question here',
+          buttonText1: 'Cancel',
+          buttonText2: 'Send'
+      }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+
+        // update content and subject of invitation
+        const userContent = result.data.content;
+        const userSubject = result.data.subject;
+
+        // save the invitation first
+       if (result.data.button === true) {
+            // send the invitation
+            this.sendEmail(userSubject, userContent, this.auth.user.userName).subscribe(emailResponse => {
+            this.displayEmailFeedback(emailResponse);
+          });
+        }
+      });
+  }
+
+  sendEmail(subject: string, content: string, from: string): Observable<any> {
+    const emailModel: EmailModel = this.emailService.createEmailModel(subject,
+    content, from);
+    return this.emailService.sendVendorQuestionEmail(this.vendor.id, emailModel);
+  }
+
+  displayEmailFeedback(response: any) {
+    let statusMsg = 'Successfully sent your question to ' + this.vendor.name + '!';
+
+    if (response !== 202) {
+      statusMsg = 'An error occurred sending the email, please contact your administrator.';
+    }
+
+    this.snackbar.open(statusMsg, '', {
+      duration: 3000
+    });
+  }
 }
