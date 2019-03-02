@@ -6,6 +6,7 @@ using source.Controllers;
 using source.Models;
 using source.Framework;
 using System.Net;
+using System;
 
 namespace UnitTests.Controllers
 {
@@ -66,6 +67,29 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void postInvitation_Return400FromException()
+        {
+
+            //arrange
+            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject" };
+
+            //act
+            __invitationQueryMock.Setup(x => x.saveInvitation(invitation))
+                .Returns(Task.Factory.StartNew(() => ThrowException() ));
+
+            var task = _invitationController.postInvitation(invitation);
+
+            // assert
+            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.Equal(HttpStatusCode.BadRequest, task.Result);
+        }
+        
+        private bool ThrowException()
+        {
+            throw new Exception("Error occurred!");
+        }
+
+        [Fact]
         public void updateInvitation_Return200()
         {
 
@@ -84,6 +108,24 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void updateInvitation_Return400()
+        {
+
+            //arrange
+            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject" };
+
+            //act
+            __invitationQueryMock.Setup(x => x.updateInvitation(invitation))
+                .Returns(Task.Factory.StartNew(() => ThrowException()));
+
+            var task = _invitationController.putInvitation(invitation);
+
+            // assert
+            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.Equal(HttpStatusCode.BadRequest, task.Result);
+        }
+
+        [Fact]
         public void deleteInvitation_Return200()
         {
             //arrange
@@ -98,6 +140,20 @@ namespace UnitTests.Controllers
             // assert
             Assert.IsType<HttpStatusCode>(task.Result);
             Assert.Equal(HttpStatusCode.OK, task.Result);
+        }
+
+        [Fact]
+        public void deleteInvitation_Return400()
+        {
+            //act
+            __invitationQueryMock.Setup(x => x.deleteInvitation(123))
+                .Returns(Task.Factory.StartNew(() => ThrowException()));
+
+            var task = _invitationController.deleteInvitation(123);
+
+            // assert
+            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.Equal(HttpStatusCode.BadRequest, task.Result);
         }
     }
 }
