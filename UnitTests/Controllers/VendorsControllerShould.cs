@@ -85,7 +85,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetVendorsByService_ThrowsException()
+        public void GetAll_ThrowsException()
         {
             //arrange
             var exception = new Exception();
