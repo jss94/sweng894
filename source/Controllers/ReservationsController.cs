@@ -13,7 +13,7 @@ namespace source.Controllers
     /// Reservations controller.
     /// </summary>
     [Route("api/[controller]")]
-    public class ReservationsController: ControllerBase
+    public class ReservationsController : ControllerBase
     {
         /// <summary>
         /// Logger for controller
@@ -46,7 +46,7 @@ namespace source.Controllers
             try
             {
                 List<Reservation> reservations = await _reservationsQuery.GetAll();
-                if(reservations == null)
+                if (reservations == null)
                     return new NotFoundResult();
 
                 return new OkObjectResult(reservations);
@@ -57,7 +57,7 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
-                
+
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody]Reservation reservation)
         {
@@ -88,7 +88,50 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets all active reservations for vendor
+        /// </summary>
+        /// <param name="id">Vendor Id</param>
+        /// <returns>List of Reservation</returns>
+        [HttpGet("/vendor/{id}")]
+        public async Task<IActionResult> GetByVendor(int id)
+        {
+            try
+            {
+                List<Reservation> reservations = await _reservationsQuery.GetByVendor(id);
+                if (reservations == null)
+                    return new NotFoundResult();
 
+                return new OkObjectResult(reservations);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
 
+        /// <summary>
+        /// Gets all active reservations for event organizer (user)
+        /// </summary>
+        /// <param name="userName">UserName</param>
+        /// <returns>List of Reservation</returns>
+        [HttpGet("/user/{userName}")]
+        public async Task<IActionResult> GetByUser(string userName)
+        {
+            try
+            {
+                List<Reservation> reservations = await _reservationsQuery.GetByUserName(userName);
+                if (reservations == null)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(reservations);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
     }
 }
