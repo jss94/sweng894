@@ -33,10 +33,10 @@ namespace UnitTests.Controllers
         {
             // arrange
             List<Guest> guests = new List<Guest>();
-            guests.Add(new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 });
-            guests.Add(new Guest { guestId = 124, name = "Guest2", email = "test2@psu.edu", isGoing = true, eventId = 1 });
-            guests.Add(new Guest { guestId = 125, name = "Guest3", email = "test3@psu.edu", isGoing = false, eventId = 1 });
-            guests.Add(new Guest { guestId = 126, name = "Guest4", email = "test4@psu.edu", isGoing = null, eventId = 1 });
+            guests.Add(new Guest { guestId = 123, name = "Guest1", isGoing = true, eventId = 1 });
+            guests.Add(new Guest { guestId = 124, name = "Guest2", isGoing = true, eventId = 1 });
+            guests.Add(new Guest { guestId = 125, name = "Guest3", isGoing = false, eventId = 1 });
+            guests.Add(new Guest { guestId = 126, name = "Guest4", isGoing = null, eventId = 1 });
 
             _guestQueryMock.Setup(x => x.GetListByEventId(guests.First().eventId))
                 .Returns(Task.Factory.StartNew(() => guests));
@@ -50,6 +50,52 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var guestsResult = result.Value as List<Guest>;
             Assert.Equal(guests, guestsResult);
+        }
+
+        [Fact]
+        public void GetListByEventGuid_ReturnsGuestList()
+        {
+            // arrange
+            var eventGuid = Guid.NewGuid().ToString();
+            List<Guest> guests = new List<Guest>();
+            guests.Add(new Guest { guestId = 123, name = "Guest1", isGoing = true, eventId = 1, eventGuid = eventGuid});
+            guests.Add(new Guest { guestId = 124, name = "Guest2", isGoing = true, eventId = 1, eventGuid = eventGuid });
+            guests.Add(new Guest { guestId = 125, name = "Guest3", isGoing = false, eventId = 1, eventGuid = eventGuid });
+            guests.Add(new Guest { guestId = 126, name = "Guest4", isGoing = null, eventId = 1, eventGuid = eventGuid });
+
+            _guestQueryMock.Setup(x => x.GetListByEventGuid(guests.First().eventGuid))
+                .Returns(Task.Factory.StartNew(() => guests));
+
+            // act
+            var task = _sut.GetListByEventGuid(guests.First().eventGuid);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var guestsResult = result.Value as List<Guest>;
+            Assert.Equal(guests, guestsResult);
+        }
+
+        [Fact]
+        public void GetListByEventGuid_ReturnsNoGuestList()
+        {
+            // arrange
+            var eventGuid = Guid.NewGuid().ToString();
+            List<Guest> guests = new List<Guest>();
+            guests.Add(new Guest { guestId = 123, name = "Guest1", isGoing = true, eventId = 1, eventGuid = eventGuid });
+            guests.Add(new Guest { guestId = 124, name = "Guest2", isGoing = true, eventId = 1, eventGuid = eventGuid });
+            guests.Add(new Guest { guestId = 125, name = "Guest3", isGoing = false, eventId = 1, eventGuid = eventGuid });
+            guests.Add(new Guest { guestId = 126, name = "Guest4", isGoing = null, eventId = 1, eventGuid = eventGuid });
+
+            _guestQueryMock.Setup(x => x.GetListByEventGuid(guests.First().eventGuid))
+                .Returns(Task.Factory.StartNew(() => guests));
+
+            // act
+            var task = _sut.GetListByEventGuid("1");
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
         }
 
         [Fact]

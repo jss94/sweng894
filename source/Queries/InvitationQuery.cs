@@ -120,13 +120,13 @@ namespace source.Queries
             }
         }
 
-        public EmailContent updateInvitationContentToIncludeRSVP(int guestId, EmailContent emailContent, HttpContext httpContext)
+        public EmailContent updateInvitationContentToIncludeRSVP(Guest guest, EmailContent emailContent, HttpContext httpContext)
         {
             HttpRequest request = httpContext.Request;
             string content = emailContent.value;
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.AppendLine("<div>").Append(content).Append("</div>");
-            htmlBuilder.AppendLine(createRsvpLinkContent(createBaseUrl(request.IsHttps, request.Host.ToString()), guestId));
+            htmlBuilder.AppendLine(createRsvpLinkContent(createBaseUrl(request.IsHttps, request.Host.ToString()), guest));
 
             return new EmailContent("text/html", htmlBuilder.ToString());
         }
@@ -142,17 +142,19 @@ namespace source.Queries
             return rsvpUrlBase + host;
         }
 
-        private string createRsvpLinkContent(string rsvpBaseUrl, int guestId)
+        private string createRsvpLinkContent(string rsvpBaseUrl, Guest guest)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("<div>RSVP</div>");
-            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
-            sb.Append(guestId).Append("?isGoing=true");
-            sb.Append("'>Going</a></div>");
-            sb.AppendLine("<div><a href='").Append(rsvpBaseUrl).Append("/api/guest/rsvp/");
-            sb.Append(guestId).Append("?isGoing=false");
-            sb.Append("'>Not Going</a></div>"); ;
-            return sb.ToString();
+            var eventLink = $"<div> <a href='{rsvpBaseUrl}/events/{guest.eventGuid}'>Go to the event.</a></div>";
+            var isGoingLink = $"<div> <a href='{rsvpBaseUrl}/api/guest/rsvp/{guest.guestId}?isGoing=true'>Going</a></div>";
+            var isNotGoingLink = $"<div> <a href='{rsvpBaseUrl}/api/guest/rsvp/{guest.guestId}?isGoing=false'>Not Going</a></div>";
+
+            var guid = $"<div>Event Code = {guest.eventGuid} </div>";
+
+            return eventLink
+            + $"<div> RSVP </div>"
+            + isGoingLink
+            + isNotGoingLink
+            + guid;
         }
         
     }

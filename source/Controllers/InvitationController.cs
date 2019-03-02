@@ -36,8 +36,11 @@ namespace source.Controllers
         {
             try
             {
-                await _invitationQuery.saveInvitation(invitation);
-                return HttpStatusCode.OK;
+                var result = await _invitationQuery.saveInvitation(invitation);
+                if (result)
+                    return HttpStatusCode.OK;
+                else
+                    return HttpStatusCode.BadRequest;
             } catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);

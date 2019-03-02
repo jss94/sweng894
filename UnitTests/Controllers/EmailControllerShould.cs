@@ -9,6 +9,7 @@ using System.Net;
 using source.Models.Email;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace UnitTests.Controllers
 {
@@ -69,6 +70,34 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void PostQuestionToVendor_Return404()
+        {
+            //arrange
+            var emailMsg = new EmailMessage();
+            
+            //act
+            _vendorQueryMock.Setup(x => x.GetById(123))
+            .Returns(Task.Factory.StartNew(() => ReturnNullVendor()));
+            
+            var task = _emailController.PostQuestionToVendor(123, emailMsg);
+
+            // assert
+            Assert.IsType<HttpStatusCode>(task.Result);
+
+            Assert.True(task.Result.Equals(HttpStatusCode.NotFound));
+        }
+
+        private Vendor ReturnNullVendor()
+        {
+            return null;
+        }
+
+        private List<Guest> ReturnNullGuestList()
+        {
+            return null;
+        }
+
+        [Fact]
         public void PostEventInviteToGuests_Return202()
         {
             List<Guest> guests = new List<Guest>();
@@ -90,7 +119,7 @@ namespace UnitTests.Controllers
             contents.Add(new EmailContent("text/plain", "unit content"));
             emailMsg.content = contents;
 
-            _invitationQueryMock.Setup(x => x.updateInvitationContentToIncludeRSVP(It.IsAny<int>(), It.IsAny<EmailContent>(), It.IsAny<HttpContext>()))
+            _invitationQueryMock.Setup(x => x.updateInvitationContentToIncludeRSVP(It.IsAny<Guest>(), It.IsAny<EmailContent>(), It.IsAny<HttpContext>()))
                 .Returns(new EmailContent("text/html", "mocked content"));
 
             _guestQueryMock.Setup(x => x.GetListByEventId(guests[0].eventId))
@@ -104,6 +133,38 @@ namespace UnitTests.Controllers
             // assert
             Assert.IsType<HttpStatusCode>(task.Result);
             Assert.Equal(HttpStatusCode.Accepted, task.Result);
+        }
+
+        [Fact]
+        public void PostEventInviteToGuests_Return404EmptyList()
+        {
+            List<Guest> guests = new List<Guest>();
+           
+            var emailMsg = new EmailMessage();
+            
+            _guestQueryMock.Setup(x => x.GetListByEventId(123))
+                .Returns(Task.Factory.StartNew(() => guests));
+            
+            var task = _emailController.PostEventInviteToGuests(1, emailMsg);
+
+            // assert
+            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.Equal(HttpStatusCode.NotFound, task.Result);
+        }
+
+        [Fact]
+        public void PostEventInviteToGuests_Return404Null()
+        {
+            var emailMsg = new EmailMessage();
+
+            _guestQueryMock.Setup(x => x.GetListByEventId(123))
+                .Returns(Task.Factory.StartNew(() => ReturnNullGuestList()));
+
+            var task = _emailController.PostEventInviteToGuests(1, emailMsg);
+
+            // assert
+            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.Equal(HttpStatusCode.NotFound, task.Result);
         }
     }
 }

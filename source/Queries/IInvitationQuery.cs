@@ -41,6 +41,6 @@ namespace source.Queries
         /// <summary>
         /// Takes the given EmailContent and returns an EmailContent that includes RSVP links for the invitation.
         /// </summary>
-        EmailContent updateInvitationContentToIncludeRSVP(int guestId, EmailContent emailContent, HttpContext httpContext);
+        EmailContent updateInvitationContentToIncludeRSVP(Guest guest, EmailContent emailContent, HttpContext httpContext);
     }
 }
