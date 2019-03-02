@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace UnitTests.Controllers
 {
@@ -70,7 +71,21 @@ namespace UnitTests.Controllers
             // assert
             Assert.IsType<NotFoundResult>(task.Result);
         }
-                
+
+        [Fact]
+        public void Get_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _reservationsQueryMock.Setup(x => x.GetAll())
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Get());
+        }
+
         [Fact]
         public void Create_ReturnsReservation()
         {
@@ -110,6 +125,8 @@ namespace UnitTests.Controllers
             var usersResult = result.Value as Reservation;
             Assert.Equal(reservation, usersResult);
         }
+
+
 
     }
 }
