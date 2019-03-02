@@ -48,7 +48,6 @@ namespace source.Controllers
             if (vendor == null)
                 return HttpStatusCode.NotFound;
             
-            // TODO - Future - Do we want to always bcc the event organizer?
             emailMsg.personalizations[0].to[0].email = vendor.userName;
             return await _emailQuery.sendEmailViaPostAsync(emailMsg);
         }

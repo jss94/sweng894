@@ -89,7 +89,7 @@ namespace source.Controllers
             }
             catch(Exception ex)
             {
-                await _logger.LogError(HttpContext.User, ex);
+                Console.WriteLine(ex.StackTrace);
                 return new BadRequestResult();
             }
 

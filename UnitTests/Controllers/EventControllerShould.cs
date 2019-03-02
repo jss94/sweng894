@@ -52,6 +52,25 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void GetAllEventsByUser_ReturnNotFoundResult()
+        {
+            //act
+            __eventQueryMock.Setup(x => x.GetAllEventsByUser("jss94"))
+                .Returns(Task.Factory.StartNew(() => ReturnNullList()));
+
+            var task = _evntController.Get("jss94");
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+
+        }
+
+        private List<Event> ReturnNullList()
+        {
+            return null;
+        }
+
+        [Fact]
         public void GetOneEventById_ReturnOneEvent()
         {
 
@@ -93,7 +112,6 @@ namespace UnitTests.Controllers
         [Fact]
         public void GetEventByGuid_ReturnsNoEvent()
         {
-
             //arrange
             var guid = Guid.NewGuid().ToString();
             var e = new Event { eventId = 2, userName = "jss94", guid = guid };
@@ -110,6 +128,25 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var eventsResult = result.Value as Event;
             Assert.Equal(e.description, eventsResult.description);
+        }
+
+        public void GetOneEventById_ReturnNotFoundResult()
+        {
+
+            //act
+            __eventQueryMock.Setup(x => x.GetEventById(2))
+                .Returns(Task.Factory.StartNew(() => ReturnNull()));
+
+            var task = _evntController.Get("jss94", 2);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+
+        }
+
+        private Event ReturnNull()
+        {
+            return null;
         }
 
         [Fact]
@@ -132,6 +169,29 @@ namespace UnitTests.Controllers
             var eventResult = result.Value as bool?;
             Assert.True(eventResult);
 
+        }
+
+        [Fact]
+        public void CreateNewEvent_ReturnBadRequestResult()
+        {
+
+            //arrange
+            var evt2 = new Event { eventId = 0, userName = "jss94", description = "mock test data event" };
+
+            //act
+            __eventQueryMock.Setup(x => x.CreateEvent(evt2))
+                .Returns(Task.Factory.StartNew(() => ThrowException()));
+
+            var task = _evntController.Create(evt2);
+
+            // assert
+            Assert.IsType<BadRequestResult>(task.Result);
+
+        }
+
+        private void ThrowException()
+        {
+            throw new Exception("Unknown error occurred");
         }
 
         [Fact]

@@ -22,22 +22,8 @@ describe('EventsComponent', () => {
   let fixture: ComponentFixture<EventsComponent>;
   let mockEventService: EventService;
 
-  class MockInvitationService {
-
-  }
-
   class MockMatSnackBar {
     open() {}
-  }
-
-  class MockEmailService {
-    sendVendorQuestionEmail() {
-
-    }
-
-    sendEventInvitationEmail() {
-
-    }
   }
 
   beforeEach(async(() => {
@@ -52,12 +38,9 @@ describe('EventsComponent', () => {
         NoopAnimationsModule,
       ],
       providers: [
-        { provide: EmailService, useClass: MockEmailService },
-        { provide: MatDialog, useClass: MockMatDialog },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
-        { provide: InvitationService, useClass: MockInvitationService },
         { provide: Router, useValue: { navigate: () => {} } }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
