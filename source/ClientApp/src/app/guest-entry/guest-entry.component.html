@@ -13,7 +13,7 @@
     </mat-form-field>
 
     <div class="action">
-        <button mat-button class="clickable" (click)="goToEventClicked()">
+        <button mat-button class="clickable" (click)="goToEventClicked()" [disabled]="!eventForm.valid">
           Go to the event
         </button>
     </div>
