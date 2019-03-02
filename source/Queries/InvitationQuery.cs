@@ -28,25 +28,25 @@ namespace source.Queries
         {
             _database = db;
         }
-        
+
         /// <summary>
-        /// Get an event invitation content by event id
+        /// Get an event invitation content by eventGuid
         /// </summary>
-        /// <param name="eventId"></param>
+        /// <param name="eventGuid"></param>
         /// <returns></returns>
-        public async Task<Invitation> getInvitation(int eventId)
+        public async Task<Invitation> getInvitation(string eventGuid)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"SELECT * FROM occasions.invitations WHERE eventId = @eventId;";
+                string query = @"SELECT * FROM occasions.invitations WHERE eventGuid = @eventGuid;";
 
                 // Use the structure new { object } when you are passing in a single param
                 // If you pass in the object without the new { } Dapper will look for the 
                 // field eventId in the object eventId (ie. eventId.eventId)
-                var result = await connection.QueryFirstAsync<Invitation>(query, new { eventId });
+                var result = await connection.QueryFirstAsync<Invitation>(query, new { eventGuid });
                 return result;
             }
         }
@@ -68,6 +68,7 @@ namespace source.Queries
                 string query = @"INSERT INTO occasions.invitations (eventId, content, subject, eventGuid) "
                     + @"VALUES (@eventId, @content, @subject, @eventGuid)";
 
+                Console.WriteLine(">>>>" + query);
                 await Task.CompletedTask;
 
                 // Here we pass in the entire event without the new  { }
@@ -92,9 +93,9 @@ namespace source.Queries
                 string query = @"UPDATE occasions.invitations"
                     + " SET content=@content,"
                     + " subject=@subject"
-                    + " eventGuid= @eventGuid"
                     + " WHERE eventId =  @eventId";
 
+                Console.WriteLine("#####:" + query);
                 await Task.CompletedTask;
                 await connection.ExecuteAsync(query, invitation);
                 return true;
@@ -102,21 +103,21 @@ namespace source.Queries
         }
 
         /// <summary>
-        /// Deletes the invitation in the database associated to the given eventId.
+        /// Deletes the invitation in the database associated to the given eventGuid.
         /// </summary>
-        /// <param name="eventId"></param>
+        /// <param name="eventGuid"></param>
         /// <returns></returns>
-        public async Task<bool> deleteInvitation(int eventId)
+        public async Task<bool> deleteInvitation(string eventGuid)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = @"DELETE FROM occasions.invitations WHERE eventId = @eventId";
+                string query = @"DELETE FROM occasions.invitations WHERE eventGuid = @eventGuid";
 
                 await Task.CompletedTask;
-                await connection.ExecuteAsync(query, new { eventId });
+                await connection.ExecuteAsync(query, new { eventGuid });
                 return true;
             }
         }

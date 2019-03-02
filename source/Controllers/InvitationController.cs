@@ -16,15 +16,17 @@ namespace source.Controllers
     public class InvitationController : ControllerBase
     {
         private IInvitationQuery _invitationQuery;
+        private IEventQuery _eventQuery;
         private ILogger _logger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InvitationController(IInvitationQuery invitationQuery, ILogger logger)
+        public InvitationController(IInvitationQuery invitationQuery, IEventQuery eventQuery, ILogger logger)
         {
             _invitationQuery = invitationQuery;
             _logger = logger;
+            _eventQuery = eventQuery;
         }
 
         /// <summary>
@@ -36,6 +38,10 @@ namespace source.Controllers
         {
             try
             {
+                var evnt = await _eventQuery.GetEventByGuid(invitation.eventGuid);
+
+                invitation.eventId = evnt.eventId;
+                
                 var result = await _invitationQuery.saveInvitation(invitation);
                 if (result)
                     return HttpStatusCode.OK;
@@ -52,12 +58,12 @@ namespace source.Controllers
         /// <summary>
         /// Gets the invitation associated with the given event id.
         /// </summary>
-        /// <param name="eventId">The id of the Event.</param>
-        [HttpGet("{eventId}")]
-        public async Task<Invitation> getInvitation(int eventId)
+        /// <param name="eventGuid">The id of the Event.</param>
+        [HttpGet("{eventGuid}")]
+        public async Task<Invitation> getInvitation(string eventGuid)
         {
             // retrieve invitation associated to event.
-            return await _invitationQuery.getInvitation(eventId);
+            return await _invitationQuery.getInvitation(eventGuid);
             
         }
 
@@ -83,13 +89,13 @@ namespace source.Controllers
         /// <summary>
         /// Deletes an invitation associated with the given event id.
         /// </summary>
-        /// <param name="eventId">The id of the Event.</param>
+        /// <param name="eventGuid">The id of the Event.</param>
         [HttpDelete]
-        public async Task<HttpStatusCode> deleteInvitation(int eventId)
+        public async Task<HttpStatusCode> deleteInvitation(string eventGuid)
         {
             try
             {
-                await _invitationQuery.deleteInvitation(eventId);
+                await _invitationQuery.deleteInvitation(eventGuid);
                 return HttpStatusCode.OK;
             }catch(Exception e)
             {

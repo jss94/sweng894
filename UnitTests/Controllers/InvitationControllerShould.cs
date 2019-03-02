@@ -15,13 +15,15 @@ namespace UnitTests.Controllers
         // System Under Test
         readonly InvitationController _invitationController;
         readonly Mock<IInvitationQuery> __invitationQueryMock;
+        readonly Mock<IEventQuery> _eventQueryMock;
         readonly Mock<ILogger> _loggerMock;
 
         public InvitationControllerShould()
         {
             __invitationQueryMock = new Mock<IInvitationQuery>();
             _loggerMock = new Mock<ILogger>();
-            _invitationController = new InvitationController(__invitationQueryMock.Object, _loggerMock.Object);
+            _eventQueryMock = new Mock<IEventQuery>();
+            _invitationController = new InvitationController(__invitationQueryMock.Object, _eventQueryMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -29,13 +31,13 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject" };
+            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject", eventGuid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac" };
 
             //act
-            __invitationQueryMock.Setup(x => x.getInvitation(123))
+            __invitationQueryMock.Setup(x => x.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => invitation));
 
-            var task = _invitationController.getInvitation(123);
+            var task = _invitationController.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
 
             // assert
             Assert.IsType<Invitation>(task.Result);
@@ -53,11 +55,21 @@ namespace UnitTests.Controllers
         {
 
             //arrange
-            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject" };
+            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject", eventGuid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac" };
+            var evnt = new Event
+            {
+                guid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac",
+                eventId = 123,
+                name = "Surprise Party",
+                description = "Lets throw a surprise party for John!"
+            };
 
             //act
             __invitationQueryMock.Setup(x => x.saveInvitation(invitation))
                 .Returns(Task.Factory.StartNew(() => true));
+
+            _eventQueryMock.Setup(x => x.GetEventByGuid("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
+                .Returns(Task.Factory.StartNew(() => evnt));
 
             var task = _invitationController.postInvitation(invitation);
 
@@ -129,13 +141,13 @@ namespace UnitTests.Controllers
         public void deleteInvitation_Return200()
         {
             //arrange
-            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject" };
+            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject",  eventGuid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac" };
 
             //act
-            __invitationQueryMock.Setup(x => x.deleteInvitation(123))
+            __invitationQueryMock.Setup(x => x.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var task = _invitationController.deleteInvitation(123);
+            var task = _invitationController.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
 
             // assert
             Assert.IsType<HttpStatusCode>(task.Result);
@@ -146,10 +158,10 @@ namespace UnitTests.Controllers
         public void deleteInvitation_Return400()
         {
             //act
-            __invitationQueryMock.Setup(x => x.deleteInvitation(123))
+            __invitationQueryMock.Setup(x => x.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => ThrowException()));
 
-            var task = _invitationController.deleteInvitation(123);
+            var task = _invitationController.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
 
             // assert
             Assert.IsType<HttpStatusCode>(task.Result);

@@ -49,7 +49,7 @@ export class EventDetailComponent implements OnInit {
       this.showInviteDialog(evnt);
     }, error => {
         // invitation does not exist
-       this.invitationModel = ({
+        this.invitationModel = ({
           eventGuid: evnt.guid,
           subject: 'You\'re Invited!',
           content: 'You are invited to celebrate ' + evnt.description
