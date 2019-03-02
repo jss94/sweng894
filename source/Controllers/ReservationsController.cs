@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using source.Constants;
 using source.Framework;
 using source.Models;
 using source.Queries;
@@ -80,6 +81,25 @@ namespace source.Controllers
             {
                 var savedReservation = await _reservationsQuery.Update(reservation);
                 return new OkObjectResult(savedReservation);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets the list of reservation status types
+        /// </summary>
+        /// <returns>List of reservation status types</returns>
+        [HttpGet("statusTypes")]
+        public async Task<IActionResult> GetReservationStatusTypes()
+        {
+            try
+            {
+                ReservationStatus types = new ReservationStatus();
+                return new OkObjectResult(types.GetReservationStatuses());
             }
             catch (Exception ex)
             {
