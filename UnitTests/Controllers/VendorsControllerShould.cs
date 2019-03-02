@@ -70,6 +70,35 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void GetAll_ReturnsNotFound()
+        {
+            //arrange
+            List<Vendor> vendors = null;
+
+            _vendorsQueryMock.Setup(x => x.GetAll())
+                .Returns(Task.Factory.StartNew(() => vendors));
+
+            var task = _sut.GetAll();
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void GetAll_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorsQueryMock.Setup(x => x.GetAll())
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.GetAll());
+        }
+
+        [Fact]
         public void GetVendorById_ReturnsVendorById()
         {
             // arrange
@@ -90,6 +119,35 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as Vendor;
             Assert.Equal(vendor, usersResult);            
+        }
+
+        [Fact]
+        public void GetVendorById_ReturnsNotFound()
+        {
+            //arrange
+            Vendor vendor = null;
+
+            _vendorsQueryMock.Setup(x => x.GetById(1))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            var task = _sut.GetById(1);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void GetVendorById_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorsQueryMock.Setup(x => x.GetById(1))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.GetById(1));
         }
 
         [Fact]
@@ -116,6 +174,35 @@ namespace UnitTests.Controllers
             Assert.Equal(vendor, usersResult);
         }
 
+        [Fact]
+        public void GetVendorByName_ReturnsNotFound()
+        {
+            //arrange
+            Vendor vendor = null;
+
+            _vendorsQueryMock.Setup(x => x.GetByUserName("vendor@example.com"))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            var task = _sut.GetByUserName("vendor@example.com");
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void GetVendorByName_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorsQueryMock.Setup(x => x.GetByUserName("vendor@example.com"))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.GetByUserName("vendor@example.com"));
+        }
+               
         [Fact]
         public void InsertVendor_ReturnsVendor()
         {
@@ -144,7 +231,22 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void UpdateVendor_ReturnsVendor()
+        public void InsertVendor_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+
+            //act
+            _vendorsQueryMock.Setup(x => x.Insert(vendor))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Insert(vendor));
+        }
+
+        [Fact]
+        public void UpdateVendor_ReturnsTrue()
         {
             // arrange
             var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
@@ -167,6 +269,46 @@ namespace UnitTests.Controllers
 
             var result = task.Result as OkObjectResult;
             Assert.Equal(true, result.Value);
+        }
+
+        [Fact]
+        public void Update_ReturnsNotFound()
+        {
+            //arrange
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var address = new Address { id = 456, userName = "vendor@example.com", street = "123 Main St", city = "State College", state = "PA", zip = 16803 };
+
+            Vendor unfoundVendor = null;
+            Address unfoundAddress = null;
+
+            _vendorsQueryMock.Setup(x => x.Update(vendor))
+                .Returns(Task.Factory.StartNew(() => false));
+
+            _addressQueryMock.Setup(x => x.GetByUserName("vendor@example.com"))
+                .Returns(Task.Factory.StartNew(() => unfoundAddress));
+
+            _vendorsQueryMock.Setup(x => x.GetByUserName("vendor@example.com"))
+                .Returns(Task.Factory.StartNew(() => unfoundVendor));
+
+            var task = _sut.Update(vendor);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void UpdateVendor_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+            var vendor = new Vendor { id = 123, userName = "vendor@example.com", name = "name1", website = "website_1" };
+
+            //act
+            _vendorsQueryMock.Setup(x => x.Update(vendor))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Update(vendor));
         }
 
         [Fact]
@@ -193,6 +335,33 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void Deactivate_ReturnsNotFound()
+        {
+            //arrange
+            _vendorsQueryMock.Setup(x => x.Deactivate("vendor@example.com"))
+                .Returns(Task.Factory.StartNew(() => false));
+
+            var task = _sut.Deactivate("vendor@example.com");
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void Deactivate_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorsQueryMock.Setup(x => x.Deactivate("vendor@example.com"))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Deactivate("vendor@example.com"));
+        }
+
+        [Fact]
         public void DeleteVendor_ReturnsTrue()
         {
             // arrange
@@ -211,6 +380,35 @@ namespace UnitTests.Controllers
             var usersResult = result.Value as bool?;
             Assert.True(usersResult.Value);
         }
+
+        [Fact]
+        public void Delete_ReturnsNotFound()
+        {
+            //arrange
+            _vendorsQueryMock.Setup(x => x.Delete(1))
+                .Returns(Task.Factory.StartNew(() => false));
+
+            var task = _sut.Delete(1);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void Delete_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorsQueryMock.Setup(x => x.Delete(1))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Delete(1));
+        }
+
+
 
     }
 }
