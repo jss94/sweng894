@@ -60,7 +60,6 @@ namespace UnitTests.Controllers
         public void Get_ReturnsNotFound()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
             List<Reservation> reservations = null;
 
             //act

@@ -9,6 +9,7 @@ using source.Models;
 using source.Framework;
 using source.Constants;
 using System.Linq;
+using System;
 
 namespace UnitTests.Controllers
 {
@@ -81,6 +82,35 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void GetVendorsByService_ReturnsNotFound()
+        {
+            //arrange
+            List<Vendor> vendors = null;
+
+            _vendorServicesQueryMock.Setup(x => x.GetVendorsByServiceTypes("Venue"))
+                .Returns(Task.Factory.StartNew(() => vendors));
+
+            var task = _sut.GetVendorsByServiceType("Venue");
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void GetVendorsByService_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.GetVendorsByServiceTypes("Venue"))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.GetVendorsByServiceType("Venue"));
+        }
+
+        [Fact]
         public void GetAll_ReturnsVendorServices()
         {
             // arrange
@@ -108,6 +138,35 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as List<VendorServices>;
             Assert.Equal(services, usersResult);
+        }
+
+        [Fact]
+        public void Get_ReturnsNotFound()
+        {
+            //arrange
+            List<VendorServices> services = null;
+
+            _vendorServicesQueryMock.Setup(x => x.GetAll())
+                .Returns(Task.Factory.StartNew(() => services));
+
+            var task = _sut.Get();
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void Get_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.GetAll())
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Get());
         }
 
         [Fact]
@@ -139,6 +198,22 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void InsertServiceType_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+            VendorServices service = new VendorServices { serviceType = "Venue", serviceName = "Test" };
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.InsertService(service))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Insert(service));
+        }
+
+
+        [Fact]
         public void UpdateServiceType_ReturnsUpdatedServiceType()
         {
             // arrange
@@ -164,6 +239,21 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as VendorServices;
             Assert.Equal(service, usersResult);
+        }
+
+        [Fact]
+        public void UpdateServiceType_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+            VendorServices service = new VendorServices { serviceType = "Venue", serviceName = "Test" };
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.UpdateService(service))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Update(service));
         }
 
         [Fact]
@@ -197,6 +287,35 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void GetServicesByVendor_ReturnsNotFound()
+        {
+            //arrange
+            List<VendorServices> services = null;
+
+            _vendorServicesQueryMock.Setup(x => x.GetServicesByVendor(1))
+                .Returns(Task.Factory.StartNew(() => services));
+
+            var task = _sut.GetServicesByVendor(1);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void GetServicesByVendor_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.GetServicesByVendor(1))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.GetServicesByVendor(1));
+        }
+
+        [Fact]
         public void DeactivateService_ReturnsTrue()
         {
             // arrange
@@ -214,6 +333,33 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as bool?;
             Assert.True(usersResult);
+        }
+
+        [Fact]
+        public void DeactivateService_ReturnsNotFound()
+        {
+            //arrange
+            _vendorServicesQueryMock.Setup(x => x.DeactivateByServiceId(1))
+                .Returns(Task.Factory.StartNew(() => false));
+
+            var task = _sut.Delete(1);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void DeactivateService_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.DeactivateByServiceId(1))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Delete(1));
         }
 
         [Fact]
@@ -243,6 +389,96 @@ namespace UnitTests.Controllers
             var result = task.Result as OkObjectResult;
             var usersResult = result.Value as VendorServices;
             Assert.Equal(service, usersResult);
+        }
+
+        [Fact]
+        public void GetById_ReturnsNotFound()
+        {
+            //arrange
+            VendorServices service = null;
+
+            _vendorServicesQueryMock.Setup(x => x.GetById(1))
+                .Returns(Task.Factory.StartNew(() => service));
+
+            var task = _sut.GetServiceById(1);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void GetById_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.GetById(1))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.GetServiceById(1));
+        }
+
+        [Fact]
+        public void Search_ReturnsServices()
+        {
+            // arrange
+            var vendorSearchProp = new VendorSearchProperties { type = "Venue", maxPrice = 100 };
+            var service = new VendorServices
+            {
+                vendorId = 123,
+                flatFee = true,
+                price = 20,
+                serviceDescription = "desc",
+                serviceName = "svcName",
+                serviceType = "Venue"
+            };
+            List<VendorServices> services = new List<VendorServices> { service, service };
+
+            _vendorServicesQueryMock.Setup(x => x.Search(vendorSearchProp))
+                .Returns(Task.Factory.StartNew(() => services));
+
+            // act
+            var task = _sut.Search(vendorSearchProp);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as List<VendorServices>;
+            Assert.Equal(services, usersResult);
+        }
+
+        [Fact]
+        public void Search_ReturnsNotFound()
+        {
+            //arrange
+            List<VendorServices> services = null;
+            var vendorSearchProp = new VendorSearchProperties { type = "Venue", maxPrice = 100 };
+
+            _vendorServicesQueryMock.Setup(x => x.Search(vendorSearchProp))
+                .Returns(Task.Factory.StartNew(() => services));
+
+            var task = _sut.Search(vendorSearchProp);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void Search_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+            var vendorSearchProp = new VendorSearchProperties { type = "Venue", maxPrice = 100 };
+
+            //act
+            _vendorServicesQueryMock.Setup(x => x.Search(vendorSearchProp))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Search(vendorSearchProp));
         }
     }
 }
