@@ -23,10 +23,10 @@ export class UpdateGuestsComponent implements OnInit {
     private guestId: string;
     public selectedValue: string;
     public options: DropDownOption[] = [
-        {value: "undecided", viewValue: "UNDECIDED"},
-        {value: "yes", viewValue: "YES"},
-        {value: "no", viewValue: "NO"},
-    ]
+        {value: 'undecided', viewValue: 'UNDECIDED'},
+        {value: 'yes', viewValue: 'YES'},
+        {value: 'no', viewValue: 'NO'},
+    ];
 
     updateGuestForm = new FormGroup({
         name: new FormControl('', [ Validators.required ]),
@@ -48,8 +48,6 @@ export class UpdateGuestsComponent implements OnInit {
             this.guestId = params.get('guestId');
             this.guestService.getGuest(this.guestId).subscribe((result: Guest) => {
                 this.guest = result;
-                console.log(result);
-
                 this.updateGuestForm.controls['name'].setValue(this.guest.name);
                 this.updateGuestForm.controls['email'].setValue(this.guest.email);
                 this.setSelected(this.guest.isGoing);
@@ -61,9 +59,9 @@ export class UpdateGuestsComponent implements OnInit {
         this.guest.name = this.updateGuestForm.controls['name'].value;
         this.guest.email = this.updateGuestForm.controls['email'].value;
         this.setIsGoing(this.selectedValue);
-        this.guestService.update(this.guest).subscribe(response => {
-          this.router.navigate(['/guests/' + this.guest.eventId]);
-       });
+        this.guestService.update(this.guest).subscribe(() => {
+          this.router.navigate(['/guests/' + this.guest.eventGuid]);
+        });
 
     }
 
@@ -72,11 +70,11 @@ export class UpdateGuestsComponent implements OnInit {
     }
 
     setIsGoing(value: string) {
-        if(value === "yes")
+        if(value === 'yes')
         {
             this.guest.isGoing = true;
         }
-        else if(value === "no")
+        else if(value === 'no')
         {
             this.guest.isGoing = false;
         }
@@ -89,15 +87,15 @@ export class UpdateGuestsComponent implements OnInit {
     setSelected(value: boolean) {
         if(value === true)
         {
-            this.selectedValue = "yes"
+            this.selectedValue = 'yes'
         }
         else if(value === false)
         {
-            this.selectedValue = "no"
+            this.selectedValue = 'no'
         }
         else
         {
-            this.selectedValue = "undecided"
+            this.selectedValue = 'undecided'
         }
     }
 }

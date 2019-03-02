@@ -119,7 +119,7 @@ namespace UnitTests.Controllers
             contents.Add(new EmailContent("text/plain", "unit content"));
             emailMsg.content = contents;
 
-            _invitationQueryMock.Setup(x => x.updateInvitationContentToIncludeRSVP(It.IsAny<int>(), It.IsAny<EmailContent>(), It.IsAny<HttpContext>()))
+            _invitationQueryMock.Setup(x => x.updateInvitationContentToIncludeRSVP(It.IsAny<Guest>(), It.IsAny<EmailContent>(), It.IsAny<HttpContext>()))
                 .Returns(new EmailContent("text/html", "mocked content"));
 
             _guestQueryMock.Setup(x => x.GetListByEventId(guests[0].eventId))

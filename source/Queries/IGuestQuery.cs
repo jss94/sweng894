@@ -10,6 +10,7 @@ namespace source.Queries
     {
         Task<Guest> GetByGuestId(int id);
         Task<List<Guest>> GetListByEventId(int eventId);
+        Task<List<Guest>> GetListByEventGuid(string guid);
         Task Insert(Guest guest);
         Task Update(Guest guest);
         Task DeleteByGuestId(int guestId);

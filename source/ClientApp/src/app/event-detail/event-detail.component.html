@@ -10,7 +10,7 @@
       <p>{{theEvent.description}}</p>
       <div *ngIf="auth.user">
             <div>
-                <button mat-button [routerLink]="['/guests/', theEvent.eventId]">
+                <button mat-button [routerLink]="['/guests/', theEvent.guid]">
                   <mat-icon>people</mat-icon>
                   View Guest List
                 </button>

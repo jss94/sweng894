@@ -78,11 +78,11 @@ export class EventsComponent implements OnInit {
    }
 
    onGuestsClicked(event: OccEvent): void {
-    this.router.navigate(['/guests/' + event.eventId]);
+    this.router.navigate(['/guests/' + event.guid]);
    }
 
    onViewEventClicked(event: OccEvent): void {
-    this.router.navigate(['/events/' + event.userName + '/' + event.eventId]);
+    this.router.navigate(['/events/' + event.guid]);
    }
 
    deleteEvent(evnt: OccEvent): void {

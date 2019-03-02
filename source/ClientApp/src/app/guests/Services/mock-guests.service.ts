@@ -14,4 +14,8 @@ export class MockGuestsService {
   getGuests(id: string): Observable<Guest[]> {
     return of(null);
   }
+
+  insert(guest: Guest): Observable<boolean> {
+    return of(null);
+  }
 }

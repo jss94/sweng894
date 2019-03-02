@@ -12,8 +12,8 @@ export class InvitationService {
       ) {
   }
 
-  getInvitation(eventId: number): Observable<InvitationModel> {
-      return this.auth.get('invitation/' + eventId);
+  getInvitation(eventGuid: string): Observable<InvitationModel> {
+      return this.auth.get('invitation/' + eventGuid);
   }
 
   createNewInvitation(invitation: InvitationModel): Observable<any> {
@@ -26,7 +26,7 @@ export class InvitationService {
   }
 
   deleteInvitation(invitation: InvitationModel): Observable<any> {
-    return this.auth.delete('invitation/' + invitation.eventId);
+    return this.auth.delete('invitation/' + invitation.eventGuid);
   }
 
 }

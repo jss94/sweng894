@@ -16,8 +16,8 @@ export class EventService {
       return this.auth.get('event/' + id);
   }
 
-  getEvent(userName: string, eventId: number): Observable<OccEvent> {
-    return this.auth.get('event/' + userName + '/' + eventId);
+  getEvent(guid: string): Observable<OccEvent> {
+    return this.auth.get('event/guid/' + guid);
   }
 
   createNewEvent(evt: OccEvent): Observable<any> {
@@ -30,7 +30,7 @@ export class EventService {
   }
 
   deleteEvent(evnt: OccEvent): Observable<any> {
-    return this.auth.delete('event/' + evnt.eventId);
+    return this.auth.delete('event/' + evnt.guid);
   }
 
 }
