@@ -65,8 +65,8 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 // I left these all caps because Dapper doesnt care
-                string query = @"INSERT INTO occasions.invitations (eventId, content, subject) "
-                    + @"VALUES (@eventId, @content, @subject)";
+                string query = @"INSERT INTO occasions.invitations (eventId, content, subject, eventGuid) "
+                    + @"VALUES (@eventId, @content, @subject, @eventGuid)";
 
                 await Task.CompletedTask;
 
@@ -92,6 +92,7 @@ namespace source.Queries
                 string query = @"UPDATE occasions.invitations"
                     + " SET content=@content,"
                     + " subject=@subject"
+                    + " eventGuid= @eventGuid"
                     + " WHERE eventId =  @eventId";
 
                 await Task.CompletedTask;
