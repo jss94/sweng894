@@ -66,9 +66,7 @@ namespace source.Queries
                     var reservationResult = await connection.QueryAsync<Reservation>(query);
                     foreach(Reservation res in reservationResult)
                     {
-                        res.vendor =await _vendorsQuery.GetById(res.vendorId.Value);
-                        res.vendorService = await _vendorServicesQuery.GetById(res.vendorServiceId.Value);
-                        res.evt = await _eventQuery.GetEventById(res.eventId.Value);
+                        await MapObjectsToReservation(res);
                     }
 
                     return reservationResult.ToList();
@@ -149,6 +147,75 @@ namespace source.Queries
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Gets all active reservations for a vendor
+        /// </summary>
+        /// <param name="vendorId">Vendor Id</param>
+        /// <returns>List of reservations</returns>
+        public async Task<List<Reservation>> GetByVendor(int vendorId)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    string query =
+                          @"SELECT * from occasions.reservations WHERE active = 1 AND vendorId = @vendorId;";
+
+                    var reservationResult = await connection.QueryAsync<Reservation>(query, new { vendorId });
+                    foreach (Reservation res in reservationResult)
+                    {
+                        await MapObjectsToReservation(res);
+                    }
+
+                    return reservationResult.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets all active reservations for a user
+        /// </summary>
+        ///<param name="userName">UserName</param>
+        /// <returns>List of reservations</returns>
+        public async Task<List<Reservation>> GetByUserName(string userName)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    string query =
+                          @"SELECT * from occasions.reservations WHERE active = 1 AND userName = @userName;";
+
+                    var reservationResult = await connection.QueryAsync<Reservation>(query, new { userName });
+                    foreach (Reservation res in reservationResult)
+                    {
+                        await MapObjectsToReservation(res);
+                    }
+
+                    return reservationResult.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private async Task MapObjectsToReservation(Reservation reservation)
+        {
+            reservation.vendor = await _vendorsQuery.GetById(reservation.vendorId.Value);
+            reservation.vendorService = await _vendorServicesQuery.GetById(reservation.vendorServiceId.Value);
+            reservation.evt = await _eventQuery.GetEventById(reservation.eventId.Value);
         }
     }
 }

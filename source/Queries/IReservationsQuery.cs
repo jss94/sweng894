@@ -14,5 +14,7 @@ namespace source.Queries
         Task<List<Reservation>> GetAll();
         Task<Reservation> Insert(Reservation reservation);
         Task<Reservation> Update(Reservation reservation);
+        Task<List<Reservation>> GetByVendor(int vendorId);
+        Task<List<Reservation>> GetByUserName(string userName);
     }
 }
