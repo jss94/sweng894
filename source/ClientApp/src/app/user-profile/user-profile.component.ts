@@ -50,7 +50,7 @@ export class UserProfileComponent implements OnInit {
   setUserProfile(user: User) {
     this.user = user;
 
-    if (user.role === 'VENDOR') {
+    if (user.role === 'VENDOR' || user.role === 'Admin') {
       this.setVendorProfile(user);
     } else {
       this.setOrganizerProfile(user);
