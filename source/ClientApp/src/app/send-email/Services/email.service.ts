@@ -24,7 +24,7 @@ export class EmailService {
   }
 
 
-  createEmailModel(invitationSubject: string, invitationText: string, from: string): EmailModel {
+  createEmailModel(invitationSubject: string, msgContent: string, from: string): EmailModel {
     const toEmail = new EmailAddress();
     toEmail.email = from; // place holder, will be replaced by backend
 
@@ -36,7 +36,7 @@ export class EmailService {
 
     const emailContent = new EmailContent();
     emailContent.type = 'text/html';
-    emailContent.value = invitationText;
+    emailContent.value = msgContent;
 
     const content: EmailContent[] = [];
     content.push(emailContent);
