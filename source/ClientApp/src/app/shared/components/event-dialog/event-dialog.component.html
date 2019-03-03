@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ data.iconName }}</mat-icon>
+  {{ data.title }}
+</h2>
+
+<form class="form" [formGroup]="editEventForm" (ngSubmit)="onCreate()">
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Event Date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <br>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Event Name</mat-label>
+    <input
+      matInput
+      placeholder="Event Name"
+      formControlName="name"
+      >
+  </mat-form-field>
+
+  <br>
+
+  <mat-form-field appearance="outline">
+      <mat-label>Event Description</mat-label>
+      <input
+        autocomplete="description"
+        matInput
+        placeholder="Event Description"
+        formControlName="description"
+        >
+    </mat-form-field>
+
+</form>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close (click)="onClick(true)">{{ data.buttonText }}</button>
+  <button mat-button mat-dialog-close (click)="onClick(false)">Cancel</button>
+</mat-dialog-actions>
