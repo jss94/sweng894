@@ -1,3 +1,9 @@
+.page-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 h1 {
     padding: 10px;
     display: flex;
@@ -10,26 +16,36 @@ h2 {
     flex-direction: column;
     align-items: left;
 }
-  
-.page-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
 
-.outer-expansion {
-    width: 100%;
-    margin-top: 10px;
-    padding: 0px;
+.expansion-header {
+    height: 40px;  
+    line-height: 40px;
     background-color: #E5E8EC;
     display: flex;
     justify-content: space-between;
-    flex-direction: column;
-    align-items: left;
 }
 
-.inner-expansion {
+.expansion-panel {
+    padding-top: 10px;
+}
+
+.services-panel {
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
-    align-items: left;
+    justify-content: space-between;
+}
+
+.reservation-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+}
+
+.actions {
+    background-color: #E5E8EC;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }
