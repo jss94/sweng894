@@ -46,15 +46,11 @@
         </button>
       </mat-menu>
 
-      <button *ngIf="!auth.isAuthenticated()" mat-button [matMenuTriggerFor]="guestMenu">
+      <button *ngIf="!auth.isAuthenticated() || (isVendor && isOrganizer)" mat-button
+        [routerLink]="['/guest-entry']" [routerLinkActive]="['link-active']">
         <mat-icon>person_outline</mat-icon>
         Guest
       </button>
-      <mat-menu #guestMenu="matMenu">
-        <button mat-menu-item [routerLink]="['/guests']" [routerLinkActive]="['link-active']"> 
-          Guest List
-        </button>
-      </mat-menu>
 
       <button *ngIf="isVendor && isOrganizer" mat-button [matMenuTriggerFor]="adminMenu">
         <mat-icon>verified_user</mat-icon>

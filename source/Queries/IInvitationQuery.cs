@@ -18,11 +18,11 @@ namespace source.Queries
         Task<bool> saveInvitation(Invitation invitation);
 
         /// <summary>
-        /// Retrieves the Invitation associated with the given eventId
+        /// Retrieves the Invitation associated with the given eventGuid
         /// </summary>
-        /// <param name="eventId"></param>
+        /// <param name="eventGuid"></param>
         /// <returns></returns>
-        Task<Invitation> getInvitation(int eventId);
+        Task<Invitation> getInvitation(string eventGuid);
 
         /// <summary>
         /// Updates the Invitation with the given one.
@@ -34,13 +34,13 @@ namespace source.Queries
         /// <summary>
         /// Deletes the invitation associated to the given eventId
         /// </summary>
-        /// <param name="eventId"></param>
+        /// <param name="eventGuid"></param>
         /// <returns></returns>
-        Task<bool> deleteInvitation(int eventId);
+        Task<bool> deleteInvitation(string eventGuid);
 
         /// <summary>
         /// Takes the given EmailContent and returns an EmailContent that includes RSVP links for the invitation.
         /// </summary>
-        EmailContent updateInvitationContentToIncludeRSVP(int guestId, EmailContent emailContent, HttpContext httpContext);
+        EmailContent updateInvitationContentToIncludeRSVP(Guest guest, EmailContent emailContent, HttpContext httpContext);
     }
 }

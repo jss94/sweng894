@@ -4,5 +4,6 @@ export interface Guest {
     email: string;
     isGoing: boolean;
     isUndecided?: boolean;
-    eventId: number;
+    eventId?: number;
+    eventGuid: string;
 }

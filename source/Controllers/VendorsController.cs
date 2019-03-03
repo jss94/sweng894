@@ -58,7 +58,13 @@ namespace source.Controllers
         {
             try
             {
-                return new OkObjectResult(await _vendorQuery.GetAll());
+                var result = await _vendorQuery.GetAll();
+                if(result == null)
+                {
+                    return new NotFoundResult();
+                }
+
+                return new OkObjectResult(result);
             }
             catch (Exception ex)
             {
@@ -130,8 +136,7 @@ namespace source.Controllers
                     await _addressesQuery.Insert(vendor.address);
                 }
 
-                await _vendorQuery.Insert(vendor);
-                return new OkObjectResult(vendor);
+                return new OkObjectResult(await _vendorQuery.Insert(vendor));
             }
             catch (Exception ex)
             {
@@ -144,7 +149,7 @@ namespace source.Controllers
         /// Updates a vendor record
         /// </summary>
         /// <param name="vendor">Vendor</param>
-        /// <returns>Updated Vendor record</returns>
+        /// <returns>True/False</returns>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody]Vendor vendor)
         {

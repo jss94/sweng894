@@ -1,0 +1,23 @@
+<div class="container">
+  <form class="center" [formGroup]="eventForm">
+    <h1>Welcome to Occasions</h1>
+    <p>
+      You can access an event by entering the code provided in your invitation email.
+      Alternatively you can click the link in the your invitation email.
+    </p>
+  
+
+    <mat-form-field appearance="outline">
+        <mat-label>Event Code</mat-label>
+        <input matInput formControlName="guid">
+    </mat-form-field>
+
+    <div class="action">
+        <button mat-button class="clickable" (click)="goToEventClicked()" [disabled]="!eventForm.valid">
+          Go to the event
+        </button>
+    </div>
+
+  </form>
+
+</div>

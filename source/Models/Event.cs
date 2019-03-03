@@ -26,7 +26,17 @@ namespace source.Models
         //The date that the event will be held.
         public string dateTime { get; set; }
 
+        /// <summary>
+        /// Gets or sets the created.
+        /// </summary>
+        /// <value>The created.</value>
         public string created { get; set; }
+
+        /// <summary>
+        /// Gets or sets the GUID.
+        /// </summary>
+        /// <value>The GUID.</value>
+        public string guid { get; set; }
 
         /* 
          * TODO 

@@ -11,8 +11,8 @@ export class GuestsService {
       ) {
   }
 
-  getGuests(id: string): Observable<Guest[]> {
-    return this.auth.get('guest/event/' + id);
+  getGuests(guid: string): Observable<Guest[]> {
+    return this.auth.get('guest/event/guid/' + guid);
   }
 
   getGuest(id: string): Observable<Guest> {

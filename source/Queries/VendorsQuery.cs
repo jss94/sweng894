@@ -56,7 +56,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new List<Vendor>();
+                return null;
             }
         }
 
@@ -99,7 +99,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new Vendor();
+                return null;
             }
         }
 
@@ -144,7 +144,7 @@ namespace source.Queries
             }
             catch(Exception ex)
             {
-                return new Vendor();
+                return null;
             }
 
         }
@@ -190,7 +190,7 @@ namespace source.Queries
             }
             catch (Exception ex)
             {
-                return new Vendor();
+                return null;
             }
         }
 
@@ -250,17 +250,24 @@ namespace source.Queries
         /// <param name="userName">User name.</param>
         public async Task<bool> Reactivate(string userName)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.vendors "
-                    + @"SET active = 1 "
-                    + @"WHERE userName = @userName AND active = 0;";
+                    string query = @"UPDATE occasions.vendors "
+                        + @"SET active = 1 "
+                        + @"WHERE userName = @userName AND active = 0;";
 
-                var returnedValue = connection.QueryAsync<Vendor>(query, new { userName });
-                return true;
+                    var returnedValue = connection.QueryAsync<Vendor>(query, new { userName });
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
             }
         }
 

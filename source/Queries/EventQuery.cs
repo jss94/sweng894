@@ -7,6 +7,7 @@ using source.Models;
 using Dapper;
 using System.Linq;
 using System.Threading;
+using System;
 
 namespace source.Queries
 {
@@ -64,8 +65,8 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 // I left these all caps because Dapper doesnt care
-                string query = @"INSERT INTO occasions.events (userName, name, description, dateTime) "
-                    + @"VALUES (@userName, @name, @description, @dateTime)";
+                string query = @"INSERT INTO occasions.events (userName, name, description, dateTime, guid) "
+                    + @"VALUES (@userName, @name, @description, @dateTime, @guid)";
 
                 await Task.CompletedTask;
 
@@ -93,6 +94,26 @@ namespace source.Queries
 
                 var events = connection.QueryAsync<Event>(query, new { userName } ).Result.ToList();
                 return events;
+            }
+        }
+
+        /// <summary>
+        /// Get all events for a GUID
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public async Task<Event> GetEventByGuid(string guid)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query =
+                      @" SELECT * FROM occasions.events "
+                    + @" WHERE guid = @guid;";
+
+                return await connection.QueryFirstOrDefaultAsync<Event>(query, new { guid });
             }
         }
 

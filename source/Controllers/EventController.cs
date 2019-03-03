@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +60,21 @@ namespace source.Controllers
         }
 
         /// <summary>
+        /// Returns one Event given a guid
+        /// </summary>
+        /// <param name="guid">The guid for the event.</param>
+        [HttpGet("guid/{guid}")]
+        public async Task<IActionResult> GetByGuid(string guid)
+        {
+            var result = await _eventQuery.GetEventByGuid(guid);
+
+            if (result == null)
+                return new NotFoundResult();
+
+            return new OkObjectResult(result);
+        }
+
+        /// <summary>
         /// Creates a new event in the database
         /// </summary>
         /// <param name="evnt">The Event to insert into the database.</param>
@@ -70,12 +83,13 @@ namespace source.Controllers
         {
             try
             {
+                evnt.guid = Guid.NewGuid().ToString();
                 await _eventQuery.CreateEvent(evnt);
                 return new OkObjectResult(true);
             }
             catch(Exception ex)
             {
-                await _logger.LogError(HttpContext.User, ex);
+                Console.WriteLine(ex.StackTrace);
                 return new BadRequestResult();
             }
 
@@ -96,11 +110,11 @@ namespace source.Controllers
         /// Deletes the event.
         /// </summary>
         /// <returns>The event.</returns>
-        /// <param name="eventId">Event identifier.</param>
-        [HttpDelete("{eventId}")]
-        public async Task<IActionResult> Delete(int eventId)
+        /// <param name="eventGuid">Event identifier.</param>
+        [HttpDelete("{eventGuid}")]
+        public async Task<IActionResult> Delete(string eventGuid)
         {
-            var result = await _eventQuery.GetEventById(eventId);
+            var result = await _eventQuery.GetEventByGuid(eventGuid);
 
             if (result == null)
                 return new NotFoundResult();

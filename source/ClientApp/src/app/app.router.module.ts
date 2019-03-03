@@ -24,21 +24,23 @@ import { VendorSearchComponent } from './vendor-search/vendor-search.component';
 import { VendorDetailsComponent } from './vendor-details/vendor-details.component';
 import {ReservationsVendorComponent} from './reservations/reservations-vendor/reservations-vendor.component';
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
+import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'admin', component: UsersComponent },
+    { path: 'guest-entry', component: GuestEntryComponent},
     { path: 'user-profile', component: UserProfileComponent },
     { path: 'learn-more', component: LearnMoreComponent},
     { path: 'search-vendors', component: VendorSearchComponent },
     { path: 'events', component: EventsComponent },
-    { path: 'events/:userName/:eventId', component: EventDetailComponent },
+    { path: 'events/:guid', component: EventDetailComponent },
     { path: 'register-user', component: RegisterUserComponent },
     { path: 'deactivate-user', component: DeactivateUserComponent },
     { path: 'reactivate-user', component: ReactivateUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
-    { path: 'guests/:eventId', component: GuestsComponent },
+    { path: 'guests/:eventGuid', component: GuestsComponent },
     { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
@@ -49,6 +51,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         HomeComponent,
+        GuestEntryComponent,
         LearnMoreComponent,
         GoogleMapComponent,
         UsersComponent,

@@ -17,10 +17,9 @@ import { MatSnackBar } from '@angular/material';
 )
 export class GuestsComponent implements OnInit {
     public guests: Guest[];
-    private eventId: string;
+    private eventGuid: string;
 
     constructor(
-        private auth: AuthService,
         private guestService: GuestsService,
         private route: ActivatedRoute,
         private router: Router,
@@ -36,13 +35,12 @@ export class GuestsComponent implements OnInit {
 
     ngOnInit() {
         this.route.paramMap.subscribe((params: ParamMap) => {
-            this.eventId = params.get('eventId');
-            this.guestService.getGuests(this.eventId).subscribe((result: Guest[]) => {
+            this.eventGuid = params.get('eventGuid');
+            this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
                 this.guests = result.map((guest: Guest) => {
                     guest.isUndecided = guest.isGoing === null;
                     return guest;
                 });
-                console.log(result)
             });
         });
 
@@ -54,9 +52,9 @@ export class GuestsComponent implements OnInit {
           name:  this.guestForm.controls['name'].value,
           email:  this.guestForm.controls['email'].value,
           isGoing: null,
-          eventId: Number(this.eventId)
+          eventGuid: this.eventGuid
          };
-    
+
         this.guestService.insert(guest).subscribe(response => {
           this.ngOnInit();
           this.guestForm.reset();
@@ -67,7 +65,7 @@ export class GuestsComponent implements OnInit {
       }
 
     delete(guest: Guest) {
-        this.guestService.delete(guest.guestId+"").subscribe(response => {
+        this.guestService.delete(guest.guestId + '').subscribe(response => {
             // reload page
             this.ngOnInit();
             this.snackbar.open('Successfully Deleted ' + guest.name, '', {

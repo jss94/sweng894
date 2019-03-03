@@ -165,16 +165,23 @@ namespace source.Queries
 
         public async Task<bool> DeactivateByServiceId(int id)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.vendorServices "
-                    + @"SET active = 0 WHERE id = @id AND active = 1;";
+                    string query = @"UPDATE occasions.vendorServices "
+                        + @"SET active = 0 WHERE id = @id AND active = 1;";
 
-                var result = connection.ExecuteAsync(query, new { id }).Result;
-                return true;
+                    var result = connection.ExecuteAsync(query, new { id }).Result;
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
             }
         }
 
@@ -185,16 +192,23 @@ namespace source.Queries
         /// <param name="id">Identifier.</param>
         public async Task<bool> DeactivateByVendorId(int id)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.vendorServices "
-                    + @"SET active = 0 WHERE vendorId = @id AND active = 1;";
+                    string query = @"UPDATE occasions.vendorServices "
+                        + @"SET active = 0 WHERE vendorId = @id AND active = 1;";
 
-                await connection.ExecuteAsync(query, new { id });
-                return true;
+                    await connection.ExecuteAsync(query, new { id });
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
             }
         }
 
@@ -205,16 +219,23 @@ namespace source.Queries
         /// <param name="id">Identifier.</param>
         public async Task<bool> ReactivateByVendorId(int id)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"UPDATE occasions.vendorServices "
-                    + @"SET active = 1 WHERE vendorId = @id AND active = 0;";
+                    string query = @"UPDATE occasions.vendorServices "
+                        + @"SET active = 1 WHERE vendorId = @id AND active = 0;";
 
-                await connection.ExecuteAsync(query, new { id });
-                return true;
+                    await connection.ExecuteAsync(query, new { id });
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                return false;
             }
         }
 
@@ -247,17 +268,24 @@ namespace source.Queries
 
         public async Task<List<VendorServices>> Search(VendorSearchProperties properties)
         {
-            using (var db = _database)
+            try
             {
-                var connection = db.Connection as MySqlConnection;
-                await connection.OpenAsync();
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
 
-                string query = @"SELECT * FROM occasions.vendorServices "
-                            + @" WHERE (active = 1 AND serviceType = @type AND price <= @maxPrice) " 
-                            + @"   AND (unitsAvailable >= @maxCapacity OR unitsAvailable IS NULL)";
+                    string query = @"SELECT * FROM occasions.vendorServices "
+                                + @" WHERE (active = 1 AND serviceType = @type AND price <= @maxPrice) "
+                                + @"   AND (unitsAvailable >= @maxCapacity OR unitsAvailable IS NULL)";
 
-                var result = await connection.QueryAsync<VendorServices>(query, properties);
-                return result.ToList();
+                    var result = await connection.QueryAsync<VendorServices>(query, properties);
+                    return result.ToList();
+                }
+            }
+            catch(Exception ex)
+            {
+                return null;
             }
         }
     }

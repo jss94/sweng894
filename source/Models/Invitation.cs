@@ -19,6 +19,12 @@ namespace source.Models
         public int eventId { get; set; }
 
         /// <summary>
+        /// Gets or sets the event GUID.
+        /// </summary>
+        /// <value>The event GUID.</value>
+        public string eventGuid { get; set; }
+
+        /// <summary>
         /// The invitation subject (i.e email subject)
         /// </summary> 
         public String subject { get; set; }

@@ -9,6 +9,12 @@ import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { FakeUser } from '../shared/models/fake-user.model';
+import { EmailService } from '../send-email/Services/email.service';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { MockMatDialog } from '../nav-menu/nav-menu.component.spec';
+import { MockMatSnackBar } from '../deactivate-user/deactivate-user.component.spec';
+import { InvitationService } from '../invitations/Services/invitation.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('EventDetailComponent', () => {
   let component: EventDetailComponent;
@@ -28,6 +34,18 @@ describe('EventDetailComponent', () => {
     };
   }
 
+  class MockInvitationService {}
+
+  class MockEmailService {
+    sendVendorQuestionEmail() {
+
+    }
+
+    sendEventInvitationEmail() {
+
+    }
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EventDetailComponent],
@@ -36,10 +54,15 @@ describe('EventDetailComponent', () => {
         RouterModule,
       ],
       providers: [
+        { provide: EmailService, useClass: MockEmailService },
+        { provide: MatDialog, useClass: MockMatDialog },
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: InvitationService, useClass: MockInvitationService },
         { provide: EventService, useClass: MockEventService },
         { provide: ActivatedRoute, useClass: MockActivedRoute },
         { provide: AuthService, useClass: MockAuthService }
       ],
+      schemas: [ NO_ERRORS_SCHEMA ]
     })
     .compileComponents();
   }));

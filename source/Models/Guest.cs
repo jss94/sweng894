@@ -12,5 +12,6 @@ namespace source.Models
         public string email { get; set; }
         public bool? isGoing { get; set; }
         public int eventId { get; set; }
+        public string eventGuid { get; set; }
     }
 }

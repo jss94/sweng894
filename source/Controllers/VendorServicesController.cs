@@ -235,7 +235,7 @@ namespace source.Controllers
         }
 
         /// <summary>
-        /// Gets a vendor service by vendor service id
+        /// Gets a vendor service by vendor service search properties
         /// </summary>
         /// <returns></returns>
         [HttpPost("search")]
@@ -244,6 +244,11 @@ namespace source.Controllers
             try
             {
                 var result = await _vendorServicesQuery.Search(properties);
+
+                if (result == null)
+                {
+                    return new NotFoundResult();
+                }
 
                 return new OkObjectResult(result);
             }
