@@ -13,6 +13,7 @@ import { InvitationService } from '../invitations/Services/invitation.service';
 import { InvitationModel } from '../invitations/Models/invitation.model';
 import { Observable } from 'rxjs';
 import { User } from '../shared/models/user.model';
+import { EventDialogComponent } from '../shared/components/event-dialog/event-dialog.component';
 
 @Component({
   selector: 'app-events',
@@ -80,22 +81,45 @@ export class EventsComponent implements OnInit {
 
   }
 
-   updateEvent(changedName: string, changedDescription: string, evnt: OccEvent): void {
-     evnt.name = changedName;
-     evnt.description = changedDescription;
+  onEditEventClicked(event: OccEvent): void {
+    const dialogRef = this.dialog.open(EventDialogComponent, {
+      width: '400px',
+      data: {
+          iconName: 'event',
+          title: 'Update ' + event.name,
+          buttonText: 'Update',
+          event: event
+      }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result.data.save) {
+          this.updateEvent(result.data.newName, result.data.newDescription, result.data.newDate, result.data.event);
+        }
+    });
+  }
+
+  updateEvent(changedName: string, changedDescription: string, changedDate: any, evnt: OccEvent): void {
+    evnt.name = changedName;
+    evnt.description = changedDescription;
+    evnt.dateTime = changedDate;
     this.eventService.updateEvent(evnt).subscribe(response => {
       // reload page
-     this.ngOnInit();
-   });
-   }
+      this.ngOnInit();
+      // this.snackbar.open('Response: ' + response, '', {
+      //   duration: 3000
+      // });
+    });
+  }
 
    onGuestsClicked(event: OccEvent): void {
     this.router.navigate(['/guests/' + event.eventId]);
    }
 
-   onViewEventClicked(event: OccEvent): void {
-    this.router.navigate(['/events/' + event.userName + '/' + event.eventId]);
-   }
+  onViewEventClicked(event: OccEvent): void {
+   this.router.navigate(['/events/' + event.userName + '/' + event.eventId]);
+  }
 
    deleteEvent(evnt: OccEvent): void {
     this.eventService.deleteEvent(evnt).subscribe(response => {

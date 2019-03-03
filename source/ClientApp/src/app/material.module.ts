@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { WarningDialogComponent } from './shared/components/warning-dialog/warning-dialog.component';
 import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
 import { EmailDialogComponent } from './shared/components/email-dialog/email-dialog.component';
+import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { EmailDialogComponent } from './shared/components/email-dialog/email-dia
     SnackbarComponent,
     WarningDialogComponent,
     EmailDialogComponent,
+    EventDialogComponent
   ]
 })
 export class MaterialModule { }

@@ -23,6 +23,7 @@ import { UpdateVendorServicesComponent } from './vendor-services/update-vendor-s
 import { VendorSearchComponent } from './vendor-search/vendor-search.component';
 import { VendorDetailsComponent } from './vendor-details/vendor-details.component';
 import {ReservationsVendorComponent} from './reservations/reservations-vendor/reservations-vendor.component';
+import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -66,6 +67,7 @@ const routes: Routes = [
         VendorSearchComponent,
         VendorDetailsComponent,
         ReservationsVendorComponent,
+        EventDialogComponent,
     ],
 
     imports: [
