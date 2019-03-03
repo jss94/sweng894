@@ -3,12 +3,37 @@
     <h1>Reservations</h1>
     
     <h2 ngOnInit="let x = newCount">New ({{newCount}})</h2>
-    <mat-accordion multi="true" class="accordion">
+    <mat-accordion multi="true">
 
         <div *ngFor="let newReservation of newReservations">
-            <mat-expansion-panel class="outer-expansion">
-                <mat-expansion-panel-header>{{newReservation}}</mat-expansion-panel-header>
-                    <div *ngFor="let service of services">{{service}}</div>
+
+            <mat-expansion-panel class="expansion-panel">
+
+                <mat-expansion-panel-header class="expansion-header">
+                    <div>
+                        {{newReservation}}
+                    </div>
+                        
+                    
+                </mat-expansion-panel-header>
+                
+                <div class="reservation-details">
+                    <div class="services-panel">
+                        <div *ngFor="let service of services">
+                            {{service}}
+                        </div>
+                    </div>
+    
+                    <div class="actions">
+                        <button appearance="outline" type="submit" mat-button>
+                            Accept
+                        </button>
+                        <button appearance="outline" type="submit" mat-button>
+                            Decline
+                        </button>
+                    </div>
+                </div>
+                
             </mat-expansion-panel>
         </div>
     </mat-accordion>
