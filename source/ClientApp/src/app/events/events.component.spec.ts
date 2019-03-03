@@ -38,6 +38,7 @@ describe('EventsComponent', () => {
         NoopAnimationsModule,
       ],
       providers: [
+        { provide: MatDialog, userClass: MockMatDialog},
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
