@@ -218,20 +218,21 @@ namespace UnitTests.Controllers
         public void DeleteEvent_ReturnEvent()
         {
             // arrange
-            var evnt = new Event { 
+            var evnt = new Event {
+                guid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac",
                 eventId = 123, 
                 name = "Surprise Party", 
                 description = "Lets throw a surprise party for John!"
                 };
                 
-            __eventQueryMock.Setup(x => x.GetEventById(evnt.eventId))
+            __eventQueryMock.Setup(x => x.GetEventByGuid(evnt.guid))
                 .Returns(Task.Factory.StartNew(() => evnt));
 
             __eventQueryMock.Setup(x => x.DeleteById(evnt.eventId))
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _evntController.Delete(evnt.eventId);
+            var task = _evntController.Delete(evnt.guid);
 
             // assert
             Assert.IsType<OkObjectResult>(task.Result);

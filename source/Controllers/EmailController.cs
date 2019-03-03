@@ -55,7 +55,7 @@ namespace source.Controllers
         /// <summary>
         /// Sends the given email to a list of Guests for the given event id.
         /// </summary>
-        /// <param name="eventId">The id of the Event.</param>
+        /// <param name="eventGuid">The id of the Event.</param>
         /// <param name="emailMsg">A EmailMessage. Initial Implementation - Converts to JSON and sends to SendGrid API.</param>
         [HttpPost("event/invitation/{eventGuid}")]
         public async Task<HttpStatusCode> PostEventInviteToGuests(string eventGuid, [FromBody]EmailMessage emailMsg)
