@@ -80,6 +80,10 @@
       <button *ngIf="event.isEditable" (click)="event.isEditable=!event.isEditable; updateEvent(name.value, description.value, event)">
           <mat-icon>save</mat-icon>
       </button> -->
+      <button mat-button (click)="onEditEventClicked(event)" matTooltip="Edit Event Details">
+        <mat-icon>edit</mat-icon>
+      </button>
+
       <button mat-button (click)="onViewEventClicked(event)" matTooltip="View Event Details">
         <mat-icon>visibility</mat-icon>
       </button>

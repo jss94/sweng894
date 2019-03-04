@@ -6,6 +6,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { User } from '../shared/models/user.model';
+import { EventDialogComponent } from '../shared/components/event-dialog/event-dialog.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-events',
@@ -24,6 +26,7 @@ export class EventsComponent implements OnInit {
   });
 
   constructor(
+    private dialog: MatDialog,
     private auth: AuthService,
     private eventService: EventService,
     private router: Router,
@@ -68,22 +71,45 @@ export class EventsComponent implements OnInit {
 
   }
 
-   updateEvent(changedName: string, changedDescription: string, evnt: OccEvent): void {
-     evnt.name = changedName;
-     evnt.description = changedDescription;
+  onEditEventClicked(event: OccEvent): void {
+    const dialogRef = this.dialog.open(EventDialogComponent, {
+      width: '400px',
+      data: {
+          iconName: 'event',
+          title: 'Update ' + event.name,
+          buttonText: 'Update',
+          event: event
+      }
+    });
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result.data.save) {
+          this.updateEvent(result.data.newName, result.data.newDescription, result.data.newDate, result.data.event);
+        }
+    });
+  }
+
+  updateEvent(changedName: string, changedDescription: string, changedDate: any, evnt: OccEvent): void {
+    evnt.name = changedName;
+    evnt.description = changedDescription;
+    evnt.dateTime = changedDate;
     this.eventService.updateEvent(evnt).subscribe(() => {
       // reload page
-     this.ngOnInit();
-   });
-   }
+      this.ngOnInit();
+      // this.snackbar.open('Response: ' + response, '', {
+      //   duration: 3000
+      // });
+    });
+  }
 
    onGuestsClicked(event: OccEvent): void {
     this.router.navigate(['/guests/' + event.guid]);
    }
 
-   onViewEventClicked(event: OccEvent): void {
+  onViewEventClicked(event: OccEvent): void {
     this.router.navigate(['/events/' + event.guid]);
-   }
+  }
 
    deleteEvent(evnt: OccEvent): void {
     this.eventService.deleteEvent(evnt).subscribe(() => {
