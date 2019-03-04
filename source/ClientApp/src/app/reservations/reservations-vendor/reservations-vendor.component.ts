@@ -32,7 +32,6 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.newCount = 2;
         this.newReservations = [
             "Reservation 1",
             "Reservation 2",
@@ -41,6 +40,7 @@ export class ReservationsVendorComponent implements OnInit {
             "Reservation 5",
             "Reservation 6",
         ];
+        this.newCount = this.newReservations.length;
         this.services = [
             "Service 1",
             "Service 2",
