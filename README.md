@@ -1,6 +1,6 @@
 # Build Status
 
-[![Build Status](https://travis-ci.com/jss94/sweng894.svg?branch=master)](https://travis-ci.com/jss94/sweng894)
+Master: [![Build Status](https://travis-ci.com/jss94/sweng894.svg?branch=master)](https://travis-ci.com/jss94/sweng894)
 
 # Install the following software:
 * Git: https://git-scm.com/
