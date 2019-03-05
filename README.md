@@ -1,3 +1,7 @@
+# Build Status
+
+[![Build Status](https://travis-ci.com/jss94/sweng894.svg?branch=master)](https://travis-ci.com/jss94/sweng894)
+
 # Install the following software:
 * Git: https://git-scm.com/
 * Node.js 10.15+ https://nodejs.org/en/
