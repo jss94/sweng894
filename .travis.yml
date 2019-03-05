@@ -1,0 +1,27 @@
+dist: trusty
+sudo: false
+ 
+language: node_js
+node_js:
+  - "8"
+  
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+ 
+cache:
+  directories:
+     - ./source/ClientApp/node_modules
+ 
+install:
+  - cd source/ClientApp/
+  - npm install
+ 
+script:
+# - npm run lint
+  - npm run testCI
+#  - npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
+#  - npm run e2e --protractor-config=e2e/protractor-ci.conf.js
