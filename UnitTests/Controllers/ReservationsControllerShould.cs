@@ -286,5 +286,54 @@ namespace UnitTests.Controllers
             Assert.Equal(statusTypes, usersResult);
         }
 
+        [Fact]
+        public void DeactivateReservation_ReturnsTrue()
+        {
+            //arrange
+            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+
+            //act
+            _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
+                .Returns(Task.Factory.StartNew(() => true));
+
+            var task = _sut.Deactivate(reservation.id.Value);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as bool?;
+            Assert.True(usersResult);
+        }
+
+        [Fact]
+        public void DeactivateService_ReturnsNotFound()
+        {
+            //arrange
+            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            
+            //act
+            _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
+                .Returns(Task.Factory.StartNew(() => false));
+
+            var task = _sut.Deactivate(reservation.id.Value);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public void DeactivateService_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+
+            //act
+            _reservationsQueryMock.Setup(x => x.Deactivate(1))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.Deactivate(1));
+        }
+
     }
 }

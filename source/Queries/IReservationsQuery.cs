@@ -16,5 +16,7 @@ namespace source.Queries
         Task<Reservation> Update(Reservation reservation);
         Task<List<Reservation>> GetByVendor(int vendorId);
         Task<List<Reservation>> GetByUserName(string userName);
+        Task<bool> Deactivate(int id);
     }
+
 }
