@@ -173,7 +173,24 @@ namespace source.Controllers
                 await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
+        }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                Reservation reservation = await _reservationsQuery.GetById(id);
+                if (reservation == null)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(reservation);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
         }
     }
 }

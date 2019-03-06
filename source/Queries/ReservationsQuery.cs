@@ -244,5 +244,32 @@ namespace source.Queries
                 return false;
             }
         }
+
+        public async Task<Reservation> GetById(int reservationId)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    string query =
+                          @"SELECT * from occasions.reservations WHERE active = 1 AND id = @reservationId;";
+
+                    var reservationResult = await connection.QueryAsync<Reservation>(query, new { reservationId });
+                    foreach (Reservation res in reservationResult)
+                    {
+                        await MapObjectsToReservation(res);
+                    }
+
+                    return reservationResult.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
 }
