@@ -19,6 +19,10 @@
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
+        <mat-form-field>
+          <input matInput type="time" placeholder="Time" formControlName="time">
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>Event Name</mat-label>
           <input
@@ -64,7 +68,7 @@
           <h5>{{event.name}}</h5>
         </div>
         <div>
-          <div>{{event.dateTime}}</div>
+          <div>{{event.dateTime | date:'medium'}}</div>
         </div>
       </div>
     </div>

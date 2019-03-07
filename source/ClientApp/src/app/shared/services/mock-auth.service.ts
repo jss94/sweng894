@@ -23,7 +23,7 @@ export class MockAuthService {
   }
 
   isAuthenticated(): any {
-    return null;
+    return true;
   }
 
   getUserProfile(): any {

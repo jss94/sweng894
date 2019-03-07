@@ -18,8 +18,10 @@ import { MatSnackBar } from '@angular/material';
 export class GuestsComponent implements OnInit {
     public guests: Guest[];
     private eventGuid: string;
+    isVendor = false;
 
-    constructor(
+  constructor(
+        private auth: AuthService,
         private guestService: GuestsService,
         private route: ActivatedRoute,
         private router: Router,
@@ -33,16 +35,22 @@ export class GuestsComponent implements OnInit {
         email: new FormControl('', [ Validators.required, Validators.email] ),
       });
 
-    ngOnInit() {
-        this.route.paramMap.subscribe((params: ParamMap) => {
-            this.eventGuid = params.get('eventGuid');
-            this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
-                this.guests = result.map((guest: Guest) => {
-                    guest.isUndecided = guest.isGoing === null;
-                    return guest;
-                });
-            });
-        });
+  ngOnInit() {
+    const userRole = this.auth.user$.subscribe(usr => {
+      if (usr.role === 'VENDOR') {
+        this.isVendor = true;
+      }
+    });
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.eventGuid = params.get('eventGuid');
+      this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
+          this.guests = result.map((guest: Guest) => {
+              guest.isUndecided = guest.isGoing === null;
+              return guest;
+          });
+      });
+    });
 
 
     }

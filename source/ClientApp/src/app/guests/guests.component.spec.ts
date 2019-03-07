@@ -15,6 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router, Routes } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { FakeGuests, FakeGuest } from './Models/fake.guest.model';
+import { MockAuthService } from '../shared/services/mock-auth.service';
 
 describe('GuestsComponent', () => {
   let component: GuestsComponent;
@@ -31,15 +32,6 @@ describe('GuestsComponent', () => {
 
     }
   }
-
-  class MockAuthService {
-    user$ = of(new FakeUser);
-
-    get(aString: string): Observable<any> {
-      return of(new FakeUser);
-    }
-  }
-
 
   class MockParam {
     get(params: string): string {
@@ -84,6 +76,7 @@ describe('GuestsComponent', () => {
   it('should populate with guests', () => {
     // assign
     const fakeGuests = new FakeGuests().arr;
+    spyOn(mockAuthService, 'user$').and.returnValue(of(new FakeUser()));
     spyOn(mockGuestsService, 'getGuests').and.returnValue(of(fakeGuests));
 
     // act

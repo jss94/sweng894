@@ -128,9 +128,8 @@ namespace source.Queries
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
-
                 string query = @"UPDATE occasions.events"
-                    + " SET name=@name, description=@description, dateTime=STR_TO_DATE(@dateTime,'%Y-%m-%d %h:%i:%s')"
+                    + " SET name=@name, description=@description, dateTime=STR_TO_DATE(@dateTime,'%Y-%m-%d %H:%i:%s')"
                     + " WHERE eventId =  @eventId";
 
                 await Task.CompletedTask;

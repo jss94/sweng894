@@ -1,8 +1,8 @@
-<div class="page-container"> 
-    
+<div class="page-container">
+
     <h1>Guest List</h1>
 
-    <mat-accordion>
+    <mat-accordion *ngIf="auth.isAuthenticated() && !isVendor">
         <mat-expansion-panel>
 
             <mat-expansion-panel-header>
@@ -69,15 +69,15 @@
                 <div class="status">
                     <mat-icon *ngIf="guest.isUndecided">info</mat-icon>
                 </div>
-                
-                <button mat-button (click)="editClicked(guest)">
+
+                <button *ngIf="auth.isAuthenticated() && !isVendor" mat-button (click)="editClicked(guest)">
                     <mat-icon>edit</mat-icon>
                 </button>
-            
-                <button mat-button (click)="delete(guest)">
+
+                <button *ngIf="auth.isAuthenticated() && !isVendor" mat-button (click)="delete(guest)">
                     <mat-icon>delete</mat-icon>
                 </button>
-                
+
             </div>
         </div>
     </div>
