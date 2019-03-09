@@ -7,6 +7,8 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { EventService } from '../events/Services/event.service';
+import { OccEvent } from '../events/Models/occ-event.model';
 
 @Component(
     {
@@ -19,6 +21,7 @@ export class GuestsComponent implements OnInit {
     public guests: Guest[];
     private eventGuid: string;
     isVendor = false;
+    event: OccEvent;
 
   constructor(
         private auth: AuthService,
@@ -26,6 +29,7 @@ export class GuestsComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar,
+        private eventService: EventService
         ) {
 
     }
@@ -44,11 +48,16 @@ export class GuestsComponent implements OnInit {
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.eventGuid = params.get('eventGuid');
+
       this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
           this.guests = result.map((guest: Guest) => {
               guest.isUndecided = guest.isGoing === null;
               return guest;
           });
+      });
+
+      this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
+        this.event = result;
       });
     });
 
