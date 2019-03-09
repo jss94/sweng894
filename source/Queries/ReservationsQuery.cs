@@ -217,5 +217,59 @@ namespace source.Queries
             reservation.vendorService = await _vendorServicesQuery.GetById(reservation.vendorServiceId.Value);
             reservation.evt = await _eventQuery.GetEventById(reservation.eventId.Value);
         }
+
+        /// <summary>
+        /// Deactivates a reservation
+        /// </summary>
+        /// <param name="id">Reservation Id</param>
+        /// <returns>True/False</returns>
+        public async Task<bool> Deactivate(int id)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+
+                    string query = @"UPDATE occasions.reservations "
+                        + @"SET active = 0 WHERE id = @id AND active = 1;";
+
+                    await connection.ExecuteAsync(query, new { id });
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<Reservation> GetById(int reservationId)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    string query =
+                          @"SELECT * from occasions.reservations WHERE active = 1 AND id = @reservationId;";
+
+                    var reservationResult = await connection.QueryAsync<Reservation>(query, new { reservationId });
+                    foreach (Reservation res in reservationResult)
+                    {
+                        await MapObjectsToReservation(res);
+                    }
+
+                    return reservationResult.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
 }
