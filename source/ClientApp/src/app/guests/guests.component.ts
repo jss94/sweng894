@@ -7,6 +7,8 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
+import { EventService } from '../events/Services/event.service';
+import { OccEvent } from '../events/Models/occ-event.model';
 
 @Component(
     {
@@ -18,12 +20,16 @@ import { MatSnackBar } from '@angular/material';
 export class GuestsComponent implements OnInit {
     public guests: Guest[];
     private eventGuid: string;
+    isVendor = false;
+    event: OccEvent;
 
-    constructor(
+  constructor(
+        private auth: AuthService,
         private guestService: GuestsService,
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar,
+        private eventService: EventService
         ) {
 
     }
@@ -33,16 +39,27 @@ export class GuestsComponent implements OnInit {
         email: new FormControl('', [ Validators.required, Validators.email] ),
       });
 
-    ngOnInit() {
-        this.route.paramMap.subscribe((params: ParamMap) => {
-            this.eventGuid = params.get('eventGuid');
-            this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
-                this.guests = result.map((guest: Guest) => {
-                    guest.isUndecided = guest.isGoing === null;
-                    return guest;
-                });
-            });
-        });
+  ngOnInit() {
+    const userRole = this.auth.user$.subscribe(usr => {
+      if (usr.role === 'VENDOR') {
+        this.isVendor = true;
+      }
+    });
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.eventGuid = params.get('eventGuid');
+
+      this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
+          this.guests = result.map((guest: Guest) => {
+              guest.isUndecided = guest.isGoing === null;
+              return guest;
+          });
+      });
+
+      this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
+        this.event = result;
+      });
+    });
 
 
     }

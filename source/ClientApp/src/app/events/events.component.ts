@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { User } from '../shared/models/user.model';
 import { EventDialogComponent } from '../shared/components/event-dialog/event-dialog.component';
 import { MatDialog } from '@angular/material';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-events',
@@ -22,7 +23,8 @@ export class EventsComponent implements OnInit {
   eventForm = new FormGroup({
     date: new FormControl('', [ Validators.required ]),
     name: new FormControl('', [ Validators.required ]),
-    description: new FormControl('', [ Validators.required] ),
+    description: new FormControl('', [Validators.required]),
+    time: new FormControl('', Validators.required),
   });
 
   constructor(
@@ -31,6 +33,7 @@ export class EventsComponent implements OnInit {
     private eventService: EventService,
     private router: Router,
     private snackbar: MatSnackBar,
+    private datePipe: DatePipe,
    ) {
   }
 
@@ -43,6 +46,8 @@ export class EventsComponent implements OnInit {
         this.setEvents(result);
       });
     }
+    // default time for new event
+    this.eventForm.controls['time'].setValue('12:00');
   }
 
   setEvents(user: User) {
@@ -53,11 +58,17 @@ export class EventsComponent implements OnInit {
   }
 
   onCreate(): void {
+
+    // get calendar date, time and concatenate together for one date
+    const evntDate = this.eventForm.controls['date'].value;
+    const evntTime = this.eventForm.controls['time'].value;
+    const evDate = this.createDateWithTime(evntDate, evntTime);
+
     const event: OccEvent = {
       userName: this.userName,
       name:  this.eventForm.controls['name'].value,
       description:  this.eventForm.controls['description'].value,
-      dateTime: this.eventForm.controls['date'].value.toISOString().slice(0, 19).replace('T', ' '),
+      dateTime: evDate,
       created: new Date().toISOString().slice(0, 19).replace('T', ' '),
      };
 
@@ -69,6 +80,14 @@ export class EventsComponent implements OnInit {
       });
     });
 
+  }
+
+  createDateWithTime(dateWithoutTime: any, time: any): any {
+    const timeArr = time.split(':');
+    dateWithoutTime.setHours(timeArr[0]);
+    dateWithoutTime.setMinutes(timeArr[1]);
+    dateWithoutTime.setSeconds(0);
+    return this.datePipe.transform(dateWithoutTime, 'yyyy-MM-dd HH:mm:ss');
   }
 
   onEditEventClicked(event: OccEvent): void {
@@ -85,7 +104,9 @@ export class EventsComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(result => {
         if (result.data.save) {
-          this.updateEvent(result.data.newName, result.data.newDescription, result.data.newDate, result.data.event);
+          const newDate = new Date(result.data.newDate);
+          const updatedDate = this.createDateWithTime(newDate, result.data.eventTime);
+          this.updateEvent(result.data.newName, result.data.newDescription, updatedDate, result.data.event);
         }
     });
   }
