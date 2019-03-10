@@ -15,12 +15,17 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router, Routes } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { FakeGuests, FakeGuest } from './Models/fake.guest.model';
+import { MockAuthService } from '../shared/services/mock-auth.service';
+import { MockEventService } from '../events/Services/mock-event.service';
+import { EventService } from '../events/Services/event.service';
+import { FakeOccEvent } from '../events/Models/fake-occ-event.model';
 
 describe('GuestsComponent', () => {
   let component: GuestsComponent;
   let fixture: ComponentFixture<GuestsComponent>;
   let mockGuestsService: GuestsService;
   let mockAuthService: AuthService;
+  let mockEventService: EventService;
 
 
   const routes: Routes = [
@@ -31,15 +36,6 @@ describe('GuestsComponent', () => {
 
     }
   }
-
-  class MockAuthService {
-    user$ = of(new FakeUser);
-
-    get(aString: string): Observable<any> {
-      return of(new FakeUser);
-    }
-  }
-
 
   class MockParam {
     get(params: string): string {
@@ -65,6 +61,7 @@ describe('GuestsComponent', () => {
         { provide: GuestsService, useClass: MockGuestsService },
         { provide: AuthService, useClass: MockAuthService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: EventService, useClass: MockEventService },
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
@@ -73,6 +70,7 @@ describe('GuestsComponent', () => {
   beforeEach(() => {
     mockGuestsService = TestBed.get(GuestsService);
     mockAuthService = TestBed.get(AuthService);
+    mockEventService = TestBed.get(EventService);
     fixture = TestBed.createComponent(GuestsComponent);
     component = fixture.componentInstance;
   });
@@ -84,7 +82,11 @@ describe('GuestsComponent', () => {
   it('should populate with guests', () => {
     // assign
     const fakeGuests = new FakeGuests().arr;
+    const mockEvent = new FakeOccEvent();
+
+    spyOn(mockAuthService, 'user$').and.returnValue(of(new FakeUser()));
     spyOn(mockGuestsService, 'getGuests').and.returnValue(of(fakeGuests));
+    spyOn(mockEventService, 'getEvent').and.returnValue(of(mockEvent));
 
     // act
     fixture.detectChanges();

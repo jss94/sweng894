@@ -11,6 +11,7 @@ import { of } from 'rxjs/internal/observable/of';
 
 import { EventDialogComponent } from './event-dialog.component';
 import { FakeOccEvent } from 'src/app/events/Models/fake-occ-event.model';
+import { DatePipe } from '@angular/common';
 
 export class MockMatDialogRefEvent extends MockMatDialogRef {
   result: any;
@@ -76,9 +77,11 @@ describe('EventDialogComponent', () => {
   it('should update event', () => {
     spyOn(mockDialogRef, 'close').and.callThrough();
 
+    const eventDate = new Date('1970-01-01 12:00:00');
     component.editEventForm.controls['name'].setValue('A New Event Name');
-    component.editEventForm.controls['date'].setValue(new Date('1970-01-01 12:00:00'));
+    component.editEventForm.controls['date'].setValue(eventDate);
     component.editEventForm.controls['description'].setValue('A New Event Description');
+    component.editEventForm.controls['time'].setValue('11:00');
 
     component.onClick(true);
 
@@ -86,10 +89,11 @@ describe('EventDialogComponent', () => {
     expect(mockDialogRef.close).toHaveBeenCalledWith({
       data: {
         newName: 'A New Event Name',
-        newDate: new Date('1970-01-01 12:00:00').toISOString().slice(0, 19).replace('T', ' '),
+        newDate: eventDate,
         newDescription: 'A New Event Description',
         save: true,
-        event: eut
+        event: eut,
+        eventTime: '11:00'
       }
     });
   });

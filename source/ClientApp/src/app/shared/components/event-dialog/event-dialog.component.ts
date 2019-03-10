@@ -12,30 +12,41 @@ export class EventDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<EventDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: EventDialogData
+    @Inject(MAT_DIALOG_DATA) public data: EventDialogData,
   ) {}
+
+  eventTime: any;
 
   editEventForm = new FormGroup({
     date: new FormControl(''),
     name: new FormControl(''),
     description: new FormControl(''),
+    time: new FormControl(''),
   });
 
   ngOnInit() {
     this.editEventForm.controls['name'].setValue(this.data.event.name);
     this.editEventForm.controls['description'].setValue(this.data.event.description);
-    this.editEventForm.controls['date'].setValue(new Date(this.data.event.dateTime));
-    // console.log('%s', this.data.event.dateTime);
+
+    if (this.data.event.dateTime != null) {
+      this.editEventForm.controls['date'].setValue(new Date(this.data.event.dateTime));
+    }
+
+    if (this.data.event.dateTime != null) {
+      this.eventTime = this.data.event.dateTime;
+    }
+
   }
 
   onClick(affirm: boolean): void {
     this.dialogRef.close({
       data: {
         newName: this.editEventForm.controls['name'].value,
-        newDate: this.editEventForm.controls['date'].value.toISOString().slice(0, 19).replace('T', ' '),
+        newDate: this.editEventForm.controls['date'].value,
         newDescription: this.editEventForm.controls['description'].value,
         save: affirm,
-        event: this.data.event
+        event: this.data.event,
+        eventTime: this.editEventForm.controls['time'].value,
       }
     });
   }
