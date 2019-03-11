@@ -1,3 +1,8 @@
+#search-map {
+  width: 100%;
+  height: 55vh;
+}
+
 h1 {
   padding: 10px;
 }
@@ -70,7 +75,6 @@ mat-form-field {
   width: 100%;
 }
 
- 
 .vendor-services-item {
   width: 100%;
   margin-top: 10px;
@@ -87,4 +91,8 @@ mat-form-field {
 
 .vendor-services-description{
   max-width: 400px;
+}
+
+.address .mat-form-field{
+  width:675px !important;
 }

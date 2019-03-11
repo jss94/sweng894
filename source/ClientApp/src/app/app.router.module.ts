@@ -46,6 +46,7 @@ const routes: Routes = [
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
     { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
     { path: 'reservations-vendor', component: ReservationsVendorComponent },
+    { path: 'google-map', component: GoogleMapComponent },
   ];
 
 @NgModule({

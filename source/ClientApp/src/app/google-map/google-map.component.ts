@@ -19,9 +19,9 @@ export class GoogleMapComponent implements OnInit {
     // The location of Penn State University
     const psu = {lat: 40.7982, lng: -77.8599};
     // The map, centered at Penn State University
-    const map = this.mapService.setMap(document.getElementById('map'), {zoom: 7, center: psu});
+    const map = this.mapService.setMap(document.getElementById('sample-map'), {zoom: 7, center: psu});
     // The marker, positioned at Penn State University
     const marker = this.mapService.setMarker(psu, map);
-}
+  }
 
 }
