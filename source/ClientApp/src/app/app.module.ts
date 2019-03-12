@@ -8,7 +8,7 @@ import { UsersService } from './users/Services/users.service';
 import { EventService } from './events/Services/event.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RoutingModule } from './app.router.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { AuthService } from './shared/services/auth.service';
 import { GoogleMapsService } from './google-map/Services/google-maps.service';
 import { MatSnackBar } from '@angular/material';
@@ -58,6 +58,7 @@ import { GooglePlacesService } from './vendor-search/Services/google-places.serv
     InvitationService,
     ReservationsService,
     GooglePlacesService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

@@ -11,6 +11,11 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
+
+  <mat-form-field>
+    <input matInput type="time" placeholder="Time" formControlName="time" value="{{eventTime | date:'HH:mm'}}">
+  </mat-form-field>
+
   <br>
 
   <mat-form-field appearance="outline">

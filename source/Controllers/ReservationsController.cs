@@ -153,5 +153,44 @@ namespace source.Controllers
                 return new BadRequestResult();
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Deactivate(int id)
+        {
+            try
+            {
+                bool result = await _reservationsQuery.Deactivate(id);
+
+                if (result == false)
+                {
+                    return new NotFoundResult();
+                }
+
+                return new OkObjectResult(result);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                Reservation reservation = await _reservationsQuery.GetById(id);
+                if (reservation == null)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(reservation);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
     }
 }

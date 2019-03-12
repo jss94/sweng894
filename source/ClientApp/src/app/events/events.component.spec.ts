@@ -16,6 +16,7 @@ import { InvitationService } from '../invitations/Services/invitation.service';
 import { FakeOccEvents } from './Models/fake-occ-event.model';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { of } from 'rxjs/internal/observable/of';
+import { DatePipe } from '@angular/common';
 
 describe('EventsComponent', () => {
   let component: EventsComponent;
@@ -42,6 +43,7 @@ describe('EventsComponent', () => {
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
+        { provide: DatePipe, useClass: DatePipe},
         { provide: Router, useValue: { navigate: () => {} } }
       ],
       schemas: [ NO_ERRORS_SCHEMA ]

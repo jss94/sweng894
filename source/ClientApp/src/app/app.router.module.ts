@@ -25,6 +25,7 @@ import { VendorDetailsComponent } from './vendor-details/vendor-details.componen
 import {ReservationsVendorComponent} from './reservations/reservations-vendor/reservations-vendor.component';
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 import { GuestEntryComponent } from './guest-entry/guest-entry.component';
+import { ReserveComponent } from './reservations/reserve/reserve.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -47,6 +48,7 @@ const routes: Routes = [
     { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
     { path: 'reservations-vendor', component: ReservationsVendorComponent },
     { path: 'google-map', component: GoogleMapComponent },
+    { path: 'reserve', component: ReserveComponent },
   ];
 
 @NgModule({
@@ -72,6 +74,7 @@ const routes: Routes = [
         VendorDetailsComponent,
         ReservationsVendorComponent,
         EventDialogComponent,
+        ReserveComponent,
     ],
 
     imports: [
