@@ -60,11 +60,11 @@
 
 </div>
 
-<div class="item-container" *ngFor="let service of services">
-  <div class="vendor-services-item">
+<div class="item-container" *ngFor="let service of claimedServices">
+  <div class="claimed-vendor-services-item">
 
     <div class="header">
-      <h6>{{service.serviceName}}</h6>
+      <h6>{{service.name}}</h6>
     </div>
     
     <div class="description">
@@ -73,26 +73,41 @@
 
     <div class="value">
       <div>
-          <h6 *ngIf="service.flatFee">Flat fee</h6>
-          <h6 *ngIf="!service.flatFee">Price per unit</h6>
+          <h6 *ngIf="claimedServices.flatFee">Flat fee</h6>
+          <h6 *ngIf="!claimedServices.flatFee">Price per unit</h6>
       </div>
       <div>
           <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
       </div>
       <div>
-          <h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
+          <h6 *ngIf="claimedServices.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
       </div>
     </div>
 
     <div class="actions">
-      
-        <button mat-button (click)="onViewClicked(service)">
-            <mat-icon>remove_red_eye</mat-icon>
-        </button>
-        
+      <button mat-button (click)="onDetailsClicked(service)">
+          <mat-icon>remove_red_eye</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="item-container" *ngFor="let service of unclaimedServices">
+  <div class="vendor-services-item">
+
+    <div class="header">
+      <h6>{{service.serviceName}}</h6>
     </div>
 
+    <div class="value">
+      <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
+    </div>
 
+    <div class="actions">
+      <button mat-button (click)="onClaimClicked(service)">
+          <mat-icon>add_location</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
 

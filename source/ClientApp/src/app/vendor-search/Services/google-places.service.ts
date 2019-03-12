@@ -1,7 +1,7 @@
 /// <reference types="@types/googlemaps" />
 
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { GoogleMapsService } from 'src/app/google-map/Services/google-maps.service';
 
 @Injectable()
@@ -48,6 +48,21 @@ export class GooglePlacesService {
             });
         });
         return locations;
+    }
+
+    getVendorById(id: string, map: google.maps.Map): Observable<any> {
+        const details = new Subject();
+        const service = new google.maps.places.PlacesService(map);
+        const request = { placeId: id };
+        service.getDetails(request, function(result) {
+            details.next(result);
+            const marker = new google.maps.Marker({
+                map: map,
+                position: result.geometry.location
+            });
+        });
+
+        return details;
     }
 
     removeMarkers() {

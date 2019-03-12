@@ -6,7 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { VendorServices } from '../shared/models/vendor-services.model';
 import { Router } from '@angular/router';
 import { GooglePlacesService } from './Services/google-places.service';
-import { of, Subject } from 'rxjs';
+import { of, Subject, Observable, forkJoin } from 'rxjs';
 import { GoogleMapsService } from '../google-map/Services/google-maps.service';
 import { VendorService } from '../vendors/Services/vendor.service';
 
@@ -16,7 +16,8 @@ import { VendorService } from '../vendors/Services/vendor.service';
   styleUrls: [ './vendor-search.component.css']
 })
 export class VendorSearchComponent implements OnInit {
-  services: VendorServices[];
+  unclaimedServices: VendorServices[];
+  claimedServices: VendorServices[];
 
   map: google.maps.Map;
   geolocation$ = new Subject();
@@ -99,7 +100,36 @@ export class VendorSearchComponent implements OnInit {
   }
 
   onSearchClicked() {
-    this.searchVendors();
+    this.searchUnclaimedVendors().subscribe((result) => {
+      this.unclaimedServices = result;
+    });
+
+    forkJoin(
+      this.searchClaimedVendors(),
+      this.searchUnclaimedVendors()).subscribe(([claimed, unclaimed]) => {
+        this.removeDuplicateVendors(claimed, unclaimed);
+      });
+  }
+
+  onResetClicked() {
+    this.searchForm.reset();
+  }
+
+  removeDuplicateVendors(claimed: VendorServices[], unclaimed: VendorServices[]) {
+
+    unclaimed = unclaimed.filter(service => {
+      const existingService = claimed
+        .find(c => c.googleId === service.googleId);
+      // if service doesn't exist then return true and keep the service.
+      return existingService === undefined ? true : false;
+    });
+
+    this.unclaimedServices = unclaimed;
+    this.claimedServices = claimed;
+  }
+
+  searchClaimedVendors(): Observable<VendorServices[]> {
+    const services = new Subject<VendorServices[]>();
 
     const properties = {
       maxPrice: this.searchForm.controls['price'].value || 999999,
@@ -107,20 +137,16 @@ export class VendorSearchComponent implements OnInit {
       zip: this.searchForm.controls['location'].value,
       type: this.searchForm.controls['category'].value,
     };
-
-    this.vendorSearchService.searchVendorServices(properties).subscribe((result) => {
-      console.log(result);
-      this.services = result;
-    }, error => {
-      console.log('SEARCH ERROR', error);
+    this.vendorSearchService.searchVendorServices(properties)
+    .subscribe(s => {
+      services.next(s || []);
     });
+
+    return services;
   }
 
-  onResetClicked() {
-    this.searchForm.reset();
-  }
-
-  searchVendors() {
+  searchUnclaimedVendors(): Observable<VendorServices[]> {
+    const services = new Subject<VendorServices[]>();
     const address = this.searchForm.controls['location'].value;
     this.googlePlacesService.getGeoLocationFromAddress(address)
       .subscribe((location: {lat: number, lng: number}) => {
@@ -131,22 +157,30 @@ export class VendorSearchComponent implements OnInit {
         };
 
         this.googlePlacesService.locationSearch(request, this.map).subscribe(results => {
-          const services: VendorServices[] = results.map(loc => {
+          const vendorServices: VendorServices[] = results.map(loc => {
             return {
               price: 0,
               vendorId: 0,
+              googleId: loc.id,
               serviceType: loc.types.toString(),
               serviceName: loc.name,
               serviceDescription: '',
             };
           });
-          this.services = services;
+          services.next(vendorServices);
         });
       });
+
+      return services;
   }
 
-  onViewClicked(service: VendorServices) {
-    this.router.navigate(['vendor-details/' + service.vendorId]);
+  onClaimClicked(service: VendorServices) {
+    const type = this.searchForm.controls['category'].value;
+    this.router.navigate(['claim-vendor/' + type + '/' + service.googleId]);
+  }
+
+  onDetailsClicked(service: VendorServices) {
+    this.router.navigate(['vendor-details', service.vendorId]);
   }
 
   getCategory() {

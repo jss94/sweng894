@@ -266,7 +266,7 @@ namespace source.Queries
         }
 
 
-        public async Task<List<VendorServices>> Search(VendorSearchProperties properties)
+        public async Task<IEnumerable<VendorServices>> Search(VendorSearchProperties properties)
         {
             try
             {
@@ -280,7 +280,7 @@ namespace source.Queries
                                 + @"   AND (unitsAvailable >= @maxCapacity OR unitsAvailable IS NULL)";
 
                     var result = await connection.QueryAsync<VendorServices>(query, properties);
-                    return result.ToList();
+                    return result;
                 }
             }
             catch(Exception ex)

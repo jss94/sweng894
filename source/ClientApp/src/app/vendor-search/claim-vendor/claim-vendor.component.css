@@ -1,0 +1,35 @@
+h1 {
+  padding: 10px;
+}
+
+.vendor-services-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+mat-form-field {
+  padding-top: 5px;
+  padding-right: 20px;
+}
+
+mat-action-row {
+  border-top-style: none;
+}
+
+.options {
+  padding-left: 5px;
+}
+
+.vendor-services-icon {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.item-container {
+  width: 100%;
+}
