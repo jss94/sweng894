@@ -1,3 +1,43 @@
-<p>
-  reserve works!
-</p>
+<div *ngIf="vendorServiceModel">
+
+<div class="reservation-container">
+
+      <h1>Reserve {{vendorServiceModel.serviceName}}</h1>
+  
+      <div>Select your event:
+        
+      </div>
+
+
+    <div class="vendor-services-item">
+        <div class="header">
+          <div class="vendor-services-icon">
+            <mat-icon>service</mat-icon>
+          </div>
+          <div>
+            <div>
+              <h5 class='vendor-services-text'>{{vendorServiceModel.serviceType}}</h5>
+            </div>            
+          </div>
+        </div>
+    
+        <div>
+            <h6>{{vendorServiceModel.serviceName}}</h6>
+        </div>
+        <div>
+            <h6 class='vendor-services-description'>{{vendorServiceModel.serviceDescription}}</h6>
+        </div>
+        <div>
+            <h6 *ngIf="vendorServiceModel.flatFee">Flat fee</h6>
+            <h6 *ngIf="!vendorServiceModel.flatFee">Price per unit</h6>
+        </div>
+        <div>
+            <h6>{{vendorServiceModel.price | currency:'USD':symbol:'1.2-2'}}</h6>
+        </div>
+        <div>
+            <h6 *ngIf="vendorServiceModel.unitsAvailable != null">{{vendorServiceModel.unitsAvailable}} units available</h6>
+        </div>
+      
+
+  </div>
+</div>
