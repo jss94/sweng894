@@ -27,7 +27,7 @@ export class ReservationsService {
     return this.auth.delete('reservation/' + res.id);
   }
 
-  getReservationByVendorId(id?: number): Observable<Reservation> {
+  getReservationByVendorId(id?: number): Observable<Reservation[]> {
     return this.auth.get('reservation/vendor/' + id);
   }
 

@@ -11,24 +11,22 @@
 
                 <mat-expansion-panel-header class="expansion-header">
                     <div>
-                        {{newReservation}}
+                        {{newReservation.userName}}
                     </div>
-                        
-                    
                 </mat-expansion-panel-header>
                 
                 <div class="reservation-details">
                     <div class="services-panel">
-                        <div *ngFor="let service of services">
-                            {{service}}
+                        <div>
+                            {{newReservation.service.serviceName}}
                         </div>
                     </div>
     
                     <div class="actions">
-                        <button appearance="outline" type="submit" mat-button>
+                        <button class="button" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(newReservation)">
                             Accept
                         </button>
-                        <button appearance="outline" type="submit" mat-button>
+                        <button class="button" appearance="outline" type="submit" mat-button (click)="onDeclineClicked(newReservation)">
                             Decline
                         </button>
                     </div>
