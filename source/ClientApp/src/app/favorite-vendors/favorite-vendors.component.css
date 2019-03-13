@@ -1,0 +1,38 @@
+h1 {
+    padding: 10px;
+  }
+  
+  .header {
+    width: 25%;
+  }
+  
+  .description {
+    width: 25%;
+  }
+  
+  .value {
+    width: 25%;
+  } 
+  
+  .header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .item-container {
+    width: 100%;
+  }
+   
+  .favorite-vendor-item {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #E5E8EC;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .favorite-vendor-item:hover {
+    background-color: rgb(193, 198, 206);
+  }

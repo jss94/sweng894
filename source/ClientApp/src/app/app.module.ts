@@ -21,6 +21,7 @@ import { EmailService } from './send-email/Services/email.service';
 import { VendorSearchService } from './vendor-search/Services/vendor-search.service';
 import { InvitationService } from './invitations/Services/invitation.service';
 import { ReservationsService } from './reservations/Services/reservations.service';
+import { FavoriteVendorsService } from './favorite-vendors/Services/favorite-vendors.service';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { ReservationsService } from './reservations/Services/reservations.servic
     VendorSearchService,
     InvitationService,
     ReservationsService,
-    DatePipe
+    DatePipe,
+    FavoriteVendorsService
   ],
   bootstrap: [AppComponent]
 })

@@ -9,6 +9,12 @@
           <mat-icon>email</mat-icon>
           <span>Ask a Question</span>
       </button>
+      <br>
+        <button mat-button (click)="toggleFavorite()">
+          <mat-icon>star-rate</mat-icon>
+          <span *ngIf="isFavorite == true">Remove from Favorites</span>
+          <span *ngIf="isFavorite == false">Add to Favorites</span>
+        </button>
     </div>
     <div class="column right">
         <div class="box">

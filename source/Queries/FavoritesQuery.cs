@@ -12,17 +12,25 @@ namespace source.Queries
 {
     public class FavoritesQuery : IFavoritesQuery
     {
-
         /// <summary>
         /// database object
         /// </summary>
         protected readonly IAppDatabase _database;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="db">IAppDatabase via dependency injection</param>
         public FavoritesQuery(IAppDatabase db)
         {
             _database = db;
         }
 
+        /// <summary>
+        /// Adds a new favorite vendor record
+        /// </summary>
+        /// <param name="favorite">Vendor id</param>
+        /// <returns>The added favorite if successful; null otherwise</returns>
         public async Task<Favorite> Add(Favorite favorite)
         {
             try
@@ -35,8 +43,6 @@ namespace source.Queries
                     string query = @"INSERT INTO occasions.favorites (userName, vendorId) "
                         + @"VALUES (@userName, @vendorId)";
 
-                    //await Task.CompletedTask;
-
                     var affectedRows = await connection.ExecuteAsync(query, favorite);
 
                     if (affectedRows == 0)
@@ -45,8 +51,8 @@ namespace source.Queries
                     }
                     else
                     {
-                        var newFavorite = await GetFavorite(favorite.userName, favorite.vendorId);
-                        return newFavorite;
+                         var newFavorite = await GetFavorite(favorite);
+                         return newFavorite;
                     }                    
                 }
             }
@@ -56,6 +62,11 @@ namespace source.Queries
             }
         }
 
+        /// <summary>
+        /// Delete a favorite vendor.
+        /// </summary>
+        /// <returns>True when the favorite was successfully deleted; False otherwise</returns>
+        /// <param name="favorite">The favorite to delete</param>
         public async Task<bool> Delete(Favorite favorite)
         {
             try
@@ -81,6 +92,11 @@ namespace source.Queries
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets a list of favorite veddor records for a particular user
+        /// </summary>
+        /// <param name="userName">User's username</param>
+        /// <returns>List of favorite vendor records</returns>
         public async Task<List<Favorite>> GetAllByUserName(string userName)
         {
             try
@@ -90,7 +106,7 @@ namespace source.Queries
                     var connection = db.Connection as MySqlConnection;
                     await connection.OpenAsync();
                     string query =
-                          @"SELECT * from occasions.favorites WHERE userName = @userName;";
+                        @"SELECT * from occasions.favorites WHERE userName = @userName;";
 
                     var favorites = connection.QueryAsync<Favorite>(query, new { userName }).Result.ToList();
                     return favorites;
@@ -100,11 +116,14 @@ namespace source.Queries
             {
                 return null;
             }
-
-            //throw new NotImplementedException();
         }
 
-        protected async Task<Favorite> GetFavorite(string userName, int vendorId)
+        /// <summary>
+        /// Gets a single favorite vendor record
+        /// </summary>
+        /// <param name="fav">The favorite to retrieve</param>
+        /// <returns>A favorite vendor record or null if one doesn't exist</returns>
+        public async Task<Favorite> GetFavorite(Favorite fav)
         {
             try
             {
@@ -119,7 +138,7 @@ namespace source.Queries
                     string query =
                           @"SELECT * from occasions.favorites WHERE userName = @userName AND vendorId = @vendorId;";
 
-                    var result = connection.QueryAsync<Favorite>(query, new { userName, vendorId }).Result.ToList();
+                    var result = connection.QueryAsync<Favorite>(query, new { fav.userName, fav.vendorId }).Result.ToList(); 
 
                     var favorite = result.FirstOrDefault();
 
@@ -130,8 +149,6 @@ namespace source.Queries
             {
                 return null;
             }
-
-            //throw new NotImplementedException();
         }
     }
 }

@@ -1,0 +1,36 @@
+<div class="item-container" *ngFor="let vendor of favoriteVendors">
+    <div class="favorite-vendor-item">
+
+      <div class="header">
+        <h6>{{vendor.name}}</h6>
+      </div>
+
+      <div class="description">
+        <h6 *ngIf="vendor.address">
+          {{vendor.address.street}}
+          <br>
+          {{vendor.address.city}}, {{vendor.address.state}} {{vendor.address.zip}}
+          <br>
+          {{vendor.phone}}
+        </h6>
+      </div>
+
+      <div class="value">
+          <a target="_blank" href="{{vendor.website}}">Website</a>
+      </div>
+
+      <div class="actions">
+
+          <button mat-button (click)="onViewClicked(vendor)">
+              <mat-icon>remove_red_eye</mat-icon>
+          </button>
+
+          <button mat-button (click)="onDeleteFavorite(vendor)" matTooltip="Delete Favorite Vendor">
+              <mat-icon>delete_forever</mat-icon>
+          </button>
+          
+      </div>
+
+
+    </div>
+  </div>
