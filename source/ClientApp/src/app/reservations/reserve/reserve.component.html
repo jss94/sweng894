@@ -2,14 +2,34 @@
 
 <div class="reservation-container">
 
-      <h1>Reserve {{vendorServiceModel.serviceName}}</h1>
-  
-      <div>Select your event:
-        
+      <div *ngIf="userEvents?.length > 0"><h1>
+        Reserve {{vendorServiceModel.serviceName}}
+        <span *ngIf='eventModel != null'> for {{eventModel.name}}</span></h1></div>
+       
+      <div *ngIf="userEvents == null || userEvents?.length == 0">
+        <h1>Reserve {{vendorServiceModel.serviceName}}</h1>
+        <div>You do not have any events. Create an event <a routerLink="events">here.</a></div>
       </div>
 
+      <div *ngIf="userEvents?.length > 1" class='col'>
+        <form class="form" [formGroup]="reservationForm" (ngSubmit)="onCreate()">
+          <mat-form-field class="options">
+              <mat-select placeholder="Choose event" formControlName="eventList">
+              <mat-option *ngFor="let ev of userEvents" [value]="ev.guid">
+                  {{ev.name}}
+              </mat-option>
+              </mat-select>
+          </mat-form-field>
+        </form>      
+      </div>
 
-    <div class="vendor-services-item">
+    
+    
+    
+
+
+   <div class='col'>   
+      <div class="vendor-services-item">
         <div class="header">
           <div class="vendor-services-icon">
             <mat-icon>service</mat-icon>
@@ -38,6 +58,10 @@
             <h6 *ngIf="vendorServiceModel.unitsAvailable != null">{{vendorServiceModel.unitsAvailable}} units available</h6>
         </div>
       
+
+      </div>
+    </div>
+
 
   </div>
 </div>

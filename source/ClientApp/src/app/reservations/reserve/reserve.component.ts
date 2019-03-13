@@ -8,6 +8,8 @@ import { VendorServices } from 'src/app/shared/models/vendor-services.model';
 import { VendorServicesService } from 'src/app/vendor-services/Services/vendor-services.service';
 import { EventService } from 'src/app/events/Services/event.service';
 import { OccEvent } from 'src/app/events/Models/occ-event.model';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 
 
 @Component({
@@ -21,6 +23,11 @@ export class ReserveComponent implements OnInit {
   userName: string
   userEvents: OccEvent[]
   eventModel: OccEvent
+  eventList: []
+
+  reservationForm = new FormGroup({
+    eventList: new FormControl('', [ Validators.required ]),
+  });
 
   constructor(
     private auth: AuthService,
@@ -42,10 +49,8 @@ export class ReserveComponent implements OnInit {
   setUser()
   {
     if (this.auth.user) {
-      debugger
       this.userName = this.auth.user.userName;
     } else {
-      debugger
       this.auth.user$.subscribe((result) => {
         this.userName = result.userName;
       });
@@ -64,12 +69,27 @@ export class ReserveComponent implements OnInit {
   }
 
   getUserEvents() {
-    debugger
     this.eventService.getEvents(this.userName).subscribe(response => {
       this.userEvents = response
-      debugger
+      if(this.userEvents.length == 1){
+        this.eventModel = this.userEvents[0];        
+      }
+      if(this.userEvents.length > 1){
+        this.subscribeEventChoice();
+      }
     });
     
+  }
+
+  subscribeEventChoice(){
+    this.reservationForm.controls['eventList'].valueChanges.subscribe(
+      (value) => {
+        if (value) {
+          this.eventService.getEvent(value).subscribe(response => {
+            this.eventModel = response
+       });
+      }
+    });
   }
 
 }

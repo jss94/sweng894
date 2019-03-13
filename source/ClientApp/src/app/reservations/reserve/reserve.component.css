@@ -7,3 +7,7 @@ h1 {
     flex-direction: column;
     align-items: center;
   }
+
+  .col{
+    flex:1;
+  }
