@@ -24,6 +24,7 @@ export class ClaimVendorComponent implements OnInit {
   googleVendorId: string;
   googleVendor: any;
   occasionVendor: Vendor;
+  vendorType: string;
 
   vendorServiceForm = new FormGroup({
     serviceType: new FormControl('', [ Validators.required ]),
@@ -88,7 +89,7 @@ export class ClaimVendorComponent implements OnInit {
 
   ngOnInit() {
     this.googleVendorId = this.route.snapshot.paramMap.get('id');
-    const vendorType = this.route.snapshot.paramMap.get('type');
+    this.vendorType = this.route.snapshot.paramMap.get('type');
 
     if (this.authService.user) {
       this.setOccasionsVendor(this.authService.user);
@@ -103,8 +104,6 @@ export class ClaimVendorComponent implements OnInit {
     this.setMap();
 
     this.setGoogleVendor();
-
-    this.setForm(this.occasionVendor.name, vendorType);
   }
 
   setOccasionsVendor(user: User) {
@@ -117,13 +116,19 @@ export class ClaimVendorComponent implements OnInit {
     this.googlePlacesService.getVendorById(this.googleVendorId, this.map)
     .subscribe(vendor => {
       this.googleVendor = vendor;
+
+      debugger
+      this.setForm(vendor.name, this.vendorType);
     });
   }
 
   setMap() {
+    const lat = this.route.snapshot.paramMap.get('lat');
+    const lng = this.route.snapshot.paramMap.get('lng');
+
     const property = {
       zoom: 12,
-      center: location
+      center: {lat: +lat, lng: +lng}
     };
 
     this.map = this.googleMapsService.setMap(document.getElementById('vendor-map'), property);
@@ -143,14 +148,9 @@ export class ClaimVendorComponent implements OnInit {
   }
 
   setForm(vendorName: string, vendorType: string) {
-      this.vendorServiceForm = new FormGroup({
-        serviceType: new FormControl(vendorType, [ Validators.required ]),
-        serviceName: new FormControl(vendorName, [ Validators.required ]),
-        serviceDescription: new FormControl('', [ Validators.required ]),
-        serviceFlatFee: new FormControl('', [ Validators.required ]),
-        servicePrice: new FormControl('', [ Validators.required ]),
-        serviceUnitsAvailable: new FormControl('', [ Validators.required ]),
-    });
+    debugger
+    this.vendorServiceForm.controls['serviceType'].setValue(vendorType);
+    this.vendorServiceForm.controls['serviceName'].setValue(vendorName);
   }
 
   onSubmitClicked() {

@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { GooglePlacesService } from './Services/google-places.service';
 import { of, Subject, Observable, forkJoin } from 'rxjs';
 import { GoogleMapsService } from '../google-map/Services/google-maps.service';
-import { VendorService } from '../vendors/Services/vendor.service';
 
 @Component({
   selector: 'app-vendor-search',
@@ -165,6 +164,7 @@ export class VendorSearchComponent implements OnInit {
               serviceType: loc.types.toString(),
               serviceName: loc.name,
               serviceDescription: '',
+              location: { lat: loc.geometry.location.lat(), lng: loc.geometry.location.lng() }
             };
           });
           services.next(vendorServices);
@@ -176,7 +176,9 @@ export class VendorSearchComponent implements OnInit {
 
   onClaimClicked(service: VendorServices) {
     const type = this.searchForm.controls['category'].value;
-    this.router.navigate(['claim-vendor/' + type + '/' + service.googleId]);
+    const lat = service.location.lat;
+    const lng = service.location.lng;
+    this.router.navigate(['claim-vendor/' + lat + '/' + lng + '/' + type + '/' + service.googleId]);
   }
 
   onDetailsClicked(service: VendorServices) {

@@ -10,6 +10,7 @@ export class GooglePlacesService {
     geocoder = new google.maps.Geocoder;
     markers: google.maps.Marker[] = [];
     infowindow = new google.maps.InfoWindow();
+    lastMap: google.maps.Map;
 
     constructor(private mapsService: GoogleMapsService) {
     }
@@ -53,7 +54,10 @@ export class GooglePlacesService {
     getVendorById(id: string, map: google.maps.Map): Observable<any> {
         const details = new Subject();
         const service = new google.maps.places.PlacesService(map);
-        const request = { placeId: id };
+        const request = {
+            placeId: id,
+            fields: ['name', 'formatted_address', 'place_id', 'geometry']
+         };
         service.getDetails(request, function(result) {
             details.next(result);
             const marker = new google.maps.Marker({

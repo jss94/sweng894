@@ -8,4 +8,5 @@ export interface VendorServices {
     flatFee?: boolean;
     price: number;
     unitsAvailable?: number;
+    location?: { lat: number, lng: number };
 }
