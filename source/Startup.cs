@@ -71,6 +71,7 @@ namespace source
             services.AddTransient<IEmailQuery, EmailQuery>();
             services.AddTransient<IInvitationQuery, InvitationQuery>();
             services.AddTransient<IReservationsQuery, ReservationsQuery>();
+            services.AddTransient<IVendorMetricsQuery, VendorMetricsQuery>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
