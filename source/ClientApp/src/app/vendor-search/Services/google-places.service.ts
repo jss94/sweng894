@@ -56,13 +56,13 @@ export class GooglePlacesService {
         const service = new google.maps.places.PlacesService(map);
         const request = {
             placeId: id,
-            fields: ['name', 'formatted_address', 'place_id', 'geometry']
-         };
-        service.getDetails(request, function(result) {
-            details.next(result);
+            fields: ['name', 'formatted_address', 'geometry']
+        };
+        service.getDetails(request, function(place, status) {
+            details.next(place);
             const marker = new google.maps.Marker({
                 map: map,
-                position: result.geometry.location
+                position: place.geometry.location
             });
         });
 

@@ -12,6 +12,9 @@ import { VendorSearchService } from '../Services/vendor-search.service';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { User } from 'src/app/shared/models/user.model';
 import { Vendor } from 'src/app/shared/models/vendor.model';
+import { MatSnackBar } from '@angular/material';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
+import { VendorDetailsComponent } from 'src/app/vendor-details/vendor-details.component';
 
 @Component({
   selector: 'app-claim-vendor',
@@ -25,6 +28,7 @@ export class ClaimVendorComponent implements OnInit {
   googleVendor: any;
   occasionVendor: Vendor;
   vendorType: string;
+  isVendor: boolean;
 
   vendorServiceForm = new FormGroup({
     serviceType: new FormControl('', [ Validators.required ]),
@@ -80,10 +84,12 @@ export class ClaimVendorComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
+    private router: Router,
     private vendorService: VendorService,
     private vendorSearchService: VendorSearchService,
     private googlePlacesService: GooglePlacesService,
     private googleMapsService: GoogleMapsService,
+    private snackbar: MatSnackBar,
     ) {
   }
 
@@ -92,9 +98,11 @@ export class ClaimVendorComponent implements OnInit {
     this.vendorType = this.route.snapshot.paramMap.get('type');
 
     if (this.authService.user) {
+      this.isVendor = this.authService.user.role === 'VENDOR' || this.authService.user.role === 'Admin';
       this.setOccasionsVendor(this.authService.user);
     } else {
       this.authService.user$.subscribe(user => {
+        this.isVendor = user.role === 'VENDOR' || user.role === 'Admin';
         this.setOccasionsVendor(user);
       });
     }
@@ -117,18 +125,14 @@ export class ClaimVendorComponent implements OnInit {
     .subscribe(vendor => {
       this.googleVendor = vendor;
 
-      debugger
       this.setForm(vendor.name, this.vendorType);
     });
   }
 
   setMap() {
-    const lat = this.route.snapshot.paramMap.get('lat');
-    const lng = this.route.snapshot.paramMap.get('lng');
-
     const property = {
       zoom: 12,
-      center: {lat: +lat, lng: +lng}
+      center: {lat: 0, lng: 0}
     };
 
     this.map = this.googleMapsService.setMap(document.getElementById('vendor-map'), property);
@@ -148,22 +152,35 @@ export class ClaimVendorComponent implements OnInit {
   }
 
   setForm(vendorName: string, vendorType: string) {
-    debugger
     this.vendorServiceForm.controls['serviceType'].setValue(vendorType);
     this.vendorServiceForm.controls['serviceName'].setValue(vendorName);
   }
 
   onSubmitClicked() {
-    const service: VendorServices = {
-      googleId: this.googleVendorId,
-      serviceType: this.vendorServiceForm.controls['serviceType'].value,
-      serviceDescription: this.vendorServiceForm.controls['serviceDescription'].value,
-      serviceName: this.googleVendor.name,
-      flatFee: this.vendorServiceForm.controls['serviceFlatFee'].value,
-      price: this.vendorServiceForm.controls['serviceFlatFee'].value,
-      unitsAvailable: this.vendorServiceForm.controls['unitsAvailable'].value
-    };
+    const username = this.authService.user.userName;
+    this.vendorService.getVendor(username).subscribe(vendor => {
+      const service: VendorServices = {
+        vendorId: vendor.id,
+        googleId: this.googleVendorId,
+        serviceType: this.vendorServiceForm.controls['serviceType'].value,
+        serviceDescription: this.vendorServiceForm.controls['serviceDescription'].value,
+        serviceName: this.googleVendor.name,
+        flatFee: this.vendorServiceForm.controls['serviceFlatFee'].value,
+        price: +this.vendorServiceForm.controls['servicePrice'].value,
+        unitsAvailable: +this.vendorServiceForm.controls['serviceUnitsAvailable'].value
+      };
 
-    this.vendorSearchService.claimVendorServices(service);
+      console.log(service);
+
+      this.vendorSearchService.claimVendorServices(service).subscribe(results => {
+          const message = 'You have claimed this service!';
+          this.snackbar.open(message, 'Saved', {
+            duration: 10000
+          });
+      }, (error) => {
+        console.log('ERROR INSERTING', error);
+      });
+    });
+
   }
 }

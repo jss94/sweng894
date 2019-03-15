@@ -122,6 +122,7 @@ export class VendorServicesComponent implements OnInit {
       flatFee: this.vendorServiceForm.controls['serviceFlatFee'].value,
       price: this.vendorServiceForm.controls['servicePrice'].value,
       unitsAvailable: this.vendorServiceForm.controls['serviceUnitsAvailable'].value,
+      googleId: '',
      };
 
     this.vendorServicesService.createNewVendorService(svc).subscribe(response => {

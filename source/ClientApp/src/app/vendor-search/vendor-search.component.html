@@ -64,7 +64,7 @@
   <div class="claimed-vendor-services-item">
 
     <div class="header">
-      <h6>{{service.name}}</h6>
+      <h6>{{service.serviceName}}</h6>
     </div>
     
     <div class="description">
@@ -100,11 +100,11 @@
     </div>
 
     <div class="value">
-      <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
+      <h6>{{service.serviceDescription}}</h6>
     </div>
 
     <div class="actions">
-      <button mat-button (click)="onClaimClicked(service)">
+      <button *ngIf="isVendor" mat-button (click)="onClaimClicked(service)">
           <mat-icon>add_location</mat-icon>
       </button>
     </div>

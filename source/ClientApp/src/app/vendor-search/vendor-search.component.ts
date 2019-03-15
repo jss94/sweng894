@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { GooglePlacesService } from './Services/google-places.service';
 import { of, Subject, Observable, forkJoin } from 'rxjs';
 import { GoogleMapsService } from '../google-map/Services/google-maps.service';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-vendor-search',
@@ -17,6 +18,7 @@ import { GoogleMapsService } from '../google-map/Services/google-maps.service';
 export class VendorSearchComponent implements OnInit {
   unclaimedServices: VendorServices[];
   claimedServices: VendorServices[];
+  isVendor: boolean;
 
   map: google.maps.Map;
   geolocation$ = new Subject();
@@ -62,6 +64,7 @@ export class VendorSearchComponent implements OnInit {
   ];
 
   constructor(
+    private authService: AuthService,
     private router: Router,
     private vendorSearchService: VendorSearchService,
     private googlePlacesService: GooglePlacesService,
@@ -96,18 +99,24 @@ export class VendorSearchComponent implements OnInit {
       const marker = this.googleMapsService.setMarker(location, this.map);
       this.markers.push(marker);
     });
+
+    if (this.authService.user) {
+      this.isVendor = this.authService.user.role === 'Admin' || this.authService.user.role === 'VENDOR';
+    } else {
+      this.authService.user$.subscribe(user => {
+        this.isVendor = user.role === 'Admin' || user.role === 'VENDOR';
+      });
+    }
   }
 
   onSearchClicked() {
-    this.searchUnclaimedVendors().subscribe((result) => {
-      this.unclaimedServices = result;
-    });
-
-    forkJoin(
-      this.searchClaimedVendors(),
-      this.searchUnclaimedVendors()).subscribe(([claimed, unclaimed]) => {
+    this.searchUnclaimedVendors().subscribe(unclaimed => {
+      const googleIds = unclaimed.map(service => service.googleId);
+      this.searchClaimedVendors(googleIds).subscribe(claimed => {
+        console.log(googleIds)
         this.removeDuplicateVendors(claimed, unclaimed);
       });
+    });
   }
 
   onResetClicked() {
@@ -127,14 +136,14 @@ export class VendorSearchComponent implements OnInit {
     this.claimedServices = claimed;
   }
 
-  searchClaimedVendors(): Observable<VendorServices[]> {
+  searchClaimedVendors(ids: string[]): Observable<VendorServices[]> {
     const services = new Subject<VendorServices[]>();
 
     const properties = {
       maxPrice: this.searchForm.controls['price'].value || 999999,
       maxCapacity: this.searchForm.controls['capacity'].value || 0,
-      zip: this.searchForm.controls['location'].value,
       type: this.searchForm.controls['category'].value,
+      googleIds: ids,
     };
     this.vendorSearchService.searchVendorServices(properties)
     .subscribe(s => {
@@ -151,7 +160,7 @@ export class VendorSearchComponent implements OnInit {
       .subscribe((location: {lat: number, lng: number}) => {
         const request = {
           location: location,
-          radius: 10000,
+          radius: 15000,
           type: this.getCategory()
         };
 
@@ -160,11 +169,10 @@ export class VendorSearchComponent implements OnInit {
             return {
               price: 0,
               vendorId: 0,
-              googleId: loc.id,
+              googleId: loc.place_id,
               serviceType: loc.types.toString(),
               serviceName: loc.name,
-              serviceDescription: '',
-              location: { lat: loc.geometry.location.lat(), lng: loc.geometry.location.lng() }
+              serviceDescription: loc.vicinity,
             };
           });
           services.next(vendorServices);
@@ -176,9 +184,8 @@ export class VendorSearchComponent implements OnInit {
 
   onClaimClicked(service: VendorServices) {
     const type = this.searchForm.controls['category'].value;
-    const lat = service.location.lat;
-    const lng = service.location.lng;
-    this.router.navigate(['claim-vendor/' + lat + '/' + lng + '/' + type + '/' + service.googleId]);
+    console.log(service.googleId);
+    this.router.navigate(['claim-vendor/' + type + '/' + service.googleId]);
   }
 
   onDetailsClicked(service: VendorServices) {

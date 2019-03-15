@@ -115,6 +115,7 @@ export class UpdateVendorServicesComponent implements OnInit {
       flatFee: this.updateVendorServiceForm.controls['serviceFlatFee'].value,
       price: this.updateVendorServiceForm.controls['servicePrice'].value,
       unitsAvailable: this.updateVendorServiceForm.controls['serviceUnitsAvailable'].value,
+      googleId: ''
      };
      this.vendorServicesService.updateVendorService(svc).subscribe((result: VendorServices) => {
       this.vendorService = result;
