@@ -21,7 +21,7 @@ export class GuestsComponent implements OnInit {
     public guests: Guest[];
     private eventGuid: string;
     isVendor = false;
-  eventNamea: string;
+    eventName: string;
 
   constructor(
         private auth: AuthService,
