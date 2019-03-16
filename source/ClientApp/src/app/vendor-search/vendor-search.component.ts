@@ -70,6 +70,9 @@ export class VendorSearchComponent implements OnInit {
     private googlePlacesService: GooglePlacesService,
     private googleMapsService: GoogleMapsService,
     ) {
+
+      this.searchForm.controls['location'].disable();
+
       navigator.geolocation.getCurrentPosition((position) => {
         this.geolocation$.next({
           lat: position.coords.latitude,
@@ -82,12 +85,17 @@ export class VendorSearchComponent implements OnInit {
       this.geolocation$.subscribe((location: {lat: number, lng: number}) => {
         this.googlePlacesService.getAddressFromGeolocation(location)
         .subscribe((address) => {
+          this.searchForm.controls['location'].enable();
           this.searchForm.controls['location'].setValue(address);
         });
       });
   }
 
   ngOnInit() {
+    if (this.googlePlacesService.lastSearch !== undefined) {
+      this.searchForm = this.googlePlacesService.lastSearch;
+    }
+
     this.geolocation$.subscribe((location: {lat: number, lng: number}) => {
       const property = {
         zoom: 12,
@@ -98,6 +106,10 @@ export class VendorSearchComponent implements OnInit {
 
       const marker = this.googleMapsService.setMarker(location, this.map);
       this.markers.push(marker);
+
+      if (this.googlePlacesService.lastSearch !== undefined) {
+        this.onSearchClicked();
+      }
     });
 
     if (this.authService.user) {
@@ -110,13 +122,18 @@ export class VendorSearchComponent implements OnInit {
   }
 
   onSearchClicked() {
+    this.saveSearchCriteria();
+
     this.searchUnclaimedVendors().subscribe(unclaimed => {
       const googleIds = unclaimed.map(service => service.googleId);
       this.searchClaimedVendors(googleIds).subscribe(claimed => {
-        console.log(googleIds)
         this.removeDuplicateVendors(claimed, unclaimed);
       });
     });
+  }
+
+  saveSearchCriteria() {
+    this.googlePlacesService.lastSearch = this.searchForm;
   }
 
   onResetClicked() {
@@ -158,6 +175,7 @@ export class VendorSearchComponent implements OnInit {
     const address = this.searchForm.controls['location'].value;
     this.googlePlacesService.getGeoLocationFromAddress(address)
       .subscribe((location: {lat: number, lng: number}) => {
+
         const request = {
           location: location,
           radius: 15000,

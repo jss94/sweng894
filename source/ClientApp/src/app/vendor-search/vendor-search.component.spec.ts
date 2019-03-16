@@ -87,7 +87,7 @@ describe('VendorSearchComponent', () => {
 
         // assert
         expect(mockVendorSearchService.searchVendorServices).toHaveBeenCalledTimes(1);
-        expect(component.vendorServices.length).toBe(3);
+        expect(component.claimedServices.length).toBe(3);
 
     });
   });

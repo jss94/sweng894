@@ -170,8 +170,6 @@ export class ClaimVendorComponent implements OnInit {
         unitsAvailable: +this.vendorServiceForm.controls['serviceUnitsAvailable'].value
       };
 
-      console.log(service);
-
       this.vendorSearchService.claimVendorServices(service).subscribe(results => {
           const message = 'You have claimed this service!';
           this.snackbar.open(message, 'Saved', {

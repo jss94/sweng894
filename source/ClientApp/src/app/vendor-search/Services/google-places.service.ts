@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { GoogleMapsService } from 'src/app/google-map/Services/google-maps.service';
+import { FormGroup } from '@angular/forms';
 
 @Injectable()
 export class GooglePlacesService {
@@ -10,7 +11,7 @@ export class GooglePlacesService {
     geocoder = new google.maps.Geocoder;
     markers: google.maps.Marker[] = [];
     infowindow = new google.maps.InfoWindow();
-    lastMap: google.maps.Map;
+    lastSearch: FormGroup;
 
     constructor(private mapsService: GoogleMapsService) {
     }
@@ -18,6 +19,7 @@ export class GooglePlacesService {
     locationSearch(request, map) {
         const locations = new Subject<google.maps.places.PlaceResult[]>();
         const service = new google.maps.places.PlacesService(map);
+
         service.nearbySearch(request, function(results) {
             locations.next(results);
         });
