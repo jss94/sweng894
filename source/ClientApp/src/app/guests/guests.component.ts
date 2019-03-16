@@ -21,7 +21,7 @@ export class GuestsComponent implements OnInit {
     public guests: Guest[];
     private eventGuid: string;
     isVendor = false;
-    event: OccEvent;
+    eventName: string;
 
   constructor(
         private auth: AuthService,
@@ -50,20 +50,24 @@ export class GuestsComponent implements OnInit {
       this.eventGuid = params.get('eventGuid');
 
       this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
-          this.guests = result.map((guest: Guest) => {
-              guest.isUndecided = guest.isGoing === null;
-              return guest;
-          });
+        this.guests = result.map((guest: Guest) => {
+          guest.isUndecided = guest.isGoing === null;
+          return guest;
+        });
       });
 
-      this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
-        this.event = result;
-      });
     });
 
 
-    }
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.eventGuid = params.get('eventGuid');
 
+      this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
+        this.eventName = result.name;
+      });
+
+    });
+}
     onCreate(): void {
         const guest: Guest = {
           name:  this.guestForm.controls['name'].value,
