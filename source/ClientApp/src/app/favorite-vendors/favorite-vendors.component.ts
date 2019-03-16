@@ -53,4 +53,14 @@ export class FavoriteVendorsComponent implements OnInit {
     this.router.navigate(['vendor-details/' + vendor.id]);
   }
 
+  onViewWebsite(vendor: Vendor) {
+    let url = '';
+    if (!/^http[s]?:\/\//.test(vendor.website)) {
+        url += 'http://';
+  }
+
+    url += vendor.website;
+    window.open(url, '_blank');
+  }
+
 }

@@ -13,6 +13,8 @@ import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs';
 import { MockMatDialog } from '../deactivate-user/deactivate-user.component.spec';
 import { EmailService } from '../send-email/Services/email.service';
+import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
+import { MockFavoriteVendorService } from '../favorite-vendors/Services/mock-favorite-vendors.service';
 
 describe('VendorDetailsComponent', () => {
   let component: VendorDetailsComponent;
@@ -35,7 +37,10 @@ describe('VendorDetailsComponent', () => {
   };
 
   class MockActivedRoute {
-      paramMap = of(mockParamMap);
+    paramMap = of(mockParamMap);
+    snapshot = {
+        paramMap: mockParamMap
+    };
   }
 
   const fakeAddress: Address = {
@@ -88,6 +93,7 @@ describe('VendorDetailsComponent', () => {
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: EmailService, useClass: MockEmailService },
+        { provide: FavoriteVendorsService, useClass: MockFavoriteVendorService },
       ],
       imports: [
         MatSelectModule,

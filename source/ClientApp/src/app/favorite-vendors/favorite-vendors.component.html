@@ -16,7 +16,10 @@
       </div>
 
       <div class="value">
-          <a target="_blank" href="{{vendor.website}}">Website</a>
+          <button mat-button (click)="onViewWebsite(vendor)">
+            <mat-icon>launch</mat-icon>
+            Website
+          </button>
       </div>
 
       <div class="actions">
