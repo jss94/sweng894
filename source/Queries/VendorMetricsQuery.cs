@@ -37,17 +37,8 @@ namespace source.Queries
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
-                /*
-                 select vendors.name, count(*) as "Count of Monthly Reservations", DATE_FORMAT(dateTime, "%Y-%m-01") as "Month"
-                    from events 
-                    inner join 
-                    reservations on reservations.eventId=events.eventId+ 
-                    inner join
-                    vendors on reservations.vendorId = vendors.id
-                    where vendorId = 1
-                    group by DATE_FORMAT(dateTime, "%Y-%m-01");
-                    */
-                string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '%Y-%m-01') as 'month'"
+
+                string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '%M') as 'month'"
                     + " from occasions.events"
                     + " inner join"
                     + " occasions.reservations on reservations.eventId = events.eventId"
@@ -55,8 +46,6 @@ namespace source.Queries
                     + " occasions.vendors on reservations.vendorId = vendors.id"
                     + " where vendorId = @id"
                     + " group by month";
-
-                Console.WriteLine(">>>" + query);
 
                 await Task.CompletedTask;
 

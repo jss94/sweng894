@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { VendorMetricService } from './Service/vendor-metric.service';
 import { MonthlyMetric } from './Model/monthly-metric.model';
+import { MonthlyMetricChartData } from './Model/monthly-metric-chart-data';
 
 @Component({
   selector: 'app-vendor-metrics',
@@ -12,23 +13,9 @@ export class VendorMetricsComponent implements OnInit {
 
   monthlyMetric: MonthlyMetric[];
 
-  chartData: any[] =
-  [
-    {
-      "name": "January",
-      "value": 0
-    },
-    {
-      "name": "February",
-      "value": 0
-    },
-    {
-      "name": "March",
-      "value": 0
-    }
-  ];
+  chartData: MonthlyMetricChartData;
 
-  view: any[] = [300, 300];
+  view: any[] = [700, 400];
 
   // options
   showXAxis = true;
@@ -48,7 +35,7 @@ export class VendorMetricsComponent implements OnInit {
     private metricsService: VendorMetricService,
     private route: ActivatedRoute,
   ) {
-    // https://stackblitz.com/edit/vertical-bar-chart?embed=1&file=app/app.component.ts
+    this.chartData = new MonthlyMetricChartData();
     Object.assign(this.chartData);
   }
 
@@ -56,22 +43,21 @@ export class VendorMetricsComponent implements OnInit {
     this.getMetrics();
   }
 
-
   onSelect(event) {
     console.log(event);
   }
 
-
   getMetrics() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const vendorId = + params.get('vendorId');
-      const testId = 1; // replaceWithVendorId
-      this.metricsService.getMonthlyMetrics(testId).subscribe(response => {
+    //  const testId = 1; // replaceWithVendorId
+      this.metricsService.getMonthlyMetrics(vendorId).subscribe(response => {
         this.monthlyMetric = response;
-        console.log(this.monthlyMetric);
-        this.chartData.push({ name: 'January', value: 1 });
-        this.chartData.push({ name: 'March', value: 3 });
-        this.chartData = [...this.chartData];
+        this.monthlyMetric.forEach(metric => {
+          this.chartData.data.push({ name: metric.month, value: metric.count });
+        });
+        console.log('Chart Data:' + this.chartData.data);
+        this.chartData.data = [...this.chartData.data];
       }, error => {
         console.log(error);
       });

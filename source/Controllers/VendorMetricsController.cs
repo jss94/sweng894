@@ -41,7 +41,7 @@ namespace source.Controllers
                 var result = await _metricsQuery.GetMonthlyReservationMetricAsync(id);
                 if (result == null)
                     return new NotFoundResult();
-
+                
                 return new OkObjectResult(result);
             } catch (Exception e)
             {
