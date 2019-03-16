@@ -30,14 +30,14 @@ namespace source.Queries
             _database = db;
         }
 
-        
-        public async Task<List<MonthlyMetric>> GetMonthlyReservationMetricAsync(int id)
+
+        public async Task<List<MonthlyReservationCountMetric>> GetMonthlyReservationCountMetricAsync(int id)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
-
+                /*
                 string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '%M') as 'month'"
                     + " from occasions.events"
                     + " inner join"
@@ -46,21 +46,76 @@ namespace source.Queries
                     + " occasions.vendors on reservations.vendorId = vendors.id"
                     + " where vendorId = @id"
                     + " group by month";
-
+                */
+                string query = createReservationCountMetricQuery("%M", "month");
                 await Task.CompletedTask;
 
                 try
                 {
-                    var result = connection.QueryAsync<MonthlyMetric>(query, new { id }).Result.ToList();
+                    var result = connection.QueryAsync<MonthlyReservationCountMetric>(query, new { id }).Result.ToList();
                     return result;
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    
+
                 }
 
                 return null;
             }
+        }
+
+        public Task<List<MonthlyReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<WeeklyReservationCountMetric>> GetWeeklyReservationCountMetricAsync(int id)
+        {
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+                /*
+                string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '%M') as 'month'"
+                    + " from occasions.events"
+                    + " inner join"
+                    + " occasions.reservations on reservations.eventId = events.eventId"
+                    + " inner join"
+                    + " occasions.vendors on reservations.vendorId = vendors.id"
+                    + " where vendorId = @id"
+                    + " group by month";
+                */
+                string query = createReservationCountMetricQuery("%W", "weekday");
+                await Task.CompletedTask;
+
+                try
+                {
+                    var result = connection.QueryAsync<WeeklyReservationCountMetric>(query, new { id }).Result.ToList();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+
+                }
+
+                return null;
+            }
+        }
+
+        private string createReservationCountMetricQuery(string dateFormatAbbreviation, string dateColumnName)
+        {
+            string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '" + dateFormatAbbreviation + "') as '" + dateColumnName + "'"
+                    + " from occasions.events"
+                    + " inner join"
+                    + " occasions.reservations on reservations.eventId = events.eventId"
+                    + " inner join"
+                    + " occasions.vendors on reservations.vendorId = vendors.id"
+                    + " where vendorId = @id"
+                    + " group by " + dateColumnName;
+            return query;
+
         }
     }
 }

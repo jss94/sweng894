@@ -7,7 +7,11 @@ namespace source.Queries
 {
     public interface IVendorMetricsQuery
     {
-        Task<List<MonthlyMetric>> GetMonthlyReservationMetricAsync(int vendorId);
-        
+        Task<List<MonthlyReservationCountMetric>> GetMonthlyReservationCountMetricAsync(int vendorId);
+
+        Task<List<WeeklyReservationCountMetric>> GetWeeklyReservationCountMetricAsync(int vendorId);
+
+        Task<List<MonthlyReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId);
+
     }
 }

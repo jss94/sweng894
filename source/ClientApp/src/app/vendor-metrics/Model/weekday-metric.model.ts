@@ -1,4 +1,4 @@
 export interface MonthlyMetric {
-  reservationCount: number;
+  count: number;
   month: string;
 }

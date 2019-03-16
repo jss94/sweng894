@@ -13,7 +13,8 @@ export class VendorMetricService {
   }
 
   getMonthlyMetrics(id: number): Observable<MonthlyMetric[]> {
-      return this.auth.get('vendorMetrics/' + id);
+    console.log("IN HERE");
+      return this.auth.get('vendorMetrics/reservations/monthly/' + id);
   }
 
 }

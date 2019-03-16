@@ -33,12 +33,12 @@ namespace source.Controllers
         /// Returns a List of MonthlyMetric objects for the given Vendor Id
         /// </summary>
         /// <param name="id">The vendorId.</param>
-        [HttpGet("{id}")]
+        [HttpGet("reservations/monthly/{id}")]
         public async Task<IActionResult> GetMonthlyReservationMetrics(int id)
         {
             try
             {
-                var result = await _metricsQuery.GetMonthlyReservationMetricAsync(id);
+                var result = await _metricsQuery.GetMonthlyReservationCountMetricAsync(id);
                 if (result == null)
                     return new NotFoundResult();
                 
@@ -49,6 +49,29 @@ namespace source.Controllers
                 return new NotFoundResult();
             }
             
+        }
+
+        /// <summary>
+        /// Returns a List of WeeklyReservationCountMetric objects for the given Vendor Id
+        /// </summary>
+        /// <param name="id">The vendorId.</param>
+        [HttpGet("reservations/weekday/{id}")]
+        public async Task<IActionResult> GetWeeklyReservationCountMetrics(int id)
+        {
+            try
+            {
+                var result = await _metricsQuery.GetWeeklyReservationCountMetricAsync(id);
+                if (result == null)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return new NotFoundResult();
+            }
+
         }
 
     }

@@ -50,13 +50,12 @@ export class VendorMetricsComponent implements OnInit {
   getMetrics() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const vendorId = + params.get('vendorId');
-    //  const testId = 1; // replaceWithVendorId
-      this.metricsService.getMonthlyMetrics(vendorId).subscribe(response => {
+      const testId = 35; // replaceWithVendorId
+      this.metricsService.getMonthlyMetrics(testId).subscribe(response => {
         this.monthlyMetric = response;
         this.monthlyMetric.forEach(metric => {
-          this.chartData.data.push({ name: metric.month, value: metric.count });
+          this.chartData.data.push({ name: metric.month, value: metric.reservationCount });
         });
-        console.log('Chart Data:' + this.chartData.data);
         this.chartData.data = [...this.chartData.data];
       }, error => {
         console.log(error);
