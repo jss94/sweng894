@@ -26,6 +26,8 @@ import {ReservationsVendorComponent} from './reservations/reservations-vendor/re
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 import { ReserveComponent } from './reservations/reserve/reserve.component';
+import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -48,6 +50,7 @@ const routes: Routes = [
     { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
     { path: 'reservations-vendor', component: ReservationsVendorComponent },
     { path: 'reserve', component: ReserveComponent },
+    { path: 'vendor-metrics', component: VendorMetricsComponent },
   ];
 
 @NgModule({
@@ -74,6 +77,7 @@ const routes: Routes = [
         ReservationsVendorComponent,
         EventDialogComponent,
         ReserveComponent,
+        VendorMetricsComponent,
     ],
 
     imports: [
@@ -82,6 +86,7 @@ const routes: Routes = [
         BrowserModule,
         MaterialModule,
         ReactiveFormsModule,
+        NgxChartsModule,
     ],
     exports: [ RouterModule ]
 })

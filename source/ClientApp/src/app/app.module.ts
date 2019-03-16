@@ -21,7 +21,8 @@ import { EmailService } from './send-email/Services/email.service';
 import { VendorSearchService } from './vendor-search/Services/vendor-search.service';
 import { InvitationService } from './invitations/Services/invitation.service';
 import { ReservationsService } from './reservations/Services/reservations.service';
-import { ChartsModule } from 'ng2-charts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { ChartsModule } from 'ng2-charts';
     RoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    ChartsModule
+    NgxChartsModule,
   ],
   exports: [
   ],
@@ -57,6 +58,7 @@ import { ChartsModule } from 'ng2-charts';
     VendorSearchService,
     InvitationService,
     ReservationsService,
+    VendorMetricService,
     DatePipe
   ],
   bootstrap: [AppComponent]
