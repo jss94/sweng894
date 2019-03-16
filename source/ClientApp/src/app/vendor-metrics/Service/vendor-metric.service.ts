@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { MonthlyMetric } from '../Model/monthly-metric.model';
+import { MonthlyMetric } from '../monthly-reservation-metric/Model/monthly-metric.model';
 
 @Injectable()
 export class VendorMetricService {
@@ -13,7 +13,6 @@ export class VendorMetricService {
   }
 
   getMonthlyMetrics(id: number): Observable<MonthlyMetric[]> {
-    console.log("IN HERE");
       return this.auth.get('vendorMetrics/reservations/monthly/' + id);
   }
 

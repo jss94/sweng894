@@ -1,4 +1,4 @@
-export class MonthlyMetricChartData {
+export class WeekdayMetricChartData {
 
   private weekdays: any[] = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

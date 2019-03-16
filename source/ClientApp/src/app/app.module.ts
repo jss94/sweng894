@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { createCustomElement } from '@angular/elements';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
@@ -23,7 +24,6 @@ import { InvitationService } from './invitations/Services/invitation.service';
 import { ReservationsService } from './reservations/Services/reservations.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.service';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +61,7 @@ import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.serv
     VendorMetricService,
     DatePipe
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
-export class AppModule { }
+export class AppModule {}

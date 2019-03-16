@@ -2,7 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { UsersComponent } from './users/users.component';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material.module';
@@ -28,6 +28,8 @@ import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 import { ReserveComponent } from './reservations/reserve/reserve.component';
 import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MonthlyReservationCountMetricsComponent } from './vendor-metrics/monthly-reservation-metric/monthly-reservation-count-metrics.component';
+import { createCustomElement } from '@angular/elements';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -77,7 +79,8 @@ const routes: Routes = [
         ReservationsVendorComponent,
         EventDialogComponent,
         ReserveComponent,
-        VendorMetricsComponent,
+    VendorMetricsComponent,
+    [MonthlyReservationCountMetricsComponent],
     ],
 
     imports: [
@@ -88,7 +91,17 @@ const routes: Routes = [
         ReactiveFormsModule,
         NgxChartsModule,
     ],
-    exports: [ RouterModule ]
+  exports: [RouterModule],
+  entryComponents: [
+    MonthlyReservationCountMetricsComponent
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 
-export class RoutingModule {}
+export class RoutingModule {
+  constructor(private injector: Injector) { }
+  ngDoBootstrap() {
+    const monthlyReservationMetricCustomElement = createCustomElement(MonthlyReservationCountMetricsComponent, { injector: this.injector });
+    customElements.define('app-monthly-reservation-count-metrics', monthlyReservationMetricCustomElement);
+  }
+}
