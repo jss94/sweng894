@@ -152,19 +152,23 @@ export class ReserveComponent implements OnInit {
         }
       });
   }
+  
+  onCancel() {
+    this.ngOnInit();
+  }
 
   onCreate(): void {
     const res: Reservation = {
+      id: null,
       userName: this.userName,
-      eventId: this.eventModel.guid,
-      vendorId: this.vendorServiceModel.vendorId,
-      vendorServiceId: this.vendorServiceModel.id,
-      status: "New",
-      numberReserved: this.reservationForm.controls['numberReserved'].value,
-      service: null,
-      event: null,
-      vendor: null,
-      id: null
+    eventId: this.eventModel.guid,
+    vendorId: this.vendorServiceModel.vendorId,
+    vendorServiceId: this.vendorServiceModel.id,
+    status: "New",
+    numberReserved:  this.reservationForm.controls['numberReserved'].value,
+    service: null,
+    event: null,
+    vendor: null
      };
 
     this.reservationService.createReservation(res).subscribe(response => {
@@ -180,7 +184,5 @@ export class ReserveComponent implements OnInit {
       });
     });
   }
-
-
 
 }

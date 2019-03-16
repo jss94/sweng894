@@ -16,54 +16,59 @@
 
     <div class="main">
 
-        <div class="stacked">
+      <div class="stacked">
 
-          <div *ngIf="userEvents?.length > 1">
-            <div class='col1'>
-              <form class="form" [formGroup]="reservationForm" (ngSubmit)="onCreate()">
-                <mat-form-field appearance="outline" class="first">
-                  <mat-select placeholder="Choose event" formControlName="eventList">
-                    <mat-option *ngFor="let ev of userEvents" [value]="ev.guid">
-                      {{ev.name}}
-                    </mat-option>
-                  </mat-select>
+        <div *ngIf="userEvents?.length > 1">
+          <div class='col1'>
+            <form class="form" [formGroup]="reservationForm" (ngSubmit)="onCreate()">
+              <mat-form-field appearance="outline" class="first">
+                <mat-select placeholder="Choose event" formControlName="eventList">
+                  <mat-option *ngFor="let ev of userEvents" [value]="ev.guid">
+                    {{ev.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div *ngIf="vendorServiceModel.unitsAvailable != null">
+                <mat-form-field appearance="outline">
+                  <mat-label>Units Requested</mat-label>
+                  <input matInput placeholder="Units Requested" type="number" formControlName="numberReserved">
                 </mat-form-field>
-
-                <div *ngIf="vendorServiceModel.unitsAvailable != null">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Units Requested</mat-label>
-                    <input matInput placeholder="Units Requested" type="number" formControlName="numberReserved">
-                  </mat-form-field>
-                </div>
-              </form>
-
-              <div>
-                <h6>Total: {{cost | currency:'USD':symbol:'1.2-2'}}</h6>
               </div>
+            </form>
 
-              <mat-action-row>
-                <button type="submit" mat-button [disabled]="!reservationForm.valid">
-                  <mat-icon>add</mat-icon>
-                  Request Reservation
-                </button>
-              </mat-action-row>
-            </div><!-- col 1-->
+            <div>
+              <h6>Total: {{cost | currency:'USD':symbol:'1.2-2'}}</h6>
+            </div>
 
-          </div><!-- if-->
-     
-        </div><!--stacked-->
-      
-     
+            <mat-action-row>
+              <button type="submit" mat-button [disabled]="!reservationForm.valid" mat-button (click)="onCreate()">
+                <mat-icon>add</mat-icon>
+                Request Reservation
+              </button>
+              <button type="cancel" mat-button (click)="onCancel()">
+                <mat-icon>cancel</mat-icon>
+                Cancel
+              </button>
+            </mat-action-row>
+          </div><!-- col 1-->
+
+        </div><!-- if-->
+
+      </div>
+      <!--stacked-->
+
+
       <div class="col2">
         <div class="vendor-services-item">
-              <h5 class='vendor-services-text'>{{vendorServiceModel.serviceType}}</h5>
-            <h6>{{vendorServiceModel.serviceName}}</h6>
-            <h6 class='vendor-services-description'>{{vendorServiceModel.serviceDescription}}</h6>
-            <h6 *ngIf="vendorServiceModel.flatFee">Flat fee</h6>
-            <h6 *ngIf="!vendorServiceModel.flatFee">Price per unit</h6>
-            <h6>{{vendorServiceModel.price | currency:'USD':symbol:'1.2-2'}}</h6>
-            <h6 *ngIf="vendorServiceModel.unitsAvailable != null">{{vendorServiceModel.unitsAvailable}} units available</h6>
-         </div>
+          <h5 class='vendor-services-text'>{{vendorServiceModel.serviceType}}</h5>
+          <h6>{{vendorServiceModel.serviceName}}</h6>
+          <h6 class='vendor-services-description'>{{vendorServiceModel.serviceDescription}}</h6>
+          <h6 *ngIf="vendorServiceModel.flatFee">Flat fee</h6>
+          <h6 *ngIf="!vendorServiceModel.flatFee">Price per unit</h6>
+          <h6>{{vendorServiceModel.price | currency:'USD':symbol:'1.2-2'}}</h6>
+          <h6 *ngIf="vendorServiceModel.unitsAvailable != null">{{vendorServiceModel.unitsAvailable}} units available</h6>
+        </div>
       </div>
       <!--closing flex section-->
 
