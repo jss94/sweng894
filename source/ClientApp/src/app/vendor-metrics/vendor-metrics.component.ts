@@ -25,7 +25,7 @@ export class VendorMetricsComponent implements OnInit {
   showXAxisLabel = true;
   xAxisLabel = 'Month';
   showYAxisLabel = true;
-  yAxisLabel = 'Count';
+  yAxisLabel = 'Reservations';
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
