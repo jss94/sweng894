@@ -74,5 +74,28 @@ namespace source.Controllers
 
         }
 
+        /// <summary>
+        /// Returns a List of WeeklyReservationCountMetric objects for the given Vendor Id
+        /// </summary>
+        /// <param name="id">The vendorId.</param>
+        [HttpGet("reservations/sales/monthly/{id}")]
+        public async Task<IActionResult> GetMonthlyReservationSalesMetrics(int id)
+        {
+            try
+            {
+                var result = await _metricsQuery.GetMonthlyReservationSalesMetricAsync(id);
+                if (result == null)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return new NotFoundResult();
+            }
+
+        }
+
     }
 }

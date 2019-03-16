@@ -56,9 +56,50 @@ namespace source.Queries
             }
         }
 
-        public Task<List<MonthlyReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId)
+        public async Task<List<MonthlyReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId)
         {
-            throw new NotImplementedException();
+            /*
+            select DATE_FORMAT(dateTime, '%M') as 'month', vendors.name, vendorServices.serviceType, vendorServices.serviceName, vendorServices.price, vendorServices.flatFee, reservations.numberReserved
+from reservations
+inner join
+vendorServices on reservations.vendorServiceId = vendorServices.id
+inner join
+events on reservations.eventId=events.eventId
+inner join
+vendors on vendors.id=reservations.vendorId
+where reservations.vendorId = 35;
+*/
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = "select DATE_FORMAT(dateTime, '%M') as 'month', vendors.name, vendorServices.serviceType, vendorServices.serviceName, vendorServices.price, vendorServices.flatFee, reservations.numberReserved"
+                    + " from occasions.reservations"
+                    + " inner join"
+                    + " occasions.vendorServices on reservations.vendorServiceId = vendorServices.id"
+                    + " inner join"
+                    + " occasions.events on reservations.eventId = events.eventId"
+                    + " inner join"
+                    + " occasions.vendors on vendors.id = reservations.vendorId"
+                    + " where reservations.vendorId = @vendorId;";
+
+                await Task.CompletedTask;
+
+                try
+                {
+                    var result = connection.QueryAsync<MonthlyReservationSalesMetric>(query, new { vendorId }).Result.ToList();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+
+                }
+
+                return null;
+            }
+
         }
 
         public async Task<List<WeeklyReservationCountMetric>> GetWeeklyReservationCountMetricAsync(int id)
