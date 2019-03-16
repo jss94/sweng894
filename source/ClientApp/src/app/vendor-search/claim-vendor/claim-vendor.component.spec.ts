@@ -1,52 +1,47 @@
 import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { of } from 'rxjs/internal/observable/of';
-import { AuthService } from '../shared/services/auth.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Routes } from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
-import { GuestsComponent } from '../guests/guests.component';
-import { MatDialog, MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
-import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
-import { EmailModel } from '../send-email/Models/email.model';
-import { MockAuthService } from '../shared/services/mock-auth.service';
-import { VendorSearchComponent } from './claim-vendor.component';
-import { VendorSearchService } from '../Services/claim-vendor.service';
-import { FakeVendorServicesGroup } from '../shared/models/fake-vendor-services.model';
-import { MockVendorSearchService } from '../Services/mock-claim-vendor.service';
+import { MatSelectModule, MatInputModule } from '@angular/material';
+import { ClaimVendorComponent } from './claim-vendor.component';
+import { VendorSearchService } from '../Services/vendor-search.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs/internal/observable/of';
+import { RouterTestingModule } from '@angular/router/testing';
+import { VendorService } from 'src/app/vendors/Services/vendor.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { Vendor } from 'src/app/shared/models/vendor.model';
+import { unescapeIdentifier } from '@angular/compiler';
 
 describe('ClaimVendorComponent', () => {
-  let component: VendorSearchComponent;
-  let fixture: ComponentFixture<VendorSearchComponent>;
+  let component: ClaimVendorComponent;
+  let fixture: ComponentFixture<ClaimVendorComponent>;
   let mockVendorSearchService: VendorSearchService;
 
   class MockMatSnackBar {
     open() {}
   }
 
-  class MockEmailService {
-    sendVendorQuestionEmail(vendorId: number, emailModel: EmailModel) {
-
+  class MockVendorService {
+    getVendors(): Observable<Vendor[]> {
+      return of(undefined);
     }
 
-    sendEventInvitationEmail(eventId: number, emailModel: EmailModel) {
+    getVendor(userName: string): Observable<Vendor> {
+        return of(undefined);
+    }
 
+    getVendorById(vendorId: number): Observable<Vendor> {
+        return of(undefined);
     }
   }
-
-
-  const routes: Routes = [
-    { path: 'guests/:id', component: GuestsComponent },
-  ];
-
-  let fakeMatDialog: MatDialog;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        VendorSearchComponent,
-        GuestsComponent,
+        ClaimVendorComponent,
       ],
       imports: [
         FormsModule,
@@ -54,21 +49,25 @@ describe('ClaimVendorComponent', () => {
         NoopAnimationsModule,
         MatSelectModule,
         MatInputModule,
-        RouterTestingModule.withRoutes(routes),
+        RouterTestingModule.withRoutes([]),
       ],
       providers: [
-        { provide: VendorSearchService, useClass: MockVendorSearchService },
-        { provide: MatDialog, useClass: MockMatDialog },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({id: 123})
+          }
+        },
         { provide: AuthService, useClass: MockAuthService },
+        { provide: VendorService, userClass: FakeVendorService}
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VendorSearchComponent);
+    fixture = TestBed.createComponent(ClaimVendorComponent);
     component = fixture.componentInstance;
-    fakeMatDialog = TestBed.get(MatDialog);
     mockVendorSearchService = TestBed.get(VendorSearchService);
   });
 
@@ -76,19 +75,4 @@ describe('ClaimVendorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('onSearchClicked()', () => {
-    it ('should return search results', () => {
-        // arrange
-        const fakeVendorServices = new FakeVendorServicesGroup().arr;
-        spyOn(mockVendorSearchService, 'searchVendorServices').and.returnValue(of(fakeVendorServices));
-
-        // act
-        component.onSearchClicked();
-
-        // assert
-        expect(mockVendorSearchService.searchVendorServices).toHaveBeenCalledTimes(1);
-        expect(component.vendorServices.length).toBe(3);
-
-    });
-  });
 });
