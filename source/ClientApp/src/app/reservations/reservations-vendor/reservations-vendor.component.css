@@ -44,8 +44,13 @@ h2 {
 }
 
 .actions {
-    background-color: #E5E8EC;
     position: absolute;
     bottom: 0px;
     right: 0px;
+}
+
+.button {
+    background-color: #E5E8EC;
+    padding-right: 5px;
+    padding-left: 5px;
 }
