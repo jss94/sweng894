@@ -1,67 +1,74 @@
 <div *ngIf="vendorServiceModel">
 
-<div class="reservation-container">
+  <div class="page-container">
 
-      <div *ngIf="userEvents?.length > 0"><h1>
+
+    <div *ngIf="userEvents?.length > 0">
+      <h1>
         Reserve {{vendorServiceModel.serviceName}}
-        <span *ngIf='eventModel != null'> for {{eventModel.name}}</span></h1></div>
-       
-      <div *ngIf="userEvents == null || userEvents?.length == 0">
-        <h1>Reserve {{vendorServiceModel.serviceName}}</h1>
-        <div>You do not have any events. Create an event <a routerLink="events">here.</a></div>
-      </div>
-
-      <div *ngIf="userEvents?.length > 1" class='col'>
-        <form class="form" [formGroup]="reservationForm" (ngSubmit)="onCreate()">
-          <mat-form-field class="options">
-              <mat-select placeholder="Choose event" formControlName="eventList">
-              <mat-option *ngFor="let ev of userEvents" [value]="ev.guid">
-                  {{ev.name}}
-              </mat-option>
-              </mat-select>
-          </mat-form-field>
-        </form>      
-      </div>
-
-    
-    
-    
-
-
-   <div class='col'>   
-      <div class="vendor-services-item">
-        <div class="header">
-          <div class="vendor-services-icon">
-            <mat-icon>service</mat-icon>
-          </div>
-          <div>
-            <div>
-              <h5 class='vendor-services-text'>{{vendorServiceModel.serviceType}}</h5>
-            </div>            
-          </div>
-        </div>
-    
-        <div>
-            <h6>{{vendorServiceModel.serviceName}}</h6>
-        </div>
-        <div>
-            <h6 class='vendor-services-description'>{{vendorServiceModel.serviceDescription}}</h6>
-        </div>
-        <div>
-            <h6 *ngIf="vendorServiceModel.flatFee">Flat fee</h6>
-            <h6 *ngIf="!vendorServiceModel.flatFee">Price per unit</h6>
-        </div>
-        <div>
-            <h6>{{vendorServiceModel.price | currency:'USD':symbol:'1.2-2'}}</h6>
-        </div>
-        <div>
-            <h6 *ngIf="vendorServiceModel.unitsAvailable != null">{{vendorServiceModel.unitsAvailable}} units available</h6>
-        </div>
-      
-
-      </div>
+        <span *ngIf='eventModel != null'> for {{eventModel.name}}</span></h1>
     </div>
 
+    <div *ngIf="userEvents == null || userEvents?.length == 0">
+      <h1>Reserve {{vendorServiceModel.serviceName}}</h1>
+      <p>You do not have any events. Create an event <a routerLink="events">here.</a></p>
+    </div>
 
-  </div>
-</div>
+    <div class="main">
+
+        <div class="stacked">
+
+          <div *ngIf="userEvents?.length > 1">
+            <div class='col1'>
+              <form class="form" [formGroup]="reservationForm" (ngSubmit)="onCreate()">
+                <mat-form-field appearance="outline" class="first">
+                  <mat-select placeholder="Choose event" formControlName="eventList">
+                    <mat-option *ngFor="let ev of userEvents" [value]="ev.guid">
+                      {{ev.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <div *ngIf="vendorServiceModel.unitsAvailable != null">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Units Requested</mat-label>
+                    <input matInput placeholder="Units Requested" type="number" formControlName="numberReserved">
+                  </mat-form-field>
+                </div>
+              </form>
+
+              <div>
+                <h6>Total: {{cost | currency:'USD':symbol:'1.2-2'}}</h6>
+              </div>
+
+              <mat-action-row>
+                <button type="submit" mat-button [disabled]="!reservationForm.valid">
+                  <mat-icon>add</mat-icon>
+                  Request Reservation
+                </button>
+              </mat-action-row>
+            </div><!-- col 1-->
+
+          </div><!-- if-->
+     
+        </div><!--stacked-->
+      
+     
+      <div class="col2">
+        <div class="vendor-services-item">
+              <h5 class='vendor-services-text'>{{vendorServiceModel.serviceType}}</h5>
+            <h6>{{vendorServiceModel.serviceName}}</h6>
+            <h6 class='vendor-services-description'>{{vendorServiceModel.serviceDescription}}</h6>
+            <h6 *ngIf="vendorServiceModel.flatFee">Flat fee</h6>
+            <h6 *ngIf="!vendorServiceModel.flatFee">Price per unit</h6>
+            <h6>{{vendorServiceModel.price | currency:'USD':symbol:'1.2-2'}}</h6>
+            <h6 *ngIf="vendorServiceModel.unitsAvailable != null">{{vendorServiceModel.unitsAvailable}} units available</h6>
+         </div>
+      </div>
+      <!--closing flex section-->
+
+    </div>
+    <!--end main-->
+
+  </div><!-- end container -->
+</div><!-- end if -->
