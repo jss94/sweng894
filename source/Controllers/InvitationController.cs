@@ -63,8 +63,15 @@ namespace source.Controllers
         public async Task<Invitation> getInvitation(string eventGuid)
         {
             // retrieve invitation associated to event.
-            return await _invitationQuery.getInvitation(eventGuid);
-            
+            Invitation invitation = null;
+            try
+            {
+                return await _invitationQuery.getInvitation(eventGuid);
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return invitation;
+            }
         }
 
         /// <summary>
