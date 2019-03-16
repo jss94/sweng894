@@ -24,7 +24,7 @@ export class MonthlyReservationCountMetricsComponent implements OnInit {
   showXAxis = true;
   showYAxis = true;
   gradient = false;
-  showLegend = true;
+  showLegend = false;
   showXAxisLabel = true;
   xAxisLabel = 'Month';
   showYAxisLabel = true;

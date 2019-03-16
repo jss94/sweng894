@@ -37,16 +37,7 @@ namespace source.Queries
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
-                /*
-                string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '%M') as 'month'"
-                    + " from occasions.events"
-                    + " inner join"
-                    + " occasions.reservations on reservations.eventId = events.eventId"
-                    + " inner join"
-                    + " occasions.vendors on reservations.vendorId = vendors.id"
-                    + " where vendorId = @id"
-                    + " group by month";
-                */
+
                 string query = createReservationCountMetricQuery("%M", "month");
                 await Task.CompletedTask;
 
@@ -76,16 +67,7 @@ namespace source.Queries
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
-                /*
-                string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '%M') as 'month'"
-                    + " from occasions.events"
-                    + " inner join"
-                    + " occasions.reservations on reservations.eventId = events.eventId"
-                    + " inner join"
-                    + " occasions.vendors on reservations.vendorId = vendors.id"
-                    + " where vendorId = @id"
-                    + " group by month";
-                */
+                
                 string query = createReservationCountMetricQuery("%W", "weekday");
                 await Task.CompletedTask;
 
