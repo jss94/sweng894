@@ -170,7 +170,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void InsertServiceType_ReturnsNewServiceType()
+        public void InsertServiceType_ReturnsTrue()
         {
             // arrange
             var service = new VendorServices
@@ -193,8 +193,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var usersResult = result.Value as VendorServices;
-            Assert.Equal(service, usersResult);
+            var usersResult = result.Value;
+            Assert.Equal(true, usersResult);
         }
 
         [Fact]
@@ -455,6 +455,7 @@ namespace UnitTests.Controllers
         {
             //arrange
             List<VendorServices> services = null;
+
             var vendorSearchProp = new VendorSearchProperties { type = "Venue", maxPrice = 100 };
 
             _vendorServicesQueryMock.Setup(x => x.Search(vendorSearchProp))

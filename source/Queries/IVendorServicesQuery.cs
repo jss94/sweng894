@@ -15,6 +15,6 @@ namespace source.Queries
         Task<bool> DeactivateByVendorId(int id);
         Task<bool> ReactivateByVendorId(int id);
         Task<VendorServices> GetById(int id);
-        Task<IEnumerable<VendorServices>> Search(VendorSearchProperties properties);
+        Task<List<VendorServices>> Search(VendorSearchProperties properties);
     }
 }
