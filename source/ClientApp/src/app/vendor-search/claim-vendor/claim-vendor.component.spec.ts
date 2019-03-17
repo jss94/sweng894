@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testi
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule, MatInputModule } from '@angular/material';
+import { MatSelectModule, MatInputModule, MatSnackBar } from '@angular/material';
 import { ClaimVendorComponent } from './claim-vendor.component';
 import { VendorSearchService } from '../Services/vendor-search.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -14,6 +14,11 @@ import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { Vendor } from 'src/app/shared/models/vendor.model';
 import { unescapeIdentifier } from '@angular/compiler';
+import { MockVendorSearchService } from '../Services/mock-vendor-search.service';
+import { GooglePlacesService } from '../Services/google-places.service';
+import { MockGooglePlacesService } from '../Services/mock-google-places.service';
+import { GoogleMapsService } from 'src/app/google-map/Services/google-maps.service';
+import { MockGoogleMapsService } from 'src/app/google-map/Services/mock-google-maps.service';
 
 describe('ClaimVendorComponent', () => {
   let component: ClaimVendorComponent;
@@ -59,7 +64,11 @@ describe('ClaimVendorComponent', () => {
           }
         },
         { provide: AuthService, useClass: MockAuthService },
-        { provide: VendorService, userClass: FakeVendorService}
+        { provide: VendorService, useClass: MockVendorService },
+        { provide: VendorSearchService, useClass: MockVendorSearchService },
+        { provide: GooglePlacesService, useClass: MockGooglePlacesService },
+        { provide: GoogleMapsService, useClass: MockGoogleMapsService },
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     }).compileComponents();
