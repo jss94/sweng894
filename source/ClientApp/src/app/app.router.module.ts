@@ -28,7 +28,7 @@ import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 import { ReserveComponent } from './reservations/reserve/reserve.component';
 import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MonthlyReservationCountMetricsComponent } from './vendor-metrics/monthly-reservation-metric/monthly-reservation-count-metrics.component';
+import { MonthlyReservationCountMetricsComponent } from './vendor-metrics/reservation-count-metric/monthly-reservation-count-metrics.component';
 import { createCustomElement } from '@angular/elements';
 
 const routes: Routes = [

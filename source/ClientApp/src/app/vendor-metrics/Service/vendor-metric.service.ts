@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { MonthlyMetric } from '../monthly-reservation-metric/Model/monthly-metric.model';
+import { MonthlyMetric } from '../reservation-count-metric/Model/monthly-metric.model';
+import { WeekdayMetric } from '../reservation-count-metric/Model/weekday-metric.model';
 
 @Injectable()
 export class VendorMetricService {
@@ -12,8 +13,12 @@ export class VendorMetricService {
       ) {
   }
 
-  getMonthlyMetrics(id: number): Observable<MonthlyMetric[]> {
+  getMonthlyReservationCountMetrics(id: number): Observable<MonthlyMetric[]> {
       return this.auth.get('vendorMetrics/reservations/monthly/' + id);
   }
 
+
+  getWeekdayReservationCountMetrics(id: number): Observable<WeekdayMetric[]> {
+    return this.auth.get('vendorMetrics/reservations/weekday/' + id);
+  }
 }

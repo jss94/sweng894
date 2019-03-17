@@ -10,8 +10,10 @@ import { VendorMetricService } from './Service/vendor-metric.service';
 export class VendorMetricsComponent implements OnInit {
 
   vendorId: any;
-
-
+  weekdayDateFormat = 'Weekday';
+  monthlyDateFormat = 'Monthly';
+  xAxisMonthLabel = 'Month';
+  xAxisWeekdayLabel = 'Weekday';
   constructor(
     private route: ActivatedRoute,
   ) {}
