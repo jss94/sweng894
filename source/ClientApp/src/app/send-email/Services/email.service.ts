@@ -23,8 +23,11 @@ export class EmailService {
     return this.auth.post('Email/event/invitation/' + eventGuid, emailModel);
   }
 
+  sendReservationEmailNotification(reservationId: string, emailModel: EmailModel) {
+    return this.auth.post('Email/vendor/reservation/' + reservationId, emailModel);
+  }
 
-  createEmailModel(invitationSubject: string, msgContent: string, from: string): EmailModel {
+  createEmailModel(subject: string, msgContent: string, from: string): EmailModel {
     const toEmail = new EmailAddress();
     toEmail.email = from; // place holder, will be replaced by backend
 
@@ -43,7 +46,7 @@ export class EmailService {
 
     const emailModel = new EmailModel();
     emailModel.personalizations = [({ 'to': to })];
-    emailModel.subject = invitationSubject;
+    emailModel.subject = subject;
 
     emailModel.from = fromEmail;
     emailModel.content = content;

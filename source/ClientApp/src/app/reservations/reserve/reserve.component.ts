@@ -13,6 +13,7 @@ import { GuestsService } from 'src/app/guests/Services/guests.service';
 import { subscribeOn } from 'rxjs/operators';
 import { Reservation } from '../Models/reservation.model';
 import { ReservationsService } from '../Services/reservations.service';
+import { EmailModel } from 'src/app/send-email/Models/email.model';
 
 
 @Component({
@@ -95,11 +96,11 @@ export class ReserveComponent implements OnInit {
       if (guestresponse != null) {
         this.eventGuestNum = guestresponse.length
         if(this.vendorServiceModel.flatFee != true && this.vendorServiceModel.unitsAvailable < this.eventGuestNum){
-          this.reservationForm.controls["numberReserved"].setValue(this.vendorServiceModel.unitsAvailable)  
+          this.reservationForm.controls["numberReserved"].setValue(this.vendorServiceModel.unitsAvailable)
           message ='This vendor cannot accomodate all of your guests with this service. Units Requested has been set to the units available.';
           this.snackbar.open(message, '', {
             duration: 5000
-          });   
+          });
           //TODO: SET MAX IN UNITS REQUESTED CONTROL TO MAX OF VENDOR OFFERINGS
         }
         else{
@@ -152,7 +153,7 @@ export class ReserveComponent implements OnInit {
         }
       });
   }
-  
+
   onCancel() {
     this.ngOnInit();
   }
@@ -177,6 +178,18 @@ export class ReserveComponent implements OnInit {
       this.snackbar.open('Your reservation has been requested.', 'Created', {
         duration: 1500
       });
+
+      const emailModel: EmailModel = this.emailService.createEmailModel('Reservation Requested', 'Reservation Requested', this.userName);
+      this.emailService.sendReservationEmailNotification(response.id, emailModel).subscribe(emailResponse => {
+        this.snackbar.open('Your vendor has been notified.', 'Notified', {
+          duration: 1500
+        });
+      }, error => {
+        this.snackbar.open('Your reservation has been requested, but the Vendor was unable to be notified via Email.', 'Failed', {
+          duration: 1500
+        });
+      });
+
     }, error => {
       console.log(error);
       this.snackbar.open('Failed to create reservation request.', 'Failed', {
