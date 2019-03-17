@@ -113,6 +113,21 @@ export class ReservationsVendorComponent implements OnInit {
             res,
             res
         ];
+        this.changedReservations = [
+            res,
+            res,
+            res
+        ];
+        this.approvedReservations = [
+            res,
+            res,
+            res,
+            res,
+            res,
+            res,
+            res,
+            res
+        ];
     }
 
     onAcceptClicked(reservation: Reservation) {
