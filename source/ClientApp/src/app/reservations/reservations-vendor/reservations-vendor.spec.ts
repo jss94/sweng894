@@ -12,6 +12,7 @@ import { MockMatDialog } from 'src/app/nav-menu/nav-menu.component.spec';
 import { MockEventService } from 'src/app/events/Services/mock-event.service';
 import { EventService } from 'src/app/events/Services/event.service';
 import { ReservationsService } from '../Services/reservations.service';
+import { VendorService } from 'src/app/vendors/Services/vendor.service';
 
 describe('ReservationsVendorComponent', () => {
     let component: ReservationsVendorComponent;
@@ -28,6 +29,8 @@ describe('ReservationsVendorComponent', () => {
     }
   
     class MockReservationService { }
+
+    class MockVendorServices { }
   
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -42,6 +45,7 @@ describe('ReservationsVendorComponent', () => {
           { provide: MatDialog, useClass: MockMatDialog },
           { provide: EventService, useClass: MockEventService },
           { provide: ReservationsService, useClass: MockReservationService },
+          { provide: VendorService, useClass: MockVendorServices }
         ],
       })
       .compileComponents();
