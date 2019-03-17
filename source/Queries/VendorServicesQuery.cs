@@ -258,7 +258,7 @@ namespace source.Queries
         }
 
 
-        public async Task<IEnumerable<VendorServices>> Search(VendorSearchProperties properties)
+        public async Task<List<VendorServices>> Search(VendorSearchProperties properties)
         {
             try
             {
@@ -273,7 +273,7 @@ namespace source.Queries
                                 + @"   AND googleId IN @googleIds;";
 
                     var result = await connection.QueryAsync<VendorServices>(query, properties);
-                    return result;
+                    return result.ToList();
                 }
             }
             catch(Exception ex)

@@ -242,7 +242,10 @@ namespace source.Controllers
             try
             {
                 var result = await _vendorServicesQuery.Search(properties);
-
+                if(result == null)
+                {
+                    return new NotFoundResult();
+                }
                 return new OkObjectResult(result);
             }
             catch (Exception ex)
