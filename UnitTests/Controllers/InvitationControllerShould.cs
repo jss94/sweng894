@@ -51,6 +51,23 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
+        public void getInvitation_ReturnNullInvitation()
+        {
+
+            //arrange
+            var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject", eventGuid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac" };
+
+            //act
+            __invitationQueryMock.Setup(x => x.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
+                .Returns(Task.Factory.StartNew(() => ThrowExceptionForGet()));
+
+            var task = _invitationController.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
+            
+            var result = task.Result as Invitation;
+            Assert.Null(result);
+        }
+
+        [Fact]
         public void postInvitation_Return200()
         {
 
@@ -97,6 +114,11 @@ namespace UnitTests.Controllers
         }
         
         private bool ThrowException()
+        {
+            throw new Exception("Error occurred!");
+        }
+
+        private Invitation ThrowExceptionForGet()
         {
             throw new Exception("Error occurred!");
         }

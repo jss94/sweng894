@@ -58,6 +58,15 @@ export class GuestsComponent implements OnInit {
 
     });
 
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.eventGuid = params.get('eventGuid');
+
+      this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
+        this.eventName = result.name;
+      });
+
+    });
+
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.eventGuid = params.get('eventGuid');

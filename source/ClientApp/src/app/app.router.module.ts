@@ -51,7 +51,7 @@ const routes: Routes = [
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
     { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
     { path: 'reservations-vendor', component: ReservationsVendorComponent },
-    { path: 'reserve', component: ReserveComponent },
+    { path: 'reserve/:id', component: ReserveComponent },
     { path: 'vendor-metrics', component: VendorMetricsComponent },
   ];
 
@@ -79,8 +79,8 @@ const routes: Routes = [
         ReservationsVendorComponent,
         EventDialogComponent,
         ReserveComponent,
-    VendorMetricsComponent,
-    [MonthlyReservationCountMetricsComponent],
+        VendorMetricsComponent,
+        [MonthlyReservationCountMetricsComponent],
     ],
 
     imports: [

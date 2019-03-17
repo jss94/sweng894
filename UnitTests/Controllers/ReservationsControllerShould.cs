@@ -39,7 +39,7 @@ namespace UnitTests.Controllers
         public void Get_ReturnsAllReservations()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             List<Reservation> reservations = new List<Reservation> { reservation, reservation, reservation };
 
             //act
@@ -90,7 +90,7 @@ namespace UnitTests.Controllers
         public void Insert_ReturnsReservation()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
 
             //act
             _reservationsQueryMock.Setup(x => x.Insert(reservation))
@@ -110,7 +110,7 @@ namespace UnitTests.Controllers
         public void Insert_ThrowsException()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
 
             var exception = new Exception();
 
@@ -126,7 +126,7 @@ namespace UnitTests.Controllers
         public void Update_ReturnsReservation()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "Changed" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "Changed" };
 
             //act
             _reservationsQueryMock.Setup(x => x.Update(reservation))
@@ -146,7 +146,7 @@ namespace UnitTests.Controllers
         public void Update_ThrowsException()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
 
             var exception = new Exception();
 
@@ -162,7 +162,7 @@ namespace UnitTests.Controllers
         public void GetByVendor_ReturnsReservations()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             List<Reservation> reservations = new List<Reservation> { reservation, reservation, reservation };
             int vendorId = 1;
             
@@ -184,7 +184,7 @@ namespace UnitTests.Controllers
         public void GetByVendor_ReturnsNotFound()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             List<Reservation> reservations = null;
             int vendorId = 1;
 
@@ -217,7 +217,7 @@ namespace UnitTests.Controllers
         public void GetByUserName_ReturnsReservations()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             List<Reservation> reservations = new List<Reservation> { reservation, reservation, reservation };
             string userName = "user@example.com";
 
@@ -239,7 +239,7 @@ namespace UnitTests.Controllers
         public void GetByUserName_ReturnsNotFound()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             List<Reservation> reservations = null;
             string userName = "user@example.com";
 
@@ -290,7 +290,7 @@ namespace UnitTests.Controllers
         public void DeactivateReservation_ReturnsTrue()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
 
             //act
             _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
@@ -309,7 +309,7 @@ namespace UnitTests.Controllers
         public void DeactivateService_ReturnsNotFound()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             
             //act
             _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
@@ -339,7 +339,7 @@ namespace UnitTests.Controllers
         public void GetById_ReturnsReservation()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             
             //act
             _reservationsQueryMock.Setup(x => x.GetById(reservation.id.Value))
@@ -359,7 +359,7 @@ namespace UnitTests.Controllers
         public void GetById_ReturnsNotFound()
         {
             //arrange
-            var reservation = new Reservation { id = 1, eventId = 1, vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             Reservation returnedReservation = null;
             
             //act

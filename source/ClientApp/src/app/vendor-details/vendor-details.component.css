@@ -58,13 +58,15 @@ h1 {
   }
 
 .main {
-    flex: 80%;
+    flex: 55%;
     padding: 20px;
+    text-align: left;
 }
+
 .side {
     flex: 20%;
-    padding: 20px;
-    text-align: center;
+    padding: 10px;
+    text-align: left;
 }
 
 .box {
@@ -74,7 +76,7 @@ h1 {
     padding:20px;
 }
 
-
 .large {
     font-size: 96px;
 }
+
