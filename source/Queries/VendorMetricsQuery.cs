@@ -132,7 +132,7 @@ where reservations.vendorId = 35;
             string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '" + dateFormatAbbreviation + "') as '" + dateColumnName + "'"
                     + " from occasions.events"
                     + " inner join"
-                    + " occasions.reservations on reservations.eventId = events.eventId"
+                    + " occasions.reservations on reservations.eventId = events.guid"
                     + " inner join"
                     + " occasions.vendors on reservations.vendorId = vendors.id"
                     + " where vendorId = @id"
