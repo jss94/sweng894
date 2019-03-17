@@ -10,29 +10,174 @@
             <mat-expansion-panel class="expansion-panel">
 
                 <mat-expansion-panel-header class="expansion-header">
-                    <div>
-                        {{newReservation.userName}}
+                    <h4>
+                        {{newReservation.event.name}} -- {{newReservation.event.dateTime}}
+                    </h4>
+                    <div class="actions">
+                        <button class="accept-color" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(newReservation)">
+                            Accept
+                        </button>
+                        <button class="decline-color" appearance="outline" type="submit" mat-button (click)="onDeclineClicked(newReservation)">
+                            Decline
+                        </button>
                     </div>
                 </mat-expansion-panel-header>
                 
                 <div class="reservation-details">
                     <div class="services-panel">
-                        <div>
-                            {{newReservation.service.serviceName}}
+                        <h5>Service</h5>
+                        <div class="title-value-node">
+                            <h6>Requested:</h6> {{newReservation.service.serviceName}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Type:</h6>{{newReservation.service.type}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Description:</h6> {{newReservation.service.serviceDescription}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Price:</h6> {{newReservation.service.price}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Amount Requested:</h6> {{newReservation.numberReserved}}
                         </div>
                     </div>
-    
-                    <div class="actions">
-                        <button class="button" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(newReservation)">
-                            Accept
-                        </button>
-                        <button class="button" appearance="outline" type="submit" mat-button (click)="onDeclineClicked(newReservation)">
-                            Decline
-                        </button>
+
+                    <div class="event-panel">
+                        <h5>Event</h5>
+                        <div class="title-value-node">
+                            <h6>Organizer:</h6> {{newReservation.event.userName}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Description:</h6> {{newReservation.event.description}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Address:</h6> TODO: PLACEHOLDER
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Date:</h6> {{newReservation.event.dateTime}}
+                        </div>
                     </div>
                 </div>
                 
             </mat-expansion-panel>
         </div>
     </mat-accordion>
+
+    <h2 ngOnInit="let x = changedCount">Changed ({{changedCount}})</h2>
+    <mat-accordion multi="true">
+
+        <div *ngFor="let changedReservation of changedReservations">
+
+            <mat-expansion-panel class="expansion-panel">
+
+                <mat-expansion-panel-header class="expansion-header">
+                    <h4>
+                        {{changedReservation.event.name}} -- {{changedReservation.event.dateTime}}
+                    </h4>
+                    <div class="actions">
+                        <button class="accept-color" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(changedReservation)">
+                            Accept
+                        </button>
+                        <button class="decline-color" appearance="outline" type="submit" mat-button (click)="onDeclineClicked(changedReservation)">
+                            Decline
+                        </button>
+                    </div>
+                </mat-expansion-panel-header>
+                
+                <div class="reservation-details">
+                    <div class="services-panel">
+                        <h5>Service</h5>
+                        <div class="title-value-node">
+                            <h6>Requested:</h6> {{changedReservation.service.serviceName}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Type:</h6>{{changedReservation.service.type}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Description:</h6> {{changedReservation.service.serviceDescription}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Price:</h6> {{changedReservation.service.price}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Amount Requested:</h6> {{changedReservation.numberReserved}}
+                        </div>
+                    </div>
+
+                    <div class="event-panel">
+                        <h5>Event</h5>
+                        <div class="title-value-node">
+                            <h6>Organizer:</h6> {{changedReservation.event.userName}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Description:</h6> {{changedReservation.event.description}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Address:</h6> TODO: PLACEHOLDER
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Date:</h6> {{changedReservation.event.dateTime}}
+                        </div>
+                    </div>
+                </div>
+                
+            </mat-expansion-panel>
+        </div>
+    </mat-accordion>
+
+    <h2 ngOnInit="let x = approvedCount">Approved ({{approvedCount}})</h2>
+    <mat-accordion multi="true">
+
+        <div *ngFor="let approvedReservation of approvedReservations">
+
+            <mat-expansion-panel class="expansion-panel">
+
+                <mat-expansion-panel-header class="expansion-header">
+                    <h4>
+                        {{approvedReservation.event.name}} -- {{approvedReservation.event.dateTime}}
+                    </h4>
+                </mat-expansion-panel-header>
+                
+                <div class="reservation-details">
+                    <div class="services-panel">
+                        <h5>Service</h5>
+                        <div class="title-value-node">
+                            <h6>Requested:</h6> {{approvedReservation.service.serviceName}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Type:</h6>{{approvedReservation.service.type}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Description:</h6> {{approvedReservation.service.serviceDescription}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Price:</h6> {{approvedReservation.service.price}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Amount Requested:</h6> {{approvedReservation.numberReserved}}
+                        </div>
+                    </div>
+
+                    <div class="event-panel">
+                        <h5>Event</h5>
+                        <div class="title-value-node">
+                            <h6>Organizer:</h6> {{approvedReservation.event.userName}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Description:</h6> {{approvedReservation.event.description}}
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Address:</h6> TODO: PLACEHOLDER
+                        </div>
+                        <div class="title-value-node">
+                            <h6>Date:</h6> {{approvedReservation.event.dateTime}}
+                        </div>
+                    </div>
+                </div>
+                
+            </mat-expansion-panel>
+        </div>
+    </mat-accordion>
+
 </div>
