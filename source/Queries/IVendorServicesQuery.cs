@@ -8,7 +8,7 @@ namespace source.Queries
     {
         Task<List<Vendor>> GetVendorsByServiceTypes(string serviceType);
         Task<List<VendorServices>> GetAll();
-        Task<VendorServices> InsertService(VendorServices service);
+        Task InsertService(VendorServices service);
         Task<VendorServices> UpdateService(VendorServices service);
         Task<List<VendorServices>> GetServicesByVendor(int id);
         Task<bool> DeactivateByServiceId(int id);

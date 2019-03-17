@@ -117,13 +117,11 @@ namespace source.Controllers
         {
             try
             {
-                VendorServices newService = await _vendorServicesQuery.InsertService(service);
-                if (newService == null)
-                {
-                    return new NotFoundResult();
-                }
+                if (service == null) return new UnprocessableEntityResult();
 
-                return new OkObjectResult(newService);
+                await _vendorServicesQuery.InsertService(service);
+
+                return new OkObjectResult(true);
             }
             catch (Exception ex)
             {
@@ -244,12 +242,10 @@ namespace source.Controllers
             try
             {
                 var result = await _vendorServicesQuery.Search(properties);
-
-                if (result == null)
+                if(result == null)
                 {
                     return new NotFoundResult();
                 }
-
                 return new OkObjectResult(result);
             }
             catch (Exception ex)

@@ -8,7 +8,7 @@ export class FakeVendorServices implements VendorServices {
     flatFee = true;
     price = 10000;
     unitsAvailable = undefined;
-
+    googleId = 'asdfghjkl';
 
 }
 

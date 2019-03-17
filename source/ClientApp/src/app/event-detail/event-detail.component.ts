@@ -42,12 +42,13 @@ export class EventDetailComponent implements OnInit {
   }
 
   loadInvite(evnt: OccEvent) {
-
+    console.log('in loadInvite');
     this.invitationService.getInvitation(evnt.guid).subscribe(invitationResponse => {
-      // invitation exists
-      this.invitationModel = invitationResponse;
-      this.showInviteDialog(evnt);
-    }, error => {
+      if (invitationResponse != null) {
+        // invitation exists
+        this.invitationModel = invitationResponse;
+        this.showInviteDialog(evnt);
+      } else {
         // invitation does not exist
         this.invitationModel = ({
           eventGuid: evnt.guid,
@@ -55,6 +56,7 @@ export class EventDetailComponent implements OnInit {
           content: 'You are invited to celebrate ' + evnt.description
         });
         this.showInviteDialog(evnt);
+      }
     });
   }
 

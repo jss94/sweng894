@@ -21,7 +21,7 @@ export class GuestsComponent implements OnInit {
     public guests: Guest[];
     private eventGuid: string;
     isVendor = false;
-    event: OccEvent;
+    eventName: string;
 
   constructor(
         private auth: AuthService,
@@ -50,15 +50,26 @@ export class GuestsComponent implements OnInit {
       this.eventGuid = params.get('eventGuid');
 
       this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
+        if (result) {
           this.guests = result.map((guest: Guest) => {
-              guest.isUndecided = guest.isGoing === null;
-              return guest;
+            guest.isUndecided = guest.isGoing === null;
+            return guest;
           });
+        }
       });
 
+
+    });
+
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.eventGuid = params.get('eventGuid');
+
       this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
-        this.event = result;
+        if (result) {
+          this.eventName = result.name;
+        }
       });
+
     });
 
 
@@ -79,7 +90,7 @@ export class GuestsComponent implements OnInit {
             duration: 1500
           });
         });
-      }
+    }
 
     delete(guest: Guest) {
         this.guestService.delete(guest.guestId + '').subscribe(response => {

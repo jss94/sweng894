@@ -5,7 +5,7 @@ import { VendorServices } from 'src/app/shared/models/vendor-services.model'
 export interface Reservation {
     id: number
     userName: string
-    eventId: number
+    eventId: string
     vendorId: number
     vendorServiceId: number
     status: string
