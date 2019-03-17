@@ -9,7 +9,7 @@ namespace source.Models
     {
         public int? id { get; set; }
         public string userName { get; set; }
-        public int? eventId { get; set; }
+        public string eventId { get; set; }
         public int? vendorId { get; set; }
         public int? vendorServiceId { get; set; }
         public string status { get; set; }
