@@ -1,0 +1,72 @@
+<div class="vendor-services-container">
+
+    <h1>Claim Service</h1>
+
+        <form class="form" [formGroup]="vendorServiceForm" (ngSubmit)="onSubmitClicked()">
+
+          <mat-form-field class="options" appearance="outline">
+             <mat-select placeholder="Select service type" formControlName="serviceType">
+             <mat-option *ngFor="let svc of svcs" [value]="svc.value">
+                 {{svc.viewValue}}
+             </mat-option>
+             </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Service Name</mat-label>
+            <input
+              matInput
+              placeholder="Service Name"
+              formControlName="serviceName"
+              >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+              <mat-label>Service Description</mat-label>
+              <input
+                matInput
+                placeholder="Service Description"
+                formControlName="serviceDescription"
+                >
+            </mat-form-field>
+
+            <br/>
+
+          <mat-form-field appearance="outline">
+                <mat-label>Price</mat-label>
+                <input
+                  matInput
+                  placeholder="Price"
+                  formControlName="servicePrice"
+                  >
+             </mat-form-field>
+
+          <mat-form-field class="options" appearance="outline">
+            <mat-select  [(value)]="selected" formControlName="serviceFlatFee" placeholder="Flat Fee" >
+              <mat-option *ngFor="let fee of fees" [value]="fee.value">
+                {{fee.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field  appearance="outline">
+            <mat-label>Units Available</mat-label>
+            <input
+              matInput
+              placeholder="Units Available"
+              formControlName="serviceUnitsAvailable"
+              >
+          </mat-form-field>
+
+        <br>
+        <mat-action-row>
+            <button type="submit" mat-button [disabled]="!vendorServiceForm.valid" >
+                <mat-icon>add_location</mat-icon>
+                Save
+            </button>
+        </mat-action-row>
+
+    </form>
+</div>
+
+<div id="vendor-map"></div>

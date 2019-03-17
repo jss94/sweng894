@@ -26,6 +26,7 @@ import {ReservationsVendorComponent} from './reservations/reservations-vendor/re
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 import { ReserveComponent } from './reservations/reserve/reserve.component';
+import { ClaimVendorComponent } from './vendor-search/claim-vendor/claim-vendor.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -47,6 +48,8 @@ const routes: Routes = [
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
     { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
     { path: 'reservations-vendor', component: ReservationsVendorComponent },
+    { path: 'google-map', component: GoogleMapComponent },
+    { path: 'claim-vendor/:type/:id', component: ClaimVendorComponent},
     { path: 'reserve/:id', component: ReserveComponent },
   ];
 
@@ -74,6 +77,7 @@ const routes: Routes = [
         ReservationsVendorComponent,
         EventDialogComponent,
         ReserveComponent,
+        ClaimVendorComponent,
     ],
 
     imports: [

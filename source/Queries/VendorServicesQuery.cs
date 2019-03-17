@@ -83,26 +83,18 @@ namespace source.Queries
         /// </summary>
         /// <param name="service">Vendor service</param>
         /// <returns>Saved vendor service</returns>
-        public async Task<VendorServices> InsertService(VendorServices service)
+        public async Task InsertService(VendorServices service)
         {
-            try
+            using (var db = _database)
             {
-                using (var db = _database)
-                {
-                    var connection = db.Connection as MySqlConnection;
-                    await connection.OpenAsync();
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
 
-                    string query = @"INSERT INTO occasions.vendorServices (vendorId, serviceType, serviceName, serviceDescription, flatFee, price, unitsAvailable, active) "
-                        + @"VALUES (@vendorId, @serviceType, @serviceName, @serviceDescription, @flatFee, @price, @unitsAvailable, 1); "
-                        + @"SELECT * FROM occasions.vendorServices WHERE id = LAST_INSERT_ID();";
+                string query = @"INSERT INTO occasions.vendorServices (vendorId, serviceType, serviceName, serviceDescription, flatFee, price, unitsAvailable, googleId, active) "
+                    + @"VALUES (@vendorId, @serviceType, @serviceName, @serviceDescription, @flatFee, @price, @unitsAvailable, @googleId, 1); ";
 
-                    var addedService = connection.QueryAsync<VendorServices>(query, service).Result;
-                    return addedService.FirstOrDefault();
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
+
+                var addedService = await connection.ExecuteAsync(query, service);
             }
         }
 
@@ -266,7 +258,7 @@ namespace source.Queries
         }
 
 
-        public async Task<List<VendorServices>> Search(VendorSearchProperties properties)
+        public async Task<IEnumerable<VendorServices>> Search(VendorSearchProperties properties)
         {
             try
             {
@@ -277,10 +269,11 @@ namespace source.Queries
 
                     string query = @"SELECT * FROM occasions.vendorServices "
                                 + @" WHERE (active = 1 AND serviceType = @type AND price <= @maxPrice) "
-                                + @"   AND (unitsAvailable >= @maxCapacity OR unitsAvailable IS NULL)";
+                                + @"   AND (unitsAvailable >= @maxCapacity OR unitsAvailable IS NULL)"
+                                + @"   AND googleId IN @googleIds;";
 
                     var result = await connection.QueryAsync<VendorServices>(query, properties);
-                    return result.ToList();
+                    return result;
                 }
             }
             catch(Exception ex)

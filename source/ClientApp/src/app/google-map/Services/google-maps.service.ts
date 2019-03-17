@@ -9,11 +9,11 @@ export class GoogleMapsService {
     constructor() {
     }
 
-    setMap(element: HTMLElement, properties: {zoom: number, center: any}): any {
+    setMap(element: HTMLElement, properties: {zoom: number, center: any}): google.maps.Map {
         return new google.maps.Map(element, properties);
     }
 
-    setMarker(position: any, map: any ): any {
+    setMarker(position: any, map: any ): google.maps.Marker {
         return new google.maps.Marker({position, map});
     }
 }

@@ -55,7 +55,8 @@ describe('VendorDetailsComponent', () => {
     serviceDescription: 'Fake venue description',
     flatFee: true,
     price: 200.00,
-    unitsAvailable: null
+    unitsAvailable: null,
+    googleId: ''
   };
 
   const fakeSvcsArray = new Array(fakeService, fakeService, fakeService);
