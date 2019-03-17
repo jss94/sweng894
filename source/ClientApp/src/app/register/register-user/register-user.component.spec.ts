@@ -3,7 +3,6 @@ import { RegisterUserComponent } from './register-user.component';
 import { RegisterService } from '../Services/register.service';
 import { MockRegisterService } from '../Services/mock-register.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatSelectModule, MatFormFieldModule, MatInputModule, MatSnackBar, MatExpansionModule, MatIconModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FakeUser } from '../../shared/models/fake-user.model';
