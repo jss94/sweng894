@@ -101,7 +101,7 @@ export class ReservationsVendorComponent implements OnInit {
             id: 1,
             vendorId: 1,
             userName: "Zach",
-            eventId: 1,
+            eventId: "1",
             vendorServiceId: 1,
             status: "New",
             numberReserved: 20,

@@ -24,7 +24,8 @@ export class VendorDetailsComponent implements OnInit {
   vendor: Vendor;
   vendorServices: VendorServices[];
   isFavorite: boolean;
-
+  isOrganizer: boolean;
+  
   constructor(
     private auth: AuthService,
     private vendorServicesService: VendorServicesService,
@@ -38,8 +39,9 @@ export class VendorDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setFavoriteState();
     this.setVendor();
+    this.setUserRole();
+    this.setFavoriteState();
   }
 
   toggleFavorite() {
@@ -136,4 +138,17 @@ export class VendorDetailsComponent implements OnInit {
       duration: 3000
     });
   }
+
+  setUserRole()
+  {
+    this.auth.user$.subscribe((user) => {
+      if (user && user.role === 'ORGANIZER') {
+        this.isOrganizer = true;
+      }
+      else{ 
+        this.isOrganizer = false; 
+      }
+    });
+  }
+  
 }

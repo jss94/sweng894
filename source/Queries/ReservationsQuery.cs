@@ -99,7 +99,7 @@ namespace source.Queries
                     var reserved = (await connection.QueryAsync<Reservation>(query, reservation)).FirstOrDefault();
                     if(reserved != null)
                     {
-                        reserved.evt = await _eventQuery.GetEventById(reserved.eventId.Value);
+                        reserved.evt = await _eventQuery.GetEventByGuid(reserved.eventId);
                         reserved.vendor = await _vendorsQuery.GetById(reserved.vendorId.Value);
                         reserved.vendorService = await _vendorServicesQuery.GetById(reserved.vendorServiceId.Value);
                     }
@@ -135,7 +135,7 @@ namespace source.Queries
                     var reserved = (await connection.QueryAsync<Reservation>(query, reservation)).FirstOrDefault();
                     if (reserved != null)
                     {
-                        reserved.evt = await _eventQuery.GetEventById(reserved.eventId.Value);
+                        reserved.evt = await _eventQuery.GetEventByGuid(reserved.eventId);
                         reserved.vendor = await _vendorsQuery.GetById(reserved.vendorId.Value);
                         reserved.vendorService = await _vendorServicesQuery.GetById(reserved.vendorServiceId.Value);
                     }
@@ -215,7 +215,7 @@ namespace source.Queries
         {
             reservation.vendor = await _vendorsQuery.GetById(reservation.vendorId.Value);
             reservation.vendorService = await _vendorServicesQuery.GetById(reservation.vendorServiceId.Value);
-            reservation.evt = await _eventQuery.GetEventById(reservation.eventId.Value);
+            reservation.evt = await _eventQuery.GetEventByGuid(reservation.eventId);
         }
 
         /// <summary>

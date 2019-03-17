@@ -66,7 +66,17 @@
             <div><h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6></div>
             <div><h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6></div>
           </div>
+
+          <div class="side">
+          <button *ngIf="isOrganizer || !isOrganizer" mat-button [routerLink]='["/reserve/", service.id]'>
+            <mat-icon>event_available</mat-icon>
+            Reserve
+          </button>
         </div>
+
+         <div>
+        </div>
+      </div>
    </div>
 </div>
 
