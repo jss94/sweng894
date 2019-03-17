@@ -38,7 +38,7 @@ namespace source.Controllers
         /// <summary>
         /// Remove a favorite vendor from a user specific list of favorite vendors
         /// </summary>
-        /// <returns>Status code 204 or 404</returns>
+        /// <returns>Status code 204 or 400</returns>
         /// <param name="userName">User's user name.</param>
         /// <param name="vendorId">Vendor ID.</param>
         [HttpDelete("{userName}/{vendorId}")]
