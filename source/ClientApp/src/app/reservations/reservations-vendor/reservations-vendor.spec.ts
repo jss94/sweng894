@@ -13,6 +13,7 @@ import { MockEventService } from 'src/app/events/Services/mock-event.service';
 import { EventService } from 'src/app/events/Services/event.service';
 import { ReservationsService } from '../Services/reservations.service';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ReservationsVendorComponent', () => {
     let component: ReservationsVendorComponent;
@@ -35,8 +36,11 @@ describe('ReservationsVendorComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [ReservationsVendorComponent],
-        imports: [FormsModule,
-          ReactiveFormsModule],
+        imports: [
+          FormsModule,
+          ReactiveFormsModule,
+          RouterTestingModule.withRoutes([])
+        ],
         schemas: [NO_ERRORS_SCHEMA],
         providers: [
           { provide: AuthService, useClass: MockAuthService },

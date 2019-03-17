@@ -50,11 +50,14 @@ export class GuestsComponent implements OnInit {
       this.eventGuid = params.get('eventGuid');
 
       this.guestService.getGuests(this.eventGuid).subscribe((result: Guest[]) => {
-        this.guests = result.map((guest: Guest) => {
-          guest.isUndecided = guest.isGoing === null;
-          return guest;
-        });
+        if (result) {
+          this.guests = result.map((guest: Guest) => {
+            guest.isUndecided = guest.isGoing === null;
+            return guest;
+          });
+        }
       });
+
 
     });
 
@@ -62,7 +65,9 @@ export class GuestsComponent implements OnInit {
       this.eventGuid = params.get('eventGuid');
 
       this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
-        this.eventName = result.name;
+        if (result) {
+          this.eventName = result.name;
+        }
       });
 
     });
@@ -85,7 +90,7 @@ export class GuestsComponent implements OnInit {
             duration: 1500
           });
         });
-      }
+    }
 
     delete(guest: Guest) {
         this.guestService.delete(guest.guestId + '').subscribe(response => {
