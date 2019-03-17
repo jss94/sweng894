@@ -50,7 +50,7 @@ const routes: Routes = [
     { path: 'reservations-vendor', component: ReservationsVendorComponent },
     { path: 'google-map', component: GoogleMapComponent },
     { path: 'claim-vendor/:type/:id', component: ClaimVendorComponent},
-    { path: 'reserve', component: ReserveComponent },
+    { path: 'reserve/:id', component: ReserveComponent },
   ];
 
 @NgModule({

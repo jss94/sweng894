@@ -10,6 +10,7 @@ using source.Models.Email;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace UnitTests.Controllers
 {
@@ -22,6 +23,9 @@ namespace UnitTests.Controllers
         readonly Mock<ILogger> _loggerMock;
         readonly EmailController _emailController;
         readonly Mock<IInvitationQuery> _invitationQueryMock;
+        readonly Mock<IReservationsQuery> _reservationQueryMock;
+        readonly Mock<IVendorServicesQuery> _vendorServiceQueryMock;
+        readonly Mock<HttpContext> _mockHttpContext;
 
         public EmailControllerShould()
         {
@@ -30,7 +34,10 @@ namespace UnitTests.Controllers
             _loggerMock = new Mock<ILogger>();
             _emailQueryMock = new Mock<IEmailQuery>();
             _invitationQueryMock = new Mock<IInvitationQuery>();
-            _emailController = new EmailController(_vendorQueryMock.Object, _guestQueryMock.Object, _loggerMock.Object, _emailQueryMock.Object, _invitationQueryMock.Object);
+            _reservationQueryMock = new Mock<IReservationsQuery>();
+            _vendorServiceQueryMock = new Mock<IVendorServicesQuery>();
+            _mockHttpContext = new Mock<HttpContext>();
+            _emailController = new EmailController(_vendorQueryMock.Object, _guestQueryMock.Object, _loggerMock.Object, _emailQueryMock.Object, _invitationQueryMock.Object, _reservationQueryMock.Object, _vendorServiceQueryMock.Object);
         }
         
         [Fact]
@@ -131,6 +138,9 @@ namespace UnitTests.Controllers
             _emailQueryMock.Setup(x => x.sendEmailViaPostAsync(emailMsg))
             .Returns(Task.Factory.StartNew(() => HttpStatusCode.Accepted));
 
+            _emailQueryMock.Setup(x => x.getBaseUrlForEmail(It.IsAny<HttpContext>()))
+                .Returns("https://fakeUrl.com");
+
             var task = _emailController.PostEventInviteToGuests(eventGuid, emailMsg);
             
             // assert
@@ -171,6 +181,56 @@ namespace UnitTests.Controllers
             // assert
             Assert.IsType<HttpStatusCode>(task.Result);
             Assert.Equal(HttpStatusCode.NotFound, task.Result);
+        }
+
+        [Fact]
+        public void PostReservationToVendor_Return202()
+        {
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
+            var vendor = new Vendor { id = 1, userName = "vendor@example.com", name = "name1", website = "website_1" };
+            var service = new VendorServices
+            {
+                id = 1,
+                vendorId = 1,
+                flatFee = true,
+                price = 20,
+                serviceDescription = "desc",
+                serviceName = "svcName",
+                serviceType = "Venue"
+            };
+
+            var emailMsg = new EmailMessage();
+
+            emailMsg.from = new source.Models.Email.EmailRecipient("unit@testEmail.com");
+            emailMsg.subject = "Unit Test";
+
+            List<EmailPersonalization> personalizations = new List<EmailPersonalization>();
+            EmailPersonalization personalization = new EmailPersonalization();
+            personalization.to.Add((new EmailRecipient("unitTest@email.com")));
+            personalizations.Add(personalization);
+            emailMsg.personalizations = personalizations;
+
+            List<EmailContent> contents = new List<EmailContent>();
+            contents.Add(new EmailContent("text/plain", "unit content"));
+            emailMsg.content = contents;
+
+            _reservationQueryMock.Setup(x => x.GetById(It.IsAny<int>()))
+                .Returns(Task.Factory.StartNew(() => reservation));
+
+            _vendorQueryMock.Setup(x => x.GetById(1))
+                .Returns(Task.Factory.StartNew(() => vendor));
+
+            _vendorServiceQueryMock.Setup(x => x.GetById(1))
+            .Returns(Task.Factory.StartNew(() => service));
+
+            _emailQueryMock.Setup(x => x.sendEmailViaPostAsync(emailMsg))
+            .Returns(Task.Factory.StartNew(() => HttpStatusCode.Accepted));
+            
+            var task = _emailController.PostReservationToVendor(1, emailMsg);
+
+            // assert
+            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.Equal(HttpStatusCode.Accepted, task.Result);
         }
     }
 }
