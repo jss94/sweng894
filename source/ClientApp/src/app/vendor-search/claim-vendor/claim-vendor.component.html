@@ -42,7 +42,7 @@
              </mat-form-field>
 
           <mat-form-field class="options" appearance="outline">
-            <mat-select  [(value)]="selected" formControlName="serviceFlatFee" placeholder="Flat Fee" >
+            <mat-select formControlName="serviceFlatFee" placeholder="Flat Fee" >
               <mat-option *ngFor="let fee of fees" [value]="fee.value">
                 {{fee.viewValue}}
               </mat-option>

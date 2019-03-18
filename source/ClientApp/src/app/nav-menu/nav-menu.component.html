@@ -22,7 +22,7 @@
       </button>
       
 
-      <button *ngIf="isOrganizer" mat-button [routerLink]='["/search-vendors"]' [routerLinkActive]='["link-active"]'>
+      <button *ngIf="isOrganizer || isVendor" mat-button [routerLink]='["/search-vendors"]' [routerLinkActive]='["link-active"]'>
         <mat-icon>search</mat-icon>
         Search
       </button>

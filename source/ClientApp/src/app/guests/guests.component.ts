@@ -24,7 +24,7 @@ export class GuestsComponent implements OnInit {
     eventName: string;
 
   constructor(
-        private auth: AuthService,
+        public auth: AuthService,
         private guestService: GuestsService,
         private route: ActivatedRoute,
         private router: Router,
