@@ -71,30 +71,56 @@ export class VendorSearchComponent implements OnInit {
     private googleMapsService: GoogleMapsService,
     ) {
 
-      this.searchForm.controls['location'].disable();
 
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.geolocation$.next({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        });
-      }, function(error) {
-        console.log(error);
-      });
-
-      this.geolocation$.subscribe((location: {lat: number, lng: number}) => {
-        this.googlePlacesService.getAddressFromGeolocation(location)
-        .subscribe((address) => {
-          this.searchForm.controls['location'].enable();
-          this.searchForm.controls['location'].setValue(address);
-        });
-      });
   }
 
   ngOnInit() {
     if (this.googlePlacesService.lastSearch !== undefined) {
       this.searchForm = this.googlePlacesService.lastSearch;
+      this.onSearchClicked();
     }
+
+    const property = {
+      zoom: 12,
+      center: {lat: 0, lng: 0},
+    };
+
+    this.map = this.googleMapsService.setMap(document.getElementById('search-map'), property);
+
+
+    if (this.authService.user) {
+      this.isVendor = this.authService.user.role === 'Admin' || this.authService.user.role === 'VENDOR';
+    } else {
+      this.authService.user$.subscribe(user => {
+        this.isVendor = user.role === 'Admin' || user.role === 'VENDOR';
+      });
+    }
+  }
+
+  getLocationFromBrowser() {
+    this.searchForm.controls['location'].disable();
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.geolocation$.next({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      });
+    }, function(error) {
+      console.log(error);
+    });
+
+    this.geolocation$.subscribe((location: {lat: number, lng: number}) => {
+      this.googlePlacesService.getAddressFromGeolocation(location)
+      .subscribe((address) => {
+        this.searchForm.controls['location'].enable();
+        this.searchForm.controls['location'].setValue(address);
+      });
+    });
+
+  }
+
+  populateLocationClicked() {
+    this.getLocationFromBrowser();
 
     this.geolocation$.subscribe((location: {lat: number, lng: number}) => {
       const property = {
@@ -107,20 +133,8 @@ export class VendorSearchComponent implements OnInit {
       const marker = this.googleMapsService.setMarker(location, this.map);
       this.markers.push(marker);
 
-      if (this.googlePlacesService.lastSearch !== undefined) {
-        this.onSearchClicked();
-      }
     });
-
-    if (this.authService.user) {
-      this.isVendor = this.authService.user.role === 'Admin' || this.authService.user.role === 'VENDOR';
-    } else {
-      this.authService.user$.subscribe(user => {
-        this.isVendor = user.role === 'Admin' || user.role === 'VENDOR';
-      });
-    }
   }
-
   onSearchClicked() {
     this.saveSearchCriteria();
 
