@@ -1,3 +1,8 @@
+#search-map {
+  width: 100%;
+  height: 55vh;
+}
+
 h1 {
   padding: 10px;
 }
@@ -49,16 +54,6 @@ mat-form-field {
   width: 100%;
 }
 
-.search-item {
-  width: 100%;
-  margin-top: 10px;
-  padding: 0px;
-  background-color: #E5E8EC;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .search-item:hover {
   background-color: rgb(193, 198, 206);
 }
@@ -70,8 +65,18 @@ mat-form-field {
   width: 100%;
 }
 
- 
 .vendor-services-item {
+  opacity: 0.2;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #E5E8EC;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.claimed-vendor-services-item {
   width: 100%;
   margin-top: 10px;
   padding: 10px;
@@ -87,4 +92,8 @@ mat-form-field {
 
 .vendor-services-description{
   max-width: 400px;
+}
+
+.address .mat-form-field{
+  width:675px !important;
 }

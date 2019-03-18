@@ -14,7 +14,4 @@ export class VendorSearchService {
     return this.auth.post('vendorservices/search', properties);
   }
 
-  claimVendorServices(service: VendorServices): Observable<boolean> {
-    return this.auth.post('vendorservices/', service);
-  }
 }

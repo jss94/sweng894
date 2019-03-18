@@ -82,7 +82,8 @@ export class ReservationsVendorComponent implements OnInit {
             serviceDescription: "Place To Do Stuff",
             flatFee: true,
             price: 100.00,
-            unitsAvailable: 10
+            unitsAvailable: 10,
+            googleId: 'asdfghjkl'
         }
         var evt: OccEvent = {
             userName: "Debs",
@@ -110,6 +111,21 @@ export class ReservationsVendorComponent implements OnInit {
             vendor: ven
         };
         this.newReservations = [
+            res,
+            res
+        ];
+        this.changedReservations = [
+            res,
+            res,
+            res
+        ];
+        this.approvedReservations = [
+            res,
+            res,
+            res,
+            res,
+            res,
+            res,
             res,
             res
         ];

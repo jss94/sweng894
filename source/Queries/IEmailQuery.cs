@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using source.Models;
 
 namespace source.Queries
@@ -10,6 +11,7 @@ namespace source.Queries
         
         Task<HttpStatusCode> sendEmailViaPostAsync(EmailMessage emailMsg);
 
+        string getBaseUrlForEmail(HttpContext context);
 
     }
 }

@@ -1,6 +1,7 @@
 export interface VendorServices {
     id?: number;
     vendorId: number;
+    googleId: string;
     serviceType: string;
     serviceName: string;
     serviceDescription: string;

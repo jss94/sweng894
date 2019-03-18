@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { AuthService } from '../shared/services/auth.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { VendorServices } from '../shared/models/vendor-services.model';
 import { Vendor } from '../shared/models/vendor.model';
@@ -13,6 +13,7 @@ import { of } from 'rxjs/internal/observable/of';
 import { Observable } from 'rxjs';
 import { MockMatDialog } from '../deactivate-user/deactivate-user.component.spec';
 import { EmailService } from '../send-email/Services/email.service';
+import { RouterTestingModule } from '@angular/router/testing';
 import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
 import { MockFavoriteVendorService } from '../favorite-vendors/Services/mock-favorite-vendors.service';
 
@@ -59,7 +60,8 @@ describe('VendorDetailsComponent', () => {
     serviceDescription: 'Fake venue description',
     flatFee: true,
     price: 200.00,
-    unitsAvailable: null
+    unitsAvailable: null,
+    googleId: ''
   };
 
   const fakeSvcsArray = new Array(fakeService, fakeService, fakeService);
@@ -100,6 +102,8 @@ describe('VendorDetailsComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatExpansionModule,
+        RouterModule,
+        RouterTestingModule,
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })

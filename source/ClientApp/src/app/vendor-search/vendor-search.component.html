@@ -1,106 +1,123 @@
 <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Vendor Search">  
 
-      <div class="search-container">
+<div class="search-container">
+  <h1>Vendor Search</h1>
 
-        <h1>Vendor Search</h1>
+  <form class="form" [formGroup]="searchForm">
 
-        <form class="form" [formGroup]="searchForm">
+    <div class="address">
+      <mat-form-field appearance="outline">
+        <mat-label>My Address</mat-label>
+        <input
+          matInput
+          autocomplete="address-line1"
+          placeholder="Your location"
+          formControlName="location"
+          >
+      </mat-form-field>
+  </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Maximum Price</mat-label>
+        <input
+          matInput
+          autocomplete="price"
+          placeholder="Your desired max price"
+          formControlName="price"
+          >
+      </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Maximum Price</mat-label>
-            <input
-              matInput
-              autocomplete="price"
-              placeholder="Your desired max price"
-              formControlName="price"
-              >
-          </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Capacity</mat-label>
+        <input
+          matInput
+          autocomplete="capacity"
+          placeholder="Your head count"
+          formControlName="capacity"
+          >
+      </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Capacity</mat-label>
-            <input
-              matInput
-              autocomplete="capacity"
-              placeholder="Your head count"
-              formControlName="capacity"
-              >
-          </mat-form-field>
+      <mat-form-field appearance="outline" class="options">
+        <mat-select formControlName="category" placeholder="Type of Vendor" >
+          <mat-option *ngFor="let type of svcs" [value]="type.value">
+            {{type.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Zip Code</mat-label>
-            <input
-              matInput
-              autocomplete="postal-code"
-              placeholder="Zipcode"
-              formControlName="zip"
-              >
-          </mat-form-field>
+    <button mat-button type="submit" (click)="onSearchClicked(undefined)" matTooltip="Search for a Vendor Service">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
 
-          <mat-form-field class="options">
-            <mat-select formControlName="category" placeholder="Type of Vendor" >
-              <mat-option *ngFor="let type of svcs" [value]="type.value">
-                {{type.viewValue}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+    <button mat-button (click)="onResetClicked()" matTooltip="Reset search parameters">
+      <mat-icon>cached</mat-icon>
+      Reset
+    </button>
+    
+  </form>
 
 
-          <button mat-button type="submit" (click)="onSearchClicked()" matTooltip="Search for a Vendor Service">
-            <mat-icon>search</mat-icon>
-            Search
-          </button>
+</div>
 
-          <button mat-button (click)="onResetClicked()" matTooltip="Reset search parameters">
-            <mat-icon>cached</mat-icon>
-            Reset
-          </button>
-          
-        </form>
+<div class="item-container" *ngFor="let service of claimedServices">
+  <div class="claimed-vendor-services-item">
 
+    <div class="header">
+      <h6>{{service.serviceName}}</h6>
+    </div>
+    
+    <div class="description">
+        <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
+    </div>
 
+    <div class="value">
+      <div>
+          <h6 *ngIf="claimedServices.flatFee">Flat fee</h6>
+          <h6 *ngIf="!claimedServices.flatFee">Price per unit</h6>
       </div>
-
-      <div class="item-container" *ngFor="let service of vendorServices">
-        <div class="vendor-services-item">
-
-          <div class="header">
-            <h6>{{service.serviceName}}</h6>
-          </div>
-          
-          <div class="description">
-              <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
-          </div>
-
-          <div class="value">
-            <div>
-                <h6 *ngIf="service.flatFee">Flat fee</h6>
-                <h6 *ngIf="!service.flatFee">Price per unit</h6>
-            </div>
-            <div>
-                <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
-            </div>
-            <div>
-                <h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
-            </div>
-          </div>
-
-          <div class="actions">
-            
-              <button mat-button (click)="onViewClicked(service)">
-                  <mat-icon>remove_red_eye</mat-icon>
-              </button>
-              
-          </div>
-
-
-        </div>
+      <div>
+          <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
       </div>
+      <div>
+          <h6 *ngIf="claimedServices.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
+      </div>
+    </div>
 
-    </mat-tab>
-    <mat-tab label="Favorite Vendors"> 
-      <app-favorite-vendors></app-favorite-vendors> 
-    </mat-tab>
-  </mat-tab-group>
+    <div class="actions">
+      <button mat-button (click)="onDetailsClicked(service)">
+          <mat-icon>remove_red_eye</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
 
+<div class="item-container" *ngFor="let service of unclaimedServices">
+  <div class="vendor-services-item">
+
+    <div class="header">
+      <h6>{{service.serviceName}}</h6>
+    </div>
+
+    <div class="value">
+      <h6>{{service.serviceDescription}}</h6>
+    </div>
+
+    <div class="actions">
+      <button *ngIf="isVendor" mat-button (click)="onClaimClicked(service)">
+          <mat-icon>add_location</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="search-map"></div>
+
+  </mat-tab>
+  <mat-tab label="Favorite Vendors"> 
+    <app-favorite-vendors></app-favorite-vendors> 
+  </mat-tab>
+</mat-tab-group>
 
