@@ -27,6 +27,7 @@ import { EventDialogComponent } from './shared/components/event-dialog/event-dia
 import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 import { ReserveComponent } from './reservations/reserve/reserve.component';
 import { ClaimVendorComponent } from './vendor-search/claim-vendor/claim-vendor.component';
+import { FavoriteVendorsComponent } from './favorite-vendors/favorite-vendors.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -78,6 +79,7 @@ const routes: Routes = [
         EventDialogComponent,
         ReserveComponent,
         ClaimVendorComponent,
+        FavoriteVendorsComponent,
     ],
 
     imports: [

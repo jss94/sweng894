@@ -22,6 +22,7 @@ import { VendorSearchService } from './vendor-search/Services/vendor-search.serv
 import { InvitationService } from './invitations/Services/invitation.service';
 import { ReservationsService } from './reservations/Services/reservations.service';
 import { GooglePlacesService } from './vendor-search/Services/google-places.service';
+import { FavoriteVendorsService } from './favorite-vendors/Services/favorite-vendors.service';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { GooglePlacesService } from './vendor-search/Services/google-places.serv
     InvitationService,
     ReservationsService,
     GooglePlacesService,
-    DatePipe
+    DatePipe,
+    FavoriteVendorsService
   ],
   bootstrap: [AppComponent]
 })
