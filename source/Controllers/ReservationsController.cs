@@ -59,6 +59,11 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// Inserts/creates a reservation
+        /// </summary>
+        /// <param name="reservation">Reservation</param>
+        /// <returns>Reservation</returns>
         [HttpPost]
         public async Task<IActionResult> Insert([FromBody]Reservation reservation)
         {
@@ -74,6 +79,11 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a reservation
+        /// </summary>
+        /// <param name="reservation">Reservation</param>
+        /// <returns>Reservation</returns>
         [HttpPut]
         public async Task<IActionResult> Update([FromBody]Reservation reservation)
         {
@@ -154,6 +164,11 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// Deactivates a reservation
+        /// </summary>
+        /// <param name="id">Reservation Id</param>
+        /// <returns>True/False</returns>
         [HttpDelete]
         public async Task<IActionResult> Deactivate(int id)
         {
@@ -175,6 +190,11 @@ namespace source.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a reservation by reservation id
+        /// </summary>
+        /// <param name="id">Reservation Id</param>
+        /// <returns>Reservation</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -185,6 +205,29 @@ namespace source.Controllers
                     return new NotFoundResult();
 
                 return new OkObjectResult(reservation);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError(HttpContext.User, ex);
+                return new BadRequestResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets reservations for an event
+        /// </summary>
+        /// <param name="guid">Event Guid</param>
+        /// <returns>List of Reservation</returns>
+        [HttpGet("event/{guid}")]
+        public async Task<IActionResult> GetByEventId(string guid)
+        {
+            try
+            {
+                List<Reservation> reservations = await _reservationsQuery.GetByEventId(guid);
+                if (reservations == null)
+                    return new NotFoundResult();
+
+                return new OkObjectResult(reservations);
             }
             catch (Exception ex)
             {
