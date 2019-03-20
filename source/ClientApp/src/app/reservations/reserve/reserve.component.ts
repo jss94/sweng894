@@ -71,6 +71,12 @@ export class ReserveComponent implements OnInit {
       const svcId = +params.get('id');
       this.vendorServicesService.getVendorServiceById(svcId).subscribe(response => {
         this.vendorServiceModel = response;
+        let maxNumber = 1;
+        debugger
+        if(this.vendorServiceModel.unitsAvailable != null){
+          maxNumber = this.vendorServiceModel.unitsAvailable;
+          this.reservationForm.controls["numberReserved"].setValidators([Validators.min(1), Validators.max(maxNumber)]);
+        }        
       });
     }, error => {
       console.log(error);
@@ -101,7 +107,6 @@ export class ReserveComponent implements OnInit {
           this.snackbar.open(message, '', {
             duration: 5000
           });
-          //TODO: SET MAX IN UNITS REQUESTED CONTROL TO MAX OF VENDOR OFFERINGS
         }
         else{
         this.reservationForm.controls["numberReserved"].setValue(this.eventGuestNum)
