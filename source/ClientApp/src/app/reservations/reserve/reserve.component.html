@@ -33,6 +33,7 @@
                 <mat-form-field appearance="outline">
                   <mat-label>Units Requested</mat-label>
                   <input matInput placeholder="Units Requested" type="number" formControlName="numberReserved">
+                  <mat-error>{{getMaxNumberErrorMessage()}}</mat-error>
                 </mat-form-field>
               </div>
             </form>

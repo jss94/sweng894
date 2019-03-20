@@ -14,7 +14,7 @@ import { subscribeOn } from 'rxjs/operators';
 import { Reservation } from '../Models/reservation.model';
 import { ReservationsService } from '../Services/reservations.service';
 import { EmailModel } from 'src/app/send-email/Models/email.model';
-
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-reserve',
@@ -32,7 +32,7 @@ export class ReserveComponent implements OnInit {
 
   reservationForm = new FormGroup({
     eventList: new FormControl('', [Validators.required]),
-    numberReserved: new FormControl('', [Validators.required]),
+    numberReserved: new FormControl(''),
   });
 
   constructor(
@@ -45,6 +45,7 @@ export class ReserveComponent implements OnInit {
     private eventService: EventService,
     private guestService: GuestsService,
     private reservationService: ReservationsService,
+    private location: Location,
   ) {
   }
 
@@ -72,10 +73,9 @@ export class ReserveComponent implements OnInit {
       this.vendorServicesService.getVendorServiceById(svcId).subscribe(response => {
         this.vendorServiceModel = response;
         let maxNumber = 1;
-        debugger
         if(this.vendorServiceModel.unitsAvailable != null){
           maxNumber = this.vendorServiceModel.unitsAvailable;
-          this.reservationForm.controls["numberReserved"].setValidators([Validators.min(1), Validators.max(maxNumber)]);
+          this.reservationForm.controls["numberReserved"].setValidators([Validators.required, Validators.min(1), Validators.max(maxNumber)]);
         }        
       });
     }, error => {
@@ -160,7 +160,7 @@ export class ReserveComponent implements OnInit {
   }
 
   onCancel() {
-    this.ngOnInit();
+    this.location.back();
   }
 
   onCreate(): void {
@@ -201,6 +201,17 @@ export class ReserveComponent implements OnInit {
         duration: 3500
       });
     });
+  }
+
+  getMaxNumberErrorMessage() {
+    debugger
+    let val = this.reservationForm.controls['numberReserved'].value;
+    if(val == '0'){
+      return "Must be greater than 0"
+    }
+    else if(val > this.vendorServiceModel.unitsAvailable){
+      return "Must be " + this.vendorServiceModel.unitsAvailable + " or less";
+    }
   }
 
 }
