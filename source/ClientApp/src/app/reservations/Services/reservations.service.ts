@@ -43,4 +43,8 @@ export class ReservationsService {
     return this.auth.get('reservation/statusTypes');
   }
 
+  getReservationsByEventGuid(guid: string): Observable<Reservation[]>{
+    return this.auth.get('reservation/event/' + guid)
+  }
+
 }

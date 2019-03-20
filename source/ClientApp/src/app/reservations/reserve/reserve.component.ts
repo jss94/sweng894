@@ -14,7 +14,7 @@ import { subscribeOn } from 'rxjs/operators';
 import { Reservation } from '../Models/reservation.model';
 import { ReservationsService } from '../Services/reservations.service';
 import { EmailModel } from 'src/app/send-email/Models/email.model';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-reserve',
@@ -29,6 +29,7 @@ export class ReserveComponent implements OnInit {
   eventModel: OccEvent
   eventGuestNum: number
   cost: number
+  reservations: Reservation[]
 
   reservationForm = new FormGroup({
     eventList: new FormControl('', [Validators.required]),
@@ -73,10 +74,10 @@ export class ReserveComponent implements OnInit {
       this.vendorServicesService.getVendorServiceById(svcId).subscribe(response => {
         this.vendorServiceModel = response;
         let maxNumber = 1;
-        if(this.vendorServiceModel.unitsAvailable != null){
+        if (this.vendorServiceModel.unitsAvailable != null) {
           maxNumber = this.vendorServiceModel.unitsAvailable;
           this.reservationForm.controls["numberReserved"].setValidators([Validators.required, Validators.min(1), Validators.max(maxNumber)]);
-        }        
+        }
       });
     }, error => {
       console.log(error);
@@ -101,15 +102,15 @@ export class ReserveComponent implements OnInit {
     this.guestService.getGuests(value).subscribe(guestresponse => {
       if (guestresponse != null) {
         this.eventGuestNum = guestresponse.length
-        if(this.vendorServiceModel.flatFee != true && this.vendorServiceModel.unitsAvailable < this.eventGuestNum){
+        if (this.vendorServiceModel.flatFee != true && this.vendorServiceModel.unitsAvailable < this.eventGuestNum) {
           this.reservationForm.controls["numberReserved"].setValue(this.vendorServiceModel.unitsAvailable)
-          message ='This vendor cannot accomodate all of your guests with this service. Units Requested has been set to the units available.';
+          message = 'This vendor cannot accomodate all of your guests with this service. Units Requested has been set to the units available.';
           this.snackbar.open(message, '', {
             duration: 5000
           });
         }
-        else{
-        this.reservationForm.controls["numberReserved"].setValue(this.eventGuestNum)
+        else {
+          this.reservationForm.controls["numberReserved"].setValue(this.eventGuestNum)
         }
       }
     }, (error) => {
@@ -167,16 +168,30 @@ export class ReserveComponent implements OnInit {
     const res: Reservation = {
       id: null,
       userName: this.userName,
-    eventId: this.eventModel.guid,
-    vendorId: this.vendorServiceModel.vendorId,
-    vendorServiceId: this.vendorServiceModel.id,
-    status: "New",
-    numberReserved:  this.reservationForm.controls['numberReserved'].value,
-    service: null,
-    event: null,
-    vendor: null
-     };
+      eventId: this.eventModel.guid,
+      vendorId: this.vendorServiceModel.vendorId,
+      vendorServiceId: this.vendorServiceModel.id,
+      status: "New",
+      numberReserved: this.reservationForm.controls['numberReserved'].value,
+      service: null,
+      event: null,
+      vendor: null
+    };
 
+    this.reservationService.getReservationsByEventGuid(this.eventModel.guid).subscribe((response: Reservation[]) => {
+      if(response != null){
+        response.forEach(function(val){
+          if(val.service.serviceType == this.vendorServiceModel.serviceType){
+            this.snackbar.open('You already have a reservation for ' + val.service.serviceType, 'Failed', {
+              duration: 1500
+            });
+            return;
+          }
+        });
+      }//if
+    });
+          
+    
     this.reservationService.createReservation(res).subscribe(response => {
       this.ngOnInit();
       this.reservationForm.reset();
@@ -204,12 +219,11 @@ export class ReserveComponent implements OnInit {
   }
 
   getMaxNumberErrorMessage() {
-    debugger
     let val = this.reservationForm.controls['numberReserved'].value;
-    if(val == '0'){
+    if (val == '0') {
       return "Must be greater than 0"
     }
-    else if(val > this.vendorServiceModel.unitsAvailable){
+    else if (val > this.vendorServiceModel.unitsAvailable) {
       return "Must be " + this.vendorServiceModel.unitsAvailable + " or less";
     }
   }
