@@ -9,7 +9,8 @@ namespace source.Models
     public class VendorServices
     {
         public int? id { get; set; }
-        public int?vendorId { get; set; }
+        public int vendorId { get; set; }
+        public string googleId { get; set; }
         public string serviceType { get; set; }
         public string serviceName { get; set; }
         public string serviceDescription { get; set; }

@@ -26,6 +26,8 @@ import {ReservationsVendorComponent} from './reservations/reservations-vendor/re
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 import { ReserveComponent } from './reservations/reserve/reserve.component';
+import { ClaimVendorComponent } from './vendor-search/claim-vendor/claim-vendor.component';
+import { FavoriteVendorsComponent } from './favorite-vendors/favorite-vendors.component';
 import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MonthlyReservationCountMetricsComponent } from './vendor-metrics/reservation-count-metric/monthly-reservation-count-metrics.component';
@@ -51,6 +53,8 @@ const routes: Routes = [
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
     { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },
     { path: 'reservations-vendor', component: ReservationsVendorComponent },
+    { path: 'google-map', component: GoogleMapComponent },
+    { path: 'claim-vendor/:type/:id', component: ClaimVendorComponent},
     { path: 'reserve/:id', component: ReserveComponent },
     { path: 'vendor-metrics', component: VendorMetricsComponent },
   ];
@@ -79,6 +83,8 @@ const routes: Routes = [
         ReservationsVendorComponent,
         EventDialogComponent,
         ReserveComponent,
+        ClaimVendorComponent,
+        FavoriteVendorsComponent,
         VendorMetricsComponent,
         [MonthlyReservationCountMetricsComponent],
     ],

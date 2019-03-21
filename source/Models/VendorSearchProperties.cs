@@ -12,5 +12,6 @@ namespace source.Models
         public int maxCapacity { get; set; }
         public int? zip { get; set; }
         public string type { get; set; }
+        public string[] googleIds { get; set; }
     }
 }

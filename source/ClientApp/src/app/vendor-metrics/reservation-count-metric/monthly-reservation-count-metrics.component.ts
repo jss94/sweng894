@@ -37,9 +37,7 @@ export class MonthlyReservationCountMetricsComponent implements OnInit {
 
   constructor(
     private metricsService: VendorMetricService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     if (this.dateFormat === 'Monthly') {

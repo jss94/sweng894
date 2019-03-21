@@ -15,6 +15,10 @@ import { VendorSearchComponent } from './vendor-search.component';
 import { VendorSearchService } from './Services/vendor-search.service';
 import { FakeVendorServicesGroup } from '../shared/models/fake-vendor-services.model';
 import { MockVendorSearchService } from './Services/mock-vendor-search.service';
+import { GooglePlacesService } from './Services/google-places.service';
+import { MockGoogleMapsService } from '../google-map/Services/mock-google-maps.service';
+import { MockGooglePlacesService } from './Services/mock-google-places.service';
+import { GoogleMapsService } from '../google-map/Services/google-maps.service';
 
 describe('VendorSearchComponent', () => {
   let component: VendorSearchComponent;
@@ -57,6 +61,8 @@ describe('VendorSearchComponent', () => {
         RouterTestingModule.withRoutes(routes),
       ],
       providers: [
+        { provide: GoogleMapsService, useClass: MockGoogleMapsService },
+        { provide: GooglePlacesService, useClass: MockGooglePlacesService },
         { provide: VendorSearchService, useClass: MockVendorSearchService },
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: AuthService, useClass: MockAuthService },
@@ -77,18 +83,20 @@ describe('VendorSearchComponent', () => {
   });
 
   describe('onSearchClicked()', () => {
-    it ('should return search results', () => {
+    it ('should return search results', fakeAsync(() => {
         // arrange
         const fakeVendorServices = new FakeVendorServicesGroup().arr;
-        spyOn(mockVendorSearchService, 'searchVendorServices').and.returnValue(of(fakeVendorServices));
+        spyOn(component, 'searchUnclaimedVendors').and.returnValue(of(fakeVendorServices));
+        spyOn(component, 'searchClaimedVendors').and.returnValue(of(fakeVendorServices));
 
         // act
         component.onSearchClicked();
 
         // assert
-        expect(mockVendorSearchService.searchVendorServices).toHaveBeenCalledTimes(1);
-        expect(component.vendorServices.length).toBe(3);
-
-    });
+        expect(component.searchUnclaimedVendors).toHaveBeenCalledTimes(1);
+        expect(component.searchClaimedVendors).toHaveBeenCalledTimes(1);
+        expect(component.claimedServices.length).toBe(3);
+        // expect(component.unclaimedServices.length).toBe(3);
+    }));
   });
 });

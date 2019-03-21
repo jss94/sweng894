@@ -12,6 +12,7 @@ import { EmailDialogComponent } from '../shared/components/email-dialog/email-di
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { EmailModel } from '../send-email/Models/email.model';
+import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
 
 @Component({
   selector: 'app-vendor-details',
@@ -22,6 +23,7 @@ export class VendorDetailsComponent implements OnInit {
 
   vendor: Vendor;
   vendorServices: VendorServices[];
+  isFavorite: boolean;
   isOrganizer: boolean;
   
   constructor(
@@ -32,12 +34,45 @@ export class VendorDetailsComponent implements OnInit {
     private snackbar: MatSnackBar,
     private dialog: MatDialog,
     private emailService: EmailService,
+    private favoriteVendorsService: FavoriteVendorsService,
     ) {
   }
 
   ngOnInit() {
     this.setVendor();
     this.setUserRole();
+    this.setFavoriteState();
+  }
+
+  toggleFavorite() {
+    if (this.isFavorite === true) {
+      this.favoriteVendorsService.deleteFavoriteVendor({
+        userName: this.auth.user.userName,
+        vendorId: this.vendor.id
+      }).subscribe(() => {this.isFavorite = false; });
+    } else {
+      this.favoriteVendorsService.addNewFavoriteVendor({
+        userName: this.auth.user.userName,
+        vendorId: this.vendor.id
+      }).subscribe(() => {this.isFavorite = true; });
+    }
+  }
+
+  setFavoriteState() {
+    const vendorId = +this.route.snapshot.paramMap.get('vendorId');
+    if (this.auth.user) {
+        this.favoriteVendorsService.isVendorAFavorite({
+          userName: this.auth.user.userName,
+          vendorId: vendorId
+        }).subscribe(response => { this.isFavorite = response; });
+    } else {
+      this.auth.user$.subscribe((result) => {
+        this.favoriteVendorsService.isVendorAFavorite({
+          userName: result.userName,
+          vendorId: vendorId
+        }).subscribe(response => { this.isFavorite = response; });
+      });
+    }
   }
 
   setVendor() {

@@ -14,6 +14,8 @@ import { Observable } from 'rxjs';
 import { MockMatDialog } from '../deactivate-user/deactivate-user.component.spec';
 import { EmailService } from '../send-email/Services/email.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
+import { MockFavoriteVendorService } from '../favorite-vendors/Services/mock-favorite-vendors.service';
 
 describe('VendorDetailsComponent', () => {
   let component: VendorDetailsComponent;
@@ -36,7 +38,10 @@ describe('VendorDetailsComponent', () => {
   };
 
   class MockActivedRoute {
-      paramMap = of(mockParamMap);
+    paramMap = of(mockParamMap);
+    snapshot = {
+        paramMap: mockParamMap
+    };
   }
 
   const fakeAddress: Address = {
@@ -55,7 +60,8 @@ describe('VendorDetailsComponent', () => {
     serviceDescription: 'Fake venue description',
     flatFee: true,
     price: 200.00,
-    unitsAvailable: null
+    unitsAvailable: null,
+    googleId: ''
   };
 
   const fakeSvcsArray = new Array(fakeService, fakeService, fakeService);
@@ -89,6 +95,7 @@ describe('VendorDetailsComponent', () => {
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: EmailService, useClass: MockEmailService },
+        { provide: FavoriteVendorsService, useClass: MockFavoriteVendorService },
       ],
       imports: [
         MatSelectModule,

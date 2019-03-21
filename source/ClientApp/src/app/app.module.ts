@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injector, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { createCustomElement } from '@angular/elements';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
@@ -22,8 +21,11 @@ import { EmailService } from './send-email/Services/email.service';
 import { VendorSearchService } from './vendor-search/Services/vendor-search.service';
 import { InvitationService } from './invitations/Services/invitation.service';
 import { ReservationsService } from './reservations/Services/reservations.service';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { GooglePlacesService } from './vendor-search/Services/google-places.service';
+import { FavoriteVendorsService } from './favorite-vendors/Services/favorite-vendors.service';
 import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.service';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +42,6 @@ import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.serv
     RoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    NgxChartsModule,
   ],
   exports: [
   ],
@@ -58,10 +59,11 @@ import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.serv
     VendorSearchService,
     InvitationService,
     ReservationsService,
+    GooglePlacesService,
+    DatePipe,
+    FavoriteVendorsService,
     VendorMetricService,
-    DatePipe
   ],
-  bootstrap: [AppComponent],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

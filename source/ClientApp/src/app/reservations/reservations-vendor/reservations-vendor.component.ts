@@ -73,61 +73,6 @@ export class ReservationsVendorComponent implements OnInit {
             this.changedCount = this.changedReservations != null ? this.changedReservations.length : 0;
             this.approvedCount = this.approvedReservations != null ? this.approvedReservations.length : 0;
         }
-
-        var serv: VendorServices = {
-            id: 1,
-            vendorId: 1,
-            serviceType: "Venue",
-            serviceName: "Zach's Place",
-            serviceDescription: "Place To Do Stuff",
-            flatFee: true,
-            price: 100.00,
-            unitsAvailable: 10
-        }
-        var evt: OccEvent = {
-            userName: "Debs",
-            name: "Fun Party",
-            description: "Wooooo",
-            dateTime: Date(),
-            created: Date(),
-        }
-        var ven: Vendor = {
-            userName: "Zach",
-            name: "Zach",
-            website: "Zach@Zach.com",
-            phone: "111-111-1111",
-        }
-        var res: Reservation = {
-            id: 1,
-            vendorId: 1,
-            userName: "Zach",
-            eventId: "1",
-            vendorServiceId: 1,
-            status: "New",
-            numberReserved: 20,
-            service: serv,
-            event: evt,
-            vendor: ven
-        };
-        this.newReservations = [
-            res,
-            res
-        ];
-        this.changedReservations = [
-            res,
-            res,
-            res
-        ];
-        this.approvedReservations = [
-            res,
-            res,
-            res,
-            res,
-            res,
-            res,
-            res,
-            res
-        ];
     }
 
     onAcceptClicked(reservation: Reservation) {
