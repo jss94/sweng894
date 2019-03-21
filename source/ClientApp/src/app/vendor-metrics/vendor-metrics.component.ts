@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { VendorMetricService } from './Service/vendor-metric.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-metrics',

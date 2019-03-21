@@ -30,8 +30,8 @@ import { ClaimVendorComponent } from './vendor-search/claim-vendor/claim-vendor.
 import { FavoriteVendorsComponent } from './favorite-vendors/favorite-vendors.component';
 import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MonthlyReservationCountMetricsComponent } from './vendor-metrics/reservation-count-metric/monthly-reservation-count-metrics.component';
 import { createCustomElement } from '@angular/elements';
+import { ReservationMetricsComponent } from './vendor-metrics/reservation-count-metric/reservation-metrics.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -86,7 +86,7 @@ const routes: Routes = [
         ClaimVendorComponent,
         FavoriteVendorsComponent,
         VendorMetricsComponent,
-        [MonthlyReservationCountMetricsComponent],
+        [ReservationMetricsComponent],
     ],
 
     imports: [
@@ -99,7 +99,7 @@ const routes: Routes = [
     ],
   exports: [RouterModule],
   entryComponents: [
-    MonthlyReservationCountMetricsComponent
+    ReservationMetricsComponent
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
@@ -107,7 +107,7 @@ const routes: Routes = [
 export class RoutingModule {
   constructor(private injector: Injector) { }
   ngDoBootstrap() {
-    const monthlyReservationMetricCustomElement = createCustomElement(MonthlyReservationCountMetricsComponent, { injector: this.injector });
-    customElements.define('app-monthly-reservation-count-metrics', monthlyReservationMetricCustomElement);
+    const monthlyReservationMetricCustomElement = createCustomElement(ReservationMetricsComponent, { injector: this.injector });
+    customElements.define('app-reservation-metrics', monthlyReservationMetricCustomElement);
   }
 }
