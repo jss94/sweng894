@@ -13,6 +13,11 @@ export class VendorMetricsComponent implements OnInit {
   monthlyDateFormat = 'Monthly';
   xAxisMonthLabel = 'Month';
   xAxisWeekdayLabel = 'Weekday';
+  yAxisSalesLabel = 'Sales';
+  yAxisReservationsLabel = 'Reservations';
+  saleType = 'Sales';
+  reservationType = 'Reservations';
+
   constructor(
     private route: ActivatedRoute,
   ) {}

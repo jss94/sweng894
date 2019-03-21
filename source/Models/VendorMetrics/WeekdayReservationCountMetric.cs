@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace source.Models
 {
-    public class WeeklyReservationCountMetric
+    public class WeekdayReservationCountMetric
 
     {
         public string weekday { get; set; }

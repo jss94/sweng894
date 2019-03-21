@@ -51,8 +51,8 @@ namespace UnitTests.Controllers
         public void GetWeeklyReservationCountMetrics_ReturnWeeklyReservationsCount()
         {
             //arrange
-            var tuesdayMetric = new WeeklyReservationCountMetric { weekday = "Tuesday", reservationCount = 2 };
-            var weekdayMetrics = new List<WeeklyReservationCountMetric> { tuesdayMetric };
+            var tuesdayMetric = new WeekdayReservationCountMetric { weekday = "Tuesday", reservationCount = 2 };
+            var weekdayMetrics = new List<WeekdayReservationCountMetric> { tuesdayMetric };
 
 
             //act
@@ -65,7 +65,7 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var results = result.Value as List<WeeklyReservationCountMetric>;
+            var results = result.Value as List<WeekdayReservationCountMetric>;
             Assert.Equal("Tuesday", results[0].weekday);
             Assert.Equal(2, results[0].reservationCount);
         }

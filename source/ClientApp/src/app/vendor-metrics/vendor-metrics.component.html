@@ -1,8 +1,18 @@
 <div class="row">
   <div class="left">
-    <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
+    <div>
+      <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisReservationsLabel" [type]="reservationType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
+    </div>
+    <div>
+        <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
+      </div>
   </div>
   <div class="right">
-    <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
+    <div>
+      <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [yAxisLabel]="yAxisReservationsLabel" [type]="reservationType" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
+    </div>
+    <div>
+        <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
+      </div>
   </div>
 </div>

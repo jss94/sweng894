@@ -31,7 +31,7 @@ import { FavoriteVendorsComponent } from './favorite-vendors/favorite-vendors.co
 import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { createCustomElement } from '@angular/elements';
-import { ReservationMetricsComponent } from './vendor-metrics/reservation-count-metric/reservation-metrics.component';
+import { ReservationMetricsComponent } from './vendor-metrics/reservation-metric/reservation-metrics.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },

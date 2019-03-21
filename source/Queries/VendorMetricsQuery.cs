@@ -58,31 +58,13 @@ namespace source.Queries
 
         public async Task<List<MonthlyReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId)
         {
-            /*
-            select DATE_FORMAT(dateTime, '%M') as 'month', vendors.name, vendorServices.serviceType, vendorServices.serviceName, vendorServices.price, vendorServices.flatFee, reservations.numberReserved
-from reservations
-inner join
-vendorServices on reservations.vendorServiceId = vendorServices.id
-inner join
-events on reservations.eventId=events.eventId
-inner join
-vendors on vendors.id=reservations.vendorId
-where reservations.vendorId = 35;
-*/
+  
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = "select DATE_FORMAT(dateTime, '%M') as 'month', vendors.name, vendorServices.serviceType, vendorServices.serviceName, vendorServices.price, vendorServices.flatFee, reservations.numberReserved"
-                    + " from occasions.reservations"
-                    + " inner join"
-                    + " occasions.vendorServices on reservations.vendorServiceId = vendorServices.id"
-                    + " inner join"
-                    + " occasions.events on reservations.eventId = events.eventId"
-                    + " inner join"
-                    + " occasions.vendors on vendors.id = reservations.vendorId"
-                    + " where reservations.vendorId = @vendorId;";
+                string query = createReservationSalesMetricQuery("%M", "month");
 
                 await Task.CompletedTask;
 
@@ -102,7 +84,35 @@ where reservations.vendorId = 35;
 
         }
 
-        public async Task<List<WeeklyReservationCountMetric>> GetWeeklyReservationCountMetricAsync(int id)
+        public async Task<List<MonthlyReservationSalesMetric>> GetWeekdayReservationSalesMetricAsync(int vendorId)
+        {
+
+            using (var db = _database)
+            {
+                var connection = db.Connection as MySqlConnection;
+                await connection.OpenAsync();
+
+                string query = createReservationSalesMetricQuery("%W", "weekday");
+
+                await Task.CompletedTask;
+
+                try
+                {
+                    var result = connection.QueryAsync<MonthlyReservationSalesMetric>(query, new { vendorId }).Result.ToList();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+
+                }
+
+                return null;
+            }
+
+        }
+
+        public async Task<List<WeekdayReservationCountMetric>> GetWeekdayReservationCountMetricAsync(int id)
         {
             using (var db = _database)
             {
@@ -114,7 +124,7 @@ where reservations.vendorId = 35;
 
                 try
                 {
-                    var result = connection.QueryAsync<WeeklyReservationCountMetric>(query, new { id }).Result.ToList();
+                    var result = connection.QueryAsync<WeekdayReservationCountMetric>(query, new { id }).Result.ToList();
                     return result;
                 }
                 catch (Exception e)
@@ -140,5 +150,21 @@ where reservations.vendorId = 35;
             return query;
 
         }
+
+        private string createReservationSalesMetricQuery(string dateFormatAbbreviation, string dateColumnName)
+        {
+            string query = @"select DATE_FORMAT(dateTime, '" + dateFormatAbbreviation + "') as '" + dateColumnName + "', vendorServices.serviceType, vendorServices.serviceName, vendorServices.price, vendorServices.flatFee, reservations.numberReserved"
+                   + " from occasions.reservations"
+                   + " inner join"
+                   + " occasions.vendorServices on reservations.vendorServiceId = vendorServices.id"
+                   + " inner join"
+                   + " occasions.events on reservations.eventId = events.guid"
+                   + " inner join"
+                   + " occasions.vendors on vendors.id = reservations.vendorId"
+                   + " where reservations.vendorId = @vendorId;";
+            
+            return query;
+        }
+
     }
 }

@@ -9,9 +9,11 @@ namespace source.Queries
     {
         Task<List<MonthlyReservationCountMetric>> GetMonthlyReservationCountMetricAsync(int vendorId);
 
-        Task<List<WeeklyReservationCountMetric>> GetWeeklyReservationCountMetricAsync(int vendorId);
+        Task<List<WeekdayReservationCountMetric>> GetWeekdayReservationCountMetricAsync(int vendorId);
 
         Task<List<MonthlyReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId);
+
+        Task<List<MonthlyReservationSalesMetric>> GetWeekdayReservationSalesMetricAsync(int vendorId);
 
     }
 }
