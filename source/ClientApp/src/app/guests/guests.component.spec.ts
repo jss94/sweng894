@@ -96,13 +96,16 @@ describe('GuestsComponent', () => {
   });
 
   describe('onCreate', () => {
-    it('shold create user', () => {
+    it('should create user', () => {
       // assign
       const fakeGuest = new FakeGuest();
+      const mockEvent = new FakeOccEvent();
       component.guestForm.controls['name'].setValue(fakeGuest.name);
       component.guestForm.controls['email'].setValue(fakeGuest.email);
       spyOn(mockGuestsService, 'insert').and.returnValue(of(true));
       spyOn(component.guestForm, 'reset').and.callThrough();
+      spyOn(mockEventService, 'getEvent').and.returnValue(of(mockEvent));
+
 
       // act
       component.onCreate();
