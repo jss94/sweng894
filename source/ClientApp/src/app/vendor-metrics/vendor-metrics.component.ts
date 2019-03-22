@@ -44,13 +44,10 @@ export class VendorMetricsComponent implements OnInit {
     } else {
       this.auth.user$.subscribe((result) => {
         this.vendorService.getVendor(result.userName).subscribe((vendor) => {
-          console.log('FOUND MY VENDOR2' + vendor.id);
           this.vendorId = vendor.id;
           this.vendorIdLoaded = Promise.resolve(true);
         });
       });
     }
-
-
   }
 }
