@@ -31,19 +31,19 @@ namespace source.Queries
         }
 
 
-        public async Task<List<MonthlyReservationCountMetric>> GetMonthlyReservationCountMetricAsync(int id)
+        public async Task<List<ReservationCountMetric>> GetMonthlyReservationCountMetricAsync(int id)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = createReservationCountMetricQuery("%M", "month");
+                string query = createReservationCountMetricQuery("%M");
                 await Task.CompletedTask;
 
                 try
                 {
-                    var result = connection.QueryAsync<MonthlyReservationCountMetric>(query, new { id }).Result.ToList();
+                    var result = connection.QueryAsync<ReservationCountMetric>(query, new { id }).Result.ToList();
                     return result;
                 }
                 catch (Exception e)
@@ -56,7 +56,7 @@ namespace source.Queries
             }
         }
 
-        public async Task<List<MonthlyReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId)
+        public async Task<List<ReservationSalesMetric>> GetMonthlyReservationSalesMetricAsync(int vendorId)
         {
   
             using (var db = _database)
@@ -64,13 +64,13 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = createReservationSalesMetricQuery("%M", "month");
+                string query = createReservationSalesMetricQuery("%M");
 
                 await Task.CompletedTask;
 
                 try
                 {
-                    var result = connection.QueryAsync<MonthlyReservationSalesMetric>(query, new { vendorId }).Result.ToList();
+                    var result = connection.QueryAsync<ReservationSalesMetric>(query, new { vendorId }).Result.ToList();
                     return result;
                 }
                 catch (Exception e)
@@ -84,7 +84,7 @@ namespace source.Queries
 
         }
 
-        public async Task<List<MonthlyReservationSalesMetric>> GetWeekdayReservationSalesMetricAsync(int vendorId)
+        public async Task<List<ReservationSalesMetric>> GetWeekdayReservationSalesMetricAsync(int vendorId)
         {
 
             using (var db = _database)
@@ -92,13 +92,13 @@ namespace source.Queries
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
 
-                string query = createReservationSalesMetricQuery("%W", "weekday");
+                string query = createReservationSalesMetricQuery("%W");
 
                 await Task.CompletedTask;
 
                 try
                 {
-                    var result = connection.QueryAsync<MonthlyReservationSalesMetric>(query, new { vendorId }).Result.ToList();
+                    var result = connection.QueryAsync<ReservationSalesMetric>(query, new { vendorId }).Result.ToList();
                     return result;
                 }
                 catch (Exception e)
@@ -112,19 +112,19 @@ namespace source.Queries
 
         }
 
-        public async Task<List<WeekdayReservationCountMetric>> GetWeekdayReservationCountMetricAsync(int id)
+        public async Task<List<ReservationCountMetric>> GetWeekdayReservationCountMetricAsync(int id)
         {
             using (var db = _database)
             {
                 var connection = db.Connection as MySqlConnection;
                 await connection.OpenAsync();
                 
-                string query = createReservationCountMetricQuery("%W", "weekday");
+                string query = createReservationCountMetricQuery("%W");
                 await Task.CompletedTask;
 
                 try
                 {
-                    var result = connection.QueryAsync<WeekdayReservationCountMetric>(query, new { id }).Result.ToList();
+                    var result = connection.QueryAsync<ReservationCountMetric>(query, new { id }).Result.ToList();
                     return result;
                 }
                 catch (Exception e)
@@ -137,23 +137,23 @@ namespace source.Queries
             }
         }
 
-        private string createReservationCountMetricQuery(string dateFormatAbbreviation, string dateColumnName)
+        private string createReservationCountMetricQuery(string dateFormatAbbreviation)
         {
-            string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '" + dateFormatAbbreviation + "') as '" + dateColumnName + "'"
+            string query = @"select count(*) as 'reservationCount', DATE_FORMAT(dateTime, '" + dateFormatAbbreviation + "') as 'dateCategory'"
                     + " from occasions.events"
                     + " inner join"
                     + " occasions.reservations on reservations.eventId = events.guid"
                     + " inner join"
                     + " occasions.vendors on reservations.vendorId = vendors.id"
                     + " where vendorId = @id"
-                    + " group by " + dateColumnName;
+                    + " group by dateCategory";
             return query;
 
         }
 
-        private string createReservationSalesMetricQuery(string dateFormatAbbreviation, string dateColumnName)
+        private string createReservationSalesMetricQuery(string dateFormatAbbreviation)
         {
-            string query = @"select DATE_FORMAT(dateTime, '" + dateFormatAbbreviation + "') as '" + dateColumnName + "', vendorServices.serviceType, vendorServices.serviceName, vendorServices.price, vendorServices.flatFee, reservations.numberReserved"
+            string query = @"select DATE_FORMAT(dateTime, '" + dateFormatAbbreviation + "') as 'dateCategory', vendorServices.serviceType, vendorServices.serviceName, vendorServices.price, vendorServices.flatFee, reservations.numberReserved"
                    + " from occasions.reservations"
                    + " inner join"
                    + " occasions.vendorServices on reservations.vendorServiceId = vendorServices.id"

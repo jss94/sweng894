@@ -1,8 +1,9 @@
-<div class="row">
+<div class="row" *ngIf="vendorIdLoaded | async">
   <div class="left">
     <div>
       <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisReservationsLabel" [type]="reservationType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
     </div>
+    <br>
     <div>
         <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
       </div>
@@ -11,6 +12,7 @@
     <div>
       <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [yAxisLabel]="yAxisReservationsLabel" [type]="reservationType" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
     </div>
+    <br>
     <div>
         <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
       </div>

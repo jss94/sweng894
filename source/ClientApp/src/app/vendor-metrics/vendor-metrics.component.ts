@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AuthService } from '../shared/services/auth.service';
+import { VendorService } from '../vendors/Services/vendor.service';
 
 @Component({
   selector: 'app-vendor-metrics',
@@ -13,25 +15,42 @@ export class VendorMetricsComponent implements OnInit {
   monthlyDateFormat = 'Monthly';
   xAxisMonthLabel = 'Month';
   xAxisWeekdayLabel = 'Weekday';
-  yAxisSalesLabel = 'Sales';
-  yAxisReservationsLabel = 'Reservations';
+  yAxisSalesLabel = 'Sales $';
+  yAxisReservationsLabel = 'Reservation Count';
   saleType = 'Sales';
-  reservationType = 'Reservations';
+  reservationType = 'Count';
+  // Declaring the Promise, yes! Promise!
+  vendorIdLoaded: Promise<boolean>;
 
   constructor(
     private route: ActivatedRoute,
-  ) {}
+    private auth: AuthService,
+    private vendorService: VendorService,
+  ) { }
 
-ngOnInit() {
-  // no-op
-  this.getMetrics();
+  ngOnInit() {
+    // no-op
+    this.getMetrics();
   }
 
   getMetrics() {
-    this.route.paramMap.subscribe(() => {
-     // const vendorId = + params.get('vendorId');
-       this.vendorId = 35; // replaceWithVendorId
-    });
-  }
 
+    const user = this.auth.user;
+    if (user) {
+      this.vendorService.getVendor(user.userName).subscribe((vendor) => {
+        this.vendorId = vendor.id;
+        this.vendorIdLoaded = Promise.resolve(true);
+      });
+    } else {
+      this.auth.user$.subscribe((result) => {
+        this.vendorService.getVendor(result.userName).subscribe((vendor) => {
+          console.log('FOUND MY VENDOR2' + vendor.id);
+          this.vendorId = vendor.id;
+          this.vendorIdLoaded = Promise.resolve(true);
+        });
+      });
+    }
+
+
+  }
 }

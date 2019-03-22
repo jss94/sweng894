@@ -28,8 +28,8 @@ namespace UnitTests.Controllers
         public void GetMonthlyReservationMetrics_ReturnMonthlyReservationCount()
         {
             //arrange
-            var marchMetric = new MonthlyReservationCountMetric { month = "March", reservationCount = 5};
-            var monthlyMetrics = new List<MonthlyReservationCountMetric> { marchMetric };
+            var marchMetric = new ReservationCountMetric { dateCategory = "March", reservationCount = 5};
+            var monthlyMetrics = new List<ReservationCountMetric> { marchMetric };
 
 
             //act
@@ -42,8 +42,8 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var results = result.Value as List<MonthlyReservationCountMetric>;
-            Assert.Equal("March", results[0].month);
+            var results = result.Value as List<ReservationCountMetric>;
+            Assert.Equal("March", results[0].dateCategory);
             Assert.Equal(5, results[0].reservationCount);
         }
 
@@ -51,12 +51,12 @@ namespace UnitTests.Controllers
         public void GetWeeklyReservationCountMetrics_ReturnWeeklyReservationsCount()
         {
             //arrange
-            var tuesdayMetric = new WeekdayReservationCountMetric { weekday = "Tuesday", reservationCount = 2 };
-            var weekdayMetrics = new List<WeekdayReservationCountMetric> { tuesdayMetric };
+            var tuesdayMetric = new ReservationCountMetric { dateCategory = "Tuesday", reservationCount = 2 };
+            var weekdayMetrics = new List<ReservationCountMetric> { tuesdayMetric };
 
 
             //act
-            __metricsQueryMock.Setup(x => x.GetWeeklyReservationCountMetricAsync(2))
+            __metricsQueryMock.Setup(x => x.GetWeekdayReservationCountMetricAsync(2))
                 .Returns(Task.Factory.StartNew(() => weekdayMetrics));
 
             var task = _metricsController.GetWeeklyReservationCountMetrics(2);
@@ -75,6 +75,12 @@ namespace UnitTests.Controllers
         {
             throw new NotImplementedException();
         }
-        
+
+        [Fact]
+        public void GetWeekdayReservationSalesMetrics_ReturnSalesMetrics()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

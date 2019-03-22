@@ -1,5 +1,5 @@
-export interface WeekdaySalesMetric {
-  weekday: string;
+export interface ReservationSalesMetric {
+  dateCategory: string;
   serviceType: string;
   seviceName: string;
   price: number;

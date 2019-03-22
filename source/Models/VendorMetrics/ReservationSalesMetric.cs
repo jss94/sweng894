@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace source.Models
 {
-    public class MonthlyReservationSalesMetric
+    public class ReservationSalesMetric
 
     {
-        public string month { get; set; }
+        public string dateCategory { get; set; }
         
         public string name{ get; set; }
 
