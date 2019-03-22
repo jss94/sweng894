@@ -65,22 +65,55 @@ namespace UnitTests.Controllers
             Assert.IsType<OkObjectResult>(task.Result);
 
             var result = task.Result as OkObjectResult;
-            var results = result.Value as List<WeekdayReservationCountMetric>;
-            Assert.Equal("Tuesday", results[0].weekday);
+            var results = result.Value as List<ReservationCountMetric>;
+            Assert.Equal("Tuesday", results[0].dateCategory);
             Assert.Equal(2, results[0].reservationCount);
         }
 
         [Fact]
         public void GetMonthlyReservationSalesMetrics_ReturnSalesMetrics()
         {
-            throw new NotImplementedException();
+            //arrange
+            var tuesdayMetric = new ReservationSalesMetric { dateCategory = "March", flatFee = true, name = "Mock Vendor", numberReserved = 1, price = 100, serviceName = "Unit Test", serviceType = "Unit" };
+            var weekdayMetrics = new List<ReservationSalesMetric> { tuesdayMetric };
+
+
+            //act
+            __metricsQueryMock.Setup(x => x.GetWeekdayReservationSalesMetricAsync(It.IsAny<int>()))
+                .Returns(Task.Factory.StartNew(() => weekdayMetrics));
+
+            var task = _metricsController.GetWeekdayReservationSalesMetrics(2);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var results = result.Value as List<ReservationSalesMetric>;
+            Assert.Equal("March", results[0].dateCategory);
+            Assert.Equal(100, results[0].price);
         }
 
         [Fact]
         public void GetWeekdayReservationSalesMetrics_ReturnSalesMetrics()
         {
-            throw new NotImplementedException();
-        }
+            //arrange
+            var tuesdayMetric = new ReservationSalesMetric { dateCategory = "Tuesday", flatFee = true, name = "Mock Vendor", numberReserved = 1, price = 100, serviceName = "Unit Test", serviceType = "Unit"};
+            var weekdayMetrics = new List<ReservationSalesMetric> { tuesdayMetric };
 
+
+            //act
+            __metricsQueryMock.Setup(x => x.GetWeekdayReservationSalesMetricAsync(It.IsAny<int>()))
+                .Returns(Task.Factory.StartNew(() => weekdayMetrics));
+
+            var task = _metricsController.GetWeekdayReservationSalesMetrics(2);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var results = result.Value as List<ReservationSalesMetric>;
+            Assert.Equal("Tuesday", results[0].dateCategory);
+            Assert.Equal(100, results[0].price);
+        }
     }
 }
