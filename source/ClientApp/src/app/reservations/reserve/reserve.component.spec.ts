@@ -38,7 +38,6 @@ describe('ReserveComponent', () => {
   let mockVendorService: VendorService;
   let mockVendorServicesSvc: VendorServicesService;
   let location: Location;
-  let mockEmailService: EmailService;
 
   class MockMatSnackBar {
     open() { }
@@ -99,14 +98,31 @@ describe('ReserveComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ReserveComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockAuthService = TestBed.get(AuthService);
+    //mockVendorSearchService = TestBed.get(VendorSearchService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  
+  fdescribe('setUser', () => {
+
+    it('should set user', () => {
+      // arrange
+      const fakeUser = new FakeUser();
+      
+      // act
+      fixture.detectChanges();
+
+      // assert
+      mockAuthService.user$.subscribe(result => expect(result.userName).toEqual(fakeUser.userName)); 
+      expect(component.userName).toEqual(fakeUser.userName);
+
+    });
+  });//describe set user
+
+
 
 
 
