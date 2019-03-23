@@ -79,7 +79,7 @@ export class GooglePlacesService {
         this.markers = [];
     }
 
-    getAddressFromGeolocation(location: {lat: number, lng: number}) {
+    getAddressFromGeolocation(location: {lat: number, lng: number}): Observable<any> {
         const address = new Subject();
         this.geocoder.geocode({location: location}, (results, status) => {
             address.next(results[0].formatted_address);

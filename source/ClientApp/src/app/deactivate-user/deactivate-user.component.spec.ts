@@ -87,4 +87,9 @@ describe('DeactivateUserComponent', () => {
     // assert
     expect(fakeMatDialog.open).toHaveBeenCalledTimes(1);
   }));
+
+  it('should deactivate user', fakeAsync(() => {
+    // assign
+    spyOn(fakeMatDialog)
+  }));
 });
