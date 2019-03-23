@@ -1,10 +1,15 @@
 <mat-toolbar>
-    
+
     <span class="logo-container" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
       <img class="logo clickable" src="./assets/img/occasions-24px.svg" alt="Home" [routerLink]='["/"]'>
     </span>
 
     <div class="align-right">
+
+      <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/vendor-metrics"]' [routerLinkActive]='["link-active"]'>
+        <mat-icon>list</mat-icon>
+        Metrics
+      </button>
 
       <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/reservations-vendor"]' [routerLinkActive]='["link-active"]'>
         <mat-icon>list</mat-icon>
@@ -20,13 +25,13 @@
         <mat-icon>store</mat-icon>
         Services
       </button>
-      
+
 
       <button *ngIf="isOrganizer || isVendor" mat-button [routerLink]='["/search-vendors"]' [routerLinkActive]='["link-active"]'>
         <mat-icon>search</mat-icon>
         Search
       </button>
-      
+
       <button *ngIf="!auth.isAuthenticated()"  mat-button>
         <a class="nav-link text-dark" (click)="auth.login()">Login</a>
       </button>
