@@ -38,6 +38,7 @@ describe('ReserveComponent', () => {
   let mockVendorService: VendorService;
   let mockVendorServicesSvc: VendorServicesService;
   let location: Location;
+  let mockEmailService: EmailService;
 
   class MockMatSnackBar {
     open() { }
@@ -105,7 +106,7 @@ describe('ReserveComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
+  
 
 
 
