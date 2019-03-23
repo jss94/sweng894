@@ -1,4 +1,4 @@
-import { LocationStrategy, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { FakeOccEvents } from '../../events/Models/fake-occ-event.model';
 import { FakeUser } from '../../shared/models/fake-user.model';
@@ -87,6 +87,7 @@ describe('ReserveComponent', () => {
         { provide: GuestsService, useClass: MockGuestsService },
         { provide: ReservationsService, useClass: MockReservationService },
         { provide: Router, useValue: { navigate: () => { } } },
+        { provide: Location, useValue: Location },
       ],
     }).compileComponents();
   });
@@ -104,31 +105,6 @@ describe('ReserveComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set vendor svc', fakeAsync(() => {
-    // arrange
-    spyOn(component, 'setVendorService').and.callThrough();
-
-    // act
-    fixture.detectChanges();
-
-    // assert
-    expect(component.setVendorService).toHaveBeenCalledTimes(1);
-  }));
-
-  describe('setVendorService()', () => {
-    it('should populate vendor svc property', () => {
-      // arrange
-      const fakeUser = new FakeUser();
-      spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
-
-      // act
-      component.setVendorService();
-
-      // assert
-      expect(mockVendorServicesSvc.getVendorServiceById).toHaveBeenCalledTimes(1);
-      expect(component.vendorServiceModel).toEqual(fakeService);
-    });
-  });
 
 
 
