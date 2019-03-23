@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { FakeOccEvents } from '../../events/Models/fake-occ-event.model';
+import { FakeOccEvents, FakeOccEvent } from '../../events/Models/fake-occ-event.model';
 import { FakeUser } from '../../shared/models/fake-user.model';
 import { of } from 'rxjs/internal/observable/of';
 import { ReserveComponent } from './reserve.component';
@@ -8,9 +8,8 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MockMatSnackBar } from 'src/app/deactivate-user/deactivate-user.component.spec';
+import { MockMatSnackBar, MockMatDialog } from 'src/app/deactivate-user/deactivate-user.component.spec';
 import { MatSnackBar, MatDialog } from '@angular/material';
-import { MockMatDialog } from 'src/app/nav-menu/nav-menu.component.spec';
 import { EmailService } from 'src/app/send-email/Services/email.service';
 import { MockEventService } from 'src/app/events/Services/mock-event.service';
 import { EventService } from 'src/app/events/Services/event.service';
@@ -28,6 +27,8 @@ import { Observable } from 'rxjs';
 import { MockVendorService } from 'src/app/vendors/Services/mock-vendor.service';
 import { FakeVendorServices } from 'src/app/shared/models/fake-vendor-services.model';
 import { VendorServicesService } from 'src/app/vendor-services/Services/vendor-services.service';
+import { MockVendorSearchService } from 'src/app/vendor-search/Services/mock-vendor-search.service';
+import { MockVendorServicesService } from 'src/app/vendor-services/Services/mock-vendor-services-service';
 
 
 describe('ReserveComponent', () => {
@@ -35,9 +36,11 @@ describe('ReserveComponent', () => {
   let fixture: ComponentFixture<ReserveComponent>;
   let mockAuthService: AuthService;
   let mockReservationSvc: ReservationsService;
-  let mockVendorService: VendorService;
   let mockVendorServicesSvc: VendorServicesService;
   let location: Location;
+  let mockEventService: EventService;
+  let mockEmailService: EmailService;
+  let mockGuestService: GuestsService;
 
   class MockMatSnackBar {
     open() { }
@@ -70,6 +73,7 @@ describe('ReserveComponent', () => {
     };
   }
 
+  
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -78,54 +82,56 @@ describe('ReserveComponent', () => {
         ReactiveFormsModule,],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: ActivatedRoute, useClass: MockActivedRoute },
         { provide: AuthService, useClass: MockAuthService },
-        { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: ActivatedRoute, useClass: MockActivedRoute },
         { provide: MatDialog, useClass: MockMatDialog },
+        { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EmailService, useClass: MockEmailService },
+        { provide: VendorServicesService, useClass: MockVendorServicesService },
         { provide: EventService, useClass: MockEventService },
         { provide: GuestsService, useClass: MockGuestsService },
         { provide: ReservationsService, useClass: MockReservationService },
-        { provide: Router, useValue: { navigate: () => { } } },
         { provide: Location, useValue: Location },
+        { provide: Router, useValue: { navigate: () => { } } },
       ],
     }).compileComponents();
   });
-
-  
 
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ReserveComponent);
     component = fixture.componentInstance;
     mockAuthService = TestBed.get(AuthService);
-    //mockVendorSearchService = TestBed.get(VendorSearchService);
+    mockEmailService = TestBed.get(EmailService);
+    mockVendorServicesSvc = TestBed.get(VendorServicesService);
+    mockEventService = TestBed.get(EventService);
+    mockGuestService = TestBed.get(GuestsService);
+    mockReservationSvc = TestBed.get(ReservationsService);  
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  fdescribe('setUser', () => {
+  it('should set user', () => {
+    // assign
+    const fakeUser = new FakeUser();
+    spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser); 
+    
+    const fakeService = new FakeVendorServices();
+    spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
 
-    it('should set user', () => {
-      // arrange
-      const fakeUser = new FakeUser();
-      
-      // act
-      fixture.detectChanges();
+    const fakeEvent = new FakeOccEvent();
+    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
+    
+    
+    // act
+    fixture.detectChanges();
 
-      // assert
-      mockAuthService.user$.subscribe(result => expect(result.userName).toEqual(fakeUser.userName)); 
-      expect(component.userName).toEqual(fakeUser.userName);
+    // assert
+    expect(component.userName).toEqual(fakeUser.userName);
 
-    });
-  });//describe set user
-
-
-
-
-
+  });
 
 
 
