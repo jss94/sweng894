@@ -33,7 +33,7 @@ matrix:
     dotnet: 2.2
 
     install:
-    - cd $TRAVIS_BUILD_DIR/unittests
+    - cd $TRAVIS_BUILD_DIR/UnitTests
     - dotnet restore
 
     script: 
