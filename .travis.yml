@@ -30,7 +30,7 @@ matrix:
     mono: none
     sudo: required
     dist: xenial
-    dotnet: 2.2v
+    dotnet: 2.2
 
     install:
     - cd unittests
