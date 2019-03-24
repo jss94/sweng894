@@ -29,6 +29,12 @@ import { FakeVendorServices } from 'src/app/shared/models/fake-vendor-services.m
 import { VendorServicesService } from 'src/app/vendor-services/Services/vendor-services.service';
 import { MockVendorSearchService } from 'src/app/vendor-search/Services/mock-vendor-search.service';
 import { MockVendorServicesService } from 'src/app/vendor-services/Services/mock-vendor-services-service';
+import { FakeGuests } from 'src/app/guests/Models/fake.guest.model';
+import { FakeReservation } from '../Models/fake-reservation.model';
+import { MockReservationService } from '../Services/mock-reservation.service';
+import { Reservation } from '../Models/reservation.model';
+import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
+import { EmailContent } from 'src/app/send-email/Models/email.content.model';
 
 
 describe('ReserveComponent', () => {
@@ -41,15 +47,17 @@ describe('ReserveComponent', () => {
   let mockEventService: EventService;
   let mockEmailService: EmailService;
   let mockGuestService: GuestsService;
+  let fakeEmailAddress: EmailAddress;
 
   class MockMatSnackBar {
     open() { }
   }
 
-  class MockEmailService { }
-  
-  class MockReservationService { }
-  
+  class MockEmailService {
+    createEmailModel() { }
+    sendReservationEmailNotification() { }
+  }
+
   const fakeService: VendorServices = {
     id: 1,
     vendorId: 1,
@@ -62,18 +70,51 @@ describe('ReserveComponent', () => {
     googleId: ''
   };
 
+  const fakeEvent = new FakeOccEvent();
+  const fakeVendor = new FakeVendor();
+
+  const fakeReservation: Reservation = {
+    id: 1,
+    userName: 'fakeuser@example.com',
+    eventId: '1234',
+    vendorId: 1,
+    vendorServiceId: 1,
+    status: 'New',
+    numberReserved: 10,
+    service: fakeService,
+    event: fakeEvent,
+    vendor: fakeVendor
+  }
+
+  fakeEmailAddress = new EmailAddress();
+  fakeEmailAddress.email = 'newemail@example.com';
+  const fakeAddresses = [fakeEmailAddress, fakeEmailAddress];
+  const fakeContent = new EmailContent();
+  const fakeContentArray = [fakeContent, fakeContent];
+
+  const fakeEmail: EmailModel = {
+    personalizations: [
+      {
+        to: fakeAddresses
+      }
+    ],
+    from: fakeEmailAddress,
+    subject: 'subject',
+    content: fakeContentArray
+  }
+
   const mockParamMap = {
-    get() {}
+    get() { }
   };
 
   class MockActivedRoute {
     paramMap = of(mockParamMap);
     snapshot = {
-        paramMap: mockParamMap
+      paramMap: mockParamMap
     };
   }
 
-  
+
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -106,34 +147,58 @@ describe('ReserveComponent', () => {
     mockVendorServicesSvc = TestBed.get(VendorServicesService);
     mockEventService = TestBed.get(EventService);
     mockGuestService = TestBed.get(GuestsService);
-    mockReservationSvc = TestBed.get(ReservationsService);  
+    mockReservationSvc = TestBed.get(ReservationsService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set user', () => {
+  it('should set user and vendor service', () => {
     // assign
     const fakeUser = new FakeUser();
-    spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser); 
-    
-    const fakeService = new FakeVendorServices();
+    spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
     spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
-
-    const fakeEvent = new FakeOccEvent();
     spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
-    
-    
+
     // act
     fixture.detectChanges();
 
     // assert
+    expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
+    expect(mockVendorServicesSvc.getVendorServiceById).toHaveBeenCalledTimes(1);
     expect(component.userName).toEqual(fakeUser.userName);
-
+    expect(component.vendorServiceModel).toEqual(fakeService);
   });
 
+  describe('onCreate', () => {
+    it('should create reservation', () => {
+      // assign  
+      component.eventModel = fakeEvent;
+      component.vendorServiceModel = fakeService;
+      component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
+      component.reservationForm.controls['numberReserved'].setValue(fakeReservation.numberReserved);
 
+      spyOn(mockEmailService, 'createEmailModel').and.returnValue(of(fakeEmail));
+      spyOn(mockEmailService, 'sendReservationEmailNotification').and.returnValue(of('202'));
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
+      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(fakeReservation));
+      spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
+      spyOn(mockReservationSvc, 'createReservation').and.returnValue(of(fakeReservation));
+      spyOn(component.reservationForm, 'reset').and.callThrough();
+
+      const fakeUser = new FakeUser();
+      spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
+
+      // act
+      component.onCreate();
+
+      // assert
+      expect(mockReservationSvc.createReservation).toHaveBeenCalledTimes(1);
+      expect(component.reservationForm.reset).toHaveBeenCalledTimes(1);
+    });
+  });
 
 
 });

@@ -180,14 +180,7 @@ export class ReserveComponent implements OnInit {
 
     this.reservationService.getReservationsByEventGuid(this.eventModel.guid).subscribe((response: Reservation[]) => {
       if(response != null){
-        response.forEach(function(val){
-          if(val.service.serviceType == this.vendorServiceModel.serviceType){
-            this.snackbar.open('You already have a reservation for ' + val.service.serviceType, 'Failed', {
-              duration: 1500
-            });
-            return;
-          }
-        });
+        
       }//if
     });
           
