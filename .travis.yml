@@ -1,33 +1,38 @@
-dist: trusty
-sudo: false
+matrix:
+  include: 
 
-language: csharp
-mono: none
-dotnet: 2.2.0
+  - language: node_js
+    node_js:
+      - "8"
+      
+    addons:
+      apt:
+        sources:
+          - google-chrome
+        packages:
+          - google-chrome-stable
+    
+    cache:
+      directories:
+        - ./source/ClientApp/node_modules
+    
+    install:
+      - cd source/ClientApp/
+      - npm install
 
-language: node_js
-node_js:
-  - "8"
+    script:
+    # - npm run lint
+      - npm run testCI
+    #  - npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
+    #  - npm run e2e --protractor-config=e2e/protractor-ci.conf.js
   
-addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
- 
-cache:
-  directories:
-     - ./source/ClientApp/node_modules
- 
-install:
-  - cd source/ClientApp/
-  - npm install
-  - dotnet restore
- 
-script:
-# - npm run lint
-  - npm run testCI
-#  - npm run test --no-watch --no-progress --browsers=ChromeHeadlessCI
-#  - npm run e2e --protractor-config=e2e/protractor-ci.conf.js
-  - dotnet test
+  - language: csharp
+    mono: none
+    dotnet: 2.2.0
+
+    install:
+    - cd unittests
+    - dotnet restore
+
+    script: 
+    - dotnet test
