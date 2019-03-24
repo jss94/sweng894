@@ -29,11 +29,11 @@ matrix:
   - language: csharp
     mono: none
     sudo: required
-    dist: xenial
     dotnet: 2.2
 
     install:
-    - dotnet restore unittests/unittests.csproj
+    - cd unittests
+    - dotnet restore
 
     script: 
-    - dotnet test unittests/unittests.csproj
+    - dotnet test
