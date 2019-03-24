@@ -22,7 +22,8 @@ describe('VendorServicesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [VendorServicesComponent],
-      providers: [{ provide: AuthService, useClass: MockAuthService },
+      providers: [
+        { provide: AuthService, useClass: MockAuthService },
         { provide: VendorService, useClass: MockVendorService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
       ],

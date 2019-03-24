@@ -173,7 +173,7 @@ describe('ReserveComponent', () => {
 
   describe('onCreate', () => {
     it('should create reservation', () => {
-      // assign  
+      // assign
       component.eventModel = fakeEvent;
       component.vendorServiceModel = fakeService;
       component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
@@ -181,8 +181,7 @@ describe('ReserveComponent', () => {
 
       spyOn(mockEmailService, 'createEmailModel').and.returnValue(of(fakeEmail));
       spyOn(mockEmailService, 'sendReservationEmailNotification').and.returnValue(of('202'));
-      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
-      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(fakeReservation));
+      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of([fakeReservation]));
       spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
       spyOn(mockReservationSvc, 'createReservation').and.returnValue(of(fakeReservation));
       spyOn(component.reservationForm, 'reset').and.callThrough();

@@ -16,6 +16,8 @@ import { EmailService } from '../send-email/Services/email.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
 import { MockFavoriteVendorService } from '../favorite-vendors/Services/mock-favorite-vendors.service';
+import { MockAuthService } from '../shared/services/mock-auth.service';
+import { MockVendorService } from '../vendors/Services/mock-vendor.service';
 
 describe('VendorDetailsComponent', () => {
   let component: VendorDetailsComponent;
@@ -80,10 +82,6 @@ describe('VendorDetailsComponent', () => {
     open() {}
   }
 
-  class MockAuthService {
-    user$ = of(new FakeUser);
-  }
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ VendorDetailsComponent ],
@@ -91,7 +89,7 @@ describe('VendorDetailsComponent', () => {
         { provide: ActivatedRoute, useClass: MockActivedRoute },
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useValue: { navigate: () => {} } },
-        { provide: VendorService, useClass: VendorService },
+        { provide: VendorService, useClass: MockVendorService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: EmailService, useClass: MockEmailService },

@@ -46,10 +46,36 @@ describe('UpdateVendorServicesComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UpdateVendorServicesComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should disable flat fee', () => {
+    // assign
+
+    // act
+    // fixture.detectChanges();
+
+    // assert
+  });
+
+  it('should enble flat fee', () => {
+    // assign
+
+    // act
+    // fixture.detectChanges();
+
+    // assert
+  });
+
+  it('should populate vendor forms', () => {
+    // assign
+
+    // act
+    // fixture.detectChanges();
+
+    // assert
   });
 });
