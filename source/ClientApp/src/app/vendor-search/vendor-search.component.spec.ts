@@ -23,7 +23,7 @@ import { Subject } from 'rxjs';
 import { VendorService } from '../vendors/Services/vendor.service';
 import { VendorServices } from '../shared/models/vendor-services.model';
 
-fdescribe('VendorSearchComponent', () => {
+describe('VendorSearchComponent', () => {
   let component: VendorSearchComponent;
   let fixture: ComponentFixture<VendorSearchComponent>;
   let mockVendorSearchService: VendorSearchService;

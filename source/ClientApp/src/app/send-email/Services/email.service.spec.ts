@@ -38,10 +38,12 @@ describe('EmailService', () => {
       spyOn(mockAuthService, 'post').and.returnValue(of(202));
 
       // act
-      sut.sendVendorQuestionEmail(1, new EmailModel()).subscribe((result) => {
-        // assert
+      const result = sut.sendVendorQuestionEmail(1, new EmailModel());
+
+      // assert
+      result.subscribe((response) => {
         expect(mockAuthService.post).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(202);
+        expect(response).toEqual(202);
         done();
       });
 

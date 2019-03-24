@@ -15,7 +15,7 @@ import { ReservationsService } from '../Services/reservations.service';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
-describe('ReservationsVendorComponent', () => {
+xdescribe('ReservationsVendorComponent', () => {
     let component: ReservationsVendorComponent;
     let fixture: ComponentFixture<ReservationsVendorComponent>;
   

@@ -24,9 +24,20 @@ describe('ClaimVendorComponent', () => {
   let component: ClaimVendorComponent;
   let fixture: ComponentFixture<ClaimVendorComponent>;
   let mockVendorSearchService: VendorSearchService;
+  let fakeAuthService: AuthService;
 
   class MockMatSnackBar {
     open() {}
+  }
+
+  class MockActiveRoute {
+    snapshot = {
+      paramMap: {
+        get: function(id: string) {
+          return undefined;
+        }
+      }
+    };
   }
 
   class MockVendorService {
@@ -57,12 +68,7 @@ describe('ClaimVendorComponent', () => {
         RouterTestingModule.withRoutes([]),
       ],
       providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({id: 123})
-          }
-        },
+        { provide: ActivatedRoute, useClass: MockActiveRoute },
         { provide: AuthService, useClass: MockAuthService },
         { provide: VendorService, useClass: MockVendorService },
         { provide: VendorSearchService, useClass: MockVendorSearchService },
@@ -78,10 +84,22 @@ describe('ClaimVendorComponent', () => {
     fixture = TestBed.createComponent(ClaimVendorComponent);
     component = fixture.componentInstance;
     mockVendorSearchService = TestBed.get(VendorSearchService);
+    fakeAuthService = TestBed.get(AuthService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should set role', () => {
+    // arrange
+    spyOn(fakeAuthService, 'user').and.returnValue(undefined);
+    spyOn(component, 'setOccasionsVendor').and.callThrough();
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(component.setOccasionsVendor).toHaveBeenCalledTimes(1);
   });
 
 });
