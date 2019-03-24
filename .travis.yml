@@ -28,7 +28,9 @@ matrix:
   
   - language: csharp
     mono: none
-    dotnet: 2.2.0
+    sudo: required
+    dist: xenial
+    dotnet: 2.2v
 
     install:
     - cd unittests
