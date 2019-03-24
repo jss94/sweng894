@@ -33,8 +33,7 @@ matrix:
     dotnet: 2.2
 
     install:
-    - cd unittests
-    - dotnet restore
+    - dotnet restore unittests/unittests.csproj
 
     script: 
-    - dotnet test
+    - dotnet test unittests/unittests.csproj
