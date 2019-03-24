@@ -25,6 +25,10 @@ export class GooglePlacesService {
         });
 
         locations.subscribe((places: google.maps.places.PlaceResult[]) => {
+            if (!places) {
+                return;
+            }
+
             this.removeMarkers();
 
             const infowindow = this.infowindow;

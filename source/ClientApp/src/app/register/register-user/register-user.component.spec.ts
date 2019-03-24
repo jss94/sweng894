@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
 import { of } from 'rxjs';
 
-xdescribe('RegisterUserComponent', () => {
+describe('RegisterUserComponent', () => {
   let component: RegisterUserComponent;
   let fixture: ComponentFixture<RegisterUserComponent>;
   let mockRegisterService: MockRegisterService;

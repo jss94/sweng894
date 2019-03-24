@@ -19,12 +19,14 @@ import { GooglePlacesService } from '../Services/google-places.service';
 import { MockGooglePlacesService } from '../Services/mock-google-places.service';
 import { GoogleMapsService } from 'src/app/google-map/Services/google-maps.service';
 import { MockGoogleMapsService } from 'src/app/google-map/Services/mock-google-maps.service';
+import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 
 describe('ClaimVendorComponent', () => {
   let component: ClaimVendorComponent;
   let fixture: ComponentFixture<ClaimVendorComponent>;
   let mockVendorSearchService: VendorSearchService;
   let fakeAuthService: AuthService;
+  let fakeGooglePlacesService: GooglePlacesService;
 
   class MockMatSnackBar {
     open() {}
@@ -85,6 +87,7 @@ describe('ClaimVendorComponent', () => {
     component = fixture.componentInstance;
     mockVendorSearchService = TestBed.get(VendorSearchService);
     fakeAuthService = TestBed.get(AuthService);
+    fakeGooglePlacesService = TestBed.get(GooglePlacesService);
   });
 
   it('should create', () => {
@@ -93,8 +96,11 @@ describe('ClaimVendorComponent', () => {
 
   it('should set role', () => {
     // arrange
+    const fakeVendor = new FakeVendor();
     spyOn(fakeAuthService, 'user').and.returnValue(undefined);
     spyOn(component, 'setOccasionsVendor').and.callThrough();
+    spyOn(fakeGooglePlacesService, 'getVendorById').and.returnValue(of(fakeVendor));
+
     // act
     fixture.detectChanges();
 

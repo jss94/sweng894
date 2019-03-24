@@ -34,7 +34,7 @@ export class MockMatDialog {
   }
 }
 
-xdescribe('DeactivateUserComponent', () => {
+describe('DeactivateUserComponent', () => {
   let component: DeactivateUserComponent;
   let fixture: ComponentFixture<DeactivateUserComponent>;
   let fakeMatSnackBar: MatSnackBar;
