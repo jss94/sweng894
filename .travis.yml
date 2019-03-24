@@ -33,6 +33,7 @@ matrix:
     dotnet: 2.2
 
     install:
+    - ls
     - cd unittests
     - dotnet restore
 
