@@ -25,7 +25,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetMonthlyReservationMetrics_ReturnMonthlyReservationCount()
+        public async Task GetMonthlyReservationMetrics_ReturnMonthlyReservationCount()
         {
             //arrange
             var marchMetric = new ReservationCountMetric { dateCategory = "March", reservationCount = 5};
@@ -36,19 +36,19 @@ namespace UnitTests.Controllers
             __metricsQueryMock.Setup(x => x.GetMonthlyReservationCountMetricAsync(5))
                 .Returns(Task.Factory.StartNew(() => monthlyMetrics));
 
-            var task = _metricsController.GetMonthlyReservationMetrics(5);
+            var task = await _metricsController.GetMonthlyReservationMetrics(5);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var results = result.Value as List<ReservationCountMetric>;
             Assert.Equal("March", results[0].dateCategory);
             Assert.Equal(5, results[0].reservationCount);
         }
 
         [Fact]
-        public void GetWeeklyReservationCountMetrics_ReturnWeeklyReservationsCount()
+        public async Task GetWeeklyReservationCountMetrics_ReturnWeeklyReservationsCount()
         {
             //arrange
             var tuesdayMetric = new ReservationCountMetric { dateCategory = "Tuesday", reservationCount = 2 };
@@ -59,19 +59,19 @@ namespace UnitTests.Controllers
             __metricsQueryMock.Setup(x => x.GetWeekdayReservationCountMetricAsync(2))
                 .Returns(Task.Factory.StartNew(() => weekdayMetrics));
 
-            var task = _metricsController.GetWeeklyReservationCountMetrics(2);
+            var task = await _metricsController.GetWeeklyReservationCountMetrics(2);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var results = result.Value as List<ReservationCountMetric>;
             Assert.Equal("Tuesday", results[0].dateCategory);
             Assert.Equal(2, results[0].reservationCount);
         }
 
         [Fact]
-        public void GetMonthlyReservationSalesMetrics_ReturnSalesMetrics()
+        public async Task GetMonthlyReservationSalesMetrics_ReturnSalesMetrics()
         {
             //arrange
             var tuesdayMetric = new ReservationSalesMetric { dateCategory = "March", flatFee = true, name = "Mock Vendor", numberReserved = 1, price = 100, serviceName = "Unit Test", serviceType = "Unit" };
@@ -82,19 +82,19 @@ namespace UnitTests.Controllers
             __metricsQueryMock.Setup(x => x.GetWeekdayReservationSalesMetricAsync(It.IsAny<int>()))
                 .Returns(Task.Factory.StartNew(() => weekdayMetrics));
 
-            var task = _metricsController.GetWeekdayReservationSalesMetrics(2);
+            var task = await _metricsController.GetWeekdayReservationSalesMetrics(2);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var results = result.Value as List<ReservationSalesMetric>;
             Assert.Equal("March", results[0].dateCategory);
             Assert.Equal(100, results[0].price);
         }
 
         [Fact]
-        public void GetWeekdayReservationSalesMetrics_ReturnSalesMetrics()
+        public async Task GetWeekdayReservationSalesMetrics_ReturnSalesMetrics()
         {
             //arrange
             var tuesdayMetric = new ReservationSalesMetric { dateCategory = "Tuesday", flatFee = true, name = "Mock Vendor", numberReserved = 1, price = 100, serviceName = "Unit Test", serviceType = "Unit"};
@@ -105,12 +105,12 @@ namespace UnitTests.Controllers
             __metricsQueryMock.Setup(x => x.GetWeekdayReservationSalesMetricAsync(It.IsAny<int>()))
                 .Returns(Task.Factory.StartNew(() => weekdayMetrics));
 
-            var task = _metricsController.GetWeekdayReservationSalesMetrics(2);
-
+            var task = await _metricsController.GetWeekdayReservationSalesMetrics(2);
+            
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var results = result.Value as List<ReservationSalesMetric>;
             Assert.Equal("Tuesday", results[0].dateCategory);
             Assert.Equal(100, results[0].price);
