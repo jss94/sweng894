@@ -1,6 +1,10 @@
 dist: trusty
 sudo: false
- 
+
+language: csharp
+mono: none
+dotnet: 2.2.0
+
 language: node_js
 node_js:
   - "8"
@@ -19,6 +23,7 @@ cache:
 install:
   - cd source/ClientApp/
   - npm install
+  - dotnet restore
  
 script:
 # - npm run lint
