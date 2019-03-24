@@ -42,7 +42,7 @@ namespace source.Queries
                     string query = @"SELECT * from occasions.vendors WHERE active = 1 AND id IN (SELECT vendorId from occasions.vendorServices WHERE serviceType = @serviceType AND active = 1); "
                         + @"SELECT * from occasions.vendorServices WHERE serviceType = @serviceType AND active = 1";
 
-                    var result = await connection.QueryMultiple(query, new { serviceType }).Map<Vendor, VendorServices, int?>
+                    var result = connection.QueryMultiple(query, new { serviceType }).Map<Vendor, VendorServices, int?>
                         (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
                         (vendor, vendorservices) => {
                             vendor.services = vendorservices.ToList();

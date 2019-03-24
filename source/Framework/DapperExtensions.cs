@@ -13,7 +13,7 @@ namespace source.Framework
         /// on one round trip call to the database. Note that the stored procedure or sql 
         /// query used must return query results as verticle partitions (aka multiple results grids).
         /// </summary>
-        public static async Task<IEnumerable<TFirst>> Map<TFirst, TSecond, TKey>
+        public static IEnumerable<TFirst> Map<TFirst, TSecond, TKey>
             (this GridReader newReader, Func<TFirst, TKey> firstKey, Func<TSecond, TKey> secondKey, 
             Action<TFirst, IEnumerable<TSecond>> addChildren)
         {
