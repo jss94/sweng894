@@ -2,7 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { UsersComponent } from './users/users.component';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material.module';
@@ -27,6 +27,11 @@ import { EventDialogComponent } from './shared/components/event-dialog/event-dia
 import { GuestEntryComponent } from './guest-entry/guest-entry.component';
 import { ReserveComponent } from './reservations/reserve/reserve.component';
 import { ClaimVendorComponent } from './vendor-search/claim-vendor/claim-vendor.component';
+import { FavoriteVendorsComponent } from './favorite-vendors/favorite-vendors.component';
+import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { createCustomElement } from '@angular/elements';
+import { ReservationMetricsComponent } from './vendor-metrics/reservation-metric/reservation-metrics.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -51,6 +56,7 @@ const routes: Routes = [
     { path: 'google-map', component: GoogleMapComponent },
     { path: 'claim-vendor/:type/:id', component: ClaimVendorComponent},
     { path: 'reserve/:id', component: ReserveComponent },
+    { path: 'vendor-metrics', component: VendorMetricsComponent },
   ];
 
 @NgModule({
@@ -78,6 +84,9 @@ const routes: Routes = [
         EventDialogComponent,
         ReserveComponent,
         ClaimVendorComponent,
+        FavoriteVendorsComponent,
+        VendorMetricsComponent,
+        [ReservationMetricsComponent],
     ],
 
     imports: [
@@ -86,8 +95,19 @@ const routes: Routes = [
         BrowserModule,
         MaterialModule,
         ReactiveFormsModule,
+        NgxChartsModule,
     ],
-    exports: [ RouterModule ]
+  exports: [RouterModule],
+  entryComponents: [
+    ReservationMetricsComponent
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 
-export class RoutingModule {}
+export class RoutingModule {
+  constructor(private injector: Injector) { }
+  ngDoBootstrap() {
+    const monthlyReservationMetricCustomElement = createCustomElement(ReservationMetricsComponent, { injector: this.injector });
+    customElements.define('app-reservation-metrics', monthlyReservationMetricCustomElement);
+  }
+}

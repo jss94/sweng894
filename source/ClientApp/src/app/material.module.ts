@@ -18,6 +18,7 @@ import { WarningDialogComponent } from './shared/components/warning-dialog/warni
 import { DeactivateUserComponent } from './deactivate-user/deactivate-user.component';
 import { EmailDialogComponent } from './shared/components/email-dialog/email-dialog.component';
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { EventDialogComponent } from './shared/components/event-dialog/event-dia
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
+    MatTabsModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -51,7 +53,8 @@ import { EventDialogComponent } from './shared/components/event-dialog/event-dia
     MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule
   ],
   providers: [
     MatIconRegistry,

@@ -73,8 +73,15 @@ export class GuestsComponent implements OnInit {
     });
 
 
-    }
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.eventGuid = params.get('eventGuid');
 
+      this.eventService.getEvent(this.eventGuid).subscribe((result: OccEvent) => {
+        this.eventName = result.name;
+      });
+
+    });
+}
     onCreate(): void {
         const guest: Guest = {
           name:  this.guestForm.controls['name'].value,
