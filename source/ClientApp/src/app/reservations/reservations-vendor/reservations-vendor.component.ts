@@ -46,8 +46,12 @@ export class ReservationsVendorComponent implements OnInit {
         this.changedCount = 0;
         this.approvedCount = 0;
 
+        const user = this.auth.user;
+        this.auth.user$.subscribe((result) => {
+            this.vendorId = result.id;
+        });
+
         this.route.paramMap.subscribe((params: ParamMap) => {
-            this.vendorId = Number(params.get('vendorId'));
       
             this.reservationService.getReservationByVendorId(this.vendorId).subscribe((result: Reservation[]) => {
                 this.reservations = result.map((reservation: Reservation) => {
