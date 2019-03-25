@@ -184,7 +184,6 @@ describe('ReserveComponent', () => {
     });
   });
 
-
   describe('setUser() 1', () => {
     it('should set the current user', () => {
       //assign
