@@ -29,7 +29,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetListByEventId_ReturnsGuestList()
+        public async Task GetListByEventId_ReturnsGuestList()
         {
             // arrange
             List<Guest> guests = new List<Guest>();
@@ -42,18 +42,18 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => guests));
 
             // act
-            var task = _sut.GetListByEventId(guests.First().eventId);
+            var task = await _sut.GetListByEventId(guests.First().eventId);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var guestsResult = result.Value as List<Guest>;
             Assert.Equal(guests, guestsResult);
         }
 
         [Fact]
-        public void GetListByEventGuid_ReturnsGuestList()
+        public async Task GetListByEventGuid_ReturnsGuestList()
         {
             // arrange
             var eventGuid = Guid.NewGuid().ToString();
@@ -67,18 +67,18 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => guests));
 
             // act
-            var task = _sut.GetListByEventGuid(guests.First().eventGuid);
+            var task = await _sut.GetListByEventGuid(guests.First().eventGuid);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var guestsResult = result.Value as List<Guest>;
             Assert.Equal(guests, guestsResult);
         }
 
         [Fact]
-        public void GetListByEventGuid_ReturnsNoGuestList()
+        public async Task GetListByEventGuid_ReturnsNoGuestList()
         {
             // arrange
             var eventGuid = Guid.NewGuid().ToString();
@@ -92,14 +92,14 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => guests));
 
             // act
-            var task = _sut.GetListByEventGuid("1");
+            var task = await _sut.GetListByEventGuid("1");
 
             // assert
-            Assert.IsType<NotFoundResult>(task.Result);
+            Assert.IsType<NotFoundResult>(task);
         }
 
         [Fact]
-        public void GetGuestById_ReturnsGuest()
+        public async Task GetGuestById_ReturnsGuest()
         {
             // arrange
             Guest guest = new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 };
@@ -108,18 +108,18 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => guest));
 
             // act
-            var task = _sut.GetGuestById(guest.guestId);
+            var task = await _sut.GetGuestById(guest.guestId);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var guestResult = result.Value as Guest;
             Assert.Equal(guest, guestResult);
         }
 
         [Fact]
-        public void Insert_ReturnsGuest()
+        public async Task Insert_ReturnsGuest()
         {
             // arrange
             var guest = new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 };
@@ -128,18 +128,18 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => guest));
 
             // act
-            var task = _sut.Insert(guest);
+            var task = await _sut.Insert(guest);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var guestResult = result.Value as bool?;
             Assert.True(guestResult);
         }
 
         [Fact]
-        public void Update_ReturnsGuest()
+        public async Task Update_ReturnsGuest()
         {
             // arrange
             var guest = new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 };
@@ -148,18 +148,18 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => guest));
 
             // act
-            var task = _sut.Update(guest);
+            var task = await _sut.Update(guest);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var guestResult = result.Value as bool?;
             Assert.True(guestResult);
         }
 
         [Fact]
-        public void Delete_ReturnsNull()
+        public async Task Delete_ReturnsNull()
         {
             // arrange
             var guest = new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1 };
@@ -171,12 +171,12 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _sut.DeleteByGuestId(0);
+            var task = await _sut.DeleteByGuestId(0);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var guestResult = result.Value as bool?;
             Assert.True(guestResult);
         }

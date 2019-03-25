@@ -45,7 +45,7 @@ namespace source.Queries
                           @"SELECT * from occasions.vendors WHERE active = 1; "
                         + @"SELECT * from occasions.vendorServices WHERE active = 1;";
 
-                    var result = await connection.QueryMultiple(query).Map<Vendor, VendorServices, int?>
+                    var result = connection.QueryMultiple(query).Map<Vendor, VendorServices, int?>
                         (vendor => vendor.id, vendorsevices => vendorsevices.vendorId,
                         (vendor, vendorservices) => {
                         vendor.services = vendorservices.ToList(); 
@@ -77,7 +77,7 @@ namespace source.Queries
                           @"SELECT * from occasions.vendors WHERE id = @id and active = 1; "
                         + @"SELECT * from occasions.vendorServices WHERE active = 1";
 
-                    var vendorResult = await connection.QueryMultiple(query, new { id })
+                    var vendorResult = connection.QueryMultiple(query, new { id })
                     .Map<Vendor, VendorServices, int?>
                         (v => v.id, s => s.vendorId,
                         (v, s) => { v.services = s.ToList(); });
@@ -120,7 +120,7 @@ namespace source.Queries
                             @"SELECT * FROM occasions.vendors WHERE userName = @userName AND active = 1; "
                           + @"SELECT * FROM occasions.vendorServices WHERE active = 1";
 
-                    var vendorResult = await connection.QueryMultiple(query, new { userName })
+                    var vendorResult = connection.QueryMultiple(query, new { userName })
                     .Map<Vendor, VendorServices, int?>
                         (v => v.id, s => s.vendorId,
                         (v, s) =>

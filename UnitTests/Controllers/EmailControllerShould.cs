@@ -41,7 +41,7 @@ namespace UnitTests.Controllers
         }
         
         [Fact]
-        public void PostQuestionToVendor_Return202()
+        public async Task PostQuestionToVendor_Return202()
         {
 
             //arrange
@@ -68,16 +68,16 @@ namespace UnitTests.Controllers
             _emailQueryMock.Setup(x => x.sendEmailViaPostAsync(emailMsg))
             .Returns(Task.Factory.StartNew(() => HttpStatusCode.Accepted));
             
-            var task = _emailController.PostQuestionToVendor(123, emailMsg);
+            var task = await _emailController.PostQuestionToVendor(123, emailMsg);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.IsType<HttpStatusCode>(task);
             
-            Assert.True(task.Result.Equals(HttpStatusCode.Accepted));
+            Assert.True(task.Equals(HttpStatusCode.Accepted));
         }
 
         [Fact]
-        public void PostQuestionToVendor_Return404()
+        public async Task PostQuestionToVendor_Return404()
         {
             //arrange
             var emailMsg = new EmailMessage();
@@ -86,12 +86,12 @@ namespace UnitTests.Controllers
             _vendorQueryMock.Setup(x => x.GetById(123))
             .Returns(Task.Factory.StartNew(() => ReturnNullVendor()));
             
-            var task = _emailController.PostQuestionToVendor(123, emailMsg);
+            var task = await _emailController.PostQuestionToVendor(123, emailMsg);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
+            Assert.IsType<HttpStatusCode>(task);
 
-            Assert.True(task.Result.Equals(HttpStatusCode.NotFound));
+            Assert.True(task.Equals(HttpStatusCode.NotFound));
         }
 
         private Vendor ReturnNullVendor()
@@ -105,7 +105,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void PostEventInviteToGuests_Return202()
+        public async Task PostEventInviteToGuests_Return202()
         {
             List<Guest> guests = new List<Guest>();
             guests.Add(new Guest { guestId = 123, name = "Guest1", email = "test1@psu.edu", isGoing = true, eventId = 1, eventGuid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac"});
@@ -141,15 +141,15 @@ namespace UnitTests.Controllers
             _emailQueryMock.Setup(x => x.getBaseUrlForEmail(It.IsAny<HttpContext>()))
                 .Returns("https://fakeUrl.com");
 
-            var task = _emailController.PostEventInviteToGuests(eventGuid, emailMsg);
+            var task = await _emailController.PostEventInviteToGuests(eventGuid, emailMsg);
             
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.Accepted, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.Accepted, task);
         }
 
         [Fact]
-        public void PostEventInviteToGuests_Return404EmptyList()
+        public async Task PostEventInviteToGuests_Return404EmptyList()
         {
             List<Guest> guests = new List<Guest>();
             string eventGuid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac";
@@ -159,15 +159,15 @@ namespace UnitTests.Controllers
             _guestQueryMock.Setup(x => x.GetListByEventId(123))
                 .Returns(Task.Factory.StartNew(() => guests));
             
-            var task = _emailController.PostEventInviteToGuests(eventGuid, emailMsg);
+            var task = await _emailController.PostEventInviteToGuests(eventGuid, emailMsg);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.NotFound, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.NotFound, task);
         }
 
         [Fact]
-        public void PostEventInviteToGuests_Return404Null()
+        public async Task PostEventInviteToGuests_Return404Null()
         {
             var emailMsg = new EmailMessage();
 
@@ -176,15 +176,15 @@ namespace UnitTests.Controllers
             _guestQueryMock.Setup(x => x.GetListByEventId(123))
                 .Returns(Task.Factory.StartNew(() => ReturnNullGuestList()));
 
-            var task = _emailController.PostEventInviteToGuests(eventGuid, emailMsg);
+            var task = await _emailController.PostEventInviteToGuests(eventGuid, emailMsg);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.NotFound, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.NotFound, task);
         }
 
         [Fact]
-        public void PostReservationToVendor_Return202()
+        public async Task PostReservationToVendor_Return202()
         {
             var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
             var vendor = new Vendor { id = 1, userName = "vendor@example.com", name = "name1", website = "website_1" };
@@ -226,11 +226,11 @@ namespace UnitTests.Controllers
             _emailQueryMock.Setup(x => x.sendEmailViaPostAsync(emailMsg))
             .Returns(Task.Factory.StartNew(() => HttpStatusCode.Accepted));
             
-            var task = _emailController.PostReservationToVendor(1, emailMsg);
+            var task = await _emailController.PostReservationToVendor(1, emailMsg);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.Accepted, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.Accepted, task);
         }
     }
 }

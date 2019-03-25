@@ -25,6 +25,10 @@ export class GooglePlacesService {
         });
 
         locations.subscribe((places: google.maps.places.PlaceResult[]) => {
+            if (!places) {
+                return;
+            }
+
             this.removeMarkers();
 
             const infowindow = this.infowindow;
@@ -79,7 +83,7 @@ export class GooglePlacesService {
         this.markers = [];
     }
 
-    getAddressFromGeolocation(location: {lat: number, lng: number}) {
+    getAddressFromGeolocation(location: {lat: number, lng: number}): Observable<any> {
         const address = new Subject();
         this.geocoder.geocode({location: location}, (results, status) => {
             address.next(results[0].formatted_address);

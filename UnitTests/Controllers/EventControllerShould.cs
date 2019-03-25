@@ -25,7 +25,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetAllEventsByUser_ReturnEvents()
+        public async Task GetAllEventsByUser_ReturnEvents()
         {
 
             //arrange
@@ -38,12 +38,12 @@ namespace UnitTests.Controllers
             __eventQueryMock.Setup(x => x.GetAllEventsByUser("jss94"))
                 .Returns(Task.Factory.StartNew(() => evts));
 
-            var task = _evntController.Get("jss94");
+            var task = await _evntController.Get("jss94");
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var eventsResult = result.Value as List<Event>;
             Assert.Equal(eventsResult[2].description, evts[2].description);
             Assert.Equal(eventsResult[2].userName, evts[2].userName);
@@ -52,16 +52,16 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetAllEventsByUser_ReturnNotFoundResult()
+        public async Task GetAllEventsByUser_ReturnNotFoundResult()
         {
             //act
             __eventQueryMock.Setup(x => x.GetAllEventsByUser("jss94"))
                 .Returns(Task.Factory.StartNew(() => ReturnNullList()));
 
-            var task = _evntController.Get("jss94");
+            var task = await _evntController.Get("jss94");
 
             // assert
-            Assert.IsType<NotFoundResult>(task.Result);
+            Assert.IsType<NotFoundResult>(task);
 
         }
 
@@ -71,7 +71,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetOneEventById_ReturnOneEvent()
+        public async Task GetOneEventById_ReturnOneEvent()
         {
 
             //arrange
@@ -81,19 +81,19 @@ namespace UnitTests.Controllers
             __eventQueryMock.Setup(x => x.GetEventById(2))
                 .Returns(Task.Factory.StartNew(() => evt2));
 
-            var task = _evntController.Get("jss94", 2);
+            var task = await _evntController.Get("jss94", 2);
             
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var eventsResult = result.Value as Event;
             Assert.Equal(evt2.description, eventsResult.description);
             
         }
 
         [Fact]
-        public void GetEventByGuid_ReturnsOneEvent()
+        public async Task GetEventByGuid_ReturnsOneEvent()
         {
             //arrange
             var guid = Guid.NewGuid().ToString();
@@ -103,14 +103,14 @@ namespace UnitTests.Controllers
             __eventQueryMock.Setup(x => x.GetEventByGuid(e.guid))
                 .Returns(Task.Factory.StartNew(() => e));
 
-            var task = _evntController.Get(guid);
+            var task = await _evntController.Get(guid);
 
             // assert
-            Assert.IsType<NotFoundResult>(task.Result);
+            Assert.IsType<NotFoundResult>(task);
         }
 
         [Fact]
-        public void GetEventByGuid_ReturnsNoEvent()
+        public async Task GetEventByGuid_ReturnsNoEvent()
         {
             //arrange
             var guid = Guid.NewGuid().ToString();
@@ -120,27 +120,28 @@ namespace UnitTests.Controllers
             __eventQueryMock.Setup(x => x.GetEventById(2))
                 .Returns(Task.Factory.StartNew(() => e));
 
-            var task = _evntController.Get("jss94", 2);
+            var task = await _evntController.Get("jss94", 2);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var eventsResult = result.Value as Event;
             Assert.Equal(e.description, eventsResult.description);
         }
 
-        public void GetOneEventById_ReturnNotFoundResult()
+        [Fact]
+        public async Task GetOneEventById_ReturnNotFoundResult()
         {
 
             //act
             __eventQueryMock.Setup(x => x.GetEventById(2))
                 .Returns(Task.Factory.StartNew(() => ReturnNull()));
 
-            var task = _evntController.Get("jss94", 2);
+            var task = await _evntController.Get("jss94", 2);
 
             // assert
-            Assert.IsType<NotFoundResult>(task.Result);
+            Assert.IsType<NotFoundResult>(task);
 
         }
 
@@ -150,7 +151,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void CreateNewEvent()
+        public async Task CreateNewEvent()
         {
 
             //arrange
@@ -160,19 +161,19 @@ namespace UnitTests.Controllers
             __eventQueryMock.Setup(x => x.CreateEvent(evt2))
                 .Returns(Task.Factory.StartNew(() => evt2));
 
-            var task = _evntController.Create(evt2);
+            var task = await _evntController.Create(evt2);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var eventResult = result.Value as bool?;
             Assert.True(eventResult);
 
         }
 
         [Fact]
-        public void CreateNewEvent_ReturnBadRequestResult()
+        public async Task CreateNewEvent_ReturnBadRequestResult()
         {
 
             //arrange
@@ -180,22 +181,18 @@ namespace UnitTests.Controllers
 
             //act
             __eventQueryMock.Setup(x => x.CreateEvent(evt2))
-                .Returns(Task.Factory.StartNew(() => ThrowException()));
+                .Returns(Task.Factory.StartNew(() => throw new Exception()));
 
-            var task = _evntController.Create(evt2);
+            var task = await _evntController.Create(evt2);
 
             // assert
-            Assert.IsType<BadRequestResult>(task.Result);
+            Assert.IsType<BadRequestResult>(task);
 
         }
 
-        private void ThrowException()
-        {
-            throw new Exception("Unknown error occurred");
-        }
 
         [Fact]
-        public void UpdateEvent_ReturnsEvent()
+        public async Task UpdateEvent_ReturnsEvent()
         {
             // arrange
             var evnt = new Event { eventId = 123, name = "Surprise Party", description = "Lets throw a surprise party for John!" };
@@ -204,18 +201,18 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => evnt));
 
             // act
-            var task = _evntController.Update(evnt);
+            var task = await _evntController.Update(evnt);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var eventResult = result.Value as Event;
             Assert.Equal(evnt, eventResult);
         }
 
         [Fact]
-        public void DeleteEvent_ReturnEvent()
+        public async Task DeleteEvent_ReturnEvent()
         {
             // arrange
             var evnt = new Event {
@@ -232,12 +229,12 @@ namespace UnitTests.Controllers
                 .Returns(Task.Factory.StartNew(() => true));
 
             // act
-            var task = _evntController.Delete(evnt.guid);
+            var task = await _evntController.Delete(evnt.guid);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var usersResult = result.Value as bool?;
             Assert.True(usersResult);
         }

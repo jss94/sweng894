@@ -34,7 +34,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetFavoriteVendors_ReturnVendors()
+        public async Task GetFavoriteVendors_ReturnVendors()
         {
             //arrange
 
@@ -57,19 +57,19 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.GetFavoriteVendors("aml5071");
+            var task = await _uut.GetFavoriteVendors("aml5071");
 
             //assert
 
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var vendorsResult = result.Value as List<Vendor>;
             Assert.Equal(vendors, vendorsResult);
         }
 
         [Fact]
-        public void GetFavoriteVendors_ReturnNotFound()
+        public async Task GetFavoriteVendors_ReturnNotFound()
         {
             //arrange
 
@@ -80,15 +80,15 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.GetFavoriteVendors("aml5071");
+            var task = await _uut.GetFavoriteVendors("aml5071");
 
             //assert
 
-            Assert.IsType<NotFoundResult>(task.Result);
+            Assert.IsType<NotFoundResult>(task);
         }
 
         [Fact]
-        public void IsFavorite_ReturnTrue()
+        public async Task IsFavorite_ReturnTrue()
         {
             //arrange
 
@@ -97,19 +97,19 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.IsFavorite("aml5071", 10);
+            var task = await _uut.IsFavorite("aml5071", 10);
 
             //assert
 
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var boolResult = result.Value as Boolean?;
             Assert.True(boolResult);
         }
 
         [Fact]
-        public void IsFavorite_ReturnFalse()
+        public async Task IsFavorite_ReturnFalse()
         {
             //arrange
 
@@ -120,19 +120,19 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.IsFavorite("aml5071", 10);
+            var task = await _uut.IsFavorite("aml5071", 10);
 
             //assert
 
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var boolResult = result.Value as Boolean?;
             Assert.False(boolResult);
         }
 
         [Fact]
-        public void AddNewFavorite_ReturnSuccess()
+        public async Task AddNewFavorite_ReturnSuccess()
         {
             //arrange
 
@@ -143,19 +143,19 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.New(newFav);
+            var task = await _uut.New(newFav);
 
             //assert
 
-            Assert.IsType<CreatedAtActionResult>(task.Result);
-            var result = task.Result as CreatedAtActionResult;
+            Assert.IsType<CreatedAtActionResult>(task);
+            var result = task as CreatedAtActionResult;
             Assert.True(result.StatusCode == 201);
             var favResult = result.Value as Favorite;
             Assert.Equal(newFav, favResult);            
         }
 
         [Fact]
-        public void AddNewFavorite_ReturnFail()
+        public async Task AddNewFavorite_ReturnFail()
         {
             //arrange
             Favorite fav = null;
@@ -167,18 +167,18 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.New(newFav);
+            var task = await _uut.New(newFav);
 
             //assert
 
-            Assert.IsType<BadRequestResult>(task.Result);
-            var result = task.Result as BadRequestResult;
+            Assert.IsType<BadRequestResult>(task);
+            var result = task as BadRequestResult;
             Assert.Equal(400, result.StatusCode);
 
         }
 
         [Fact]
-        public void RemoveFavorite_ReturnSuccess()
+        public async Task RemoveFavorite_ReturnSuccess()
         {
             //arrange
 
@@ -187,18 +187,18 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.Remove("aml5071", 10);
+            var task = await _uut.Remove("aml5071", 10);
 
             //assert
 
-            Assert.IsType<NoContentResult>(task.Result);
-            var result = task.Result as NoContentResult;
+            Assert.IsType<NoContentResult>(task);
+            var result = task as NoContentResult;
             Assert.True(result.StatusCode == 204);
 
         }
 
         [Fact]
-        public void RemoveFavorite_ReturnFail()
+        public async Task RemoveFavorite_ReturnFail()
         {
             //arrange
 
@@ -207,12 +207,12 @@ namespace UnitTests.Controllers
 
             //act
 
-            var task = _uut.Remove("aml5071", 10);
+            var task = await _uut.Remove("aml5071", 10);
 
             //assert
 
-            Assert.IsType<BadRequestResult>(task.Result);
-            var result = task.Result as BadRequestResult;
+            Assert.IsType<BadRequestResult>(task);
+            var result = task as BadRequestResult;
             Assert.Equal(400, result.StatusCode);
 
         }

@@ -1,6 +1,6 @@
 /// <reference types="@types/googlemaps" />
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { VendorSearchService } from './Services/vendor-search.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { VendorServices } from '../shared/models/vendor-services.model';
@@ -15,7 +15,7 @@ import { AuthService } from '../shared/services/auth.service';
   templateUrl: './vendor-search.component.html',
   styleUrls: [ './vendor-search.component.css']
 })
-export class VendorSearchComponent implements OnInit {
+export class VendorSearchComponent implements OnInit, AfterViewInit {
   unclaimedServices: VendorServices[];
   claimedServices: VendorServices[];
   isVendor: boolean;
@@ -80,14 +80,6 @@ export class VendorSearchComponent implements OnInit {
       this.onSearchClicked();
     }
 
-    const property = {
-      zoom: 12,
-      center: {lat: 0, lng: 0},
-    };
-
-    this.map = this.googleMapsService.setMap(document.getElementById('search-map'), property);
-
-
     if (this.authService.user) {
       this.isVendor = this.authService.user.role === 'Admin' || this.authService.user.role === 'VENDOR';
     } else {
@@ -95,6 +87,16 @@ export class VendorSearchComponent implements OnInit {
         this.isVendor = user.role === 'Admin' || user.role === 'VENDOR';
       });
     }
+  }
+
+  ngAfterViewInit() {
+    const property = {
+      zoom: 12,
+      center: {lat: 0, lng: 0},
+    };
+
+    const mapElement = document.getElementById('search-map');
+    this.map = this.googleMapsService.setMap(mapElement, property);
   }
 
   getLocationFromBrowser() {
@@ -116,7 +118,6 @@ export class VendorSearchComponent implements OnInit {
         this.searchForm.controls['location'].setValue(address);
       });
     });
-
   }
 
   populateLocationClicked() {
@@ -188,7 +189,7 @@ export class VendorSearchComponent implements OnInit {
     const services = new Subject<VendorServices[]>();
     const address = this.searchForm.controls['location'].value;
     this.googlePlacesService.getGeoLocationFromAddress(address)
-      .subscribe((location: {lat: number, lng: number}) => {
+    .subscribe((location: {lat: number, lng: number}) => {
 
         const request = {
           location: location,
@@ -216,7 +217,6 @@ export class VendorSearchComponent implements OnInit {
 
   onClaimClicked(service: VendorServices) {
     const type = this.searchForm.controls['category'].value;
-    console.log(service.googleId);
     this.router.navigate(['claim-vendor/' + type + '/' + service.googleId]);
   }
 

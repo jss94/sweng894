@@ -52,7 +52,9 @@ export class ReservationsVendorComponent implements OnInit {
         });
 
         this.route.paramMap.subscribe((params: ParamMap) => {
-      
+            
+            this.vendorId = Number(params.get('vendorId'));
+            console.log('VENDOR:ID', this.vendorId)
             this.reservationService.getReservationByVendorId(this.vendorId).subscribe((result: Reservation[]) => {
                 this.reservations = result.map((reservation: Reservation) => {
                     return reservation;
