@@ -34,6 +34,10 @@ export class MockAuthService {
     return undefined;
   }
 
+  logout(): any {
+    return undefined;
+  }
+
   get(): Observable<any> {
     return of(null);
   }

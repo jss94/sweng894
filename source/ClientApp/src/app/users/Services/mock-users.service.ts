@@ -8,14 +8,17 @@ export class MockUsersService {
     }
 
     getUsers(): Observable<User[]> {
-        return of(null);
+        return of(undefined);
     }
 
     getUser(id: string): Observable<User> {
-        return of(null);
+        return of(undefined);
     }
 
     registerUser(id: string): void {
+    }
 
+    deactivateUser(id: string): Observable<boolean> {
+        return of(undefined);
     }
 }

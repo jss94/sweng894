@@ -57,10 +57,58 @@ describe('ReserveComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ReserveComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('setUser()', () => {
+    it ('should set the current user', () => {
+      // assign
+
+      // act
+      // fixture.detectChanges();
+
+      // assert
+
+    });
+  });
+
+  describe('setVendorServices()', () => {
+    it ('should set vendor services', () => {
+      // assign
+
+      // act
+      // fixture.detectChanges();
+
+      // assert
+
+    });
+  });
+
+  describe('setUserEvents()', () => {
+    it ('should set user events', () => {
+      // assign
+
+      // act
+      // fixture.detectChanges();
+
+      // assert
+
+    });
+  });
+
+  describe('subscribeCost()', () => {
+    it ('should subscribe to costs', () => {
+      // assign
+
+      // act
+      // fixture.detectChanges();
+
+      // assert
+
+    });
   });
 });
