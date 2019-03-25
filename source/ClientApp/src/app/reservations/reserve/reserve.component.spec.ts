@@ -35,6 +35,8 @@ import { MockReservationService } from '../Services/mock-reservation.service';
 import { Reservation } from '../Models/reservation.model';
 import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 import { EmailContent } from 'src/app/send-email/Models/email.content.model';
+import { compileComponentFromMetadata } from '@angular/compiler';
+import { componentNeedsResolution } from '@angular/core/src/metadata/resource_loading';
 
 
 describe('ReserveComponent', () => {
@@ -61,12 +63,12 @@ describe('ReserveComponent', () => {
   const fakeService: VendorServices = {
     id: 1,
     vendorId: 1,
-    serviceType: 'Venue',
-    serviceName: 'Fake venue',
-    serviceDescription: 'Fake venue description',
-    flatFee: true,
-    price: 200.00,
-    unitsAvailable: null,
+    serviceType: 'Catering',
+    serviceName: 'Fake catering',
+    serviceDescription: 'Fake catering description',
+    flatFee: false,
+    price: 20.00,
+    unitsAvailable: 10,
     googleId: ''
   };
 
@@ -153,24 +155,7 @@ describe('ReserveComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should set user and vendor service', () => {
-    // assign
-    const fakeUser = new FakeUser();
-    spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
-    spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
-    spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
-
-    // act
-    fixture.detectChanges();
-
-    // assert
-    expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-    expect(mockVendorServicesSvc.getVendorServiceById).toHaveBeenCalledTimes(1);
-    expect(component.userName).toEqual(fakeUser.userName);
-    expect(component.vendorServiceModel).toEqual(fakeService);
-  });
-
+  
   describe('onCreate', () => {
     it('should create reservation', () => {
       // assign
@@ -200,52 +185,169 @@ describe('ReserveComponent', () => {
   });
 
 
-    describe('setUser()', () => {
-        it('should set the current user', () => {
-            // assign
+  describe('setUser() 1', () => {
+    it('should set the current user', () => {
+      //assign
+      const fakeUser = new FakeUser();
+      spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
 
-            // act
-            // fixture.detectChanges();
+      // act
+      fixture.detectChanges();
 
-            // assert
-
-        });
+      // assert
+      expect(component.userName).toEqual(fakeUser.userName);
     });
+  });
 
-    describe('setVendorServices()', () => {
-        it('should set vendor services', () => {
-            // assign
+  describe('setUser() 2', () => {
+    it('should set the current user', () => {
+      //assign
+      const fakeUser = new FakeUser();
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
+      spyOnProperty(mockAuthService, 'user').and.returnValue(null);
+      spyOn(mockAuthService, 'user$').and.returnValue(of(fakeUser));
+   
+      // act
+      fixture.detectChanges();
 
-            // act
-            // fixture.detectChanges();
-
-            // assert
-
-        });
+      // assert
+      expect(component.userName).toEqual(fakeUser.userName);
     });
+  });
 
-    describe('setUserEvents()', () => {
-        it('should set user events', () => {
-            // assign
+  describe('setVendorServices()', () => {
+    it('should set vendor services', () => {
+      // assign
+      spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
 
-            // act
-            // fixture.detectChanges();
+      // act
+      fixture.detectChanges();
 
-            // assert
-
-        });
+      // assert
+      expect(mockVendorServicesSvc.getVendorServiceById).toHaveBeenCalledTimes(1);
+      expect(component.vendorServiceModel).toEqual(fakeService);
     });
+  });
 
-    describe('subscribeCost()', () => {
-        it('should subscribe to costs', () => {
-            // assign
+  describe('getUserEvents() 1', () => {
+    it('should get user events', () => {
+      // assign
+      const fakeEvents = [ fakeEvent ];
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      
+      // act
+      fixture.detectChanges();
 
-            // act
-            // fixture.detectChanges();
-
-            // assert
-
-        });
+      // assert
+      expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
+      expect(component.userEvents.length).toEqual(1);
+      expect(component.eventModel).toEqual(fakeEvent);
     });
+  });
 
+  describe('getUserEvents() 2', () => {
+    it('should get user events', () => {
+      // assign
+      const fakeEvents = [ fakeEvent, fakeEvent, fakeEvent ];
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      spyOn(mockEventService, 'getEvent').and.returnValue(of(fakeEvent));
+
+      // act
+      fixture.detectChanges();
+
+      // assert
+      expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('subscribeCost() 1', () => {
+    it('should subscribe to costs', () => {
+      // assign
+      const fakeEvents = [ fakeEvent ];
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
+      component.reservationForm.controls['numberReserved'].setValue(2)
+      
+      spyOn(component, 'subscribeCost').and.returnValue(of({}));
+      
+      //act
+      fixture.detectChanges();
+      
+      //assert
+      expect(component.subscribeCost).toHaveBeenCalledTimes(1);
+    });
+  });
+  
+  describe('subscribeCost() 2', () => {
+    it('should subscribe to costs', () => {
+      // assign
+      const fakeEvents = [ fakeEvent ];
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
+      
+      component.reservationForm.controls['numberReserved'].setValue(null)
+      spyOn(component, 'subscribeCost').and.returnValue(of({}));
+      
+      //act
+      fixture.detectChanges();
+      
+      //assert
+      expect(component.subscribeCost).toHaveBeenCalledTimes(1);
+      expect(component.cost).toEqual(0);
+    });
+  });
+
+  describe('getNumGuests() 1', () => {
+    it('should get num guests', () => {
+      // assign
+      const fakeEvents = [ fakeEvent ];
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      const fakeGuests = new FakeGuests().arr;
+      spyOn(mockGuestService, 'getGuests').and.returnValue(of(fakeGuests));
+      component.vendorServiceModel = fakeService;
+      
+      //act
+      component.getNumGuests(fakeEvent.eventId);
+      
+      //assert
+      expect(component.eventGuestNum).toEqual(3);
+    });
+  });
+
+  describe('getNumGuests() 2', () => {
+    it('should get num guests', () => {
+      // assign
+      const fakeEvents = [ fakeEvent ];
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      const fakeGuests = new FakeGuests().arr;
+      spyOn(mockGuestService, 'getGuests').and.returnValue(of(fakeGuests));
+      component.vendorServiceModel = fakeService;
+      component.vendorServiceModel.flatFee = false;
+      component.vendorServiceModel.unitsAvailable = 2;
+      
+      //act
+      component.getNumGuests(fakeEvent.eventId);
+      
+      //assert
+      expect(component.reservationForm.controls["numberReserved"].value).toEqual(2);
+      expect(component.eventGuestNum).toEqual(3);
+    });
+  });
+
+  describe('getMaxNumberErrorMessage()', () => {
+    it('should get max number error', () => {
+      // assign
+      component.reservationForm.controls['numberReserved'].setValue(200);
+      component.vendorServiceModel = fakeService;
+      
+      expect(component.getMaxNumberErrorMessage()).toEqual("Must be " + component.vendorServiceModel.unitsAvailable + " or less");
+    });
+  });
+
+
+  
+  
+ 
 });
