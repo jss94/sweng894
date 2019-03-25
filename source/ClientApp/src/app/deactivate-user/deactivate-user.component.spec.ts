@@ -7,8 +7,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs/internal/observable/of';
-import { Router, Routes } from '@angular/router';
-import { VendorServicesService } from '../vendor-services/Services/vendor-services.service';
+import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -40,6 +39,7 @@ describe('DeactivateUserComponent', () => {
   let fixture: ComponentFixture<DeactivateUserComponent>;
   let fakeMatSnackBar: MatSnackBar;
   let fakeMatDialog: MatDialog;
+  let fakeUserService: UsersService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -70,7 +70,7 @@ describe('DeactivateUserComponent', () => {
     component = fixture.componentInstance;
     fakeMatSnackBar = TestBed.get(MatSnackBar);
     fakeMatDialog = TestBed.get(MatDialog);
-
+    fakeUserService = TestBed.get(UsersService);
   });
 
   it('should create', () => {
@@ -86,5 +86,21 @@ describe('DeactivateUserComponent', () => {
 
     // assert
     expect(fakeMatDialog.open).toHaveBeenCalledTimes(1);
+  }));
+
+  it('should deactivate user', async(() => {
+    // assign
+    const dialogRef = new MockMatDialogRef();
+    spyOn(fakeMatDialog, 'open').and.returnValue(dialogRef);
+    spyOn(dialogRef, 'afterClosed').and.returnValue(of(true));
+    spyOn(fakeUserService, 'deactivateUser').and.returnValue(of(true));
+    spyOn(fakeMatSnackBar, 'open').and.callThrough();
+
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(fakeMatSnackBar.open).toHaveBeenCalledTimes(1);
+
   }));
 });

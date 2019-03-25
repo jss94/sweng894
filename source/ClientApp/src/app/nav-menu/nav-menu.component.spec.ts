@@ -95,6 +95,7 @@ describe('NavMenuComponent', () => {
     spyOnProperty(authService, 'user$').and.returnValue(of(user));
 
     // act
+    component.ngOnInit();
     fixture.detectChanges();
 
     // assert
