@@ -167,6 +167,7 @@ namespace UnitTests.Controllers
 
             // assert
             Assert.IsType<BadRequestResult>(task);
+
         }
 
         [Fact]
@@ -411,7 +412,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetByEventId_ReturnsReservationList()
+        public async Task GetByEventId_ReturnsReservationList()
         {
             //arrange
             var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
@@ -433,7 +434,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetByEventId_ReturnsNotFound()
+        public async Task GetByEventId_ReturnsNotFound()
         {
             //arrange
             var eventGuid = "1234-4568-9101-1213";
@@ -450,7 +451,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetByEventId_ThrowsException()
+        public async Task GetByEventId_ThrowsException()
         {
             //arrange
             var exception = new Exception();
