@@ -74,9 +74,13 @@ export class ReserveComponent implements OnInit {
       this.vendorServicesService.getVendorServiceById(svcId).subscribe(response => {
         this.vendorServiceModel = response;
         let maxNumber = 1;
-        if (this.vendorServiceModel.unitsAvailable != null) {
+        if (this.vendorServiceModel.unitsAvailable != null && this.vendorServiceModel.unitsAvailable > 1) {
           maxNumber = this.vendorServiceModel.unitsAvailable;
           this.reservationForm.controls["numberReserved"].setValidators([Validators.required, Validators.min(1), Validators.max(maxNumber)]);
+        }
+        else {
+          this.reservationForm.controls["numberReserved"].setValue(1);
+          maxNumber = 1;
         }
       });
     }, error => {
@@ -89,6 +93,7 @@ export class ReserveComponent implements OnInit {
       this.userEvents = response
       if (this.userEvents.length == 1) {
         this.eventModel = this.userEvents[0];
+        this.reservationForm.controls['eventList'].setValue(this.eventModel.guid);    
       }
       if (this.userEvents.length > 1) {
         this.subscribeEventChoice();
@@ -177,13 +182,6 @@ export class ReserveComponent implements OnInit {
       event: null,
       vendor: null
     };
-
-    this.reservationService.getReservationsByEventGuid(this.eventModel.guid).subscribe((response: Reservation[]) => {
-      if(response != null){
-        
-      }//if
-    });
-          
     
     this.reservationService.createReservation(res).subscribe(response => {
       this.ngOnInit();

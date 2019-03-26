@@ -29,7 +29,7 @@
                 </mat-select>
               </mat-form-field>
 
-              <div *ngIf="vendorServiceModel.unitsAvailable != null">
+              <div *ngIf="vendorServiceModel.unitsAvailable != null && vendorServiceModel.unitsAvailable > 1">
                 <mat-form-field appearance="outline">
                   <mat-label>Units Requested</mat-label>
                   <input matInput placeholder="Units Requested" type="number" formControlName="numberReserved">
@@ -68,7 +68,7 @@
           <h6 *ngIf="vendorServiceModel.flatFee">Flat fee</h6>
           <h6 *ngIf="!vendorServiceModel.flatFee">Price per unit</h6>
           <h6>{{vendorServiceModel.price | currency:'USD':symbol:'1.2-2'}}</h6>
-          <h6 *ngIf="vendorServiceModel.unitsAvailable != null">{{vendorServiceModel.unitsAvailable}} units available</h6>
+          <h6 *ngIf="vendorServiceModel.unitsAvailable != null && vendorServiceModel.unitsAvailable > 1">{{vendorServiceModel.unitsAvailable}} units available</h6>
         </div>
       </div>
       <!--closing flex section-->
