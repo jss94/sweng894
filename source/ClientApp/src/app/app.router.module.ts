@@ -32,6 +32,7 @@ import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.componen
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { createCustomElement } from '@angular/elements';
 import { ReservationMetricsComponent } from './vendor-metrics/reservation-metric/reservation-metrics.component';
+import { VendorCalendarComponent } from './vendor-calendar/vendor-calendar.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -57,6 +58,7 @@ const routes: Routes = [
     { path: 'claim-vendor/:type/:id', component: ClaimVendorComponent},
     { path: 'reserve/:id', component: ReserveComponent },
     { path: 'vendor-metrics', component: VendorMetricsComponent },
+    { path: 'vendor-events/:vendorId', component: VendorCalendarComponent },
   ];
 
 @NgModule({
@@ -87,6 +89,7 @@ const routes: Routes = [
         FavoriteVendorsComponent,
         VendorMetricsComponent,
         [ReservationMetricsComponent],
+        VendorCalendarComponent,
     ],
 
     imports: [

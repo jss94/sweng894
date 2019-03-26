@@ -25,12 +25,13 @@ export class VendorDetailsComponent implements OnInit {
   vendorServices: VendorServices[];
   isFavorite: boolean;
   isOrganizer: boolean;
-  
+
   constructor(
     private auth: AuthService,
     private vendorServicesService: VendorServicesService,
     private vendorService: VendorService,
     private route: ActivatedRoute,
+    private router: Router,
     private snackbar: MatSnackBar,
     private dialog: MatDialog,
     private emailService: EmailService,
@@ -89,6 +90,10 @@ export class VendorDetailsComponent implements OnInit {
     });
   }
 
+  loadCalendar() {
+    this.router.navigate(['/vendor-events/' + this.vendor.id]);
+  }
+
   loadQuestion() {
     console.log('Let\'s ask a Questoin');
 
@@ -145,10 +150,10 @@ export class VendorDetailsComponent implements OnInit {
       if (user && user.role === 'ORGANIZER') {
         this.isOrganizer = true;
       }
-      else{ 
-        this.isOrganizer = false; 
+      else{
+        this.isOrganizer = false;
       }
     });
   }
-  
+
 }
