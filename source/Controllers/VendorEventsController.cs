@@ -9,7 +9,7 @@ using source.Queries;
 namespace source.Controllers
 {
     /// <summary>
-    /// Event controller.
+    /// VendorEventsController.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
