@@ -27,7 +27,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void getInvitation_ReturnInvitation()
+        public async Task getInvitation_ReturnInvitation()
         {
 
             //arrange
@@ -37,12 +37,12 @@ namespace UnitTests.Controllers
             __invitationQueryMock.Setup(x => x.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => invitation));
 
-            var task = _invitationController.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
+            var task = await _invitationController.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
 
             // assert
-            Assert.IsType<Invitation>(task.Result);
+            Assert.IsType<Invitation>(task);
 
-            var result = task.Result as Invitation;
+            var result = task as Invitation;
             Assert.Equal(1, invitation.invitationId);
             Assert.Equal(123, invitation.eventId);
             Assert.Equal("invitationContent!", invitation.content);
@@ -51,7 +51,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void getInvitation_ReturnNullInvitation()
+        public async Task getInvitation_ReturnNullInvitation()
         {
 
             //arrange
@@ -61,14 +61,14 @@ namespace UnitTests.Controllers
             __invitationQueryMock.Setup(x => x.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => ThrowExceptionForGet()));
 
-            var task = _invitationController.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
+            var task = await _invitationController.getInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
             
-            var result = task.Result as Invitation;
+            var result = task as Invitation;
             Assert.Null(result);
         }
 
         [Fact]
-        public void postInvitation_Return200()
+        public async Task postInvitation_Return200()
         {
 
             //arrange
@@ -88,15 +88,15 @@ namespace UnitTests.Controllers
             _eventQueryMock.Setup(x => x.GetEventByGuid("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => evnt));
 
-            var task = _invitationController.postInvitation(invitation);
+            var task = await _invitationController.postInvitation(invitation);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.OK, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.OK, task);
         }
 
         [Fact]
-        public void postInvitation_Return400FromException()
+        public async Task postInvitation_Return400FromException()
         {
 
             //arrange
@@ -106,11 +106,11 @@ namespace UnitTests.Controllers
             __invitationQueryMock.Setup(x => x.saveInvitation(invitation))
                 .Returns(Task.Factory.StartNew(() => ThrowException() ));
 
-            var task = _invitationController.postInvitation(invitation);
+            var task = await _invitationController.postInvitation(invitation);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.BadRequest, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.BadRequest, task);
         }
         
         private bool ThrowException()
@@ -124,7 +124,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void updateInvitation_Return200()
+        public async Task updateInvitation_Return200()
         {
 
             //arrange
@@ -134,15 +134,15 @@ namespace UnitTests.Controllers
             __invitationQueryMock.Setup(x => x.updateInvitation(invitation))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var task = _invitationController.putInvitation(invitation);
+            var task = await _invitationController.putInvitation(invitation);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.OK, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.OK, task);
         }
 
         [Fact]
-        public void updateInvitation_Return400()
+        public async Task updateInvitation_Return400()
         {
 
             //arrange
@@ -152,15 +152,15 @@ namespace UnitTests.Controllers
             __invitationQueryMock.Setup(x => x.updateInvitation(invitation))
                 .Returns(Task.Factory.StartNew(() => ThrowException()));
 
-            var task = _invitationController.putInvitation(invitation);
+            var task = await _invitationController.putInvitation(invitation);
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.BadRequest, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.BadRequest, task);
         }
 
         [Fact]
-        public void deleteInvitation_Return200()
+        public async Task deleteInvitation_Return200()
         {
             //arrange
             var invitation = new Invitation { invitationId = 1, eventId = 123, content = "invitationContent!", subject = "invitationSubject",  eventGuid = "250c4e21-cf5d-4b5f-bf79-f11978bb18ac" };
@@ -169,25 +169,25 @@ namespace UnitTests.Controllers
             __invitationQueryMock.Setup(x => x.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var task = _invitationController.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
+            var task = await _invitationController.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.OK, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.OK, task);
         }
 
         [Fact]
-        public void deleteInvitation_Return400()
+        public async Task deleteInvitation_Return400()
         {
             //act
             __invitationQueryMock.Setup(x => x.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac"))
                 .Returns(Task.Factory.StartNew(() => ThrowException()));
 
-            var task = _invitationController.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
+            var task = await _invitationController.deleteInvitation("250c4e21-cf5d-4b5f-bf79-f11978bb18ac");
 
             // assert
-            Assert.IsType<HttpStatusCode>(task.Result);
-            Assert.Equal(HttpStatusCode.BadRequest, task.Result);
+            Assert.IsType<HttpStatusCode>(task);
+            Assert.Equal(HttpStatusCode.BadRequest, task);
         }
     }
 }

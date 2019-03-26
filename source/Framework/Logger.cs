@@ -30,7 +30,7 @@ namespace source.Framework
         /// <returns></returns>
         public async Task LogUnhandledException(System.Security.Claims.ClaimsPrincipal user, Exception ex)
         {
-            VerboseError error = await GetError(user, ex);
+            VerboseError error = GetError(user, ex);
             error.source += " - Unhandled Exception";
             await _loggerQuery.LogError(error);
         }
@@ -42,7 +42,7 @@ namespace source.Framework
         /// <returns></returns>
         public async Task LogUnhandledException(Exception ex)
         {
-            VerboseError error = await GetError(ex);
+            VerboseError error = GetError(ex);
             await _loggerQuery.LogError(error);
         }
 
@@ -54,15 +54,15 @@ namespace source.Framework
         /// <returns></returns>
         public async Task LogError(System.Security.Claims.ClaimsPrincipal user, Exception ex)
         {
-            VerboseError error = await GetError(user, ex);
+            VerboseError error = GetError(user, ex);
             await _loggerQuery.LogError(error);
         }
 
-        private async Task<VerboseError> GetError(System.Security.Claims.ClaimsPrincipal user, Exception ex)
+        private VerboseError GetError(System.Security.Claims.ClaimsPrincipal user, Exception ex)
         {
             VerboseError error = new VerboseError
             {
-                source = await ExtractUserName(user),
+                source = ExtractUserName(user),
                 errorMessage = ex.Message,
                 innerException = ex.InnerException != null ? ex.InnerException.ToString() : String.Empty,
                 stackTrace = ex.StackTrace,
@@ -71,7 +71,7 @@ namespace source.Framework
             return error;
         }
 
-        private async Task<VerboseError> GetError(Exception ex)
+        private VerboseError GetError(Exception ex)
         {
             VerboseError error = new VerboseError
             {
@@ -84,7 +84,7 @@ namespace source.Framework
             return error;
         }
 
-        private async Task<string> ExtractUserName(System.Security.Claims.ClaimsPrincipal user)
+        private string ExtractUserName(System.Security.Claims.ClaimsPrincipal user)
         {
             if (user.Claims.Count() > 0)
             {
