@@ -18,7 +18,7 @@
 
       <div class="stacked">
 
-        <div *ngIf="userEvents?.length > 1">
+        <div *ngIf="userEvents?.length >= 1">
           <div class='col1'>
             <form class="form" [formGroup]="reservationForm" (ngSubmit)="onCreate()">
               <mat-form-field appearance="outline" class="first">
