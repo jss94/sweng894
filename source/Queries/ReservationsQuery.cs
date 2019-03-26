@@ -31,10 +31,8 @@ namespace source.Queries
         /// </summary>
         private IEventQuery _eventQuery;
 
-
-
         /// <summary>
-        /// Constructors
+        /// Constructor
         /// </summary>
         /// <param name="database">Database object provided by dependency injection</param>
         /// <param name="vendorsQuery">Vendor query object provided by dependency injection</param>
@@ -211,6 +209,11 @@ namespace source.Queries
             }
         }
 
+        /// <summary>
+        /// Maps reservation objects to reservation fields
+        /// </summary>
+        /// <param name="reservation">Reservation</param>
+        /// <returns></returns>
         private async Task MapObjectsToReservation(Reservation reservation)
         {
             reservation.vendor = await _vendorsQuery.GetById(reservation.vendorId.Value);
@@ -245,6 +248,11 @@ namespace source.Queries
             }
         }
 
+        /// <summary>
+        /// Gets a reservation by reservation id
+        /// </summary>
+        /// <param name="reservationId">Reservation Id</param>
+        /// <returns>Reservation</returns>
         public async Task<Reservation> GetById(int reservationId)
         {
             try
@@ -271,5 +279,35 @@ namespace source.Queries
             }
         }
 
+        /// <summary>
+        /// Gets a list of reservations by event
+        /// </summary>
+        /// <param name="guid">Event guid</param>
+        /// <returns>List of Reservation</returns>
+        public async Task<List<Reservation>> GetByEventId(string guid)
+        {
+            try
+            {
+                using (var db = _database)
+                {
+                    var connection = db.Connection as MySqlConnection;
+                    await connection.OpenAsync();
+                    string query =
+                          @"SELECT * from occasions.reservations WHERE active = 1 AND eventId = @guid;";
+
+                    var reservationResult = await connection.QueryAsync<Reservation>(query, new { guid });
+                    foreach (Reservation res in reservationResult)
+                    {
+                        await MapObjectsToReservation(res);
+                    }
+
+                    return reservationResult.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

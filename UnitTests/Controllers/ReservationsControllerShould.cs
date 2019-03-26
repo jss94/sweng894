@@ -167,6 +167,7 @@ namespace UnitTests.Controllers
 
             // assert
             Assert.IsType<BadRequestResult>(task);
+
         }
 
         [Fact]
@@ -408,6 +409,60 @@ namespace UnitTests.Controllers
 
             // assert
             Assert.IsType<BadRequestResult>(task);
+        }
+
+        [Fact]
+        public async Task GetByEventId_ReturnsReservationList()
+        {
+            //arrange
+            var reservation = new Reservation { id = 1, eventId = "1", vendorId = 1, vendorServiceId = 1, status = "New" };
+            var reservations = new List<Reservation>() { reservation, reservation, reservation };
+            var eventGuid = "1234-4568-9101-1213";
+
+            //act
+            _reservationsQueryMock.Setup(x => x.GetByEventId(eventGuid))
+            .Returns(Task.Factory.StartNew(() => reservations));
+
+            var task = _sut.GetByEventId(eventGuid);
+
+            // assert
+            Assert.IsType<OkObjectResult>(task.Result);
+
+            var result = task.Result as OkObjectResult;
+            var usersResult = result.Value as List<Reservation>;
+            Assert.Equal(reservations, usersResult);
+        }
+
+        [Fact]
+        public async Task GetByEventId_ReturnsNotFound()
+        {
+            //arrange
+            var eventGuid = "1234-4568-9101-1213";
+            List<Reservation> returnedReservations = null;
+
+            //act
+            _reservationsQueryMock.Setup(x => x.GetByEventId(eventGuid))
+            .Returns(Task.Factory.StartNew(() => returnedReservations));
+
+            var task = _sut.GetByEventId(eventGuid);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task.Result);
+        }
+
+        [Fact]
+        public async Task GetByEventId_ThrowsException()
+        {
+            //arrange
+            var exception = new Exception();
+            var eventGuid = "1234-4568-9101-1213";
+
+            //act
+            _reservationsQueryMock.Setup(x => x.GetByEventId(eventGuid))
+            .Throws(exception);
+
+            // assert
+            Assert.ThrowsAsync<Exception>(() => _sut.GetByEventId(eventGuid));
         }
 
     }

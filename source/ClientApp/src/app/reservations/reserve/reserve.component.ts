@@ -14,7 +14,7 @@ import { subscribeOn } from 'rxjs/operators';
 import { Reservation } from '../Models/reservation.model';
 import { ReservationsService } from '../Services/reservations.service';
 import { EmailModel } from 'src/app/send-email/Models/email.model';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-reserve',
@@ -29,10 +29,11 @@ export class ReserveComponent implements OnInit {
   eventModel: OccEvent
   eventGuestNum: number
   cost: number
+  reservations: Reservation[]
 
   reservationForm = new FormGroup({
     eventList: new FormControl('', [Validators.required]),
-    numberReserved: new FormControl('', [Validators.required]),
+    numberReserved: new FormControl(''),
   });
 
   constructor(
@@ -45,6 +46,7 @@ export class ReserveComponent implements OnInit {
     private eventService: EventService,
     private guestService: GuestsService,
     private reservationService: ReservationsService,
+    private location: Location,
   ) {
   }
 
@@ -71,6 +73,15 @@ export class ReserveComponent implements OnInit {
       const svcId = +params.get('id');
       this.vendorServicesService.getVendorServiceById(svcId).subscribe(response => {
         this.vendorServiceModel = response;
+        let maxNumber = 1;
+        if (this.vendorServiceModel.unitsAvailable != null && this.vendorServiceModel.unitsAvailable > 1) {
+          maxNumber = this.vendorServiceModel.unitsAvailable;
+          this.reservationForm.controls["numberReserved"].setValidators([Validators.required, Validators.min(1), Validators.max(maxNumber)]);
+        }
+        else {
+          this.reservationForm.controls["numberReserved"].setValue(1);
+          maxNumber = 1;
+        }
       });
     }, error => {
       console.log(error);
@@ -82,6 +93,7 @@ export class ReserveComponent implements OnInit {
       this.userEvents = response
       if (this.userEvents.length == 1) {
         this.eventModel = this.userEvents[0];
+        this.reservationForm.controls['eventList'].setValue(this.eventModel.guid);    
       }
       if (this.userEvents.length > 1) {
         this.subscribeEventChoice();
@@ -95,16 +107,15 @@ export class ReserveComponent implements OnInit {
     this.guestService.getGuests(value).subscribe(guestresponse => {
       if (guestresponse != null) {
         this.eventGuestNum = guestresponse.length
-        if(this.vendorServiceModel.flatFee != true && this.vendorServiceModel.unitsAvailable < this.eventGuestNum){
+        if (this.vendorServiceModel.flatFee != true && this.vendorServiceModel.unitsAvailable < this.eventGuestNum) {
           this.reservationForm.controls["numberReserved"].setValue(this.vendorServiceModel.unitsAvailable)
-          message ='This vendor cannot accomodate all of your guests with this service. Units Requested has been set to the units available.';
+          message = 'This vendor cannot accomodate all of your guests with this service. Units Requested has been set to the units available.';
           this.snackbar.open(message, '', {
             duration: 5000
           });
-          //TODO: SET MAX IN UNITS REQUESTED CONTROL TO MAX OF VENDOR OFFERINGS
         }
-        else{
-        this.reservationForm.controls["numberReserved"].setValue(this.eventGuestNum)
+        else {
+          this.reservationForm.controls["numberReserved"].setValue(this.eventGuestNum)
         }
       }
     }, (error) => {
@@ -155,23 +166,23 @@ export class ReserveComponent implements OnInit {
   }
 
   onCancel() {
-    this.ngOnInit();
+    this.location.back();
   }
 
   onCreate(): void {
     const res: Reservation = {
       id: null,
       userName: this.userName,
-    eventId: this.eventModel.guid,
-    vendorId: this.vendorServiceModel.vendorId,
-    vendorServiceId: this.vendorServiceModel.id,
-    status: "New",
-    numberReserved:  this.reservationForm.controls['numberReserved'].value,
-    service: null,
-    event: null,
-    vendor: null
-     };
-
+      eventId: this.eventModel.guid,
+      vendorId: this.vendorServiceModel.vendorId,
+      vendorServiceId: this.vendorServiceModel.id,
+      status: "New",
+      numberReserved: this.reservationForm.controls['numberReserved'].value,
+      service: null,
+      event: null,
+      vendor: null
+    };
+    
     this.reservationService.createReservation(res).subscribe(response => {
       this.ngOnInit();
       this.reservationForm.reset();
@@ -196,6 +207,16 @@ export class ReserveComponent implements OnInit {
         duration: 3500
       });
     });
+  }
+
+  getMaxNumberErrorMessage() {
+    let val = this.reservationForm.controls['numberReserved'].value;
+    if (val == '0') {
+      return "Must be greater than 0"
+    }
+    else if (val > this.vendorServiceModel.unitsAvailable) {
+      return "Must be " + this.vendorServiceModel.unitsAvailable + " or less";
+    }
   }
 
 }
