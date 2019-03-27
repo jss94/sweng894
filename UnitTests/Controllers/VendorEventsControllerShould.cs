@@ -47,5 +47,24 @@ namespace UnitTests.Controllers
             Assert.Equal("Unit Test Name", results[0].serviceName);
             Assert.Equal("Mock Service Type", results[0].serviceType);
         }
+
+        [Fact]
+        public async Task GetVendorEvents_ReturnNotFoundResult()
+        {
+            //act
+            __queryMock.Setup(x => x.GetVendorEvents(5))
+                .Returns(Task.Factory.StartNew(() => ReturnNullList()));
+
+            var task = await _vendorEventsController.GetVendorEvents(5);
+
+            // assert
+            Assert.IsType<NotFoundResult>(task);
+
+        }
+
+        private List<VendorEvent> ReturnNullList()
+        {
+            return null;
+        }
     }
 }
