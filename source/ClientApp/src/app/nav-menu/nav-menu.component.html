@@ -47,12 +47,13 @@
 
         <br>
 
-        <button mat-button class="clickable">
-          <span class="nav-link" [routerLink]='["/user-profile"]' [routerLinkActive]='["link-active"]'>Profile</span>
+        <button mat-button class="clickable" [routerLink]='["/user-profile"]' [routerLinkActive]='["link-active"]'>
+          <mat-icon>person_pin</mat-icon>
+          Profile
         </button>
 
         <br>
-        
+
         <button mat-button class="clickable">
           <span class="nav-link" (click)="auth.logout()">Logout</span>
         </button>

@@ -2,6 +2,17 @@ h1 {
     padding: 10px;
   }
   
+  .group {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 20%;
+  }
+
+  .type {
+    width: 20%;
+  }
+
   .vendor-services-container {
     display: flex;
     flex-direction: column;

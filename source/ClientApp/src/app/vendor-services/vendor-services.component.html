@@ -12,7 +12,7 @@
 
       <form class="form" [formGroup]="vendorServiceForm" (ngSubmit)="onCreate()">
 
-        <mat-form-field class="options">
+        <mat-form-field class="options" appearance="outline">
            <mat-select placeholder="Select service type" formControlName="serviceType">
            <mat-option *ngFor="let svc of svcs" [value]="svc.value">
                {{svc.viewValue}}
@@ -20,51 +20,51 @@
            </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Service Name</mat-label>
-          <input
-            matInput
-            placeholder="Service Name"
-            formControlName="serviceName"
-            >
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>Service Description</mat-label>
+          <mat-form-field appearance="outline">
+            <mat-label>Service Name</mat-label>
             <input
               matInput
-              placeholder="Service Description"
-              formControlName="serviceDescription"
+              placeholder="Service Name"
+              formControlName="serviceName"
               >
           </mat-form-field>
 
-          <br/>
-         
-        <mat-form-field appearance="outline">
-              <mat-label>Price</mat-label>
+          <mat-form-field appearance="outline">
+              <mat-label>Service Description</mat-label>
               <input
                 matInput
-                placeholder="Price"
-                formControlName="servicePrice"
+                placeholder="Service Description"
+                formControlName="serviceDescription"
                 >
-           </mat-form-field>
+          </mat-form-field>
 
-        <mat-form-field class="options">
-          <mat-select  [(value)]="selected" formControlName="serviceFlatFee" placeholder="Flat Fee" >
-            <mat-option *ngFor="let fee of fees" [value]="fee.value">
-              {{fee.viewValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
 
-        <mat-form-field  appearance="outline">
-          <mat-label>Units Available</mat-label>
-          <input
-            matInput
-            placeholder="Units Available"
-            formControlName="serviceUnitsAvailable"
-            >
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+                <mat-label>Price</mat-label>
+                <input
+                  matInput
+                  placeholder="Price"
+                  formControlName="servicePrice"
+                  >
+          </mat-form-field>
+
+          <mat-form-field class="options">
+            <mat-select  [(value)]="selected" formControlName="serviceFlatFee" placeholder="Flat Fee" >
+              <mat-option *ngFor="let fee of fees" [value]="fee.value">
+                {{fee.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field  appearance="outline">
+            <mat-label>Units Available</mat-label>
+            <input
+              matInput
+              placeholder="Units Available"
+              formControlName="serviceUnitsAvailable"
+              >
+          </mat-form-field>
+
 
         <mat-action-row>
           <button type="submit" mat-button [disabled]="!vendorServiceForm.valid">
@@ -82,32 +82,35 @@
       <div class="vendor-services-item">
         <div class="header">
           <div class="vendor-services-icon">
-            <mat-icon>service</mat-icon>
+            <mat-icon>store</mat-icon>
           </div>
-          <div>
-            <div>
+          <div class="type">
               <h5 class='vendor-services-text'>{{service.serviceType}}</h5>
-            </div>            
           </div>
         </div>
     
-        <div>
-            <h6>{{service.serviceName}}</h6>
+        <div class="group">
+          <div>
+              <h6>{{service.serviceName}}</h6>
+          </div>
+          <div>
+              <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
+          </div>
         </div>
-        <div>
-            <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
+
+        <div class="group">
+          <div>
+              <h6 *ngIf="service.flatFee">Flat fee</h6>
+              <h6 *ngIf="!service.flatFee">Price per unit</h6>
+          </div>
+          <div>
+              <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
+          </div>
+          <div>
+              <h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
+          </div>
         </div>
-        <div>
-            <h6 *ngIf="service.flatFee">Flat fee</h6>
-            <h6 *ngIf="!service.flatFee">Price per unit</h6>
-        </div>
-        <div>
-            <h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6>
-        </div>
-        <div>
-            <h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6>
-        </div>
-         
+
         <mat-action-row>
         <button mat-button (click)="editClicked(service)">
             <mat-icon>edit</mat-icon>
