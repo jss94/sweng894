@@ -6,11 +6,6 @@
 
     <div class="align-right">
 
-      <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/vendor-metrics"]' [routerLinkActive]='["link-active"]'>
-        <mat-icon>list</mat-icon>
-        Metrics
-      </button>
-
       <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/reservations-vendor"]' [routerLinkActive]='["link-active"]'>
         <mat-icon>list</mat-icon>
         Reservations
@@ -19,11 +14,6 @@
       <button *ngIf="isOrganizer || isVendor" mat-button [routerLink]='["/events"]'>
         <mat-icon>event_notes</mat-icon>
         Events
-      </button>
-
-      <button *ngIf="isVendor" mat-button [routerLink]='["/vendor-services"]'>
-        <mat-icon>store</mat-icon>
-        Services
       </button>
 
 
@@ -42,10 +32,27 @@
         <span class="text-grey">{{ auth?.user?.name }}</span>
       </button>
       <mat-menu #userMenu="matMenu">
+        
+        <button *ngIf="isVendor" mat-button [routerLink]='["/vendor-services"]'>
+          <mat-icon>store</mat-icon>
+          Services
+        </button>
+
+        <br>
+
+        <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/vendor-metrics"]' [routerLinkActive]='["link-active"]'>
+          <mat-icon>timeline</mat-icon>
+          Metrics
+        </button>
+
+        <br>
+
         <button mat-button class="clickable">
           <span class="nav-link" [routerLink]='["/user-profile"]' [routerLinkActive]='["link-active"]'>Profile</span>
         </button>
+
         <br>
+        
         <button mat-button class="clickable">
           <span class="nav-link" (click)="auth.logout()">Logout</span>
         </button>

@@ -178,7 +178,7 @@ describe('VendorSearchComponent', () => {
       // arrange
 
       // act
-      component.removeDuplicateVendors(claimed, unclaimed);
+      component.removeClaimedVendors(claimed, unclaimed);
 
       // assert
       expect(component.claimedServices.length).toBe(1);

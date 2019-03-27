@@ -268,8 +268,7 @@ namespace source.Queries
                     await connection.OpenAsync();
 
                     string query = @"SELECT * FROM occasions.vendorServices "
-                                + @" WHERE (active = 1 AND serviceType = @type AND price <= @maxPrice) "
-                                + @"   AND (unitsAvailable >= @maxCapacity OR unitsAvailable IS NULL)"
+                                + @" WHERE active = 1 AND serviceType = @type "
                                 + @"   AND googleId IN @googleIds;";
 
                     var result = await connection.QueryAsync<VendorServices>(query, properties);
