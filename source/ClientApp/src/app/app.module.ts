@@ -26,7 +26,6 @@ import { FavoriteVendorsService } from './favorite-vendors/Services/favorite-ven
 import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.service';
 import { VendorEventService } from './vendor-calendar/Services/vendor-event.service';
 
-
 @NgModule({
   declarations: [
     AppComponent,

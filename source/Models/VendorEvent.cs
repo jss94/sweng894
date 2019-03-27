@@ -3,6 +3,8 @@
     public class VendorEvent
 
     {
+        public string vendorName { get; set; }
+
         public string serviceName { get; set; }
         
         public string serviceType{ get; set; }

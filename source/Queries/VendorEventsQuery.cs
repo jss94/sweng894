@@ -57,7 +57,7 @@ namespace source.Queries
 
         private string createVendorEventsQuery()
         {
-            string query = @"select vendorServices.serviceName, vendorServices.serviceType, DATE_FORMAT(dateTime, '%M-%d-%Y') as 'eventDate'"
+            string query = @"select vendors.name, vendorServices.serviceName, vendorServices.serviceType, DATE_FORMAT(dateTime, '%M-%d-%Y %H:%i:%s') as 'eventDate'"
                    + " from occasions.reservations"
                    + " inner join"
                    + " occasions.vendorServices on reservations.vendorServiceId = vendorServices.id"
