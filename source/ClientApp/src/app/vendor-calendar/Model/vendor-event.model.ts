@@ -2,5 +2,6 @@ export interface VendorEvent {
   vendorName: string;
   serviceName: string;
   serviceType: string;
-  eventDate: Date;
+  eventDate: string;
+  eventTime: string;
 }

@@ -62,6 +62,7 @@ export class VendorCalendarComponent implements OnInit {
   };
 
   actions: CalendarEventAction[] = [
+    /*
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
@@ -75,12 +76,13 @@ export class VendorCalendarComponent implements OnInit {
         this.handleEvent('Deleted', event);
       }
     }
+    */
   ];
 
   refresh: Subject<any> = new Subject();
 
   events: CalendarEvent[] = [
-    {
+   /* {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
       title: 'A 3 day event',
@@ -118,6 +120,7 @@ export class VendorCalendarComponent implements OnInit {
       },
       draggable: true
     }
+    */
   ];
 
   activeDayIsOpen = true;
@@ -130,13 +133,28 @@ export class VendorCalendarComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
-        const vendorId = +params.get('vendorId');
-        this.vendorEventsService.getVendorEvents(vendorId).subscribe(vendorEvents => {
-          console.log('Response:' + JSON.stringify(vendorEvents));
+      const vendorId = +params.get('vendorId');
+      this.vendorEventsService.getVendorEvents(vendorId).subscribe(vendorEvents => {
+        vendorEvents.forEach(vendorEvent => {
+          const title = 'Providing a ' + vendorEvent.serviceType + ' service for an event at ' + vendorEvent.eventTime;
+          const calendarEvent: CalendarEvent = ({
+            start: startOfDay(new Date(vendorEvent.eventDate)),
+            end: endOfDay(new Date(vendorEvent.eventDate)),
+            title: title,
+            color: colors.yellow,
+            actions: this.actions,
+            resizable: {
+              beforeStart: false,
+              afterEnd: false
+            },
+            draggable: false
+          });
+          this.events.push(calendarEvent);
         });
       }, error => {
         console.log(error);
       });
+    });
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -152,7 +170,7 @@ export class VendorCalendarComponent implements OnInit {
       }
     }
   }
-
+/*
   eventTimesChanged({
     event,
     newStart,
@@ -170,12 +188,16 @@ export class VendorCalendarComponent implements OnInit {
     });
     this.handleEvent('Dropped or resized', event);
   }
-
+*/
   handleEvent(action: string, event: CalendarEvent): void {
+   /*
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' });
+    */
+    console.log(event.title);
   }
 
+  /*
   addEvent(): void {
     this.events = [
       ...this.events,
@@ -196,7 +218,7 @@ export class VendorCalendarComponent implements OnInit {
   deleteEvent(eventToDelete: CalendarEvent) {
     this.events = this.events.filter(event => event !== eventToDelete);
   }
-
+*/
   setView(view: CalendarView) {
     this.view = view;
   }

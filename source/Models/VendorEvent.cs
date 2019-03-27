@@ -10,6 +10,8 @@
         public string serviceType{ get; set; }
 
         public string eventDate { get; set; }
+
+        public string eventTime { get; set; }
         
     }
 }

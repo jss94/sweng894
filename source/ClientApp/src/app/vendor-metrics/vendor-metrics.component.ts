@@ -19,7 +19,6 @@ export class VendorMetricsComponent implements OnInit {
   yAxisReservationsLabel = 'Reservation Count';
   saleType = 'Sales';
   reservationType = 'Count';
-  // Declaring the Promise, yes! Promise!
   vendorIdLoaded: Promise<boolean>;
 
   constructor(
