@@ -12,10 +12,6 @@
   cursor: pointer;
 }
 
-.text-grey {
-  color: #8394AB;
-}
-
 .mat-toolbar {
   width: 100%;
   display: flex;
