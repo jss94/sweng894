@@ -1,8 +1,23 @@
+<div>
+    <div class="page-container">
+      <h1>{{eventName}}</h1>
+      <h1>Guest List</h1>
+    </div>
+  <div class="title">
+      <div class="column left">
+          <button mat-button (click)="returnToEventDetails()">
+              <mat-icon>event_notes</mat-icon>
+              <span>Event Details</span>
+          </button>
+      </div>
+    <div class="column right">
+        <div class="box">
+
+        </div>
+    </div>
+  </div>
+</div>
 <div class="page-container">
-
-    <h1>{{eventName}}</h1>
-    <h1>Guest List</h1>
-
     <mat-accordion *ngIf="auth.isAuthenticated() && !isVendor">
         <mat-expansion-panel>
 

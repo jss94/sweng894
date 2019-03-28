@@ -81,7 +81,12 @@ export class GuestsComponent implements OnInit {
       });
 
     });
-}
+  }
+
+  returnToEventDetails(): void {
+    this.router.navigate(['/events/' + this.eventGuid]);
+  }
+
     onCreate(): void {
         const guest: Guest = {
           name:  this.guestForm.controls['name'].value,
