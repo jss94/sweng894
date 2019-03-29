@@ -1,7 +1,31 @@
 h1 {
     padding: 10px;
 }
-  
+
+.column {
+  float: left;
+}
+
+.left {
+  width: 40%;
+}
+
+.right {
+  width: 60%;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding:20px;
+}
+
 .page-container {
     width: 100%;
     display: flex;
@@ -52,4 +76,3 @@ mat-icon, h5, .email-field {
 .status {
     padding-right: 30px;
 }
-  
