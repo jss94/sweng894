@@ -32,7 +32,7 @@ describe('VendorSearchComponent', () => {
   const unclaimed: VendorServices[] = [
     {
       vendorId: 1,
-      googleId: 'asd',
+      googleId: '123',
       serviceType: 'vendor',
       serviceName: 'Trador Joes',
       serviceDescription: 'Place for stuff',
@@ -40,7 +40,7 @@ describe('VendorSearchComponent', () => {
     },
     {
       vendorId: 2,
-      googleId: 'dsa',
+      googleId: '456',
       serviceType: 'vendor',
       serviceName: 'Trador Joes',
       serviceDescription: 'Place for stuff',
@@ -50,11 +50,30 @@ describe('VendorSearchComponent', () => {
   const claimed: VendorServices[] = [
     {
       vendorId: 1,
-      googleId: 'asd',
+      googleId: '123',
       serviceType: 'vendor',
       serviceName: 'Trador Joes',
       serviceDescription: 'Place for stuff',
-      price: 1
+      price: 1,
+      unitsAvailable: 100,
+    },
+    {
+      vendorId: 2,
+      googleId: '111',
+      serviceType: 'vendor',
+      serviceName: 'Trador Joes',
+      serviceDescription: 'Place for stuff',
+      price: 1,
+      unitsAvailable: 100,
+    },
+    {
+      vendorId: 3,
+      googleId: '222',
+      serviceType: 'vendor',
+      serviceName: 'Trador Joes',
+      serviceDescription: 'Place for stuff',
+      price: 1,
+      unitsAvailable: 100,
     },
   ];
 
@@ -119,8 +138,12 @@ describe('VendorSearchComponent', () => {
     it ('should return search results', fakeAsync(() => {
         // arrange
         const fakeVendorServices = new FakeVendorServicesGroup().arr;
-        spyOn(component, 'searchUnclaimedVendors').and.returnValue(of(fakeVendorServices));
-        spyOn(component, 'searchClaimedVendors').and.returnValue(of(fakeVendorServices));
+        spyOn(component, 'searchUnclaimedVendors').and.returnValue(of(unclaimed));
+        spyOn(component, 'searchClaimedVendors').and.returnValue(of(claimed));
+        spyOn(component, 'removeClaimedVendors').and.callThrough();
+
+        component.searchForm.controls['price'].setValue(999);
+        component.searchForm.controls['capacity'].setValue(99);
 
         // act
         component.onSearchClicked();
@@ -128,8 +151,9 @@ describe('VendorSearchComponent', () => {
         // assert
         expect(component.searchUnclaimedVendors).toHaveBeenCalledTimes(1);
         expect(component.searchClaimedVendors).toHaveBeenCalledTimes(1);
+        expect(component.removeClaimedVendors).toHaveBeenCalledTimes(1);
         expect(component.claimedServices.length).toBe(3);
-        // expect(component.unclaimedServices.length).toBe(3);
+        expect(component.unclaimedServices.length).toBe(1);
     }));
   });
 
@@ -178,10 +202,10 @@ describe('VendorSearchComponent', () => {
       // arrange
 
       // act
-      component.removeDuplicateVendors(claimed, unclaimed);
+      component.removeClaimedVendors(claimed, unclaimed);
 
       // assert
-      expect(component.claimedServices.length).toBe(1);
+      expect(component.claimedServices.length).toBe(3);
       expect(component.unclaimedServices.length).toBe(1);
     });
   });

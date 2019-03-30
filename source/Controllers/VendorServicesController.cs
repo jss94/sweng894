@@ -241,6 +241,11 @@ namespace source.Controllers
         [HttpPost("search")]
         public async Task<IActionResult> Search([FromBody] VendorSearchProperties properties)
         {
+            if (properties == null)
+            {
+                return new BadRequestResult();
+            }
+
             try
             {
                 var result = await _vendorServicesQuery.Search(properties);
