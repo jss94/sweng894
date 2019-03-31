@@ -30,7 +30,7 @@ export class ReservationsVendorComponent implements OnInit {
     public newCount: number;
     public changedCount: number;
     public approvedCount: number;
-    public vendor: Vendor;
+    public vendorId: number;
 
     constructor(
         private authService: AuthService,
@@ -48,8 +48,8 @@ export class ReservationsVendorComponent implements OnInit {
             this.setOccasionsVendor(this.authService.user);
         } 
         else {
-            this.authService.user$.subscribe(user => {
-                this.setOccasionsVendor(user);
+            this.authService.user$.subscribe(result => {
+                this.setOccasionsVendor(result);
             });
         }
 
@@ -59,14 +59,14 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     setOccasionsVendor(user: User) {
-        this.vendorService.getVendor(user.userName).subscribe(vendor => {
-          this.vendor = vendor;
+        this.vendorService.getVendor(user.userName).subscribe(result => {
+          this.vendorId = result.id;
         });
     }
 
     createReservationLists() {
         this.route.paramMap.subscribe((params: ParamMap) => {
-            this.reservationService.getReservationByVendorId(this.vendor.id).subscribe((result: Reservation[]) => {
+            this.reservationService.getReservationByVendorId(this.vendorId).subscribe((result: Reservation[]) => {
                 this.reservations = result.map((reservation: Reservation) => {
                     return reservation;
                 });
