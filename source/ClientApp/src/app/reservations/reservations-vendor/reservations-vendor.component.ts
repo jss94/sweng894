@@ -11,6 +11,8 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { VendorServices } from 'src/app/shared/models/vendor-services.model';
 import { OccEvent } from '../../events/Models/occ-event.model';
 import { Vendor } from 'src/app/shared/models/vendor.model';
+import { VendorService } from 'src/app/vendors/Services/vendor.service';
+import { User } from 'src/app/shared/models/user.model';
 
 @Component(
     {
@@ -20,7 +22,6 @@ import { Vendor } from 'src/app/shared/models/vendor.model';
     }
 )
 export class ReservationsVendorComponent implements OnInit {
-    public vendorId: number;
     public statuses: [ "New", "Changed", "Accepted" ];
     public reservations: Reservation[];
     public newReservations: Reservation[];
@@ -29,33 +30,43 @@ export class ReservationsVendorComponent implements OnInit {
     public newCount: number;
     public changedCount: number;
     public approvedCount: number;
+    public vendor: Vendor;
 
     constructor(
-        private auth: AuthService,
+        private authService: AuthService,
         private reservationService: ReservationsService,
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar,
+        private vendorService: VendorService,
         ) {
 
     }
 
     ngOnInit() {
-        
-        this.newCount = 0;
-        this.changedCount = 0;
-        this.approvedCount = 0;
+        if (this.authService.user) {
+            this.setOccasionsVendor(this.authService.user);
+        } 
+        else {
+            this.authService.user$.subscribe(user => {
+                this.setOccasionsVendor(user);
+            });
+        }
 
-        const user = this.auth.user;
-        this.auth.user$.subscribe((result) => {
-            this.vendorId = result.id;
+        this.createReservationLists();
+
+        this.setReservationCounts();
+    }
+
+    setOccasionsVendor(user: User) {
+        this.vendorService.getVendor(user.userName).subscribe(vendor => {
+          this.vendor = vendor;
         });
+    }
 
+    createReservationLists() {
         this.route.paramMap.subscribe((params: ParamMap) => {
-            
-            this.vendorId = Number(params.get('vendorId'));
-            console.log('VENDOR:ID', this.vendorId)
-            this.reservationService.getReservationByVendorId(this.vendorId).subscribe((result: Reservation[]) => {
+            this.reservationService.getReservationByVendorId(this.vendor.id).subscribe((result: Reservation[]) => {
                 this.reservations = result.map((reservation: Reservation) => {
                     return reservation;
                 });
@@ -74,11 +85,13 @@ export class ReservationsVendorComponent implements OnInit {
                     this.approvedReservations.push(reservation);
                 }
             }
-
-            this.newCount = this.newReservations != null ? this.newReservations.length : 0;
-            this.changedCount = this.changedReservations != null ? this.changedReservations.length : 0;
-            this.approvedCount = this.approvedReservations != null ? this.approvedReservations.length : 0;
         }
+    }
+
+    setReservationCounts() {
+        this.newCount = this.newReservations != null ? this.newReservations.length : 0;
+        this.changedCount = this.changedReservations != null ? this.changedReservations.length : 0;
+        this.approvedCount = this.approvedReservations != null ? this.approvedReservations.length : 0;
     }
 
     onAcceptClicked(reservation: Reservation) {
