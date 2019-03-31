@@ -231,7 +231,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                await _logger.LogError(HttpContext.User, ex);
+                //await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
