@@ -12,10 +12,13 @@ import { MockAuthService } from '../shared/services/mock-auth.service';
 import { VendorServicesService } from './Services/vendor-services.service';
 import { MockMatSnackBar } from '../deactivate-user/deactivate-user.component.spec';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockVendorServicesService } from './Services/mock-vendor-services-service';
+import { FakeVendorServices } from '../shared/models/fake-vendor-services.model';
 
 describe('UpdateVendorServicesComponent', () => {
   let component: UpdateVendorServicesComponent;
   let fixture: ComponentFixture<UpdateVendorServicesComponent>;
+  let mockVendorServicesService: VendorServicesService;
 
   const routes: Routes = [
     { path: 'vendors/:id', component: VendorServicesService },
@@ -37,6 +40,7 @@ describe('UpdateVendorServicesComponent', () => {
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: AuthService, useClass: MockAuthService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
+        { provide: VendorServicesService, useClass: MockVendorServicesService },
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -46,10 +50,40 @@ describe('UpdateVendorServicesComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UpdateVendorServicesComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    mockVendorServicesService = TestBed.get(VendorServicesService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should disable flat fee', () => {
+    // assign
+    
+    // act
+    // fixture.detectChanges();
+
+    // assert
+  });
+
+  it('should enble flat fee', () => {
+    // assign
+
+    // act
+    // fixture.detectChanges();
+
+    // assert
+  });
+
+  it('should populate vendor forms', () => {
+    const FakeService = new FakeVendorServices();
+    component.updateVendorServiceForm.controls['serviceFlatFee'].setValue(true);
+    spyOn(mockVendorServicesService, 'getVendorServiceById').and.returnValue(FakeService);
+    
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(mockVendorServicesService.getVendorServiceById).toHaveBeenCalledTimes(1);
   });
 });

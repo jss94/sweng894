@@ -6,7 +6,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './register/register-user/register-user.component';
 import { RegisterVendorComponent } from './register/register-vendor/register-vendor.component';
 import { LearnMoreComponent } from './learn-more/learn-more.component';
@@ -32,6 +32,11 @@ import { VendorMetricsComponent } from './vendor-metrics/vendor-metrics.componen
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { createCustomElement } from '@angular/elements';
 import { ReservationMetricsComponent } from './vendor-metrics/reservation-metric/reservation-metrics.component';
+import { VendorCalendarComponent } from './vendor-calendar/vendor-calendar.component';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -57,6 +62,7 @@ const routes: Routes = [
     { path: 'claim-vendor/:type/:id', component: ClaimVendorComponent},
     { path: 'reserve/:id', component: ReserveComponent },
     { path: 'vendor-metrics', component: VendorMetricsComponent },
+    { path: 'vendor-events/:vendorId', component: VendorCalendarComponent },
   ];
 
 @NgModule({
@@ -87,6 +93,7 @@ const routes: Routes = [
         FavoriteVendorsComponent,
         VendorMetricsComponent,
         [ReservationMetricsComponent],
+        VendorCalendarComponent,
     ],
 
     imports: [
@@ -94,10 +101,17 @@ const routes: Routes = [
         CommonModule,
         BrowserModule,
         MaterialModule,
-        ReactiveFormsModule,
-        NgxChartsModule,
+      ReactiveFormsModule,
+        FormsModule,
+      NgxChartsModule,
+      NgbModalModule,
+      FlatpickrModule.forRoot(),
+      CalendarModule.forRoot({
+        provide: DateAdapter,
+        useFactory: adapterFactory
+      })
     ],
-  exports: [RouterModule],
+  exports: [RouterModule, VendorCalendarComponent],
   entryComponents: [
     ReservationMetricsComponent
   ],

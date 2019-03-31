@@ -18,6 +18,7 @@ namespace source.Queries
         Task<List<Reservation>> GetByUserName(string userName);
         Task<bool> Deactivate(int id);
         Task<Reservation> GetById(int reservationId);
+        Task<List<Reservation>> GetByEventId(string guid);
     }
 
 }

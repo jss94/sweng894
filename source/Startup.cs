@@ -73,6 +73,7 @@ namespace source
             services.AddTransient<IReservationsQuery, ReservationsQuery>();
             services.AddTransient<IVendorMetricsQuery, VendorMetricsQuery>();
             services.AddTransient<IFavoritesQuery, FavoritesQuery>();
+            services.AddTransient<IVendorEventsQuery, VendorEventsQuery>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>

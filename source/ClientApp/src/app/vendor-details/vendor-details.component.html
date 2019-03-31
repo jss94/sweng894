@@ -15,6 +15,11 @@
           <span *ngIf="isFavorite == true">Remove from Favorites</span>
           <span *ngIf="isFavorite == false">Add to Favorites</span>
         </button>
+        <br>
+        <button mat-button (click)="loadCalendar()">
+          <mat-icon>calendar_today</mat-icon>
+          <span>View Calendar</span>
+      </button>
     </div>
     <div class="column right">
         <div class="box">

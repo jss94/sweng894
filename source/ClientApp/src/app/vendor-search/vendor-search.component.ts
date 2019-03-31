@@ -142,7 +142,7 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
     this.searchUnclaimedVendors().subscribe(unclaimed => {
       const googleIds = unclaimed.map(service => service.googleId);
       this.searchClaimedVendors(googleIds).subscribe(claimed => {
-        this.removeDuplicateVendors(claimed, unclaimed);
+        this.removeClaimedVendors(claimed, unclaimed);
       });
     });
   }
@@ -155,13 +155,21 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
     this.searchForm.reset();
   }
 
-  removeDuplicateVendors(claimed: VendorServices[], unclaimed: VendorServices[]) {
+  removeClaimedVendors(claimed: VendorServices[], unclaimed: VendorServices[]) {
+    const maxPrice = this.searchForm.controls['price'].value || 999999;
+    const maxCapacity = this.searchForm.controls['capacity'].value || 0;
 
     unclaimed = unclaimed.filter(service => {
       const existingService = claimed
         .find(c => c.googleId === service.googleId);
       // if service doesn't exist then return true and keep the service.
       return existingService === undefined ? true : false;
+    });
+
+    claimed = claimed.filter(service => {
+      let isMatch = service.price <= maxPrice;
+      isMatch = service.unitsAvailable >= maxCapacity && isMatch;
+      return isMatch;
     });
 
     this.unclaimedServices = unclaimed;
@@ -196,6 +204,10 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
           radius: 15000,
           type: this.getCategory()
         };
+
+        if (!location || !this.map) {
+          return;
+        }
 
         this.googlePlacesService.locationSearch(request, this.map).subscribe(results => {
           const vendorServices: VendorServices[] = results.map(loc => {
