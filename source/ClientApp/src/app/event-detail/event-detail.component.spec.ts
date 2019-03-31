@@ -15,12 +15,16 @@ import { MockMatDialog } from '../nav-menu/nav-menu.component.spec';
 import { MockMatSnackBar } from '../deactivate-user/deactivate-user.component.spec';
 import { InvitationService } from '../invitations/Services/invitation.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ReservationsService } from '../reservations/Services/reservations.service';
+import { MockReservationService } from '../reservations/Services/mock-reservation.service';
+import { FakeReservations } from '../reservations/Models/fake-reservation.model';
 
 describe('EventDetailComponent', () => {
   let component: EventDetailComponent;
   let fixture: ComponentFixture<EventDetailComponent>;
   let mockEventService: EventService;
   let mockAuthService: AuthService;
+  let mockReservationService: ReservationsService;
 
   class MockActivedRoute {
     public snapshot = {
@@ -60,7 +64,9 @@ describe('EventDetailComponent', () => {
         { provide: InvitationService, useClass: MockInvitationService },
         { provide: EventService, useClass: MockEventService },
         { provide: ActivatedRoute, useClass: MockActivedRoute },
-        { provide: AuthService, useClass: MockAuthService }
+        { provide: AuthService, useClass: MockAuthService },
+        {provide: ReservationsService, useClass: MockReservationService }
+
       ],
       schemas: [ NO_ERRORS_SCHEMA ]
     })
@@ -72,6 +78,7 @@ describe('EventDetailComponent', () => {
     component = fixture.componentInstance;
     mockEventService = TestBed.get(EventService);
     mockAuthService = TestBed.get(AuthService);
+    mockReservationService = TestBed.get(ReservationsService);
   });
 
   it('should create', () => {
@@ -82,7 +89,9 @@ describe('EventDetailComponent', () => {
     // assign
     const fakeEvent = new FakeOccEvent();
     const fakeUser = new FakeUser();
+    const fakeReservations = new FakeReservations().arr;
     spyOn(mockEventService, 'getEvent').and.returnValue(of(fakeEvent));
+    spyOn(mockReservationService, 'getReservationsByEventGuid').and.returnValue(of(fakeReservations));
     spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
 
     // act
@@ -90,6 +99,7 @@ describe('EventDetailComponent', () => {
 
     // assert
     expect(mockEventService.getEvent).toHaveBeenCalledTimes(1);
+    expect(mockReservationService.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
     expect(component.theEvent.name).toEqual(fakeEvent.name);
 
   });
