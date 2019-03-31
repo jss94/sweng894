@@ -312,7 +312,7 @@ namespace UnitTests.Controllers
             _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var task = await _sut.Deactivate(reservation.id.Value);
+            var task = await _sut.Delete(reservation.id.Value);
 
             // assert
             Assert.IsType<OkObjectResult>(task);
@@ -331,7 +331,7 @@ namespace UnitTests.Controllers
             _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
                 .Returns(Task.Factory.StartNew(() => false));
 
-            var task = await _sut.Deactivate(reservation.id.Value);
+            var task = await _sut.Delete(reservation.id.Value);
 
             // assert
             Assert.IsType<NotFoundResult>(task);
@@ -352,7 +352,7 @@ namespace UnitTests.Controllers
             .Setup(x => x.LogError(It.IsAny<ClaimsPrincipal>(), It.IsAny<Exception>()))
             .Returns(Task.FromResult(default(object)));
 
-            var task = await _sut.Deactivate(1);
+            var task = await _sut.Delete(1);
 
             // assert
             Assert.IsType<BadRequestResult>(task);
@@ -423,12 +423,12 @@ namespace UnitTests.Controllers
             _reservationsQueryMock.Setup(x => x.GetByEventId(eventGuid))
             .Returns(Task.Factory.StartNew(() => reservations));
 
-            var task = _sut.GetByEventId(eventGuid);
+            var task = await _sut.GetByEventId(eventGuid);
 
             // assert
-            Assert.IsType<OkObjectResult>(task.Result);
+            Assert.IsType<OkObjectResult>(task);
 
-            var result = task.Result as OkObjectResult;
+            var result = task as OkObjectResult;
             var usersResult = result.Value as List<Reservation>;
             Assert.Equal(reservations, usersResult);
         }
@@ -444,10 +444,10 @@ namespace UnitTests.Controllers
             _reservationsQueryMock.Setup(x => x.GetByEventId(eventGuid))
             .Returns(Task.Factory.StartNew(() => returnedReservations));
 
-            var task = _sut.GetByEventId(eventGuid);
+            var task = await _sut.GetByEventId(eventGuid);
 
             // assert
-            Assert.IsType<NotFoundResult>(task.Result);
+            Assert.IsType<NotFoundResult>(task);
         }
 
         [Fact]
@@ -461,8 +461,10 @@ namespace UnitTests.Controllers
             _reservationsQueryMock.Setup(x => x.GetByEventId(eventGuid))
             .Throws(exception);
 
+            var task = await _sut.GetByEventId(eventGuid);
+
             // assert
-            Assert.ThrowsAsync<Exception>(() => _sut.GetByEventId(eventGuid));
+            Assert.IsType<BadRequestResult>(task);
         }
 
     }

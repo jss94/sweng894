@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ data.iconName }}</mat-icon> {{ data.title }}
+</h2>
+
+<div *ngIf="data.reservations == null">
+  <h5>You do not have any reservations yet.</h5>
+</div>
+
+<div mat-dialog-content class="item-container" *ngFor="let res of data.reservations">
+  <div class="res-item">
+    <div class="left">
+      <h6>{{res.vendor.name}} - {{res.vendorService.serviceType}}</h6>
+      <p>{{res.vendorService.serviceName}}</p>
+      <p>{{ res.vendorService.serviceDescription}}</p>
+    </div>
+    <div class="right">
+      <button mat-button (click)="deleteReservation(res)" matTooltip="Delete Reservation">
+        <mat-icon>delete</mat-icon>
+    </button>  
+    </div>
+
+  </div>
+</div>
+<mat-dialog-actions>
+  <!--<button mat-button mat-dialog-close (click)="onClick(true)">{{ data.buttonText }}</button>-->
+  <button mat-button mat-dialog-close (click)="onClick(false)">Cancel</button>
+</mat-dialog-actions>

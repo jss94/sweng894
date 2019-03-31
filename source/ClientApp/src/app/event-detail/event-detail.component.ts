@@ -11,7 +11,8 @@ import { EmailDialogComponent } from '../shared/components/email-dialog/email-di
 import { Observable } from 'rxjs';
 import { EmailModel } from '../send-email/Models/email.model';
 import { Reservation } from '../reservations/Models/reservation.model';
-import { ReservationsService }  from '../reservations/Services/reservations.service';
+import { ReservationsService } from '../reservations/Services/reservations.service';
+import { ReservationDialogComponent } from '../shared/components/reservation-dialog/reservation-dialog.component';
 
 @Component({
   selector: 'app-event-detail',
@@ -29,7 +30,7 @@ export class EventDetailComponent implements OnInit {
     private invitationService: InvitationService,
     private dialog: MatDialog,
     private reservationService: ReservationsService,
-    ) { }
+  ) { }
 
   theEvent: OccEvent;
 
@@ -44,7 +45,25 @@ export class EventDetailComponent implements OnInit {
   getEvent(): void {
     const guid = this.route.snapshot.paramMap.get('guid');
     this.eventService.getEvent(guid).subscribe(event => this.theEvent = event);
-    this.reservationService.getReservationsByEventGuid(guid).subscribe(reservationList => this.reservations = reservationList);
+  }
+
+  loadReservations(evnt: OccEvent) {
+    this.reservationService.getReservationsByEventGuid(evnt.guid).subscribe(res => {
+      this.reservations = res;
+      this.showReservationsDialog(evnt);
+    });
+  };
+
+  showReservationsDialog(evnt: OccEvent) {
+    const dialogRef = this.dialog.open(ReservationDialogComponent, {
+      width: '600px',
+      height: '70%',
+      data: {
+        iconName: 'event_available',
+        title: evnt.name + ' - Reservations',
+        reservations: this.reservations,
+      }
+    });
   }
 
   loadInvite(evnt: OccEvent) {
@@ -70,12 +89,12 @@ export class EventDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(EmailDialogComponent, {
       width: '600px',
       data: {
-          iconName: 'event',
-          title: evnt.name + ' - Invitation',
-          subject: this.invitationModel.subject,
-          content: this.invitationModel.content,
-          buttonText1: 'Save & Close',
-          buttonText2: 'Send'
+        iconName: 'event',
+        title: evnt.name + ' - Invitation',
+        subject: this.invitationModel.subject,
+        content: this.invitationModel.content,
+        buttonText1: 'Save & Close',
+        buttonText2: 'Send'
       }
     });
 
@@ -90,18 +109,18 @@ export class EventDetailComponent implements OnInit {
         this.persistInvitation().subscribe(response => {
           this.displayInvitationFeedback(response, 'Invitation Updated', 'An error occurred saving your invitation');
           if (result.data.button === true) {
-              // send the invitation
-              this.sendEmail(evnt).subscribe(emailResponse => {
+            // send the invitation
+            this.sendEmail(evnt).subscribe(emailResponse => {
               this.displayEmailFeedback(evnt, emailResponse);
             });
           }
         });
-    });
+      });
   }
 
   persistInvitation(): Observable<any> {
     if (this.invitationModel.invitationId) {
-        return this.invitationService.updateInvitation(this.invitationModel);
+      return this.invitationService.updateInvitation(this.invitationModel);
     } else {
       return this.invitationService.createNewInvitation(this.invitationModel);
     }
@@ -133,7 +152,7 @@ export class EventDetailComponent implements OnInit {
 
   sendEmail(evnt: OccEvent): Observable<any> {
     const emailModel: EmailModel = this.emailService.createEmailModel(this.invitationModel.subject,
-    this.invitationModel.content, evnt.userName);
+      this.invitationModel.content, evnt.userName);
     return this.emailService.sendEventInvitationEmail(this.invitationModel.eventGuid, emailModel);
   }
 

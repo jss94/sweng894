@@ -169,8 +169,8 @@ namespace source.Controllers
         /// </summary>
         /// <param name="id">Reservation Id</param>
         /// <returns>True/False</returns>
-        [HttpDelete]
-        public async Task<IActionResult> Deactivate(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
@@ -231,7 +231,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                await _logger.LogError(HttpContext.User, ex);
+                //await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
