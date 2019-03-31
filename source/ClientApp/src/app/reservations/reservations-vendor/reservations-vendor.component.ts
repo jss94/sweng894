@@ -66,10 +66,8 @@ export class ReservationsVendorComponent implements OnInit {
 
     createReservationLists() {
         this.route.paramMap.subscribe((params: ParamMap) => {
-            this.reservationService.getReservationByVendorId(this.vendorId).subscribe((result: Reservation[]) => {
-                this.reservations = result.map((reservation: Reservation) => {
-                    return reservation;
-                });
+            this.reservationService.getReservationByVendorId(this.vendorId).subscribe((result) => {
+                this.reservations = result;
             });
         });
 
