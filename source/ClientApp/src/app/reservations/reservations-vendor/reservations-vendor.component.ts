@@ -104,7 +104,12 @@ export class ReservationsVendorComponent implements OnInit {
         });
     }
 
-    onDeclinedClicked() {
-
+    onDeclinedClicked(reservation: Reservation) {
+        this.reservationService.cancelReservation(reservation).subscribe( response => {
+            this.snackbar.open('Successfully Declined ' + reservation.service.serviceName + " For " + reservation.event.userName, '', {
+                duration: 3000
+            });
+            this.ngOnInit();
+        });
     }
 }
