@@ -24,27 +24,27 @@ export class ReservationsService {
   }
 
   cancelReservation(res: Reservation): Observable<any> {
-    return this.auth.delete('reservation/' + res.id);
+    return this.auth.delete('reservations/' + res.id);
   }
 
   getReservationByVendorId(id?: number): Observable<Reservation[]> {
-    return this.auth.get('reservation/vendor/' + id);
+    return this.auth.get('reservations/vendor/' + id);
   }
 
   getReservationByUsername(userName: string): Observable<Reservation> {
-    return this.auth.get('reservation/user/' + userName);
+    return this.auth.get('reservations/user/' + userName);
   }
 
   getReservationById(id?: number): Observable<Reservation> {
-    return this.auth.get('reservation/' + id);
+    return this.auth.get('reservations/' + id);
   }
 
   getReservationStatusList(): Observable<string>{
-    return this.auth.get('reservation/statusTypes');
+    return this.auth.get('reservations/statusTypes');
   }
 
   getReservationsByEventGuid(guid: string): Observable<Reservation[]>{
-    return this.auth.get('reservation/event/' + guid)
+    return this.auth.get('reservations/event/' + guid)
   }
 
 }

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, Routes } from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { UpdateVendorServicesComponent } from './update-vendor-services.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatSelectModule, MatFormFieldModule, MatInputModule, MatExpansionModule } from '@angular/material';
@@ -14,6 +14,7 @@ import { MockMatSnackBar } from '../deactivate-user/deactivate-user.component.sp
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockVendorServicesService } from './Services/mock-vendor-services-service';
 import { FakeVendorServices } from '../shared/models/fake-vendor-services.model';
+import { of } from 'rxjs';
 
 describe('UpdateVendorServicesComponent', () => {
   let component: UpdateVendorServicesComponent;
@@ -42,9 +43,9 @@ describe('UpdateVendorServicesComponent', () => {
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: VendorServicesService, useClass: MockVendorServicesService },
       ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -59,7 +60,7 @@ describe('UpdateVendorServicesComponent', () => {
 
   it('should disable flat fee', () => {
     // assign
-    
+
     // act
     // fixture.detectChanges();
 
@@ -68,6 +69,16 @@ describe('UpdateVendorServicesComponent', () => {
 
   it('should enble flat fee', () => {
     // assign
+    component.updateVendorServiceForm.controls['serviceFlatFee'].valueChanges.subscribe(
+      (value) => {
+        if (value) {
+          component.updateVendorServiceForm.controls['serviceUnitsAvailable'].disable();
+          component.updateVendorServiceForm.controls['serviceUnitsAvailable'].setValue('');
+       } else {
+        component
+        }
+      }
+    );
 
     // act
     // fixture.detectChanges();
@@ -79,11 +90,14 @@ describe('UpdateVendorServicesComponent', () => {
     const FakeService = new FakeVendorServices();
     component.updateVendorServiceForm.controls['serviceFlatFee'].setValue(true);
     spyOn(mockVendorServicesService, 'getVendorServiceById').and.returnValue(FakeService);
-    
+
     // act
     fixture.detectChanges();
 
     // assert
     expect(mockVendorServicesService.getVendorServiceById).toHaveBeenCalledTimes(1);
   });
+
+ 
+
 });
