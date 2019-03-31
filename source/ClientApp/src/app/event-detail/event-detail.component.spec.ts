@@ -17,7 +17,6 @@ import { InvitationService } from '../invitations/Services/invitation.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReservationsService } from '../reservations/Services/reservations.service';
 import { MockReservationService } from '../reservations/Services/mock-reservation.service';
-import { FakeReservations } from '../reservations/Models/fake-reservation.model';
 
 describe('EventDetailComponent', () => {
   let component: EventDetailComponent;
@@ -89,9 +88,7 @@ describe('EventDetailComponent', () => {
     // assign
     const fakeEvent = new FakeOccEvent();
     const fakeUser = new FakeUser();
-    const fakeReservations = new FakeReservations().arr;
     spyOn(mockEventService, 'getEvent').and.returnValue(of(fakeEvent));
-    spyOn(mockReservationService, 'getReservationsByEventGuid').and.returnValue(of(fakeReservations));
     spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
 
     // act
@@ -99,7 +96,6 @@ describe('EventDetailComponent', () => {
 
     // assert
     expect(mockEventService.getEvent).toHaveBeenCalledTimes(1);
-    expect(mockReservationService.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
     expect(component.theEvent.name).toEqual(fakeEvent.name);
 
   });

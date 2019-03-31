@@ -83,7 +83,7 @@ describe('ReserveComponent', () => {
     vendorServiceId: 1,
     status: 'New',
     numberReserved: 10,
-    service: fakeService,
+    vendorService: fakeService,
     event: fakeEvent,
     vendor: fakeVendor
   }

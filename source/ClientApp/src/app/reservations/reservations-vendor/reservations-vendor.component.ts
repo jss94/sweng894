@@ -97,14 +97,19 @@ export class ReservationsVendorComponent implements OnInit {
     onAcceptClicked(reservation: Reservation) {
         reservation.status = this.statuses[2];
         this.reservationService.updateReservation(reservation).subscribe( response => {
-            this.snackbar.open('Successfully Approved ' + reservation.service.serviceName + " For " + reservation.event.userName, '', {
+            this.snackbar.open('Successfully Approved ' + reservation.vendorService.serviceName + " For " + reservation.event.userName, '', {
                 duration: 3000
             });
             this.ngOnInit();
         });
     }
 
-    onDeclinedClicked() {
-
+    onDeclinedClicked(reservation: Reservation) {
+        this.reservationService.deleteReservation(reservation).subscribe( response => {
+            this.snackbar.open('Successfully Declined ' + reservation.vendorService.serviceName + " For " + reservation.event.userName, '', {
+                duration: 3000
+            });
+            this.ngOnInit();
+        });
     }
 }

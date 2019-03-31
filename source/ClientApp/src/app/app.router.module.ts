@@ -37,6 +37,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { ReservationDialogComponent } from './shared/components/reservation-dialog/reservation-dialog.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -94,6 +95,7 @@ const routes: Routes = [
         VendorMetricsComponent,
         [ReservationMetricsComponent],
         VendorCalendarComponent,
+        ReservationDialogComponent,
     ],
 
     imports: [
