@@ -23,7 +23,7 @@ export class ReservationsService {
     return this.auth.put('reservations/', res);
   }
 
-  cancelReservation(res: Reservation): Observable<any> {
+  deleteReservation(res: Reservation): Observable<any> {
     return this.auth.delete('reservations/' + res.id);
   }
 

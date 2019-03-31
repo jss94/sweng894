@@ -35,7 +35,7 @@ export class FakeReservation implements Reservation {
     vendorServiceId = 1
     status = "New"
     numberReserved = 20
-    service = this.serv
+    vendorService = this.serv
     event = this.evt
     vendor = this.ven
 }

@@ -312,7 +312,7 @@ namespace UnitTests.Controllers
             _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var task = await _sut.Deactivate(reservation.id.Value);
+            var task = await _sut.Delete(reservation.id.Value);
 
             // assert
             Assert.IsType<OkObjectResult>(task);
@@ -331,7 +331,7 @@ namespace UnitTests.Controllers
             _reservationsQueryMock.Setup(x => x.Deactivate(reservation.id.Value))
                 .Returns(Task.Factory.StartNew(() => false));
 
-            var task = await _sut.Deactivate(reservation.id.Value);
+            var task = await _sut.Delete(reservation.id.Value);
 
             // assert
             Assert.IsType<NotFoundResult>(task);
@@ -352,7 +352,7 @@ namespace UnitTests.Controllers
             .Setup(x => x.LogError(It.IsAny<ClaimsPrincipal>(), It.IsAny<Exception>()))
             .Returns(Task.FromResult(default(object)));
 
-            var task = await _sut.Deactivate(1);
+            var task = await _sut.Delete(1);
 
             // assert
             Assert.IsType<BadRequestResult>(task);
