@@ -10,6 +10,8 @@ import { InvitationModel } from '../invitations/Models/invitation.model';
 import { EmailDialogComponent } from '../shared/components/email-dialog/email-dialog.component';
 import { Observable } from 'rxjs';
 import { EmailModel } from '../send-email/Models/email.model';
+import { Reservation } from '../reservations/Models/reservation.model';
+import { ReservationsService }  from '../reservations/Services/reservations.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -26,11 +28,14 @@ export class EventDetailComponent implements OnInit {
     private emailService: EmailService,
     private invitationService: InvitationService,
     private dialog: MatDialog,
+    private reservationService: ReservationsService,
     ) { }
 
   theEvent: OccEvent;
 
   invitationModel: InvitationModel;
+
+  reservations: Reservation[];
 
   ngOnInit() {
     this.getEvent();
@@ -39,6 +44,7 @@ export class EventDetailComponent implements OnInit {
   getEvent(): void {
     const guid = this.route.snapshot.paramMap.get('guid');
     this.eventService.getEvent(guid).subscribe(event => this.theEvent = event);
+    this.reservationService.getReservationsByEventGuid(guid).subscribe(reservationList => this.reservations = reservationList);
   }
 
   loadInvite(evnt: OccEvent) {
