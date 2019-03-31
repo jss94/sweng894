@@ -104,7 +104,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="id">Vendor Id</param>
         /// <returns>List of Reservation</returns>
-        [HttpGet("/vendor/{id}")]
+        [HttpGet("vendor/{id}")]
         public async Task<IActionResult> GetByVendor(int id)
         {
             try
@@ -127,7 +127,7 @@ namespace source.Controllers
         /// </summary>
         /// <param name="userName">UserName</param>
         /// <returns>List of Reservation</returns>
-        [HttpGet("/user/{userName}")]
+        [HttpGet("user/{userName}")]
         public async Task<IActionResult> GetByUser(string userName)
         {
             try
