@@ -10,7 +10,7 @@ export interface Reservation {
     vendorServiceId: number
     status: string
     numberReserved: number
-    service: VendorServices
+    vendorService: VendorServices
     event: OccEvent
     vendor: Vendor
 }

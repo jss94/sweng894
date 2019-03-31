@@ -1,0 +1,29 @@
+  .res-item {
+    width: 100%;
+    margin-top: 10px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+   
+  }
+  
+  .left {
+    width: 90%;
+  }
+
+  .right{
+    width: 10%;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  h6{
+    margin-top: 10px;
+    margin-bottom: 6px;
+  }
+
+  p{
+   margin:0px;
+  }

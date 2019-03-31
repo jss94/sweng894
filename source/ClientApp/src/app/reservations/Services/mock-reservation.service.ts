@@ -17,7 +17,7 @@ export class MockReservationService {
     return of(undefined);
   }
 
-  cancelReservation(res: Reservation): Observable<any> {
+  deleteReservation(res: Reservation): Observable<any> {
     return of(undefined);
   }
 

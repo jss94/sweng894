@@ -19,6 +19,7 @@ import { DeactivateUserComponent } from './deactivate-user/deactivate-user.compo
 import { EmailDialogComponent } from './shared/components/email-dialog/email-dialog.component';
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { ReservationDialogComponent } from './shared/components/reservation-dialog/reservation-dialog.component';
 
 
 @NgModule({
@@ -68,7 +69,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     SnackbarComponent,
     WarningDialogComponent,
     EmailDialogComponent,
-    EventDialogComponent
+    EventDialogComponent,
+    ReservationDialogComponent,
   ]
 })
 export class MaterialModule { }
