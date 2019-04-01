@@ -42,7 +42,7 @@ namespace source.Controllers
         /// </summary>
         /// <returns>List of vendor service types</returns>
         [HttpGet("types")]
-        public IActionResult GetVendorServiceTypes()
+        public async Task<IActionResult> GetVendorServiceTypes()
         {
             try
             {
@@ -53,7 +53,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -80,7 +80,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -104,7 +104,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -127,7 +127,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -152,7 +152,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -179,7 +179,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -205,7 +205,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -229,7 +229,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }
@@ -257,7 +257,7 @@ namespace source.Controllers
             }
             catch (Exception ex)
             {
-                //await _logger.LogError(HttpContext.User, ex);
+                await _logger.LogError(HttpContext.User, ex);
                 return new BadRequestResult();
             }
         }

@@ -10,6 +10,8 @@ using source.Framework;
 using source.Constants;
 using System.Linq;
 using System;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace UnitTests.Controllers
 {
@@ -21,6 +23,7 @@ namespace UnitTests.Controllers
         readonly Mock<ILogger> _loggerMock;
         readonly Mock<IVendorServicesQuery> _vendorServicesQueryMock;
         readonly Mock<VendorServices> _vendorServicesMock;
+        private ClaimsPrincipal _user;
 
         public VendorServicesControllerShould()
         {
@@ -28,24 +31,35 @@ namespace UnitTests.Controllers
             _vendorServicesQueryMock = new Mock<IVendorServicesQuery>();
             _vendorServicesMock = new Mock<VendorServices>();
 
-            _sut = new VendorServicesController(_vendorServicesQueryMock.Object,  _loggerMock.Object);
+            _user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                 new Claim(ClaimTypes.NameIdentifier, "1")
+            }));
+
+            _sut = new VendorServicesController(_vendorServicesQueryMock.Object, _loggerMock.Object);
+
+            _sut.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = _user }
+            };
         }
 
         [Fact]
-        public void GetVendorTypes_ReturnsServiceList()
+        public async Task GetVendorTypes_ReturnsServiceList()
         {
             // arrange
             var serviceTypesMock = new Mock<VendorServiceTypes>().Object;
             var serviceTypes = serviceTypesMock.GetVendorServiceTypes();
 
             // act
-            var task = _sut.GetVendorServiceTypes();
+            var task = await _sut.GetVendorServiceTypes();
 
             // assert
             Assert.IsType<OkObjectResult>(task);
 
             var result = task as OkObjectResult;
             var usersResult = result.Value as List<string>;
+
             Assert.Equal(serviceTypes, usersResult);
         }
 
