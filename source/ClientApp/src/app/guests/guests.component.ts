@@ -6,9 +6,10 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { EventService } from '../events/Services/event.service';
 import { OccEvent } from '../events/Models/occ-event.model';
+import { UpdateGuestsComponent } from './update-guests.component';
 
 @Component(
     {
@@ -29,7 +30,8 @@ export class GuestsComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar,
-        private eventService: EventService
+        private eventService: EventService,
+        private dialog: MatDialog,
         ) {
 
     }
@@ -115,7 +117,23 @@ export class GuestsComponent implements OnInit {
     }
 
     editClicked(guest: Guest) {
-        this.router.navigate(['/update-guests/' + guest.guestId]);
+      const dialogRef = this.dialog.open(UpdateGuestsComponent, {
+        width: '400px',
+        data: {
+            guest: guest
+        }
+      });
+
+      dialogRef.afterClosed()
+        .subscribe(result => {
+          if (result.data.save) {
+            this.guestService.update(result.data.guest).subscribe(() => {
+              // this.router.navigate(['/guests/' + this.guest.eventGuid]);
+              this.ngOnInit();
+            });
+          }
+      });
+      // this.router.navigate(['/update-guests/' + guest.guestId]);
     }
 
 }

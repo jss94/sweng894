@@ -54,7 +54,6 @@ const routes: Routes = [
     { path: 'reactivate-user', component: ReactivateUserComponent },
     { path: 'register-vendor', component: RegisterVendorComponent },
     { path: 'guests/:eventGuid', component: GuestsComponent },
-    { path: 'update-guests/:guestId', component: UpdateGuestsComponent },
     { path: 'vendor-services', component: VendorServicesComponent },
     { path: 'update-vendor-services/:id', component: UpdateVendorServicesComponent },
     { path: 'vendor-details/:vendorId', component: VendorDetailsComponent },

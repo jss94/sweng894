@@ -20,6 +20,7 @@ import { EmailDialogComponent } from './shared/components/email-dialog/email-dia
 import { EventDialogComponent } from './shared/components/event-dialog/event-dialog.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { ReservationDialogComponent } from './shared/components/reservation-dialog/reservation-dialog.component';
+import { UpdateGuestsComponent } from './guests/update-guests.component';
 
 
 @NgModule({
@@ -71,6 +72,7 @@ import { ReservationDialogComponent } from './shared/components/reservation-dial
     EmailDialogComponent,
     EventDialogComponent,
     ReservationDialogComponent,
+    UpdateGuestsComponent
   ]
 })
 export class MaterialModule { }

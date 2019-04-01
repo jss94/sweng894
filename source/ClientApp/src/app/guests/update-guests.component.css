@@ -1,9 +1,0 @@
-mat-form-field, mat-action-row {
-    padding: 10px;
-}
-
-.form {
-    display: flex;
-    justify-content: center;
-    align-items : center;
-}
