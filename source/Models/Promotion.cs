@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace source.Models
+﻿namespace source.Models
 {
     public class Promotion
 
@@ -19,6 +14,12 @@ namespace source.Models
 
         //The date that the promotion will end.
         public string endDate { get; set; }
+
+        // Type of promotion (i.e. PercentageOff, DollarOff)
+        public string promotionType { get; set; }
+
+        // Discounted amount.  Dependent upon promotionType
+        public int discount { get; set; }
 
         public string description { get; set; }
     }
