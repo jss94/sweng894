@@ -38,6 +38,7 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     ngOnInit() {
+        debugger
         if (this.authService.user) {
             this.setOccasionsVendor(this.authService.user);
         } else {
@@ -46,14 +47,15 @@ export class ReservationsVendorComponent implements OnInit {
             });
         }
 
-        this.createReservationLists();
-
-        this.setReservationCounts();
+        
     }
 
     setOccasionsVendor(user: User) {
-        this.vendorService.getVendor(user.userName).subscribe(vendor => {
-          this.occasionVendor = vendor;
+        this.vendorService.getVendor(user.userName).subscribe(v => {
+          this.occasionVendor = v;
+          console.log(this.occasionVendor);
+          this.createReservationLists();
+          
         });
     }
 
@@ -72,6 +74,7 @@ export class ReservationsVendorComponent implements OnInit {
                     this.approvedReservations.push(reservation);
                 }
             }
+            this.setReservationCounts();
         }
     }
 
