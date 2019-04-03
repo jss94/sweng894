@@ -16,13 +16,13 @@ import { User } from 'src/app/shared/models/user.model';
     }
 )
 export class ReservationsVendorComponent implements OnInit {
-    reservations: Reservation[];
-    newReservations: Reservation[];
-    changedReservations: Reservation[];
-    approvedReservations: Reservation[];
-    newCount: number;
-    changedCount: number;
-    approvedCount: number;
+    reservations: Reservation[] = [];
+    newReservations: Reservation[] = [];
+    changedReservations: Reservation[] = [];
+    approvedReservations: Reservation[] = [];
+    newCount = 0;
+    changedCount = 0;
+    approvedCount = 0;
     occasionVendor: Vendor;
 
     constructor(
@@ -55,8 +55,15 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     createReservationLists() {
-        this.reservationService.getReservationByVendorId(this.occasionVendor.id).subscribe((result) => {
-            this.reservations = result;
+        this.reservationService.getReservationByVendorId(this.occasionVendor.id).subscribe((results) => {
+            for (const result of results) {
+                const evt = result.event;
+                const vs = result.vendorService;
+                const res = result;
+                res.event = evt;
+                res.vendorService = vs;
+                this.reservations.push(res);
+            }
             if (this.reservations != null) {
                 for (const reservation of this.reservations) {
                     if (reservation.status === 'New') {
@@ -73,9 +80,9 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     setReservationCounts() {
-        this.newCount = this.newReservations != null ? this.newReservations.length : 0;
-        this.changedCount = this.changedReservations != null ? this.changedReservations.length : 0;
-        this.approvedCount = this.approvedReservations != null ? this.approvedReservations.length : 0;
+        this.newCount = this.newReservations.length;
+        this.changedCount = this.changedReservations.length;
+        this.approvedCount = this.approvedReservations.length;
     }
 
     onAcceptClicked(reservation: Reservation) {
