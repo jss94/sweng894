@@ -16,7 +16,6 @@ import { User } from 'src/app/shared/models/user.model';
     }
 )
 export class ReservationsVendorComponent implements OnInit {
-    statuses: [ 'New', 'Changed', 'Accepted' ];
     reservations: Reservation[];
     newReservations: Reservation[];
     changedReservations: Reservation[];
@@ -38,7 +37,6 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     ngOnInit() {
-        debugger
         if (this.authService.user) {
             this.setOccasionsVendor(this.authService.user);
         } else {
@@ -46,8 +44,6 @@ export class ReservationsVendorComponent implements OnInit {
                 this.setOccasionsVendor(result);
             });
         }
-
-        
     }
 
     setOccasionsVendor(user: User) {
@@ -55,27 +51,25 @@ export class ReservationsVendorComponent implements OnInit {
           this.occasionVendor = v;
           console.log(this.occasionVendor);
           this.createReservationLists();
-          
         });
     }
 
     createReservationLists() {
         this.reservationService.getReservationByVendorId(this.occasionVendor.id).subscribe((result) => {
             this.reservations = result;
-        });
-
-        if (this.reservations != null) {
-            for (const reservation of this.reservations) {
-                if (reservation.status === this.statuses[0]) {
-                    this.newReservations.push(reservation);
-                } else if (reservation.status === this.statuses[1]) {
-                    this.changedReservations.push(reservation);
-                } else {
-                    this.approvedReservations.push(reservation);
+            if (this.reservations != null) {
+                for (const reservation of this.reservations) {
+                    if (reservation.status === 'New') {
+                        this.newReservations.push(reservation);
+                    } else if (reservation.status === 'Changed') {
+                        this.changedReservations.push(reservation);
+                    } else {
+                        this.approvedReservations.push(reservation);
+                    }
                 }
             }
             this.setReservationCounts();
-        }
+        });
     }
 
     setReservationCounts() {
@@ -85,7 +79,7 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     onAcceptClicked(reservation: Reservation) {
-        reservation.status = this.statuses[2];
+        reservation.status = 'Accepted';
         this.reservationService.updateReservation(reservation).subscribe( response => {
             this.snackbar.open('Successfully Approved '
             + reservation.vendorService.serviceName
@@ -99,7 +93,7 @@ export class ReservationsVendorComponent implements OnInit {
     onDeclinedClicked(reservation: Reservation) {
         this.reservationService.deleteReservation(reservation).subscribe( response => {
             this.snackbar.open('Successfully Declined '
-            + reservation.vendorService.serviceName 
+            + reservation.vendorService.serviceName
             + ' For ' + reservation.event.userName, '', {
                 duration: 3000
             });
