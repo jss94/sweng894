@@ -51,8 +51,8 @@ namespace source.Queries
                 await connection.OpenAsync();
 
                 // I left these all caps because Dapper doesnt care
-                string query = @"INSERT INTO occasions.promotions (vendorId, startDate, endDate, description) "
-                    + @"VALUES (@vendorId, @startDate, @endDate, @description)";
+                string query = @"INSERT INTO occasions.promotions (vendorId, startDate, endDate, promotionType, discount, description) "
+                    + @"VALUES (@vendorId, @startDate, @endDate, @promotionType, @discount, @description)";
 
                 await Task.CompletedTask;
 
