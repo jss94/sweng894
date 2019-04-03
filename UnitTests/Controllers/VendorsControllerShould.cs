@@ -11,6 +11,8 @@ using source.Constants;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using System;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace UnitTests.Controllers
 {
@@ -25,7 +27,8 @@ namespace UnitTests.Controllers
         readonly Mock<IEventQuery> _eventsQueryMock;
         readonly Mock<IGuestQuery> _guestQueryMock;
         readonly Mock<IVendorServicesQuery> _vendorServicesQueryMock;
-        
+        private ClaimsPrincipal _user;
+
         public VendorsControllerShould()
         {
             _loggerMock = new Mock<ILogger>();
@@ -35,13 +38,23 @@ namespace UnitTests.Controllers
             _eventsQueryMock = new Mock<IEventQuery>();
             _guestQueryMock = new Mock<IGuestQuery>();
 
+            _user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                             new Claim(ClaimTypes.NameIdentifier, "1")
+            }));
+
             _sut = new VendorsController(
-                _vendorsQueryMock.Object, 
+                _vendorsQueryMock.Object,
                 _addressQueryMock.Object,
                 _vendorServicesQueryMock.Object,
                 _eventsQueryMock.Object,
                 _guestQueryMock.Object,
                 _loggerMock.Object);
+
+            _sut.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = _user }
+            };
         }
 
         [Fact]
