@@ -27,8 +27,8 @@ export class PromotionsComponent implements OnInit {
   });
 
   options: DropDownOption[] = [
-    { value: 'dollarOff', viewValue: 'Dollar Off' },
-    { value: 'percentOff', viewValue: 'Percentage Off' },
+    { value: 'dollar', viewValue: 'Dollar Off' },
+    { value: 'percent', viewValue: 'Percentage Off' },
   ];
 
   constructor(
