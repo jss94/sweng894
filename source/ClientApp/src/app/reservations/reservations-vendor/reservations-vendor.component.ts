@@ -57,10 +57,10 @@ export class ReservationsVendorComponent implements OnInit {
     createReservationLists() {
         this.reservationService.getReservationByVendorId(this.occasionVendor.id).subscribe((results) => {
             for (const result of results) {
-                const evt = result.event;
+                const evt = result.evt;
                 const vs = result.vendorService;
                 const res = result;
-                res.event = evt;
+                res.evt = evt;
                 res.vendorService = vs;
                 this.reservations.push(res);
             }
@@ -90,7 +90,7 @@ export class ReservationsVendorComponent implements OnInit {
         this.reservationService.updateReservation(reservation).subscribe( response => {
             this.snackbar.open('Successfully Approved '
             + reservation.vendorService.serviceName
-            + ' For ' + reservation.event.userName, '', {
+            + ' For ' + reservation.evt.userName, '', {
                 duration: 3000
             });
             this.ngOnInit();
@@ -101,7 +101,7 @@ export class ReservationsVendorComponent implements OnInit {
         this.reservationService.deleteReservation(reservation).subscribe( response => {
             this.snackbar.open('Successfully Declined '
             + reservation.vendorService.serviceName
-            + ' For ' + reservation.event.userName, '', {
+            + ' For ' + reservation.evt.userName, '', {
                 duration: 3000
             });
             this.ngOnInit();

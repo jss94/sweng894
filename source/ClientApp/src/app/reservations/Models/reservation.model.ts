@@ -11,6 +11,6 @@ export interface Reservation {
     status: string;
     numberReserved: number;
     vendorService: VendorServices;
-    event: OccEvent;
+    evt: OccEvent;
     vendor: Vendor;
 }
