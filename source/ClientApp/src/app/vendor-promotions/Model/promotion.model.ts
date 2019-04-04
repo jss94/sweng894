@@ -1,5 +1,5 @@
 export interface Promotion {
-  promotionId: number;
+  promotionId?: number;
   vendorId: number;
   startDate: string;
   endDate: string;

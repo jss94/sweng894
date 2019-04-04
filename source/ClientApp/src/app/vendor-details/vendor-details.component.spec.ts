@@ -18,12 +18,19 @@ import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-ve
 import { MockFavoriteVendorService } from '../favorite-vendors/Services/mock-favorite-vendors.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { MockVendorService } from '../vendors/Services/mock-vendor.service';
+import { PromotionService } from '../vendor-promotions/Services/promotion.service';
 
 describe('VendorDetailsComponent', () => {
   let component: VendorDetailsComponent;
   let fixture: ComponentFixture<VendorDetailsComponent>;
   let mockAuthService: AuthService;
   let mockVendorSvc: VendorService;
+
+  class MockPromotionService {
+    getAllPromotions() {
+
+    }
+  }
 
   class MockEmailService {
     sendVendorQuestionEmail() {
@@ -94,6 +101,7 @@ describe('VendorDetailsComponent', () => {
         { provide: MatDialog, useClass: MockMatDialog },
         { provide: EmailService, useClass: MockEmailService },
         { provide: FavoriteVendorsService, useClass: MockFavoriteVendorService },
+        { provide: PromotionService, useClass: MockPromotionService },
       ],
       imports: [
         MatSelectModule,

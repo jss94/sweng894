@@ -1,0 +1,97 @@
+<div class="promotions-container">
+
+  <h1>Promotions</h1>
+
+  <mat-accordion>
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Create Promotion
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form class="form" [formGroup]="promotionForm" (ngSubmit)="onCreate()">
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="pickerStart" formControlName="startDate" placeholder="Promotion Start Date">
+          <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+          <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="pickerEnd" formControlName="endDate" placeholder="Promotion End Date">
+          <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input
+            matInput
+            placeholder="Promotion Description"
+            formControlName="description"
+            >
+        </mat-form-field>
+
+
+        <mat-form-field>
+          <mat-label>Promotion</mat-label>
+          <mat-select [(value)]="selectedPromotionType">
+              <mat-option *ngFor="let option of options" [value]="option.value">
+                  {{option.viewValue}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Discount</mat-label>
+          <input
+            matInput
+            placeholder="Amount Off"
+            formControlName="discount"
+            >
+        </mat-form-field>
+
+        <mat-action-row>
+          <button type="submit" mat-button [disabled]="!promotionForm.valid">
+            <mat-icon>add</mat-icon>
+            Add Promotion
+          </button>
+        </mat-action-row>
+
+      </form>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+<div class="item-container" *ngFor="let promotion of promotions">
+  <div class="promotion-item">
+
+    <div class="header">
+      <div class="promotion-icon">
+        <mat-icon>card_giftcard</mat-icon>
+      </div>
+      <div>
+        <div>
+          <h5>{{promotion.description}}</h5>
+        </div>
+        <div>
+          <div>Valid from {{promotion.startDate | date:'shortDate'}} to {{promotion.endDate | date:'shortDate'}}</div>
+          <div *ngIf="promotion.promotionType === 'percent'; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>{{promotion.discount}}% Off!</ng-template>
+          <ng-template #elseBlock>${{promotion.discount}} Off!</ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+
+      <button mat-button (click)="deletePromotion(promotion.promotionId)" matTooltip="Delete Promotion">
+          <mat-icon>delete_forever</mat-icon>
+      </button>
+
+    </div>
+  </div>
+</div>

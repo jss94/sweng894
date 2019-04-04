@@ -25,6 +25,7 @@ import { GooglePlacesService } from './vendor-search/Services/google-places.serv
 import { FavoriteVendorsService } from './favorite-vendors/Services/favorite-vendors.service';
 import { VendorMetricService } from './vendor-metrics/Service/vendor-metric.service';
 import { VendorEventService } from './vendor-calendar/Services/vendor-event.service';
+import { PromotionService } from './vendor-promotions/Services/promotion.service';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { VendorEventService } from './vendor-calendar/Services/vendor-event.serv
     FavoriteVendorsService,
     VendorMetricService,
     VendorEventService,
+    PromotionService,
   ],
   bootstrap: [AppComponent]
 })
