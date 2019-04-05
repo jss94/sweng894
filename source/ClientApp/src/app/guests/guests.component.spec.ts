@@ -13,12 +13,13 @@ import { HttpClient } from 'selenium-webdriver/http';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router, Routes } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { FakeGuests, FakeGuest } from './Models/fake.guest.model';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { MockEventService } from '../events/Services/mock-event.service';
 import { EventService } from '../events/Services/event.service';
 import { FakeOccEvent } from '../events/Models/fake-occ-event.model';
+import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
 
 describe('GuestsComponent', () => {
   let component: GuestsComponent;
@@ -62,6 +63,7 @@ describe('GuestsComponent', () => {
         { provide: AuthService, useClass: MockAuthService },
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
+        { provide: MatDialog, userClass: MockMatDialog},
       ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
