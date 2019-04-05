@@ -142,7 +142,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public async Task CreateNewEvent_ReturnBadRequestResult()
+        public async Task CreateNewPromotion_ReturnBadRequestResult()
         {
 
             //arrange
