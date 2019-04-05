@@ -15,24 +15,39 @@ using System;
 using source.Constants;
 using Google.Protobuf.WellKnownTypes;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Web;
 
 namespace UnitTests.Controllers
 {
     public class ReservationsControllerShould
-    {
+    {        
         // System Under Test
         readonly ReservationsController _sut;
         private readonly Mock<IReservationsQuery> _reservationsQueryMock;
         readonly Mock<ILogger> _loggerMock;
-      
+        readonly Mock<HttpContext> _mockHttpContext;
+        private ClaimsPrincipal _user;
+
         public ReservationsControllerShould()
         {
             _reservationsQueryMock = new Mock<IReservationsQuery>();
+            _mockHttpContext = new Mock<HttpContext>();
             _loggerMock = new Mock<ILogger>();
+
+            _user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                 new Claim(ClaimTypes.NameIdentifier, "1")
+            }));
 
             _sut = new ReservationsController(
                _reservationsQueryMock.Object,
                _loggerMock.Object);
+
+            _sut.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = _user }
+            };
         }
 
         private void ThrowException()
@@ -285,20 +300,20 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void GetReservationStatusList_ReturnsStatusList()
+        public async Task GetReservationStatusList_ReturnsStatusList()
         {
             // arrange
             var statusTypesMock = new Mock<ReservationStatus>().Object;
             var statusTypes = statusTypesMock.GetReservationStatuses();
 
             // act
-            var task = _sut.GetReservationStatusTypes();
+            var task = await _sut.GetReservationStatusTypes();
 
             // assert
             Assert.IsType<OkObjectResult>(task);
 
             var result = task as OkObjectResult;
-            var usersResult = result.Value as List<string>;
+            var usersResult = result.Value;
             Assert.Equal(statusTypes, usersResult);
         }
 
@@ -342,15 +357,11 @@ namespace UnitTests.Controllers
         {
             //arrange
             var exception = new Exception();
-
+          
             //act
             _reservationsQueryMock
             .Setup(x => x.Deactivate(1))
             .Throws(exception);
-
-            _loggerMock
-            .Setup(x => x.LogError(It.IsAny<ClaimsPrincipal>(), It.IsAny<Exception>()))
-            .Returns(Task.FromResult(default(object)));
 
             var task = await _sut.Delete(1);
 
