@@ -11,9 +11,8 @@
       </button>
       <br>
         <button mat-button (click)="toggleFavorite()">
-          <mat-icon>favorite</mat-icon>
-          <span *ngIf="isFavorite == true">Remove from Favorites</span>
-          <span *ngIf="isFavorite == false">Add to Favorites</span>
+          <span *ngIf="isFavorite == true"><mat-icon>favorite</mat-icon> Remove from Favorites</span>
+          <span *ngIf="isFavorite == false"><mat-icon>favorite_border</mat-icon>Add to Favorites</span>
         </button>
         <br>
         <button mat-button (click)="loadCalendar()">

@@ -10,6 +10,7 @@ import { of, Subject, Observable, forkJoin } from 'rxjs';
 import { GoogleMapsService } from '../google-map/Services/google-maps.service';
 import { AuthService } from '../shared/services/auth.service';
 import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'app-vendor-search',
@@ -20,7 +21,8 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
   unclaimedServices: VendorServices[];
   claimedServices: VendorServices[];
   isVendor: boolean;
-  userFavorites: any[];
+  userFavorites: Set<number>;
+  refresh: any;
 
   map: google.maps.Map;
   geolocation$ = new Subject();
@@ -95,13 +97,13 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
       });
     }
 
+    this.userFavorites = new Set<number>();
   }
 
   getFavorites() {
-    this.userFavorites = [];
     this.favoriteServicesService.getFavoriteVendors(this.userName).subscribe(response => {
       response.forEach(vendor => {
-        this.userFavorites.push(vendor.id);
+        this.userFavorites.add(vendor.id);
       });
     });
   }
@@ -266,20 +268,35 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
   }
 
   toggleFavorite(id: any) {
-    if (this.userFavorites.includes(id)) {
+    if (this.userFavorites.has(id)) {
+      this.userFavorites.delete(id);
       this.favoriteServicesService.deleteFavoriteVendor({
         userName: this.userName,
         vendorId: id
-      }).subscribe(() => { this.getFavorites(); });
+      }).subscribe(() => {
+        this.getFavorites();
+        this.updateFavoritesTab();
+      });
     } else {
       this.favoriteServicesService.addNewFavoriteVendor({
         userName: this.userName,
         vendorId: id
-      }).subscribe(() => { this.getFavorites(); });
+      }).subscribe(() => {
+        this.getFavorites();
+        this.updateFavoritesTab();
+      });
     }
   }
 
   isFavorite(id: any) {
-    return this.userFavorites.includes(id);
+    return this.userFavorites.has(id);
+  }
+
+  updateFavoritesTab() {
+    if (this.refresh) {
+      this.refresh = false;
+    } else {
+      this.refresh = true;
+    }
   }
 }
