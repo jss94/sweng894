@@ -1,5 +1,5 @@
 <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="Vendor Search">  
+    <mat-tab label="Vendor Search">
 
 <div class="search-container">
   <h1>Vendor Search</h1>
@@ -62,7 +62,7 @@
       <mat-icon>cached</mat-icon>
       Reset
     </button>
-    
+
   </form>
 
 
@@ -72,9 +72,14 @@
   <div class="claimed-vendor-services-item">
 
     <div class="header">
+        <button mat-button (click)="toggleFavorite(service.vendorId)">
+            <mat-icon>favorite</mat-icon>
+            <span *ngIf="isFavorite(service.vendorId) == true">Remove Favorite</span>
+            <span *ngIf="isFavorite(service.vendorId) == false">Add Favorite</span>
+        </button>
       <h6>{{service.serviceName}}</h6>
     </div>
-    
+
     <div class="description">
         <h6 class='vendor-services-description'>{{service.serviceDescription}}</h6>
     </div>
@@ -122,8 +127,8 @@
 <div id="search-map"></div>
 
   </mat-tab>
-  <mat-tab label="Favorite Vendors"> 
-    <app-favorite-vendors></app-favorite-vendors> 
+  <mat-tab label="Favorite Vendors">
+    <app-favorite-vendors></app-favorite-vendors>
   </mat-tab>
 </mat-tab-group>
 

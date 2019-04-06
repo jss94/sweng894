@@ -9,6 +9,7 @@ import { GooglePlacesService } from './Services/google-places.service';
 import { of, Subject, Observable, forkJoin } from 'rxjs';
 import { GoogleMapsService } from '../google-map/Services/google-maps.service';
 import { AuthService } from '../shared/services/auth.service';
+import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
 
 @Component({
   selector: 'app-vendor-search',
@@ -19,6 +20,7 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
   unclaimedServices: VendorServices[];
   claimedServices: VendorServices[];
   isVendor: boolean;
+  userFavorites: any[];
 
   map: google.maps.Map;
   geolocation$ = new Subject();
@@ -69,6 +71,7 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
     private vendorSearchService: VendorSearchService,
     private googlePlacesService: GooglePlacesService,
     private googleMapsService: GoogleMapsService,
+    private favoriteServicesService: FavoriteVendorsService,
     ) {
 
 
@@ -82,11 +85,25 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
 
     if (this.authService.user) {
       this.isVendor = this.authService.user.role === 'Admin' || this.authService.user.role === 'VENDOR';
+      this.userName = this.authService.user.userName;
+      this.getFavorites();
     } else {
       this.authService.user$.subscribe(user => {
         this.isVendor = user.role === 'Admin' || user.role === 'VENDOR';
+        this.userName = user.userName;
+        this.getFavorites();
       });
     }
+
+  }
+
+  getFavorites() {
+    this.userFavorites = [];
+    this.favoriteServicesService.getFavoriteVendors(this.userName).subscribe(response => {
+      response.forEach(vendor => {
+        this.userFavorites.push(vendor.id);
+      });
+    });
   }
 
   ngAfterViewInit() {
@@ -246,5 +263,23 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
       case 'Other': return ['travel_agency'];
       default: return ['car_rental', 'clothing_store', 'hair_care', 'jewelry_store'];
     }
+  }
+
+  toggleFavorite(id: any) {
+    if (this.userFavorites.includes(id)) {
+      this.favoriteServicesService.deleteFavoriteVendor({
+        userName: this.userName,
+        vendorId: id
+      }).subscribe(() => { this.getFavorites(); });
+    } else {
+      this.favoriteServicesService.addNewFavoriteVendor({
+        userName: this.userName,
+        vendorId: id
+      }).subscribe(() => { this.getFavorites(); });
+    }
+  }
+
+  isFavorite(id: any) {
+    return this.userFavorites.includes(id);
   }
 }
