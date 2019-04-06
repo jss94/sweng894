@@ -179,7 +179,7 @@ export class ReserveComponent implements OnInit {
       status: "New",
       numberReserved: this.reservationForm.controls['numberReserved'].value,
       vendorService: null,
-      event: null,
+      evt: null,
       vendor: null
     };
     
