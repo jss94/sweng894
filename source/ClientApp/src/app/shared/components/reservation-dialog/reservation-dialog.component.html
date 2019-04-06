@@ -12,6 +12,9 @@
       <h6>{{res.vendor.name}} - {{res.vendorService.serviceType}}</h6>
       <p>{{res.vendorService.serviceName}}</p>
       <p>{{ res.vendorService.serviceDescription}}</p>
+      <p>Cost: <span *ngIf="res.vendorService.flatFee">{{ res.vendorService.price | currency:'USD':symbol:'1.2-2' }}</span>
+      <span *ngIf="!res.vendorService.flatFee">{{ (res.vendorService.price * res.numberReserved) | currency:'USD':symbol:'1.2-2' }}</span>
+      </p>
     </div>
     <div class="right">
       <button mat-button (click)="deleteReservation(res)" matTooltip="Delete Reservation">
