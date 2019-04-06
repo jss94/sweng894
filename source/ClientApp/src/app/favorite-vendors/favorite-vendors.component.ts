@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChange, SimpleChanges, Input } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { FavoriteVendorsService } from './Services/favorite-vendors.service';
 import { Vendor } from '../shared/models/vendor.model';
@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
   templateUrl: './favorite-vendors.component.html',
   styleUrls: ['./favorite-vendors.component.css']
 })
-export class FavoriteVendorsComponent implements OnInit {
+export class FavoriteVendorsComponent implements OnInit, OnChanges {
+
+  @Input() refresh: any;
+
   public favoriteVendors: Vendor[];
 
   constructor(
@@ -63,4 +66,7 @@ export class FavoriteVendorsComponent implements OnInit {
     window.open(url, '_blank');
   }
 
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    this.ngOnInit();
+  }
 }
