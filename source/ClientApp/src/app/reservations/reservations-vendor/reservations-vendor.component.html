@@ -11,13 +11,13 @@
 
                 <mat-expansion-panel-header class="expansion-header">
                     <h4>
-                        {{newReservation.event.name}} -- {{newReservation.event.dateTime}}
+                        {{newReservation.evt.name}} -- {{newReservation.evt.dateTime}}
                     </h4>
                     <div class="actions">
                         <button class="accept-color" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(newReservation)">
                             Accept
                         </button>
-                        <button class="decline-color" appearance="outline" type="submit" mat-button (click)="onDeclineClicked(newReservation)">
+                        <button class="decline-color" appearance="outline" type="submit" mat-button (click)="onDeclinedClicked(newReservation)">
                             Decline
                         </button>
                     </div>
@@ -27,16 +27,16 @@
                     <div class="services-panel">
                         <h5>Service</h5>
                         <div class="title-value-node">
-                            <h6>Requested:</h6> {{newReservation.service.serviceName}}
+                            <h6>Requested:</h6> {{newReservation.vendorService.serviceName}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Type:</h6>{{newReservation.service.type}}
+                            <h6>Type:</h6>{{newReservation.vendorService.type}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Description:</h6> {{newReservation.service.serviceDescription}}
+                            <h6>Description:</h6> {{newReservation.vendorService.serviceDescription}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Price:</h6> {{newReservation.service.price}}
+                            <h6>Price:</h6> {{newReservation.vendorService.price}}
                         </div>
                         <div class="title-value-node">
                             <h6>Amount Requested:</h6> {{newReservation.numberReserved}}
@@ -46,16 +46,16 @@
                     <div class="event-panel">
                         <h5>Event</h5>
                         <div class="title-value-node">
-                            <h6>Organizer:</h6> {{newReservation.event.userName}}
+                            <h6>Organizer:</h6> {{newReservation.evt.userName}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Description:</h6> {{newReservation.event.description}}
+                            <h6>Description:</h6> {{newReservation.evt.description}}
                         </div>
                         <div class="title-value-node">
                             <h6>Address:</h6> TODO: PLACEHOLDER
                         </div>
                         <div class="title-value-node">
-                            <h6>Date:</h6> {{newReservation.event.dateTime}}
+                            <h6>Date:</h6> {{newReservation.evt.dateTime}}
                         </div>
                     </div>
                 </div>
@@ -73,13 +73,13 @@
 
                 <mat-expansion-panel-header class="expansion-header">
                     <h4>
-                        {{changedReservation.event.name}} -- {{changedReservation.event.dateTime}}
+                        {{changedReservation.evt.name}} -- {{changedReservation.evt.dateTime}}
                     </h4>
                     <div class="actions">
                         <button class="accept-color" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(changedReservation)">
                             Accept
                         </button>
-                        <button class="decline-color" appearance="outline" type="submit" mat-button (click)="onDeclineClicked(changedReservation)">
+                        <button class="decline-color" appearance="outline" type="submit" mat-button (click)="onDeclinedClicked(changedReservation)">
                             Decline
                         </button>
                     </div>
@@ -89,16 +89,16 @@
                     <div class="services-panel">
                         <h5>Service</h5>
                         <div class="title-value-node">
-                            <h6>Requested:</h6> {{changedReservation.service.serviceName}}
+                            <h6>Requested:</h6> {{changedReservation.vendorService.serviceName}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Type:</h6>{{changedReservation.service.type}}
+                            <h6>Type:</h6>{{changedReservation.vendorService.type}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Description:</h6> {{changedReservation.service.serviceDescription}}
+                            <h6>Description:</h6> {{changedReservation.vendorService.serviceDescription}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Price:</h6> {{changedReservation.service.price}}
+                            <h6>Price:</h6> {{changedReservation.vendorService.price}}
                         </div>
                         <div class="title-value-node">
                             <h6>Amount Requested:</h6> {{changedReservation.numberReserved}}
@@ -108,16 +108,16 @@
                     <div class="event-panel">
                         <h5>Event</h5>
                         <div class="title-value-node">
-                            <h6>Organizer:</h6> {{changedReservation.event.userName}}
+                            <h6>Organizer:</h6> {{changedReservation.evt.userName}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Description:</h6> {{changedReservation.event.description}}
+                            <h6>Description:</h6> {{changedReservation.evt.description}}
                         </div>
                         <div class="title-value-node">
                             <h6>Address:</h6> TODO: PLACEHOLDER
                         </div>
                         <div class="title-value-node">
-                            <h6>Date:</h6> {{changedReservation.event.dateTime}}
+                            <h6>Date:</h6> {{changedReservation.evt.dateTime}}
                         </div>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
 
                 <mat-expansion-panel-header class="expansion-header">
                     <h4>
-                        {{approvedReservation.event.name}} -- {{approvedReservation.event.dateTime}}
+                        {{approvedReservation.evt.name}} -- {{approvedReservation.evt.dateTime}}
                     </h4>
                 </mat-expansion-panel-header>
                 
@@ -143,16 +143,16 @@
                     <div class="services-panel">
                         <h5>Service</h5>
                         <div class="title-value-node">
-                            <h6>Requested:</h6> {{approvedReservation.service.serviceName}}
+                            <h6>Requested:</h6> {{approvedReservation.vendorService.serviceName}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Type:</h6>{{approvedReservation.service.type}}
+                            <h6>Type:</h6>{{approvedReservation.vendorService.type}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Description:</h6> {{approvedReservation.service.serviceDescription}}
+                            <h6>Description:</h6> {{approvedReservation.vendorService.serviceDescription}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Price:</h6> {{approvedReservation.service.price}}
+                            <h6>Price:</h6> {{approvedReservation.vendorService.price}}
                         </div>
                         <div class="title-value-node">
                             <h6>Amount Requested:</h6> {{approvedReservation.numberReserved}}
@@ -162,16 +162,16 @@
                     <div class="event-panel">
                         <h5>Event</h5>
                         <div class="title-value-node">
-                            <h6>Organizer:</h6> {{approvedReservation.event.userName}}
+                            <h6>Organizer:</h6> {{approvedReservation.evt.userName}}
                         </div>
                         <div class="title-value-node">
-                            <h6>Description:</h6> {{approvedReservation.event.description}}
+                            <h6>Description:</h6> {{approvedReservation.evt.description}}
                         </div>
                         <div class="title-value-node">
                             <h6>Address:</h6> TODO: PLACEHOLDER
                         </div>
                         <div class="title-value-node">
-                            <h6>Date:</h6> {{approvedReservation.event.dateTime}}
+                            <h6>Date:</h6> {{approvedReservation.evt.dateTime}}
                         </div>
                     </div>
                 </div>

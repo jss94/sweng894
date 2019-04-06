@@ -69,7 +69,9 @@
               <h6 *ngIf="!service.flatFee">Price per unit</h6>
             </div>
             <div><h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6></div>
-            <div><h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6></div>
+            <div><h6 *ngIf="service.unitsAvailable != null && service.unitsAvailable != 0">{{service.unitsAvailable}} units available</h6>
+              <h6 *ngIf="service.unitsAvailable != null && service.unitsAvailable == 0">1 unit available</h6>
+            </div>
           </div>
 
           <div class="side">

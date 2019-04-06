@@ -17,7 +17,7 @@ export class FakeReservation implements Reservation {
         unitsAvailable: 10,
         googleId: "id"
     };
-    evt: OccEvent = {
+    event: OccEvent = {
         userName: "Debs",
         name: "Fun Party",
         description: "Wooooo",
@@ -39,7 +39,7 @@ export class FakeReservation implements Reservation {
     status = "New"
     numberReserved = 20
     vendorService = this.serv
-    event = this.evt
+    evt = this.event
     vendor = this.ven
 }
 
