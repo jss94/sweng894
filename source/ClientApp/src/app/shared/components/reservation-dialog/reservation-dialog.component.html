@@ -9,8 +9,7 @@
 <div mat-dialog-content class="item-container" *ngFor="let res of data.reservations">
   <div class="res-item">
     <div class="left">
-      <h6>{{res.vendor.name}} - {{res.vendorService.serviceType}}</h6>
-      <p>{{res.vendorService.serviceName}}</p>
+      <h6>{{res.vendorService.serviceType}} - {{res.vendorService.serviceName}}</h6>
       <p>{{ res.vendorService.serviceDescription}}</p>
       <p>Cost: <span *ngIf="res.vendorService.flatFee">{{ res.vendorService.price | currency:'USD':symbol:'1.2-2' }}</span>
       <span *ngIf="!res.vendorService.flatFee">{{ (res.vendorService.price * res.numberReserved) | currency:'USD':symbol:'1.2-2' }}</span>
