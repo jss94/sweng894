@@ -85,6 +85,39 @@
         </div>
       </div>
    </div>
-</div>
 
+    <br>
+
+    <h2>Vendor Promotions</h2>
+    <div *ngIf="promotions.length == 0; then showMsgBlock else showPromotionsBlock"></div>
+
+    <ng-template #showPromotionsBlock>
+      <div class="item-container" *ngFor="let promotion of promotions">
+        <div class="promotion-item">
+
+          <div class="promotion-header">
+            <div class="promotion-icon">
+              <mat-icon>card_giftcard</mat-icon>
+            </div>
+            <div>
+              <div>
+                <h5>{{promotion.description}}</h5>
+              </div>
+              <div>
+                <div>Valid from {{promotion.startDate | date:'shortDate'}} to {{promotion.endDate | date:'shortDate'}}</div>
+                <div *ngIf="promotion.promotionType === 'percent'; then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock>{{promotion.discount}}% Off!</ng-template>
+                <ng-template #elseBlock>${{promotion.discount}} Off!</ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #showMsgBlock>
+      <div>There are no promotions at this time</div>
+    </ng-template>
+
+  </div>
 </div>
