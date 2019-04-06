@@ -166,10 +166,11 @@ describe('ReserveComponent', () => {
 
       spyOn(mockEmailService, 'createEmailModel').and.returnValue(of(fakeEmail));
       spyOn(mockEmailService, 'sendReservationEmailNotification').and.returnValue(of('202'));
-      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of([fakeReservation]));
       spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
+      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(null));
       spyOn(mockReservationSvc, 'createReservation').and.returnValue(of(fakeReservation));
       spyOn(component.reservationForm, 'reset').and.callThrough();
+      this.existing = null;
 
       const fakeUser = new FakeUser();
       spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
@@ -179,8 +180,7 @@ describe('ReserveComponent', () => {
       component.onCreate();
 
       // assert
-      expect(mockReservationSvc.createReservation).toHaveBeenCalledTimes(1);
-      expect(component.reservationForm.reset).toHaveBeenCalledTimes(1);
+      expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
     });
   });
 
