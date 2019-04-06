@@ -37,6 +37,10 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.reservations = [];
+        this.newReservations = [];
+        this.changedReservations = [];
+        this.approvedReservations =[];
         if (this.authService.user) {
             this.setOccasionsVendor(this.authService.user);
         } else {
