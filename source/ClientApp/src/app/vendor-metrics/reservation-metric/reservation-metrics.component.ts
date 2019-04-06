@@ -22,7 +22,7 @@ export class ReservationMetricsComponent implements OnInit {
 
   chartData: any;
 
-  view: any[] = [650, 400];
+  view: any[] = [600, 400];
 
   // options
   showXAxis = true;
@@ -33,7 +33,7 @@ export class ReservationMetricsComponent implements OnInit {
   showYAxisLabel = true;
 
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#3F51B5', '#3F51B5', '#3F51B5', '#3F51B5']
   };
 
   constructor(

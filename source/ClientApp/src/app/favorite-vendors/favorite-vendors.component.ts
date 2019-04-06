@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 export class FavoriteVendorsComponent implements OnInit {
   public favoriteVendors: Vendor[];
 
+  trackByFn = (index: number, id: any) => index;
+
   constructor(
     private favoriteVendorService: FavoriteVendorsService,
     private auth: AuthService,
@@ -33,7 +35,8 @@ export class FavoriteVendorsComponent implements OnInit {
   }
 
   getFavoriteVendors(user: User) {
-    this.favoriteVendorService.getFavoriteVendors(user.userName).subscribe((response: Vendor[]) => {
+    this.favoriteVendorService.getFavoriteVendors(user.userName)
+    .subscribe((response: Vendor[]) => {
       this.favoriteVendors = response;
     });
   }
@@ -62,5 +65,4 @@ export class FavoriteVendorsComponent implements OnInit {
     url += vendor.website;
     window.open(url, '_blank');
   }
-
 }

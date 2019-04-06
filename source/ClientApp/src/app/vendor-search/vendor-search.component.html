@@ -2,7 +2,10 @@
     <mat-tab label="Vendor Search">  
 
 <div class="search-container">
-  <h1>Vendor Search</h1>
+  <h1>Search for Vendors</h1>
+
+  <div *ngIf="!isVendor" class="directions">As an event origanizer you will be able to search for vendors here.</div>
+  <div *ngIf="isVendor" class="directions">As a vendor you will be able to search and claim your business here.</div>
 
   <form class="form" [formGroup]="searchForm">
 
@@ -95,6 +98,7 @@
     <div class="actions">
       <button mat-button (click)="onDetailsClicked(service)">
           <mat-icon>remove_red_eye</mat-icon>
+          View
       </button>
     </div>
   </div>
@@ -114,6 +118,7 @@
     <div class="actions">
       <button *ngIf="isVendor" mat-button (click)="onClaimClicked(service)">
           <mat-icon>add_location</mat-icon>
+          Claim
       </button>
     </div>
   </div>
