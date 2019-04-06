@@ -18,7 +18,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReservationsService } from '../reservations/Services/reservations.service';
 import { MockReservationService } from '../reservations/Services/mock-reservation.service';
 import { FakeReservation, FakeReservations } from '../reservations/Models/fake-reservation.model';
-import { componentNeedsResolution } from '@angular/core/src/metadata/resource_loading';
 
 describe('EventDetailComponent', () => {
   let component: EventDetailComponent;
