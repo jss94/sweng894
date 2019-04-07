@@ -24,13 +24,13 @@
       </button>
 
       <button *ngIf="!auth.isAuthenticated()"  mat-button>
-        <a class="nav-link text-dark" (click)="auth.login()">Login</a>
+        <a (click)="auth.login()">Login</a>
       </button>
 
 
       <button *ngIf="auth.isAuthenticated()" mat-button [matMenuTriggerFor]="userMenu">
         <mat-icon>person</mat-icon>
-        <span class="text-grey">{{ auth?.user?.name }}</span>
+        <span>{{ auth?.user?.name }}</span>
       </button>
       <mat-menu #userMenu="matMenu">
 
