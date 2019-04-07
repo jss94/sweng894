@@ -14,6 +14,7 @@ import { EventService } from 'src/app/events/Services/event.service';
 import { ReservationsService } from '../Services/reservations.service';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockVendorService } from 'src/app/vendors/Services/mock-vendor.service';
 
 describe('ReservationsVendorComponent', () => {
     let component: ReservationsVendorComponent;
@@ -31,8 +32,6 @@ describe('ReservationsVendorComponent', () => {
   
     class MockReservationService { }
 
-    class MockVendorServices { }
-  
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [ReservationsVendorComponent],
@@ -49,7 +48,7 @@ describe('ReservationsVendorComponent', () => {
           { provide: MatDialog, useClass: MockMatDialog },
           { provide: EventService, useClass: MockEventService },
           { provide: ReservationsService, useClass: MockReservationService },
-          { provide: VendorService, useClass: MockVendorServices }
+          { provide: VendorService, useClass: MockVendorService }
         ],
       })
       .compileComponents();

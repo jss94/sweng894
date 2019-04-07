@@ -1,0 +1,53 @@
+h1 {
+  padding: 10px;
+}
+
+.promotions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.promotions-list {
+  float: right;
+  overflow: scroll;
+  height: 75vh;
+  width: 100%;
+}
+
+mat-form-field {
+  padding-top: 5px;
+  padding-right: 20px;
+}
+
+.options {
+  padding-left: 5px;
+}
+
+.promotion-icon {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.item-container {
+  width: 100%;
+}
+
+.promotion-item {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0px;
+  background-color: #E5E8EC;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.promotion-item:hover {
+  background-color: rgb(193, 198, 206);
+}
+

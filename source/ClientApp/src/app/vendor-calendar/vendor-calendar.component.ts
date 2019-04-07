@@ -15,6 +15,7 @@ import {
   CalendarEventAction,
   CalendarView
 } from 'angular-calendar';
+import { PromotionService } from '../vendor-promotions/Services/promotion.service';
 
 const colors: any = {
   red: {
@@ -55,7 +56,8 @@ export class VendorCalendarComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private vendorEventsService: VendorEventService  ) {}
+    private vendorEventsService: VendorEventService,
+    private promotionService: PromotionService) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -86,6 +88,33 @@ export class VendorCalendarComponent implements OnInit {
       }, error => {
         console.log(error);
       });
+
+        this.promotionService.getAllPromotions(vendorId).subscribe(promotions => {
+          promotions.forEach(promotion => {
+
+            let title: any;
+            if (promotion.promotionType === 'percent') {
+              title = promotion.discount + '% Off! ' + promotion.description;
+            } else {
+              title = '$' + promotion.discount + ' Off! ' + promotion.description;
+            }
+
+            this.events = [
+              ...this.events,
+              {
+                start: new Date(promotion.startDate),
+                end: new Date(promotion.endDate),
+                title: title,
+                color: colors.blue,
+                allDay: true,
+             }
+            ];
+
+          });
+          this.refresh.next();
+        }, error => {
+          console.log(error);
+        });
     });
   }
 

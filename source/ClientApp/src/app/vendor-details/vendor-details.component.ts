@@ -13,6 +13,8 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
 import { EmailModel } from '../send-email/Models/email.model';
 import { FavoriteVendorsService } from '../favorite-vendors/Services/favorite-vendors.service';
+import { PromotionService } from '../vendor-promotions/Services/promotion.service';
+import { Promotion } from '../vendor-promotions/Model/promotion.model';
 
 @Component({
   selector: 'app-vendor-details',
@@ -25,6 +27,7 @@ export class VendorDetailsComponent implements OnInit {
   vendorServices: VendorServices[];
   isFavorite: boolean;
   isOrganizer: boolean;
+  promotions: Promotion[] = [];
 
   constructor(
     private auth: AuthService,
@@ -36,6 +39,7 @@ export class VendorDetailsComponent implements OnInit {
     private dialog: MatDialog,
     private emailService: EmailService,
     private favoriteVendorsService: FavoriteVendorsService,
+    private promotionService: PromotionService,
     ) {
   }
 
@@ -83,6 +87,10 @@ export class VendorDetailsComponent implements OnInit {
         this.vendor = vendor;
         this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
           this.vendorServices = response;
+        });
+
+        this.promotionService.getAllPromotions(vendorId).subscribe(response => {
+          this.promotions = response;
         });
       }, error => {
         console.log(error);
@@ -144,13 +152,11 @@ export class VendorDetailsComponent implements OnInit {
     });
   }
 
-  setUserRole()
-  {
+  setUserRole() {
     this.auth.user$.subscribe((user) => {
       if (user && user.role === 'ORGANIZER') {
         this.isOrganizer = true;
-      }
-      else{
+      } else {
         this.isOrganizer = false;
       }
     });

@@ -38,6 +38,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ReservationDialogComponent } from './shared/components/reservation-dialog/reservation-dialog.component';
+import { PromotionsComponent } from './vendor-promotions/promotions.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -64,6 +65,7 @@ const routes: Routes = [
     { path: 'reserve/:id', component: ReserveComponent },
     { path: 'vendor-metrics', component: VendorMetricsComponent },
     { path: 'vendor-events/:vendorId', component: VendorCalendarComponent },
+    { path: 'vendor-promotions', component: PromotionsComponent },
   ];
 
 @NgModule({
@@ -96,6 +98,7 @@ const routes: Routes = [
         [ReservationMetricsComponent],
         VendorCalendarComponent,
         ReservationDialogComponent,
+        PromotionsComponent,
     ],
 
     imports: [

@@ -179,33 +179,48 @@ export class ReserveComponent implements OnInit {
       status: "New",
       numberReserved: this.reservationForm.controls['numberReserved'].value,
       vendorService: null,
-      event: null,
+      evt: null,
       vendor: null
     };
-    
-    this.reservationService.createReservation(res).subscribe(response => {
-      this.ngOnInit();
-      this.reservationForm.reset();
-      this.snackbar.open('Your reservation has been requested.', 'Created', {
-        duration: 1500
-      });
 
-      const emailModel: EmailModel = this.emailService.createEmailModel('Reservation Requested', 'Reservation Requested', this.userName);
-      this.emailService.sendReservationEmailNotification(response.id, emailModel).subscribe(emailResponse => {
-        this.snackbar.open('Your vendor has been notified.', 'Notified', {
-          duration: 1500
-        });
-      }, error => {
-        this.snackbar.open('Your reservation has been requested, but the Vendor was unable to be notified via Email.', 'Failed', {
-          duration: 1500
-        });
-      });
+    let alreadyReserved = false;
+    this.reservationService.getReservationsByEventGuid(this.eventModel.guid).subscribe(response => {
+      if(response != null){
+        let existing =  response.find(x => x.vendorService.serviceType == this.vendorServiceModel.serviceType);
+        if(existing){
+          this.snackbar.open('You already have ' + this.vendorServiceModel.serviceType + ' reserved for this event. Choose another event or service.', 'Failed', {
+            duration: 3500
+          });
+        }
+        else{
 
-    }, error => {
-      console.log(error);
-      this.snackbar.open('Failed to create reservation request.', 'Failed', {
-        duration: 3500
-      });
+          this.reservationService.createReservation(res).subscribe(response => {
+            this.ngOnInit();
+            this.reservationForm.reset();
+            this.snackbar.open('Your reservation has been requested.', 'Created', {
+              duration: 1500
+            });
+      
+            const emailModel: EmailModel = this.emailService.createEmailModel('Reservation Requested', 'Reservation Requested', this.userName);
+            this.emailService.sendReservationEmailNotification(response.id, emailModel).subscribe(emailResponse => {
+              this.snackbar.open('Your vendor has been notified.', 'Notified', {
+                duration: 1500
+              });
+            }, error => {
+              this.snackbar.open('Your reservation has been requested, but the Vendor was unable to be notified via Email.', 'Failed', {
+                duration: 1500
+              });
+            });
+      
+          }, error => {
+            console.log(error);
+            this.snackbar.open('Failed to create reservation request.', 'Failed', {
+              duration: 3500
+            });
+          });
+
+        }
+      }
     });
   }
 
