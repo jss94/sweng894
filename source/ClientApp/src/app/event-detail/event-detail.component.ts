@@ -13,6 +13,7 @@ import { EmailModel } from '../send-email/Models/email.model';
 import { Reservation } from '../reservations/Models/reservation.model';
 import { ReservationsService } from '../reservations/Services/reservations.service';
 import { ReservationDialogComponent } from '../shared/components/reservation-dialog/reservation-dialog.component';
+import { Address } from 'src/app/shared/models/address.model';
 
 @Component({
   selector: 'app-event-detail',
@@ -34,12 +35,17 @@ export class EventDetailComponent implements OnInit {
 
   theEvent: OccEvent;
 
+  address: Address;
+
   invitationModel: InvitationModel;
 
   reservations: Reservation[];
 
+  loadedReservations: boolean;
+
   ngOnInit() {
     this.getEvent();
+    this.getReservations();
   }
 
   getEvent(): void {
@@ -47,11 +53,22 @@ export class EventDetailComponent implements OnInit {
     this.eventService.getEvent(guid).subscribe(event => this.theEvent = event);
   }
 
-  loadReservations(evnt: OccEvent) {
-    this.reservationService.getReservationsByEventGuid(evnt.guid).subscribe(res => {
+  getReservations(): void {
+    const guid = this.route.snapshot.paramMap.get('guid');
+    this.reservationService.getReservationsByEventGuid(guid).subscribe(res => {
       this.reservations = res;
-      this.showReservationsDialog(evnt);
+      this.loadedReservations = true;
+      if(this.reservations.length > 0){
+        let venue = this.reservations.find(x => x.vendorService.serviceType == 'Venue');
+        if(venue != null){
+          this.address = venue.vendor.address;
+        }
+      }
     });
+  }
+
+  loadReservations(evnt: OccEvent) {
+      this.showReservationsDialog(evnt);
   };
 
   showReservationsDialog(evnt: OccEvent) {
