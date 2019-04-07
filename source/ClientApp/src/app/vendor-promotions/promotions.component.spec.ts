@@ -11,10 +11,20 @@ import { PromotionService } from './Services/promotion.service';
 import { MockVendorService } from '../vendors/Services/mock-vendor.service';
 import { VendorService } from '../vendors/Services/vendor.service';
 import { DatePipe } from '@angular/common';
+import { FakeVendor } from '../shared/models/fake-vendor.model';
+import { of } from 'rxjs';
+import { FakeUser } from '../shared/models/fake-user.model';
+import { FakePromotions } from '../shared/models/fake-promotion.model';
 
 describe('PromotionsComponent', () => {
   let component: PromotionsComponent;
   let fixture: ComponentFixture<PromotionsComponent>;
+  let mockAuthService: AuthService;
+  let mockVendorService: VendorService;
+  let mockPromotionService: PromotionService;
+  // let fakeVendor: FakeVendor;
+  // let fakeUser: FakeUser;
+  // let fakePromotions: FakePromotions;
 
   class MockPromotionService {
     getAllPromotions() {
@@ -44,7 +54,11 @@ describe('PromotionsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PromotionsComponent);
+    mockAuthService = TestBed.get(AuthService);
+    mockVendorService = TestBed.get(VendorService);
+    mockPromotionService = TestBed.get(PromotionService);
     component = fixture.componentInstance;
+
   });
 
   it('should create', () => {
@@ -52,14 +66,17 @@ describe('PromotionsComponent', () => {
   });
 
   it('should get the promotions of the vendor', () => {
+    const fakeVendor = new FakeVendor();
+    const fakeUser = new FakeUser();
+    const fakePromotions = new FakePromotions();
 
     // act
     spyOn(component, 'setPromotions').and.callThrough();
-    /*
+
     spyOn(mockVendorService, 'getVendor').and.returnValue(of(fakeVendor));
     spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
-    spyOn(mockPromotionService, 'getAllPromotions').and.returnValue(of(fakePromotions));
-*/
+    spyOnProperty(mockAuthService, 'user$').and.returnValue(of(fakeUser));
+    spyOn(mockPromotionService, 'getAllPromotions').and.returnValue(of(fakePromotions.arr));
     // act
     fixture.detectChanges();
 
