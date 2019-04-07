@@ -34,7 +34,31 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
     capacity: new FormControl(''),
     location: new FormControl('', [ Validators.required ]),
     category: new FormControl('', [ Validators.required]),
+    proximity: new FormControl('', [ Validators.required]),
   });
+
+  proximities = [
+    {
+      value: '20',
+      viewValue: '15 miles'
+    },
+    {
+      value: '30',
+      viewValue: '30 miles'
+    },
+    {
+      value: '50',
+      viewValue: '50 miles'
+    },
+    {
+      value: '80',
+      viewValue: '80 miles'
+    },
+    {
+      value: '100',
+      viewValue: '100 miles'
+    },
+  ]
 
   svcs = [
     {
