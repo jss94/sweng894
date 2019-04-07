@@ -89,7 +89,7 @@ describe('UpdateVendorServicesComponent', () => {
   it('should populate vendor forms', () => {
     const FakeService = new FakeVendorServices();
     component.updateVendorServiceForm.controls['serviceFlatFee'].setValue(true);
-    spyOn(mockVendorServicesService, 'getVendorServiceById').and.returnValue(FakeService);
+    spyOn(mockVendorServicesService, 'getVendorServiceById').and.returnValue(of(FakeService));
 
     // act
     fixture.detectChanges();
