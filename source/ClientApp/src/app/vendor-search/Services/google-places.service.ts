@@ -20,8 +20,9 @@ export class GooglePlacesService {
         const locations = new Subject<google.maps.places.PlaceResult[]>();
         const service = new google.maps.places.PlacesService(map);
 
-        service.nearbySearch(request, function(results) {
+        service.nearbySearch(request, function(results, status, pagination) {
             locations.next(results);
+            console.log(pagination.nextPage())
         });
 
         locations.subscribe((places: google.maps.places.PlaceResult[]) => {
@@ -95,8 +96,10 @@ export class GooglePlacesService {
     getGeoLocationFromAddress(address: string) {
         const location = new Subject<{lat: number, lng: number}>();
         this.geocoder.geocode({address: address}, (results, status) => {
-            const geo = results[0].geometry.location;
-            location.next({lat: geo.lat(), lng: geo.lng()});
+            if (results) {
+                const geo = results[0].geometry.location;
+                location.next({lat: geo.lat(), lng: geo.lng()});
+            }
         });
 
         return location;

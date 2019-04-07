@@ -18,8 +18,8 @@ import { MatTabChangeEvent } from '@angular/material';
   styleUrls: [ './vendor-search.component.css']
 })
 export class VendorSearchComponent implements OnInit, AfterViewInit {
-  unclaimedServices: VendorServices[];
-  claimedServices: VendorServices[];
+  unclaimedServices: VendorServices[] = [];
+  claimedServices: VendorServices[] = [];
   isVendor: boolean;
   userFavorites: Set<number>;
   refresh: any;
@@ -34,7 +34,23 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
     capacity: new FormControl(''),
     location: new FormControl('', [ Validators.required ]),
     category: new FormControl('', [ Validators.required]),
+    proximity: new FormControl('', [ Validators.required]),
   });
+
+  proximities = [
+    {
+      value: '15',
+      viewValue: '15 miles'
+    },
+    {
+      value: '30',
+      viewValue: '30 miles'
+    },
+    {
+      value: '50',
+      viewValue: '50 miles'
+    },
+  ];
 
   svcs = [
     {
@@ -156,6 +172,10 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
     });
   }
   onSearchClicked() {
+
+    this.unclaimedServices = [];
+    this.claimedServices = [];
+
     this.saveSearchCriteria();
 
     this.searchUnclaimedVendors().subscribe(unclaimed => {
@@ -191,8 +211,15 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
       return isMatch;
     });
 
-    this.unclaimedServices = unclaimed;
-    this.claimedServices = claimed;
+    unclaimed.forEach(s => {
+      this.unclaimedServices.push(s);
+    });
+
+    console.log(this.unclaimedServices.length);
+
+    if (this.claimedServices.length === 0){
+      this.claimedServices = claimed;
+    }
   }
 
   searchClaimedVendors(ids: string[]): Observable<VendorServices[]> {
@@ -215,12 +242,12 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
   searchUnclaimedVendors(): Observable<VendorServices[]> {
     const services = new Subject<VendorServices[]>();
     const address = this.searchForm.controls['location'].value;
+    const proximity = +this.searchForm.controls['proximity'].value * 1609.344;
     this.googlePlacesService.getGeoLocationFromAddress(address)
     .subscribe((location: {lat: number, lng: number}) => {
-
         const request = {
           location: location,
-          radius: 15000,
+          radius: proximity.toString(),
           type: this.getCategory()
         };
 
