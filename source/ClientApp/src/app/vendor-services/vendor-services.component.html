@@ -1,7 +1,7 @@
 <div class="vendor-services-container">
 
   <h1>My Services</h1>
-
+  <h6 class="directions">As a vendor you can add and manage your services here.</h6>
     <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -112,12 +112,14 @@
         </div>
 
         <mat-action-row>
-        <button mat-button (click)="editClicked(service)">
+        <button mat-button (click)="editClicked(service)" matTooltip="Edit the Service">
             <mat-icon>edit</mat-icon>
+            Edit
         </button>
 
          <button mat-button (click)="onDelete(service)">
               <mat-icon>delete_forever</mat-icon>
+              Delete
           </button>
     </mat-action-row>
     

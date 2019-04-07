@@ -17,6 +17,8 @@ export class FavoriteVendorsComponent implements OnInit, OnChanges {
 
   public favoriteVendors: Vendor[];
 
+  trackByFn = (index: number, id: any) => index;
+
   constructor(
     private favoriteVendorService: FavoriteVendorsService,
     private auth: AuthService,
@@ -36,7 +38,8 @@ export class FavoriteVendorsComponent implements OnInit, OnChanges {
   }
 
   getFavoriteVendors(user: User) {
-    this.favoriteVendorService.getFavoriteVendors(user.userName).subscribe((response: Vendor[]) => {
+    this.favoriteVendorService.getFavoriteVendors(user.userName)
+    .subscribe((response: Vendor[]) => {
       this.favoriteVendors = response;
     });
   }
