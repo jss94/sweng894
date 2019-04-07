@@ -18,8 +18,8 @@ import { MatTabChangeEvent } from '@angular/material';
   styleUrls: [ './vendor-search.component.css']
 })
 export class VendorSearchComponent implements OnInit, AfterViewInit {
-  unclaimedServices: VendorServices[];
-  claimedServices: VendorServices[];
+  unclaimedServices: VendorServices[] = [];
+  claimedServices: VendorServices[] = [];
   isVendor: boolean;
   userFavorites: Set<number>;
   refresh: any;
