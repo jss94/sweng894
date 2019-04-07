@@ -39,7 +39,7 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
 
   proximities = [
     {
-      value: '20',
+      value: '15',
       viewValue: '15 miles'
     },
     {
@@ -50,15 +50,7 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
       value: '50',
       viewValue: '50 miles'
     },
-    {
-      value: '80',
-      viewValue: '80 miles'
-    },
-    {
-      value: '100',
-      viewValue: '100 miles'
-    },
-  ]
+  ];
 
   svcs = [
     {
@@ -180,6 +172,10 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
     });
   }
   onSearchClicked() {
+
+    this.unclaimedServices = [];
+    this.claimedServices = [];
+
     this.saveSearchCriteria();
 
     this.searchUnclaimedVendors().subscribe(unclaimed => {
@@ -215,8 +211,15 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
       return isMatch;
     });
 
-    this.unclaimedServices = unclaimed;
-    this.claimedServices = claimed;
+    unclaimed.forEach(s => {
+      this.unclaimedServices.push(s);
+    });
+
+    console.log(this.unclaimedServices.length);
+
+    if (this.claimedServices.length === 0){
+      this.claimedServices = claimed;
+    }
   }
 
   searchClaimedVendors(ids: string[]): Observable<VendorServices[]> {
@@ -239,12 +242,12 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
   searchUnclaimedVendors(): Observable<VendorServices[]> {
     const services = new Subject<VendorServices[]>();
     const address = this.searchForm.controls['location'].value;
+    const proximity = +this.searchForm.controls['proximity'].value * 1609.344;
     this.googlePlacesService.getGeoLocationFromAddress(address)
     .subscribe((location: {lat: number, lng: number}) => {
-
         const request = {
           location: location,
-          radius: 15000,
+          radius: proximity.toString(),
           type: this.getCategory()
         };
 

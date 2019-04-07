@@ -99,6 +99,6 @@ mat-form-field {
   max-width: 400px;
 }
 
-.address .mat-form-field{
+.address.mat-form-field{
   width:675px !important;
 }

@@ -14,8 +14,8 @@
       Use My Location
     </button>
 
-    <div class="address">
-      <mat-form-field appearance="outline">
+    <div>
+      <mat-form-field class="address" appearance="outline">
         <mat-label>My Address</mat-label>
         <input
           matInput
@@ -24,8 +24,7 @@
           formControlName="location"
           >
       </mat-form-field>
-    </div>
-    <div class="proximity">
+
         <mat-form-field appearance="outline" class="options">
           <mat-select formControlName="proximity" placeholder="Distance From" >
             <mat-option *ngFor="let dist of proximities" [value]="dist.value">
