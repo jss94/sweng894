@@ -1,20 +1,12 @@
-<div class="row" *ngIf="vendorIdLoaded | async">
-  <div class="left">
-    <div>
+<div class="page" *ngIf="vendorIdLoaded | async">
+  <h1>My Metrics</h1>
+  <h6 class="directions">As a vendor you can review your sales metrics here.</h6>
+  <div class="row">
       <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisReservationsLabel" [type]="reservationType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
-    </div>
-    <br>
-    <div>
-        <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
-      </div>
+      <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
   </div>
-  <div class="right">
-    <div>
+  <div class="row">
       <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [yAxisLabel]="yAxisReservationsLabel" [type]="reservationType" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
-    </div>
-    <br>
-    <div>
-        <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
-      </div>
+      <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisWeekdayLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="weekdayDateFormat"></app-reservation-metrics>
   </div>
 </div>

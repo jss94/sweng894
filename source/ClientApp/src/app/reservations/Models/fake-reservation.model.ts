@@ -2,6 +2,8 @@ import { Reservation } from './reservation.model';
 import { OccEvent } from '../../events/Models/occ-event.model';
 import { Vendor } from 'src/app/shared/models/vendor.model';
 import { VendorServices } from 'src/app/shared/models/vendor-services.model'
+import { FakeAddress } from 'src/app/shared/models/fake-address.model';
+import { Address } from 'src/app/shared/models/address.model';
 
 export class FakeReservation implements Reservation {
     serv: VendorServices = {
@@ -15,7 +17,7 @@ export class FakeReservation implements Reservation {
         unitsAvailable: 10,
         googleId: "id"
     };
-    evt: OccEvent = {
+    event: OccEvent = {
         userName: "Debs",
         name: "Fun Party",
         description: "Wooooo",
@@ -27,6 +29,7 @@ export class FakeReservation implements Reservation {
         name: "Zach",
         website: "Zach@Zach.com",
         phone: "111-111-1111",
+        address: new FakeAddress,
     };
     id = 1
     vendorId = 1
@@ -36,7 +39,7 @@ export class FakeReservation implements Reservation {
     status = "New"
     numberReserved = 20
     vendorService = this.serv
-    event = this.evt
+    evt = this.event
     vendor = this.ven
 }
 

@@ -8,6 +8,12 @@
     <div class="main">
       <h2>Event Details</h2>
       <p>{{theEvent.description}}</p>
+      <p *ngIf="address">
+        {{ address.street}}
+        <br>
+        {{ address.city}}, {{ address.state}} {{ address.zip}}
+      </p>
+      <p *ngIf="!address && loadedReservations">Venue has not been selected yet.</p>
       <div>
             <div>
                 <button mat-button [routerLink]="['/guests/', theEvent.guid]">
@@ -22,7 +28,7 @@
               </button>
             </div>
             <div>
-              <button mat-button (click)="loadReservations(theEvent)" >
+              <button mat-button [disabled]="reservations == null" (click)="loadReservations(theEvent)" >
                   <mat-icon>event_available</mat-icon>
                   View Reservations
             </button>

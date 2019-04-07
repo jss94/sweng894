@@ -10,7 +10,7 @@ export class MockVendorService {
         return of(null);
     }
 
-    getVendor(id: number): Observable<Vendor> {
+    getVendor(username: string): Observable<Vendor> {
         return of(null);
     }
 

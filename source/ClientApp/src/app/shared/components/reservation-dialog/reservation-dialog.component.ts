@@ -33,7 +33,6 @@ export class ReservationDialogComponent implements OnInit {
   }
 
   deleteReservation(reservation: Reservation) {
-    debugger
     this.reservationsService.deleteReservation(reservation).subscribe(() => {
       const index = this.data.reservations.indexOf(reservation, 0);
       if (index > -1) {

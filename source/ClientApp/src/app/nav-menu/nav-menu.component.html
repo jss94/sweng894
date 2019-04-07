@@ -33,7 +33,7 @@
         <span class="text-grey">{{ auth?.user?.name }}</span>
       </button>
       <mat-menu #userMenu="matMenu">
-        
+
         <button *ngIf="isVendor" mat-button [routerLink]='["/vendor-services"]'>
           <mat-icon>store</mat-icon>
           Services
@@ -44,6 +44,13 @@
         <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/vendor-metrics"]' [routerLinkActive]='["link-active"]'>
           <mat-icon>timeline</mat-icon>
           Metrics
+        </button>
+
+        <br>
+
+        <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/vendor-promotions"]' [routerLinkActive]='["link-active"]'>
+          <mat-icon>card_giftcard</mat-icon>
+          Promotions
         </button>
 
         <br>

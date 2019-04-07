@@ -11,9 +11,8 @@
       </button>
       <br>
         <button mat-button (click)="toggleFavorite()">
-          <mat-icon>favorite</mat-icon>
-          <span *ngIf="isFavorite == true">Remove from Favorites</span>
-          <span *ngIf="isFavorite == false">Add to Favorites</span>
+          <span *ngIf="isFavorite == true"><mat-icon>favorite</mat-icon> Remove from Favorites</span>
+          <span *ngIf="isFavorite == false"><mat-icon>favorite_border</mat-icon>Add to Favorites</span>
         </button>
         <br>
         <button mat-button (click)="loadCalendar()">
@@ -69,7 +68,9 @@
               <h6 *ngIf="!service.flatFee">Price per unit</h6>
             </div>
             <div><h6>{{service.price | currency:'USD':symbol:'1.2-2'}}</h6></div>
-            <div><h6 *ngIf="service.unitsAvailable != null">{{service.unitsAvailable}} units available</h6></div>
+            <div><h6 *ngIf="service.unitsAvailable != null && service.unitsAvailable != 0">{{service.unitsAvailable}} units available</h6>
+              <h6 *ngIf="service.unitsAvailable != null && service.unitsAvailable == 0">1 unit available</h6>
+            </div>
           </div>
 
           <div class="side">
@@ -83,6 +84,39 @@
         </div>
       </div>
    </div>
-</div>
 
+    <br>
+
+    <h2>Vendor Promotions</h2>
+    <div *ngIf="promotions.length == 0; then showMsgBlock else showPromotionsBlock"></div>
+
+    <ng-template #showPromotionsBlock>
+      <div class="item-container" *ngFor="let promotion of promotions">
+        <div class="promotion-item">
+
+          <div class="promotion-header">
+            <div class="promotion-icon">
+              <mat-icon>card_giftcard</mat-icon>
+            </div>
+            <div>
+              <div>
+                <h5>{{promotion.description}}</h5>
+              </div>
+              <div>
+                <div>Valid from {{promotion.startDate | date:'shortDate'}} to {{promotion.endDate | date:'shortDate'}}</div>
+                <div *ngIf="promotion.promotionType === 'percent'; then thenBlock else elseBlock"></div>
+                <ng-template #thenBlock>{{promotion.discount}}% Off!</ng-template>
+                <ng-template #elseBlock>${{promotion.discount}} Off!</ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #showMsgBlock>
+      <div>There are no promotions at this time</div>
+    </ng-template>
+
+  </div>
 </div>

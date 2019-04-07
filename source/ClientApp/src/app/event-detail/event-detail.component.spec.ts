@@ -17,6 +17,7 @@ import { InvitationService } from '../invitations/Services/invitation.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReservationsService } from '../reservations/Services/reservations.service';
 import { MockReservationService } from '../reservations/Services/mock-reservation.service';
+import { FakeReservation, FakeReservations } from '../reservations/Models/fake-reservation.model';
 
 describe('EventDetailComponent', () => {
   let component: EventDetailComponent;
@@ -30,14 +31,14 @@ describe('EventDetailComponent', () => {
       paramMap: {
         eventId: 'abc123',
         userName: 'd31e8b48-7309-4c83-9884-4142efdf7271',
-         get(param: string): string {
+        get(param: string): string {
           return 'mock';
         }
       }
     };
   }
 
-  class MockInvitationService {}
+  class MockInvitationService { }
 
   class MockEmailService {
     sendVendorQuestionEmail() {
@@ -64,12 +65,12 @@ describe('EventDetailComponent', () => {
         { provide: EventService, useClass: MockEventService },
         { provide: ActivatedRoute, useClass: MockActivedRoute },
         { provide: AuthService, useClass: MockAuthService },
-        {provide: ReservationsService, useClass: MockReservationService }
+        { provide: ReservationsService, useClass: MockReservationService }
 
       ],
-      schemas: [ NO_ERRORS_SCHEMA ]
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -99,4 +100,19 @@ describe('EventDetailComponent', () => {
     expect(component.theEvent.name).toEqual(fakeEvent.name);
 
   });
+
+  it('should get the reservations', () => {
+    // assign
+    const fakeReservations = new FakeReservations();
+    const fakeReservation = new FakeReservation();
+    spyOn(mockReservationService, 'getReservationsByEventGuid').and.returnValue(of(fakeReservations));
+
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(mockReservationService.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
+    expect(component.reservations[0]).toEqual(fakeReservations[0]);
+  });
+
 });
