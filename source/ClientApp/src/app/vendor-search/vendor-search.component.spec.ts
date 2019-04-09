@@ -19,8 +19,6 @@ import { GooglePlacesService } from './Services/google-places.service';
 import { MockGoogleMapsService } from '../google-map/Services/mock-google-maps.service';
 import { MockGooglePlacesService } from './Services/mock-google-places.service';
 import { GoogleMapsService } from '../google-map/Services/google-maps.service';
-import { Subject } from 'rxjs';
-import { VendorService } from '../vendors/Services/vendor.service';
 import { VendorServices } from '../shared/models/vendor-services.model';
 
 describe('VendorSearchComponent', () => {

@@ -28,8 +28,6 @@ export class ReservationsVendorComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private reservationService: ReservationsService,
-        private route: ActivatedRoute,
-        private router: Router,
         private snackbar: MatSnackBar,
         private vendorService: VendorService,
         ) {
@@ -79,14 +77,7 @@ export class ReservationsVendorComponent implements OnInit {
                     }
                 }
             }
-            this.setReservationCounts();
         });
-    }
-
-    setReservationCounts() {
-        this.newCount = this.newReservations.length;
-        this.changedCount = this.changedReservations.length;
-        this.approvedCount = this.approvedReservations.length;
     }
 
     onAcceptClicked(reservation: Reservation) {
