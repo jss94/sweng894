@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material';
 import { User } from '../shared/models/user.model';
 import { Vendor } from '../shared/models/vendor.model';
 import { Address } from '../shared/models/address.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class UserProfileComponent implements OnInit {
   vendor: Vendor;
 
   isVendor = false;
+  editable = true;
 
   profileForm = new FormGroup({
     name: new FormControl('', [ Validators.required ]),
@@ -34,11 +36,19 @@ export class UserProfileComponent implements OnInit {
     private auth: AuthService,
     private profile: UserProfileService,
     private snackbar: MatSnackBar,
+    private route: ActivatedRoute,
     ) {
   }
 
   ngOnInit() {
-    if (this.auth.user) {
+    const userId = this.route.snapshot.paramMap.get('userId');
+
+    if (userId) {
+      this.editable = false;
+      this.profile.getOrganizer(userId).subscribe((organizer) => {
+        this.setUserProfile(organizer);
+      });
+    } else if (this.auth.user) {
       this.setUserProfile(this.auth.user);
     } else {
       this.auth.user$.subscribe(user => {
@@ -83,6 +93,7 @@ export class UserProfileComponent implements OnInit {
       this.isVendor = false;
 
       this.profileForm.controls['name'].setValue(this.user.name);
+      if (this.editable === false) { this.profileForm.controls['name'].disable(); }
 
       this.profileForm.controls['companyName'].disable();
       this.profileForm.controls['companyWebsite'].disable();

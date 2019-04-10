@@ -4,11 +4,12 @@
 
       <div class="person-logo">
         <img  src="./assets/img/baseline-person-24px.svg" alt="User">
-        <button mat-button [routerLink]='["/deactivate-user"]' [routerLinkActive]='["link-active"]'>
-          <mat-icon>warning</mat-icon>
-          Deactivate {{ user?.userName }}
-        </button>
-      </div>
+        <div *ngIf="editable">
+          <button mat-button [routerLink]='["/deactivate-user"]' [routerLinkActive]='["link-active"]'>
+            <mat-icon>warning</mat-icon>
+            Deactivate {{ user?.userName }}
+          </button>
+        </div>
       <div>
         <form class="form" [formGroup]="profileForm" (ngSubmit)="onUpdateUser()">
           <div>

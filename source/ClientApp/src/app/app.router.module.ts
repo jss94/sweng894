@@ -46,6 +46,7 @@ const routes: Routes = [
     { path: 'admin', component: UsersComponent },
     { path: 'guest-entry', component: GuestEntryComponent},
     { path: 'user-profile', component: UserProfileComponent },
+    { path: 'user-profile/:userId', component: UserProfileComponent },
     { path: 'learn-more', component: LearnMoreComponent},
     { path: 'search-vendors', component: VendorSearchComponent },
     { path: 'events', component: EventsComponent },
