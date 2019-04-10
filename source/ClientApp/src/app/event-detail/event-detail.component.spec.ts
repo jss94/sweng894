@@ -4,7 +4,7 @@ import { EventService } from '../events/Services/event.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MockEventService } from '../events/Services/mock-event.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FakeOccEvent, FakeOccEvents } from '../events/Models/fake-occ-event.model';
+import { FakeOccEvent } from '../events/Models/fake-occ-event.model';
 import { of } from 'rxjs/internal/observable/of';
 import { AuthService } from '../shared/services/auth.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
@@ -113,6 +113,21 @@ describe('EventDetailComponent', () => {
     // assert
     expect(mockReservationService.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
     expect(component.reservations[0]).toEqual(fakeReservations[0]);
+  });
+
+  describe('getReservations()', () => {
+    it ('should get reservations', () => {
+      // arrange
+      const fakeReservations = new FakeReservations().arr;
+      spyOn(mockReservationService, 'getReservationsByEventGuid').and.returnValue(of(fakeReservations));
+
+      // act
+      component.getReservations();
+
+      // assert
+      expect(mockReservationService.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
+
+    });
   });
 
 });

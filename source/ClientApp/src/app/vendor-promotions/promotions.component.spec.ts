@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from '../shared/services/auth.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
 import { MatSnackBar, MatExpansionModule, MatDatepickerModule, MatSelectModule, MatIconModule, MatNativeDateModule, MatInputModule } from '@angular/material';
 import { MockMatSnackBar } from '../deactivate-user/deactivate-user.component.spec';
-import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { PromotionsComponent } from './promotions.component';
 import { PromotionService } from './Services/promotion.service';
 import { MockVendorService } from '../vendors/Services/mock-vendor.service';

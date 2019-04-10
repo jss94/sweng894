@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FakeOccEvents, FakeOccEvent } from '../../events/Models/fake-occ-event.model';
 import { FakeUser } from '../../shared/models/fake-user.model';
 import { of } from 'rxjs/internal/observable/of';
@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MockMatSnackBar, MockMatDialog } from 'src/app/deactivate-user/deactivate-user.component.spec';
+import { MockMatDialog } from 'src/app/deactivate-user/deactivate-user.component.spec';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { EmailService } from 'src/app/send-email/Services/email.service';
 import { MockEventService } from 'src/app/events/Services/mock-event.service';
@@ -16,27 +16,17 @@ import { EventService } from 'src/app/events/Services/event.service';
 import { MockGuestsService } from 'src/app/guests/Services/mock-guests.service';
 import { GuestsService } from 'src/app/guests/Services/guests.service';
 import { ReservationsService } from '../Services/reservations.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EmailModel } from 'src/app/send-email/Models/email.model';
 import { EmailAddress } from 'src/app/send-email/Models/email.address.model';
-import { Router, ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
-import { VendorService } from 'src/app/vendors/Services/vendor.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { VendorServices } from 'src/app/shared/models/vendor-services.model';
-import { Vendor } from 'src/app/shared/models/vendor.model';
-import { Observable } from 'rxjs';
-import { MockVendorService } from 'src/app/vendors/Services/mock-vendor.service';
-import { FakeVendorServices } from 'src/app/shared/models/fake-vendor-services.model';
 import { VendorServicesService } from 'src/app/vendor-services/Services/vendor-services.service';
-import { MockVendorSearchService } from 'src/app/vendor-search/Services/mock-vendor-search.service';
 import { MockVendorServicesService } from 'src/app/vendor-services/Services/mock-vendor-services-service';
 import { FakeGuests } from 'src/app/guests/Models/fake.guest.model';
-import { FakeReservation } from '../Models/fake-reservation.model';
 import { MockReservationService } from '../Services/mock-reservation.service';
 import { Reservation } from '../Models/reservation.model';
 import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 import { EmailContent } from 'src/app/send-email/Models/email.content.model';
-import { compileComponentFromMetadata } from '@angular/compiler';
-import { componentNeedsResolution } from '@angular/core/src/metadata/resource_loading';
 
 
 describe('ReserveComponent', () => {
@@ -45,7 +35,6 @@ describe('ReserveComponent', () => {
   let mockAuthService: AuthService;
   let mockReservationSvc: ReservationsService;
   let mockVendorServicesSvc: VendorServicesService;
-  let location: Location;
   let mockEventService: EventService;
   let mockEmailService: EmailService;
   let mockGuestService: GuestsService;

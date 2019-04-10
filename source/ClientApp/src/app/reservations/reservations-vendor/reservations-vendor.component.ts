@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../Models/reservation.model';
 import { ReservationsService } from '../Services/reservations.service';
 import { AuthService } from '../../shared/services/auth.service';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Vendor } from 'src/app/shared/models/vendor.model';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
@@ -38,7 +37,8 @@ export class ReservationsVendorComponent implements OnInit {
         this.reservations = [];
         this.newReservations = [];
         this.changedReservations = [];
-        this.approvedReservations =[];
+        this.approvedReservations = [];
+
         if (this.authService.user) {
             this.setOccasionsVendor(this.authService.user);
         } else {
@@ -57,7 +57,8 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     createReservationLists() {
-        this.reservationService.getReservationByVendorId(this.occasionVendor.id).subscribe((results) => {
+        this.reservationService.getReservationByVendorId(this.occasionVendor.id)
+        .subscribe((results) => {
             for (const result of results) {
                 const evt = result.evt;
                 const vs = result.vendorService;

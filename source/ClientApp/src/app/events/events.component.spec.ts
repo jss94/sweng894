@@ -9,11 +9,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { GuestsComponent } from '../guests/guests.component';
 import { MatSnackBar, MatDialog } from '@angular/material';
-import { MockMatDialog } from '../reactivate-user/reactivate-user.component.spec';
-import { EmailService } from '../send-email/Services/email.service';
 import { MockAuthService } from '../shared/services/mock-auth.service';
-import { InvitationService } from '../invitations/Services/invitation.service';
-import { FakeOccEvents } from './Models/fake-occ-event.model';
+import { FakeOccEvents, FakeOccEvent } from './Models/fake-occ-event.model';
 import { FakeUser } from '../shared/models/fake-user.model';
 import { of } from 'rxjs/internal/observable/of';
 import { DatePipe } from '@angular/common';
@@ -22,7 +19,21 @@ describe('EventsComponent', () => {
   let component: EventsComponent;
   let fixture: ComponentFixture<EventsComponent>;
   let mockEventService: EventService;
+  let mockAuthService: AuthService;
+  let mockDialog: MatDialog;
+  let mockSnackbar: MatSnackBar;
 
+  class MockMatDialogRef {
+    afterClosed() {
+      return of({});
+    }
+  }
+
+  class MockMatDialog {
+    open() {
+      return new MockMatDialogRef();
+    }
+  }
   class MockMatSnackBar {
     open() {}
   }
@@ -39,7 +50,7 @@ describe('EventsComponent', () => {
         NoopAnimationsModule,
       ],
       providers: [
-        { provide: MatDialog, userClass: MockMatDialog},
+        { provide: MatDialog, useClass: MockMatDialog},
         { provide: MatSnackBar, useClass: MockMatSnackBar },
         { provide: EventService, useClass: MockEventService },
         { provide: AuthService, useClass: MockAuthService },
@@ -52,6 +63,10 @@ describe('EventsComponent', () => {
 
   beforeEach(() => {
     mockEventService = TestBed.get(EventService);
+    mockAuthService = TestBed.get(AuthService);
+    mockDialog = TestBed.get(MatDialog);
+    mockSnackbar = TestBed.get(MatSnackBar);
+
     fixture = TestBed.createComponent(EventsComponent);
     component = fixture.componentInstance;
   });
@@ -60,8 +75,22 @@ describe('EventsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display all events', fakeAsync(() => {
+  it('should display all events for user$', fakeAsync(() => {
     // arrange
+    spyOnProperty(mockAuthService, 'user').and.returnValue(undefined);
+    spyOn(component, 'setEvents').and.callThrough();
+
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(component.setEvents).toHaveBeenCalledTimes(1);
+  }));
+
+  it('should display all events for user', fakeAsync(() => {
+    // arrange
+    const fakeUser = new FakeUser();
+    spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
     spyOn(component, 'setEvents').and.callThrough();
 
     // act
@@ -86,4 +115,64 @@ describe('EventsComponent', () => {
       expect(component.events[2].description).toEqual(fakeEvents[2].description);
     });
   });
+
+  describe('onCreate()', () => {
+    it('should create new event', fakeAsync(() => {
+      // arrange
+      spyOn(mockEventService, 'createNewEvent').and.returnValue(of(true));
+      spyOn(component, 'ngOnInit');;
+      spyOn(component, 'createDateWithTime');
+
+      // act
+      component.onCreate();
+
+      // assign
+      expect(mockEventService.createNewEvent).toHaveBeenCalledTimes(1);
+      expect(component.ngOnInit).toHaveBeenCalledTimes(1);
+      expect(component.createDateWithTime).toHaveBeenCalledTimes(1);
+    }));
+  });
+
+  describe('updateEvent()', () => {
+    it ('should update event', () => {
+      // arrange
+      const fakeOccEvent = new FakeOccEvent();
+      spyOn(mockEventService, 'updateEvent').and.returnValue(of(true));
+      spyOn(component, 'ngOnInit');
+
+      // act
+      component.updateEvent('name', 'description', new Date(), fakeOccEvent);
+
+      // assert
+      expect(mockEventService.updateEvent).toHaveBeenCalledTimes(1);
+      expect(component.ngOnInit).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  // describe('onEditEventClicked()', () => {
+  //   it ('should display popup', () => {
+  //     // arrange
+  //     spyOn(mockDialog, 'open').and.returnValue(new MockMatDialogRef());
+
+  //     // act
+  //     component.onEditEventClicked(new FakeOccEvent());
+
+  //     // assert
+  //     expect(mockDialog).toHaveBeenCalledTimes(1);
+  //   });
+  // });
+
+  // describe('deleteEvent', () => {
+  //   it ('should delete event', () => {
+  //     // arrange
+  //     spyOn(mockEventService, 'deleteEvent').and.returnValue(of(true));
+  //     spyOn(mockSnackbar, 'open').and.returnValue(of(true));
+  //     // act
+  //     component.deleteEvent(new FakeOccEvent());
+
+  //     // assert
+  //     expect(mockEventService.deleteEvent).toHaveBeenCalledTimes(1);
+  //     expect(mockSnackbar.open).toHaveBeenCalledTimes(1);
+  //   });
+  // });
 });
