@@ -7,7 +7,7 @@ export class FakeVendorServices implements VendorServices {
     serviceDescription = 'some description for the fake service';
     flatFee = true;
     price = 10000;
-    unitsAvailable = undefined;
+    unitsAvailable = 100;
     googleId = 'asdfghjkl';
 
 }

@@ -30,7 +30,6 @@ export class ReservationsVendorComponent implements OnInit {
         private snackbar: MatSnackBar,
         private vendorService: VendorService,
         ) {
-
     }
 
     ngOnInit() {

@@ -27,6 +27,8 @@ import { MockReservationService } from '../Services/mock-reservation.service';
 import { Reservation } from '../Models/reservation.model';
 import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 import { EmailContent } from 'src/app/send-email/Models/email.content.model';
+import { FakeReservation, FakeReservations } from '../Models/fake-reservation.model';
+import { FakeVendorServices } from 'src/app/shared/models/fake-vendor-services.model';
 
 
 describe('ReserveComponent', () => {
@@ -47,34 +49,6 @@ describe('ReserveComponent', () => {
   class MockEmailService {
     createEmailModel() { }
     sendReservationEmailNotification() { }
-  }
-
-  const fakeService: VendorServices = {
-    id: 1,
-    vendorId: 1,
-    serviceType: 'Catering',
-    serviceName: 'Fake catering',
-    serviceDescription: 'Fake catering description',
-    flatFee: false,
-    price: 20.00,
-    unitsAvailable: 10,
-    googleId: ''
-  };
-
-  const fakeEvent = new FakeOccEvent();
-  const fakeVendor = new FakeVendor();
-
-  const fakeReservation: Reservation = {
-    id: 1,
-    userName: 'fakeuser@example.com',
-    eventId: '1234',
-    vendorId: 1,
-    vendorServiceId: 1,
-    status: 'New',
-    numberReserved: 10,
-    vendorService: fakeService,
-    evt: fakeEvent,
-    vendor: fakeVendor
   }
 
   fakeEmailAddress = new EmailAddress();
@@ -144,39 +118,63 @@ describe('ReserveComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
+
   describe('onCreate', () => {
-    it('should create reservation', () => {
-      // assign
-      component.eventModel = fakeEvent;
-      component.vendorServiceModel = fakeService;
-      component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
-      component.reservationForm.controls['numberReserved'].setValue(fakeReservation.numberReserved);
+    // it('should create reservation', () => {
+    //   // assign
+    //   const fakeReservations = new FakeReservations().arr;
+    //   const fakeVendorService = new FakeVendorServices();
+    //   const fakeReservation = new FakeReservation();
 
-      spyOn(mockEmailService, 'createEmailModel').and.returnValue(of(fakeEmail));
-      spyOn(mockEmailService, 'sendReservationEmailNotification').and.returnValue(of('202'));
-      spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
-      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(null));
-      spyOn(mockReservationSvc, 'createReservation').and.returnValue(of(fakeReservation));
-      spyOn(component.reservationForm, 'reset').and.callThrough();
-      this.existing = null;
+    //   component.eventModel = new FakeOccEvent();
+    //   component.vendorServiceModel = new FakeVendorServices();
+    //   component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
+    //   component.reservationForm.controls['numberReserved'].setValue(fakeReservations[0].numberReserved);
 
-      const fakeUser = new FakeUser();
-      spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
-      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
+    //   spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(fakeReservations));
 
-      // act
-      component.onCreate();
+    //   spyOn(mockEmailService, 'createEmailModel').and.returnValue(of(fakeEmail));
+    //   spyOn(mockEmailService, 'sendReservationEmailNotification').and.returnValue(of('202'));
+    //   spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeVendorService));
 
-      // assert
-      expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
-    });
+    //   spyOn(mockReservationSvc, 'createReservation').and.returnValue(of(fakeReservation));
+    //   spyOn(component.reservationForm, 'reset').and.callFake(() => {});
+    //   spyOn(component, 'ngOnInit').and.callFake(() => {});
+
+    //   // act
+    //   component.onCreate();
+
+    //   // assert
+    //   expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
+    // });
+
+    // it('should not create reservation', () => {
+    //   // assign
+    //   const fakeEvent = new FakeOccEvent;
+    //   const fakeService = new FakeVendorServices();
+    //   const fakeReservation = new FakeReservation();
+
+    //   component.eventModel = fakeEvent;
+    //   component.vendorServiceModel = fakeService;
+    //   component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
+    //   component.reservationForm.controls['numberReserved'].setValue(fakeReservation.numberReserved);
+
+    //   spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(undefined));
+
+    //   // act
+    //   component.onCreate();
+
+    //   // assert
+    //   expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
+    // });
   });
 
-  describe('setUser() 1', () => {
+  describe('setUser()', () => {
     it('should set the current user', () => {
-      //assign
+      // assign
       const fakeUser = new FakeUser();
+      const fakeEvent = new FakeOccEvent();
+
       spyOnProperty(mockAuthService, 'user').and.returnValue(fakeUser);
       spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
 
@@ -186,18 +184,18 @@ describe('ReserveComponent', () => {
       // assert
       expect(component.userName).toEqual(fakeUser.userName);
     });
-  });
 
-  describe('setUser() 2', () => {
-    it('should set the current user', () => {
-      //assign
+    it('should set the current user$', () => {
+      // assign
       const fakeUser = new FakeUser();
+      const fakeEvent = new FakeOccEvent();
+
       spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
       spyOnProperty(mockAuthService, 'user').and.returnValue(null);
       spyOn(mockAuthService, 'user$').and.returnValue(of(fakeUser));
    
       // act
-      fixture.detectChanges();
+      component.setUser();
 
       // assert
       expect(component.userName).toEqual(fakeUser.userName);
@@ -207,11 +205,14 @@ describe('ReserveComponent', () => {
   describe('setVendorServices()', () => {
     it('should set vendor services', () => {
       // assign
+      const fakeService = new FakeVendorServices();
+      const fakeEvent = new FakeOccEvent();
+
       spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
       spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
 
       // act
-      fixture.detectChanges();
+      component.setVendorService();
 
       // assert
       expect(mockVendorServicesSvc.getVendorServiceById).toHaveBeenCalledTimes(1);
@@ -219,106 +220,108 @@ describe('ReserveComponent', () => {
     });
   });
 
-  describe('getUserEvents() 1', () => {
-    it('should get user events', () => {
+  describe('getUserEvents()', () => {
+    it('should get and set user events', () => {
       // assign
-      const fakeEvents = [ fakeEvent ];
-      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
-      
+      const fakeEvent = [ new FakeOccEvent() ];
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvent));
+
       // act
-      fixture.detectChanges();
+      component.getUserEvents();
 
       // assert
       expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
-      expect(component.userEvents.length).toEqual(1);
-      expect(component.eventModel).toEqual(fakeEvent);
+      expect(component.userEvents).toBeDefined();
+      expect(component.userEvents.length).toEqual(fakeEvent.length);
+      expect(component.eventModel).toEqual(fakeEvent[0]);
     });
-  });
 
-  describe('getUserEvents() 2', () => {
     it('should get user events', () => {
       // assign
-      const fakeEvents = [ fakeEvent, fakeEvent, fakeEvent ];
+      const fakeEvents = new FakeOccEvents().arr;
       spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
-      spyOn(mockEventService, 'getEvent').and.returnValue(of(fakeEvent));
+      spyOn(mockEventService, 'getEvent').and.returnValue(of(fakeEvents[0]));
 
       // act
-      fixture.detectChanges();
+      component.getUserEvents();
 
       // assert
       expect(mockEventService.getEvents).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('subscribeCost() 1', () => {
+  describe('subscribeCost()', () => {
     it('should subscribe to costs', () => {
       // assign
-      const fakeEvents = [ fakeEvent ];
+      const fakeEvents = new FakeOccEvents().arr;
+      const fakeService = new FakeVendorServices();
       spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
       spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
       component.reservationForm.controls['numberReserved'].setValue(2)
       
       spyOn(component, 'subscribeCost').and.returnValue(of({}));
       
-      //act
-      fixture.detectChanges();
+      // act
+      component.subscribeCost();
       
-      //assert
+      // assert
       expect(component.subscribeCost).toHaveBeenCalledTimes(1);
     });
-  });
-  
-  describe('subscribeCost() 2', () => {
+
     it('should subscribe to costs', () => {
       // assign
-      const fakeEvents = [ fakeEvent ];
+      const fakeEvents = new FakeOccEvents().arr;
+      const fakeService = new FakeVendorServices();
+
       spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
       spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeService));
       
       component.reservationForm.controls['numberReserved'].setValue(null)
       spyOn(component, 'subscribeCost').and.returnValue(of({}));
       
-      //act
+      // act
       fixture.detectChanges();
       
-      //assert
+      // assert
       expect(component.subscribeCost).toHaveBeenCalledTimes(1);
       expect(component.cost).toEqual(0);
     });
   });
 
-  describe('getNumGuests() 1', () => {
+  describe('getNumGuests()', () => {
     it('should get num guests', () => {
       // assign
-      const fakeEvents = [ fakeEvent ];
-      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      const fakeEvents = new FakeOccEvents().arr;
+      const fakeService = new FakeVendorServices();
       const fakeGuests = new FakeGuests().arr;
+
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
       spyOn(mockGuestService, 'getGuests').and.returnValue(of(fakeGuests));
       component.vendorServiceModel = fakeService;
       
-      //act
-      component.getNumGuests(fakeEvent.eventId);
+      // act
+      component.getNumGuests(fakeEvents[0].eventId);
       
-      //assert
+      // assert
       expect(component.eventGuestNum).toEqual(3);
     });
-  });
 
-  describe('getNumGuests() 2', () => {
     it('should get num guests', () => {
       // assign
-      const fakeEvents = [ fakeEvent ];
-      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
+      const fakeEvents = new FakeOccEvents().arr;
       const fakeGuests = new FakeGuests().arr;
+      const fakeService = new FakeVendorServices();
+
+      spyOn(mockEventService, 'getEvents').and.returnValue(of(fakeEvents));
       spyOn(mockGuestService, 'getGuests').and.returnValue(of(fakeGuests));
       component.vendorServiceModel = fakeService;
       component.vendorServiceModel.flatFee = false;
       component.vendorServiceModel.unitsAvailable = 2;
       
-      //act
-      component.getNumGuests(fakeEvent.eventId);
+      // act
+      component.getNumGuests(fakeEvents[0].eventId);
       
-      //assert
+      // assert
       expect(component.reservationForm.controls["numberReserved"].value).toEqual(2);
       expect(component.eventGuestNum).toEqual(3);
     });
@@ -327,15 +330,17 @@ describe('ReserveComponent', () => {
   describe('getMaxNumberErrorMessage()', () => {
     it('should get max number error', () => {
       // assign
+      const fakeService = new FakeVendorServices();
       component.reservationForm.controls['numberReserved'].setValue(200);
       component.vendorServiceModel = fakeService;
       
+      // act
+      component.getMaxNumberErrorMessage();
+
+      // assert
       expect(component.getMaxNumberErrorMessage()).toEqual("Must be " + component.vendorServiceModel.unitsAvailable + " or less");
     });
   });
 
 
-  
-  
- 
 });

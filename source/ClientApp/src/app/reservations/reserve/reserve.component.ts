@@ -90,12 +90,12 @@ export class ReserveComponent implements OnInit {
 
   getUserEvents() {
     this.eventService.getEvents(this.userName).subscribe(response => {
-      this.userEvents = response
-      if (this.userEvents.length == 1) {
+      this.userEvents = response;
+      if (response && this.userEvents.length === 1) {
         this.eventModel = this.userEvents[0];
-        this.reservationForm.controls['eventList'].setValue(this.eventModel.guid);    
+        this.reservationForm.controls['eventList'].setValue(this.eventModel.guid);
       }
-      if (this.userEvents.length > 1) {
+      if (response && this.userEvents.length > 1) {
         this.subscribeEventChoice();
       }
     });
@@ -105,7 +105,7 @@ export class ReserveComponent implements OnInit {
   getNumGuests(value) {
     let message = ""
     this.guestService.getGuests(value).subscribe(guestresponse => {
-      if (guestresponse != null) {
+      if (guestresponse) {
         this.eventGuestNum = guestresponse.length
         if (this.vendorServiceModel.flatFee != true && this.vendorServiceModel.unitsAvailable < this.eventGuestNum) {
           this.reservationForm.controls["numberReserved"].setValue(this.vendorServiceModel.unitsAvailable)
@@ -170,53 +170,44 @@ export class ReserveComponent implements OnInit {
   }
 
   onCreate(): void {
-    const res: Reservation = {
+    const reservationToCreate: Reservation = {
       id: null,
       userName: this.userName,
       eventId: this.eventModel.guid,
       vendorId: this.vendorServiceModel.vendorId,
       vendorServiceId: this.vendorServiceModel.id,
-      status: "New",
+      status: 'New',
       numberReserved: this.reservationForm.controls['numberReserved'].value,
       vendorService: null,
       evt: null,
       vendor: null
     };
 
-    let alreadyReserved = false;
-    this.reservationService.getReservationsByEventGuid(this.eventModel.guid).subscribe(response => {
-      if(response != null){
-        let existing =  response.find(x => x.vendorService.serviceType == this.vendorServiceModel.serviceType);
-        if(existing){
-          this.snackbar.open('You already have ' + this.vendorServiceModel.serviceType + ' reserved for this event. Choose another event or service.', 'Failed', {
-            duration: 3500
-          });
-        }
-        else{
-
-          this.reservationService.createReservation(res).subscribe(response => {
-            this.ngOnInit();
+    this.reservationService.getReservationsByEventGuid(this.eventModel.guid).subscribe(reservations => {
+      if (reservations) {
+        const existing = reservations.find(x => x.vendorService.serviceType === this.vendorServiceModel.serviceType);
+        if (existing) {
+          const serviceType = this.vendorServiceModel.serviceType;
+          const msgFailed = 'You already have ' + serviceType + ' reserved for this event. Choose another event or service.';
+          this.snackbar.open(msgFailed, 'Failed', { duration: 3500 });
+        } else {
+          this.reservationService.createReservation(reservationToCreate).subscribe(response => {
+            // this.ngOnInit();
             this.reservationForm.reset();
-            this.snackbar.open('Your reservation has been requested.', 'Created', {
-              duration: 1500
-            });
-      
-            const emailModel: EmailModel = this.emailService.createEmailModel('Reservation Requested', 'Reservation Requested', this.userName);
-            this.emailService.sendReservationEmailNotification(response.id, emailModel).subscribe(emailResponse => {
-              this.snackbar.open('Your vendor has been notified.', 'Notified', {
-                duration: 1500
-              });
+            const msgCreated = 'Your reservation has been requested.';
+            this.snackbar.open(msgCreated, 'Created', { duration: 1500 });
+
+            const emailModel = this.emailService.createEmailModel('Reservation Requested', 'Reservation Requested', this.userName);
+            this.emailService.sendReservationEmailNotification(response.id, emailModel).subscribe(() => {
+              const msgNotified = 'Your vendor has been notified.';
+              this.snackbar.open(msgNotified, 'Notified', { duration: 1500 });
             }, error => {
-              this.snackbar.open('Your reservation has been requested, but the Vendor was unable to be notified via Email.', 'Failed', {
-                duration: 1500
-              });
+              const msgFailed = 'Your reservation has been requested, but the Vendor was unable to be notified via Email.';
+              this.snackbar.open(msgFailed, 'Failed', { duration: 1500 });
             });
-      
           }, error => {
-            console.log(error);
-            this.snackbar.open('Failed to create reservation request.', 'Failed', {
-              duration: 3500
-            });
+            const msgFailed = 'Failed to create reservation request.';
+            this.snackbar.open(msgFailed, 'Failed', { duration: 3500 });
           });
 
         }
@@ -225,12 +216,11 @@ export class ReserveComponent implements OnInit {
   }
 
   getMaxNumberErrorMessage() {
-    let val = this.reservationForm.controls['numberReserved'].value;
-    if (val == '0') {
-      return "Must be greater than 0"
-    }
-    else if (val > this.vendorServiceModel.unitsAvailable) {
-      return "Must be " + this.vendorServiceModel.unitsAvailable + " or less";
+    const val = this.reservationForm.controls['numberReserved'].value;
+    if (val === '0') {
+      return 'Must be greater than 0';
+    } else if (val > this.vendorServiceModel.unitsAvailable) {
+      return 'Must be ' + this.vendorServiceModel.unitsAvailable + ' or less';
     }
   }
 

@@ -150,6 +150,8 @@ describe('VendorSearchComponent', () => {
         expect(component.searchUnclaimedVendors).toHaveBeenCalledTimes(1);
         expect(component.searchClaimedVendors).toHaveBeenCalledTimes(1);
         expect(component.removeClaimedVendors).toHaveBeenCalledTimes(1);
+        expect(component.claimedServices).toBeDefined();
+        expect(component.unclaimedServices).toBeDefined();
         expect(component.claimedServices.length).toBe(3);
         expect(component.unclaimedServices.length).toBe(1);
     }));

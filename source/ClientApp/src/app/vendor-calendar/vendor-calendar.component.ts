@@ -121,7 +121,7 @@ export class VendorCalendarComponent implements OnInit {
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       this.viewDate = date;
-      if (
+      if ( events &&
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
         events.length === 0
       ) {

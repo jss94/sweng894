@@ -73,6 +73,8 @@ describe('EmailService', () => {
       const createdEmailModel = sut.createEmailModel('mySubject', 'myMessageContent', 'fromMe@me.com');
 
       // assert
+      expect(createdEmailModel).toBeDefined();
+      expect(createdEmailModel.content).toBeDefined();
       expect(createdEmailModel.content.length).toEqual(1);
       expect(createdEmailModel.content[0].type).toEqual('text/html');
       expect(createdEmailModel.content[0].value).toEqual('myMessageContent');
@@ -81,6 +83,8 @@ describe('EmailService', () => {
       expect(createdEmailModel.personalizations.length).toEqual(1);
       expect(createdEmailModel.personalizations[0].to.length).toEqual(1);
       // the to is looked up on the server, this is just a place holder.
+      expect(createdEmailModel.personalizations).toBeDefined();
+      expect(createdEmailModel.personalizations[0].to).toBeDefined();
       expect(createdEmailModel.personalizations[0].to[0].email).toEqual('fromMe@me.com');
       done();
 
