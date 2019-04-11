@@ -19,6 +19,7 @@ import { FakeVendor } from 'src/app/shared/models/fake-vendor.model';
 import { FakeReservations, FakeReservation } from '../Models/fake-reservation.model';
 import { MockReservationService } from '../Services/mock-reservation.service';
 import { FakeUser } from 'src/app/shared/models/fake-user.model';
+import { truncate } from 'fs';
 
 describe('ReservationsVendorComponent', () => {
     let component: ReservationsVendorComponent;
@@ -77,7 +78,7 @@ describe('ReservationsVendorComponent', () => {
         // assign
         const fakeVendor = new FakeVendor();
         spyOn(mockVendorService, 'getVendor').and.returnValue(of(fakeVendor));
-        spyOn(component, 'createReservationLists').and.callThrough();
+        spyOn(component, 'createReservationLists').and.callFake(() => {});
 
         // act 
         fixture.detectChanges();
@@ -89,19 +90,54 @@ describe('ReservationsVendorComponent', () => {
       });
     });
 
-    // describe('createReservationLists()', () => {
-    //   it('should set reservations', () => {
-    //     // assign
-    //     const fakeReservations = new FakeReservations().arr;
-    //     spyOn(mockReservationsService, 'getReservationByVendorId').and.returnValue(of(fakeReservations));
-    //     component.occasionVendor = new FakeVendor();
+    describe('createReservationLists()', () => {
+      it('should set reservations', () => {
+        // assign
+        const fakeReservations = new FakeReservations().arr;
+        spyOn(mockReservationsService, 'getReservationByVendorId').and.returnValue(of(fakeReservations));
+        component.occasionVendor = new FakeVendor();
 
-    //     // act
-    //     component.createReservationLists();
+        // act
+        component.createReservationLists();
 
-    //     // assert
-    //     expect(mockReservationsService.getReservationByVendorId).toHaveBeenCalledTimes(1);
-    //     expect(component.reservations).toEqual(fakeReservations);
-    //   });
-    // });
+        // assert
+        expect(mockReservationsService.getReservationByVendorId).toHaveBeenCalledTimes(1);
+        expect(component.reservations).toEqual(fakeReservations);
+      });
+    });
+
+    describe('onAcceptClicked()', () => {
+      it('should accept reservation', () => {
+        // assign
+        const fakeReservations = new FakeReservations().arr;
+        spyOn(mockReservationsService, 'updateReservation').and.returnValue(of(true));
+        component.occasionVendor = new FakeVendor();
+        spyOn(component, 'ngOnInit').and.callFake(() => {});
+
+        // act
+        component.onAcceptClicked(fakeReservations[0]);
+
+        // assert
+        expect(mockReservationsService.updateReservation).toHaveBeenCalledTimes(1);
+        expect(component.ngOnInit).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('onDeclinedClicked()', () => {
+      it('should accept reservation', () => {
+        // assign
+        const fakeReservations = new FakeReservations().arr;
+        spyOn(mockReservationsService, 'deleteReservation').and.returnValue(of(true));
+        spyOn(component, 'ngOnInit').and.callFake(() => {});
+        component.occasionVendor = new FakeVendor();
+
+        // act
+        component.onDeclinedClicked(fakeReservations[0]);
+
+        // assert
+        expect(mockReservationsService.deleteReservation).toHaveBeenCalledTimes(1);
+        expect(component.ngOnInit).toHaveBeenCalledTimes(1);
+      });
+    });
+
   });

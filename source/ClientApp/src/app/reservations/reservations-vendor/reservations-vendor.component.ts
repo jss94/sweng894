@@ -93,12 +93,11 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     onDeclinedClicked(reservation: Reservation) {
-        this.reservationService.deleteReservation(reservation).subscribe( response => {
-            this.snackbar.open('Successfully Declined '
+        this.reservationService.deleteReservation(reservation).subscribe( () => {
+            const message = 'Successfully Declined '
             + reservation.vendorService.serviceName
-            + ' For ' + reservation.evt.userName, '', {
-                duration: 3000
-            });
+            + ' For ' + reservation.evt.userName;
+            this.snackbar.open(message, '', { duration: 3000 });
             this.ngOnInit();
         });
     }

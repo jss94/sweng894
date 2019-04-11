@@ -25,6 +25,9 @@ describe('EventDetailComponent', () => {
   let mockEventService: EventService;
   let mockAuthService: AuthService;
   let mockReservationService: ReservationsService;
+  let mockInvitationService: InvitationService;
+  let mockSnackbar: MatSnackBar;
+  let mockEmailService: EmailService;
 
   class MockActivedRoute {
     public snapshot = {
@@ -38,15 +41,18 @@ describe('EventDetailComponent', () => {
     };
   }
 
-  class MockInvitationService { }
+  class MockInvitationService {
+    getInvitation(){}
+  }
 
   class MockEmailService {
     sendVendorQuestionEmail() {
-
     }
 
     sendEventInvitationEmail() {
+    }
 
+    createEmailModel() {
     }
   }
 
@@ -79,6 +85,9 @@ describe('EventDetailComponent', () => {
     mockEventService = TestBed.get(EventService);
     mockAuthService = TestBed.get(AuthService);
     mockReservationService = TestBed.get(ReservationsService);
+    mockInvitationService = TestBed.get(InvitationService);
+    mockSnackbar = TestBed.get(MatSnackBar);
+    mockEmailService = TestBed.get(EmailService);
   });
 
   it('should create', () => {
@@ -127,6 +136,75 @@ describe('EventDetailComponent', () => {
       // assert
       expect(mockReservationService.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
 
+    });
+  });
+
+  describe('loadReservation()', () => {
+    it ('should load reservation', () => {
+      // arrange
+      spyOn(component, 'showReservationsDialog').and.callThrough();
+
+      // act
+      component.loadReservations(new FakeOccEvent());
+
+      // assert
+      expect(component.showReservationsDialog).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('loadInvite()', () => {
+    it ('should load invite', () => {
+      // arrange 
+      spyOn(mockInvitationService, 'getInvitation').and.returnValue(of({}));
+      spyOn(component, 'showInviteDialog').and.callFake(() => {});
+
+      // act
+      component.loadInvite(new FakeOccEvent());
+
+      // assert
+      expect(mockInvitationService.getInvitation).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('displayInvitationFeedback', () => {
+    it ('should display invitation feedback', () => {
+      // arrange
+      spyOn(mockSnackbar, 'open').and.callThrough();
+
+      // act
+      component.displayInvitationFeedback(200, '', '');
+
+      // assert
+      expect(mockSnackbar.open).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('displayEmailFeedback', () => {
+    it ('should display email feedback', () => {
+      // arrange
+      spyOn(mockSnackbar, 'open').and.callThrough();
+
+      // act
+      component.displayEmailFeedback(new FakeOccEvent(), 200);
+
+      // assert
+      expect(mockSnackbar.open).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('sendEmail', () => {
+    it ('should send email', () => {
+      // arrange
+      spyOn(mockEmailService, 'createEmailModel').and.callThrough();
+      spyOn(mockEmailService, 'sendEventInvitationEmail').and.callThrough();
+      component.invitationModel = {subject: '', eventGuid: '', content: ''}
+
+      // act
+      component.sendEmail(new FakeOccEvent());
+
+      // assert
+      expect(mockEmailService.createEmailModel).toHaveBeenCalledTimes(1);
+      expect(mockEmailService.sendEventInvitationEmail).toHaveBeenCalledTimes(1);
     });
   });
 
