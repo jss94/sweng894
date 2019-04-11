@@ -120,53 +120,53 @@ describe('ReserveComponent', () => {
   });
 
   describe('onCreate', () => {
-    // it('should create reservation', () => {
-    //   // assign
-    //   const fakeReservations = new FakeReservations().arr;
-    //   const fakeVendorService = new FakeVendorServices();
-    //   const fakeReservation = new FakeReservation();
+    it('should create reservation', () => {
+      // assign
+      const fakeReservations = new FakeReservations().arr;
+      const fakeVendorService = new FakeVendorServices();
+      const fakeReservation = new FakeReservation();
 
-    //   component.eventModel = new FakeOccEvent();
-    //   component.vendorServiceModel = new FakeVendorServices();
-    //   component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
-    //   component.reservationForm.controls['numberReserved'].setValue(fakeReservations[0].numberReserved);
+      component.eventModel = new FakeOccEvent();
+      component.vendorServiceModel = new FakeVendorServices();
+      component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
+      component.reservationForm.controls['numberReserved'].setValue(fakeReservations[0].numberReserved);
 
-    //   spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(fakeReservations));
+      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(fakeReservations));
 
-    //   spyOn(mockEmailService, 'createEmailModel').and.returnValue(of(fakeEmail));
-    //   spyOn(mockEmailService, 'sendReservationEmailNotification').and.returnValue(of('202'));
-    //   spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeVendorService));
+      spyOn(mockEmailService, 'createEmailModel').and.returnValue(of(fakeEmail));
+      spyOn(mockEmailService, 'sendReservationEmailNotification').and.returnValue(of('202'));
+      spyOn(mockVendorServicesSvc, 'getVendorServiceById').and.returnValue(of(fakeVendorService));
 
-    //   spyOn(mockReservationSvc, 'createReservation').and.returnValue(of(fakeReservation));
-    //   spyOn(component.reservationForm, 'reset').and.callFake(() => {});
-    //   spyOn(component, 'ngOnInit').and.callFake(() => {});
+      spyOn(mockReservationSvc, 'createReservation').and.returnValue(of(fakeReservation));
+      spyOn(component.reservationForm, 'reset').and.callFake(() => {});
+      spyOn(component, 'ngOnInit').and.callFake(() => {});
 
-    //   // act
-    //   component.onCreate();
+      // act
+      component.onCreate();
 
-    //   // assert
-    //   expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
-    // });
+      // assert
+      expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
+    });
 
-    // it('should not create reservation', () => {
-    //   // assign
-    //   const fakeEvent = new FakeOccEvent;
-    //   const fakeService = new FakeVendorServices();
-    //   const fakeReservation = new FakeReservation();
+    it('should not create reservation', () => {
+      // assign
+      const fakeEvent = new FakeOccEvent;
+      const fakeService = new FakeVendorServices();
+      const fakeReservation = new FakeReservation();
 
-    //   component.eventModel = fakeEvent;
-    //   component.vendorServiceModel = fakeService;
-    //   component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
-    //   component.reservationForm.controls['numberReserved'].setValue(fakeReservation.numberReserved);
+      component.eventModel = fakeEvent;
+      component.vendorServiceModel = fakeService;
+      component.reservationForm.controls['eventList'].setValue(new FakeOccEvents());
+      component.reservationForm.controls['numberReserved'].setValue(fakeReservation.numberReserved);
 
-    //   spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(undefined));
+      spyOn(mockReservationSvc, 'getReservationsByEventGuid').and.returnValue(of(undefined));
 
-    //   // act
-    //   component.onCreate();
+      // act
+      component.onCreate();
 
-    //   // assert
-    //   expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
-    // });
+      // assert
+      expect(mockReservationSvc.getReservationsByEventGuid).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('setUser()', () => {
