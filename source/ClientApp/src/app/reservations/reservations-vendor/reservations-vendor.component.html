@@ -14,6 +14,9 @@
                         {{newReservation.evt.name}} -- {{newReservation.evt.dateTime}}
                     </h4>
                     <div class="actions">
+                        <button mat-button (click)="onViewProfileClicked(newReservation)">
+                                <mat-icon>person_pin</mat-icon>
+                        </button>
                         <button class="accept-color" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(newReservation)">
                             Accept
                         </button>
@@ -46,7 +49,7 @@
                     <div class="event-panel">
                         <h5>Event</h5>
                         <div class="title-value-node">
-                            <h6>Organizer:</h6> {{newReservation.evt.userName}}
+                            <h6>Organizer:</h6> <a routerLink="/user-profile/{{newReservation.evt.userName}}">{{newReservation.evt.userName}}</a>
                         </div>
                         <div class="title-value-node">
                             <h6>Description:</h6> {{newReservation.evt.description}}
@@ -73,6 +76,9 @@
                         {{changedReservation.evt.name}} -- {{changedReservation.evt.dateTime}}
                     </h4>
                     <div class="actions">
+                        <button mat-button (click)="onViewProfileClicked(changedReservation)">
+                                <mat-icon>person_pin</mat-icon>
+                        </button>
                         <button class="accept-color" appearance="outline" type="submit" mat-button (click)="onAcceptClicked(changedReservation)">
                             Accept
                         </button>
@@ -105,7 +111,7 @@
                     <div class="event-panel">
                         <h5>Event</h5>
                         <div class="title-value-node">
-                            <h6>Organizer:</h6> {{changedReservation.evt.userName}}
+                            <h6>Organizer:</h6> <a routerLink="/user-profile/{{changedReservation.evt.userName}}">{{changedReservation.evt.userName}}</a>
                         </div>
                         <div class="title-value-node">
                             <h6>Description:</h6> {{changedReservation.evt.description}}
@@ -131,6 +137,11 @@
                     <h4>
                         {{approvedReservation.evt.name}} -- {{approvedReservation.evt.dateTime}}
                     </h4>
+                    <div class="actions">
+                        <button mat-button (click)="onViewProfileClicked(approvedReservation)">
+                            <mat-icon>person_pin</mat-icon>
+                        </button>
+                    </div>                    
                 </mat-expansion-panel-header>
                 
                 <div class="reservation-details">
@@ -156,7 +167,7 @@
                     <div class="event-panel">
                         <h5>Event</h5>
                         <div class="title-value-node">
-                            <h6>Organizer:</h6> {{approvedReservation.evt.userName}}
+                            <h6>Organizer:</h6> <a routerLink="/user-profile/{{approvedReservation.evt.userName}}">{{approvedReservation.evt.userName}}</a>
                         </div>
                         <div class="title-value-node">
                             <h6>Description:</h6> {{approvedReservation.evt.description}}

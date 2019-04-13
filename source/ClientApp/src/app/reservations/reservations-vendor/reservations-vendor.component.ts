@@ -101,4 +101,9 @@ export class ReservationsVendorComponent implements OnInit {
             this.ngOnInit();
         });
     }
+
+    onViewProfileClicked(reservation: Reservation) {
+        // [routerLink]="['/guests/', theEvent.guid]"
+        this.router.navigate(['user-profile/' + reservation.userName]);
+    }
 }
