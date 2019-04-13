@@ -164,7 +164,7 @@ namespace source.Controllers
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.AppendLine("<div>").Append("Hello, ").Append(vendor.name).Append(". You have a requested reservation for the ");
             htmlBuilder.Append(vendorService.serviceName).Append(" waiting for you via Occasions.</div>");
-            htmlBuilder.AppendLine("Please click ").Append("<a href='https://").Append(hostname).Append("/reservations-vendor'>here</a>").Append(" to view it.");     
+            htmlBuilder.AppendLine("Please click ").Append("<a href='").Append(hostname).Append("/reservations-vendor'>here</a>").Append(" to view it.");     
             emailContent.value = htmlBuilder.ToString();
             Console.WriteLine(htmlBuilder.ToString());
             emailContents.Add(emailContent);
