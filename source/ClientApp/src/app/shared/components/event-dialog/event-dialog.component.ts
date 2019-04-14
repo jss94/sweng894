@@ -34,6 +34,8 @@ export class EventDialogComponent implements OnInit {
 
     if (this.data.event.dateTime != null) {
       this.eventTime = this.data.event.dateTime;
+      const tmpDate = new Date(this.data.event.dateTime);
+      this.editEventForm.controls['time'].setValue(tmpDate.getHours() + ':' + tmpDate.getMinutes());
     }
 
   }
