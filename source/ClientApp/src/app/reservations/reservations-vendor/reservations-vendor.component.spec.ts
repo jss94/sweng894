@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MockAuthService } from 'src/app/shared/services/mock-auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MockMatSnackBar } from 'src/app/deactivate-user/deactivate-user.component.spec';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { MockMatDialog } from 'src/app/nav-menu/nav-menu.component.spec';
@@ -54,7 +54,8 @@ describe('ReservationsVendorComponent', () => {
           { provide: MatDialog, useClass: MockMatDialog },
           { provide: EventService, useClass: MockEventService },
           { provide: ReservationsService, useClass: MockReservationService },
-          { provide: VendorService, useClass: MockVendorService }
+          { provide: VendorService, useClass: MockVendorService },
+          { provide: Router, useValue: { navigate: () => { } } },
         ],
       })
       .compileComponents();

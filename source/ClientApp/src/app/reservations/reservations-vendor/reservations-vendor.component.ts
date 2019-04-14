@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material';
 import { Vendor } from 'src/app/shared/models/vendor.model';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { User } from 'src/app/shared/models/user.model';
+import { Router } from '@angular/router';
 
 @Component(
     {
@@ -29,6 +30,7 @@ export class ReservationsVendorComponent implements OnInit {
         private reservationService: ReservationsService,
         private snackbar: MatSnackBar,
         private vendorService: VendorService,
+        private router: Router,
         ) {
     }
 
