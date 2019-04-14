@@ -2,7 +2,6 @@
 
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { GoogleMapsService } from 'src/app/google-map/Services/google-maps.service';
 import { FormGroup } from '@angular/forms';
 
 @Injectable()
@@ -13,16 +12,12 @@ export class GooglePlacesService {
     infowindow = new google.maps.InfoWindow();
     lastSearch: FormGroup;
 
-    constructor(private mapsService: GoogleMapsService) {
-    }
-
     locationSearch(request, map) {
         const locations = new Subject<google.maps.places.PlaceResult[]>();
         const service = new google.maps.places.PlacesService(map);
 
         service.nearbySearch(request, function(results, status, pagination) {
             locations.next(results);
-            console.log(pagination.nextPage())
         });
 
         locations.subscribe((places: google.maps.places.PlaceResult[]) => {

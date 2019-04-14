@@ -58,7 +58,7 @@ export class EventDetailComponent implements OnInit {
     this.reservationService.getReservationsByEventGuid(guid).subscribe(res => {
       this.reservations = res;
       this.loadedReservations = true;
-      if(this.reservations.length > 0){
+      if(res && this.reservations.length > 0){
         let venue = this.reservations.find(x => x.vendorService.serviceType == 'Venue');
         if(venue != null){
           this.address = venue.vendor.address;

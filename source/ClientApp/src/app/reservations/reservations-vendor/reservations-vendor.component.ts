@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Reservation } from '../Models/reservation.model';
 import { ReservationsService } from '../Services/reservations.service';
 import { AuthService } from '../../shared/services/auth.service';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Vendor } from 'src/app/shared/models/vendor.model';
 import { VendorService } from 'src/app/vendors/Services/vendor.service';
 import { User } from 'src/app/shared/models/user.model';
+import { Router } from '@angular/router';
 
 @Component(
     {
@@ -28,19 +28,18 @@ export class ReservationsVendorComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private reservationService: ReservationsService,
-        private route: ActivatedRoute,
-        private router: Router,
         private snackbar: MatSnackBar,
         private vendorService: VendorService,
+        private router: Router,
         ) {
-
     }
 
     ngOnInit() {
         this.reservations = [];
         this.newReservations = [];
         this.changedReservations = [];
-        this.approvedReservations =[];
+        this.approvedReservations = [];
+
         if (this.authService.user) {
             this.setOccasionsVendor(this.authService.user);
         } else {
@@ -59,7 +58,8 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     createReservationLists() {
-        this.reservationService.getReservationByVendorId(this.occasionVendor.id).subscribe((results) => {
+        this.reservationService.getReservationByVendorId(this.occasionVendor.id)
+        .subscribe((results) => {
             for (const result of results) {
                 const evt = result.evt;
                 const vs = result.vendorService;
@@ -79,14 +79,7 @@ export class ReservationsVendorComponent implements OnInit {
                     }
                 }
             }
-            this.setReservationCounts();
         });
-    }
-
-    setReservationCounts() {
-        this.newCount = this.newReservations.length;
-        this.changedCount = this.changedReservations.length;
-        this.approvedCount = this.approvedReservations.length;
     }
 
     onAcceptClicked(reservation: Reservation) {
@@ -102,12 +95,11 @@ export class ReservationsVendorComponent implements OnInit {
     }
 
     onDeclinedClicked(reservation: Reservation) {
-        this.reservationService.deleteReservation(reservation).subscribe( response => {
-            this.snackbar.open('Successfully Declined '
+        this.reservationService.deleteReservation(reservation).subscribe( () => {
+            const message = 'Successfully Declined '
             + reservation.vendorService.serviceName
-            + ' For ' + reservation.evt.userName, '', {
-                duration: 3000
-            });
+            + ' For ' + reservation.evt.userName;
+            this.snackbar.open(message, '', { duration: 3000 });
             this.ngOnInit();
         });
     }

@@ -215,9 +215,7 @@ export class VendorSearchComponent implements OnInit, AfterViewInit {
       this.unclaimedServices.push(s);
     });
 
-    console.log(this.unclaimedServices.length);
-
-    if (this.claimedServices.length === 0){
+    if (this.claimedServices && this.claimedServices.length === 0){
       this.claimedServices = claimed;
     }
   }

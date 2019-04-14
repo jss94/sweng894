@@ -2,7 +2,7 @@
     
     <h1>Reservations</h1>
     <h6 class="description">As a vendor you can manage your requested reservations here.</h6>
-    <h2 ngOnInit="let x = newCount">New ({{newCount}})</h2>
+    <h2 ngOnInit="let x = newCount">New ({{newReservations.length}})</h2>
     <mat-accordion multi="true">
 
         <div *ngFor="let newReservation of newReservations">
@@ -64,7 +64,7 @@
         </div>
     </mat-accordion>
 
-    <h2 ngOnInit="let x = changedCount">Changed ({{changedCount}})</h2>
+    <h2 ngOnInit="let x = changedCount">Changed ({{changedReservations.length}})</h2>
     <mat-accordion multi="true">
 
         <div *ngFor="let changedReservation of changedReservations">
@@ -126,7 +126,7 @@
         </div>
     </mat-accordion>
 
-    <h2 ngOnInit="let x = approvedCount">Approved ({{approvedCount}})</h2>
+    <h2 ngOnInit="let x = approvedCount">Approved ({{approvedReservations.length}})</h2>
     <mat-accordion multi="true">
 
         <div *ngFor="let approvedReservation of approvedReservations">

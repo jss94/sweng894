@@ -46,6 +46,7 @@ describe('VendorComponent', () => {
 
       // assert
       expect(mockVendorService.getVendors).toHaveBeenCalledTimes(1);
+      expect(component.vendors).toBeDefined();
       expect(component.vendors.length).toBe(3);
 
     });

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Reservation } from '../Models/reservation.model';
 import { Observable, of } from 'rxjs';
+import { FakeReservation } from '../Models/fake-reservation.model';
 
 @Injectable()
 export class MockReservationService {
@@ -21,7 +22,7 @@ export class MockReservationService {
     return of(undefined);
   }
 
-  getReservationByVendorId(id?: number): Observable<Reservation[]> {
+  getReservationByVendorId(id: number): Observable<Reservation[]> {
     return of(undefined);
   }
 
@@ -29,8 +30,8 @@ export class MockReservationService {
     return of(undefined);
   }
 
-  getReservationById(id?: number): Observable<Reservation> {
-    return of(undefined);
+  getReservationById(id: number): Observable<Reservation> {
+    return of(new FakeReservation());
   }
 
   getReservationStatusList(): Observable<string> {

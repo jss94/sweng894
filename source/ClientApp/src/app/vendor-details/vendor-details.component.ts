@@ -81,20 +81,18 @@ export class VendorDetailsComponent implements OnInit {
   }
 
   setVendor() {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const vendorId = +params.get('vendorId');
-      this.vendorService.getVendorById(vendorId).subscribe(vendor => {
-        this.vendor = vendor;
-        this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
-          this.vendorServices = response;
-        });
-
-        this.promotionService.getAllPromotions(vendorId).subscribe(response => {
-          this.promotions = response;
-        });
-      }, error => {
-        console.log(error);
+    const vendorId = +this.route.snapshot.paramMap.get('vendorId');
+    this.vendorService.getVendorById(vendorId).subscribe(vendor => {
+      this.vendor = vendor;
+      this.vendorServicesService.getVendorServices(vendor.id).subscribe(response => {
+        this.vendorServices = response;
       });
+
+      this.promotionService.getAllPromotions(vendorId).subscribe(response => {
+        this.promotions = response;
+      });
+    }, error => {
+      console.log(error);
     });
   }
 
@@ -103,8 +101,6 @@ export class VendorDetailsComponent implements OnInit {
   }
 
   loadQuestion() {
-    console.log('Let\'s ask a Questoin');
-
     const dialogRef = this.dialog.open(EmailDialogComponent, {
       width: '600px',
       data: {

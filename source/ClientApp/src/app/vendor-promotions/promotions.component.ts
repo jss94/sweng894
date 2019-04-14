@@ -6,6 +6,7 @@ import { Promotion } from './Model/promotion.model';
 import { PromotionService } from './Services/promotion.service';
 import { VendorService } from '../vendors/Services/vendor.service';
 import { AuthService } from '../shared/services/auth.service';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-promotions',
@@ -14,10 +15,8 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class PromotionsComponent implements OnInit {
   promotions: Promotion[] = [];
-
   vendorId: number;
-
-  public selectedPromotionType: string;
+  selectedPromotionType: string;
 
   promotionForm = new FormGroup({
     startDate: new FormControl('', [Validators.required]),
@@ -41,28 +40,22 @@ export class PromotionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setPromotions();
-  }
-
-  setPromotions() {
-
     if (this.auth.user) {
-      this.vendorService.getVendor(this.auth.user.userName).subscribe(vendor => {
-        this.vendorId = vendor.id;
-        this.promotionService.getAllPromotions(this.vendorId).subscribe(response => {
-            this.promotions = response;
-        });
-      });
+      this.setPromotions(this.auth.user);
     } else {
-      this.auth.user$.subscribe((result) => {
-        this.vendorService.getVendor(result.userName).subscribe(vendor => {
-          this.vendorId = vendor.id;
-          this.promotionService.getAllPromotions(this.vendorId).subscribe(response => {
-            this.promotions = response;
-          });
-        });
+      this.auth.user$.subscribe((user) => {
+        this.setPromotions(user);
       });
     }
+  }
+
+  setPromotions(user: User) {
+    this.vendorService.getVendor(user.userName).subscribe(vendor => {
+      this.vendorId = vendor.id;
+      this.promotionService.getAllPromotions(this.vendorId).subscribe(response => {
+          this.promotions = response;
+      });
+    });
   }
 
   onCreate(): void {
