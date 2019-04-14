@@ -34,26 +34,32 @@
       </button>
       <mat-menu #userMenu="matMenu">
 
-        <button *ngIf="isVendor" mat-button [routerLink]='["/vendor-services"]'>
+        <div *ngIf="isVendor">
+        <button mat-button [routerLink]='["/vendor-services"]'>
           <mat-icon>store</mat-icon>
           Services
         </button>
 
         <br>
-
-        <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/vendor-metrics"]' [routerLinkActive]='["link-active"]'>
+      </div>
+      <div *ngIf="auth.isAuthenticated() && isVendor">
+        <button  mat-button [routerLink]='["/vendor-metrics"]' [routerLinkActive]='["link-active"]'>
           <mat-icon>timeline</mat-icon>
           Metrics
         </button>
 
         <br>
-
-        <button *ngIf="auth.isAuthenticated() && isVendor" mat-button [routerLink]='["/vendor-promotions"]' [routerLinkActive]='["link-active"]'>
+      </div>
+      <div *ngIf="auth.isAuthenticated() && isVendor">
+        <button mat-button [routerLink]='["/vendor-promotions"]' [routerLinkActive]='["link-active"]'>
           <mat-icon>card_giftcard</mat-icon>
           Promotions
         </button>
 
         <br>
+      </div>
+      <div>
+
 
         <button mat-button class="clickable" [routerLink]='["/user-profile"]' [routerLinkActive]='["link-active"]'>
           <mat-icon>person_pin</mat-icon>
@@ -61,10 +67,12 @@
         </button>
 
         <br>
-
+      </div>
+      <div>
         <button mat-button class="clickable">
           <span class="nav-link" (click)="auth.logout()">Logout</span>
         </button>
+      </div>
       </mat-menu>
 
       <button *ngIf="!auth.isAuthenticated() || (isVendor && isOrganizer)" mat-button

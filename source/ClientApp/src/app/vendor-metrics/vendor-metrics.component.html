@@ -1,6 +1,10 @@
-<div class="page" *ngIf="vendorIdLoaded | async">
+
+<div class="header">
   <h1>My Metrics</h1>
   <h6 class="directions">As a vendor you can review your sales metrics here.</h6>
+</div>
+<div class="page" *ngIf="vendorIdLoaded | async">
+
   <div class="row">
       <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisReservationsLabel" [type]="reservationType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
       <app-reservation-metrics [vendorId]="vendorId" [xAxisLabel]="xAxisMonthLabel" [yAxisLabel]="yAxisSalesLabel" [type]="saleType" [dateFormat]="monthlyDateFormat"></app-reservation-metrics>
