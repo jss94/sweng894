@@ -5,16 +5,8 @@
   </div>
 
   <div class="row">
-    <div class="main">
-      <h2>Event Details</h2>
-      <p>{{theEvent.description}}</p>
-      <p *ngIf="address">
-        {{ address.street}}
-        <br>
-        {{ address.city}}, {{ address.state}} {{ address.zip}}
-      </p>
-      <p *ngIf="!address && loadedReservations">Venue has not been selected yet.</p>
-      <div>
+    <div class="side" >
+        <div>
             <div>
                 <button mat-button [routerLink]="['/guests/', theEvent.guid]">
                   <mat-icon>people</mat-icon>
@@ -35,8 +27,19 @@
           </div>
       </div>
     </div>
-    <div class="side">
-      <div class="fakemap" style="height:200px;">Map?</div>
+    <div class="main">
+      <h2>Event Details</h2>
+      <p>{{theEvent.description}}</p>
+      <p *ngIf="address">
+        {{ address.street}}
+        <br>
+        {{ address.city}}, {{ address.state}} {{ address.zip}}
+      </p>
+      <p *ngIf="!address && loadedReservations">Venue has not been selected yet.</p>
+
     </div>
+    <div class="side" >
+      
+      </div>
   </div>
 </div>
